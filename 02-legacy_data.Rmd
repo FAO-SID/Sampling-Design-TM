@@ -39,7 +39,7 @@ We define the working directory to the directory in which the actual file is loc
 ```{r load_wd, eval=TRUE, include=FALSE}
 
 # Set working directory to source file location
-  setwd("/Users/luislado/Dropbox/Github/soil_sampling")
+  setwd("/Users/luislado/Dropbox/Github/Sampling_Design_GSP")
 
 ```
 
