@@ -1,0 +1,19 @@
+---
+title: "Technical Manual on Soil Sampling Design."
+author: "*Rodríguez Lado, L., Angelini,  M.E, Naypewe, N., Luotto, I., Yigini, Y.*"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [references.bib]
+biblio-style: apalike
+link-citations: yes
+description: "Technical Manual on Soil Sampling Design."
+---
+
+# Licence {-}
+
+The NLSDR Guideline Manual is made available under the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 IGO licence
+
+[CC BY-NC-SA 3.0 IGO](https://creativecommons.org/licenses/by-nc-sa/3.0/igo/legalcode).
+
+

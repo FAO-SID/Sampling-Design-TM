@@ -1,0 +1,5 @@
+introduction
+legacy_data
+data-preparation
+representativeness-of-the-legacy-soil-data
+creating-a-new-sampling-design
