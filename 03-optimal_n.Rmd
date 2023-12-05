@@ -6,7 +6,11 @@
 
 Several strategies exist for designing soil sampling, including regular, random, and stratified sampling. Each strategy comes with its own set of advantages and limitations, which must be carefully considered before commencing a soil sampling campaign. Regular sampling, also called grid sampling, is straightforward and ensures uniform coverage, making it suitable for spatial analysis and detecting trends. However, it may introduce bias and miss small-scale variability. Generally, random sampling may require a larger number of samples to accurately capture soil variability compared to stratified sampling, which is more targeted. Nonetheless, from a statistical standpoint, random sampling is often preferred. It effectively minimizes selection bias by giving every part of the study area an equal chance of being selected. This approach yields a sample that is truly representative of the entire population, leading to more accurate, broadly applicable conclusions. Random sampling also supports valid statistical inferences, ensures reliability of results, and simplifies the estimation of errors, thereby facilitating a broad spectrum of statistical analyses.
 
-Crucially, the determination of both the number and locations of soil samples is a pivotal factor in the success of any sampling campaign. The chosen strategy directly influences the representativeness and accuracy of the soil data collected, which in turn impacts the quality of the conclusions drawn from the study.
+The determination of both the number and locations of soil samples is an important element in the success of any sampling campaign. The chosen strategy directly influences the representativeness and accuracy of the soil data collected, which in turn impacts the quality of the conclusions drawn from the study.
+
+In this exercise, we make use of the data provided by [@Malone] with 4 raster covariates in a 100 has area. We want to determine the minimal number of soil samples that must be collated to capture at least the 95% of variability within the environmental covariates. The procedure start with random distribution of a low number of samples in the area, determine the values of the spatial covariates, and compare them with those representing the whole diversity in the area at pixel scale. The comparisons are made using the `'KL divergence'` and the `'% of repressentativeness'` - i.e. the variability of covariate information in the complete area related to the variability of covariate information in the dataset of samples. Further information can be found in the original work of [@Malone]. 
+
+The initial section of the script is related to setup options in the methodology. We load of R packages, define the working directory, load covariate data and store it as `SpatRaster` object. Here, parameter related to further aspects of the analyses such as the initial and final number of samples, and the increment step are defined.
 
 ```{r setup_wd_03, eval=FALSE, include=FALSE}
 
@@ -27,6 +31,7 @@ Crucially, the determination of both the number and locations of soil samples is
 
 ```
 
+
 ```{r load_data_03, eval=TRUE, include=TRUE}
   ## Load raster covariate data----
   # Read Spatial data covariates as rasters with terra
@@ -36,6 +41,7 @@ Crucially, the determination of both the number and locations of soil samples is
   
 ```
 
+We can see the covariates in a plot.
 
 ```{r plot_covdata_03, eval=TRUE, include=TRUE, fig.cap="Plot of the covariates"}
 
@@ -46,12 +52,6 @@ Crucially, the determination of both the number and locations of soil samples is
 
 ```{r variable_inicialization_03, eval=TRUE, include=TRUE}
 
-  # Define empty vectors to store results
-  number_of_samples <- c()
-  prop_explained <- c()
-  klo_samples <-c()
-  samples_storage <- list()
-
   # Define the number of samples to be tested in a loop (from initial to final) and the step of the sequence
   initial.n <- 10
   final.n <- 400
@@ -59,15 +59,30 @@ Crucially, the determination of both the number and locations of soil samples is
   
 ```
 
+The second section is where the analyses of divergence and repressentativeness of the sampling scheme are calculated. 
+
+The analyses are performed in a loop using growing numbers of samples at each trial. Some empty vectors are defined to store the output results at each loop. At each trial of sample size `'N', soil samples are located randomly on the space of covariates, and 10 replicates are calculated to determine the amount intervariability in KL divergence and repressentativeness in the trial. The final results for each sample size correspond to the mean results obtained from each pass at the corresponding size. The optimal sample size selected correspond to the minimum sample size that accounts for at least 95% of the variability of information in the covariates within the area. The optimal sampling schema proposed correspond to the random scheme at the optimal sample size with higher value of repressentativeness. 
+
 
 ```{r compute_n_optimal_03, eval=TRUE, include=TRUE, fig.cap="Distribution of covariates in the sample space"}
 
-  for (dede in seq(initial.n, final.n, by=by.n)){
+  # Define empty vectors to store results
+  number_of_samples <- c()
+  prop_explained <- c()
+  klo_samples <-c()
+  samples_storage <- list()
+
+
+for (dede in seq(initial.n, final.n, by=by.n)){
+ for (kaka in 1:10){
     p.dat_I <- spatSample(cov.dat,dede, na.rm=TRUE,xy=TRUE,method="random")
     p.dat_I_sp <-  p.dat_I 
     coordinates(p.dat_I_sp)<- ~ x + y 
-    # Store sampling scheme in list
-    samples_storage[[paste0("N", dede)]] <- p.dat_I_sp
+    
+  # Store samples in list
+  samples_storage[[paste0("N", dede,"_",kaka)]] <- p.dat_I_sp
+ 
+    
     # Get covariate values for each point
     p.dat_I <- p.dat_I[3:ncol(p.dat_I)]
   
@@ -164,7 +179,8 @@ Crucially, the determination of both the number and locations of soil samples is
   klo_samples <- c(klo_samples,klo)
   prop_explained <- c(prop_explained,sum(newScores$pip)/nrow(newScores)*100)
   number_of_samples <- c(number_of_samples,dede)
-  # print(paste("N samples = ",dede, " out of ",final.n, " ;KL = ", klo, ";Proportion = ", sum(newScores$pip)/nrow(newScores)*100 ))
+  #print(paste("N samples = ",dede, " out of ",final.n, " ;kaka = ",kaka," ;KL = ", klo, ";Proportion = ", sep sum(newScores$pip)/nrow(newScores)*100 ))
+  }
   }
 
     # Plot the polygon and all points to be checked
@@ -187,36 +203,50 @@ Figure \@ref(fig:chunk-compute_n_optimal_03) shows the distribution of covariate
 
 
 
-```{r results_03, eval=TRUE, include=TRUE}
+```{r results_03, eval=TRUE, include=FALSE}
 
   # Merge data from number of samples, KL Divercence and % representativeness 
   results <- data.frame(number_of_samples,klo_samples,prop_explained)
   names(results)<-c("N","KL","Perc")
   
+  # Calculate mean results by N size
+  mean_result <- results %>%
+  group_by(N) %>%
+  summarize_all(mean)
+  mean_result
+```  
+
+
+```{r results-table-03, eval=TRUE, include=TRUE}
+knitr::kable(
+  mean_result, booktabs = TRUE,
+  caption = 'Mean results for each trial of sample size at increasing steps of 10 samples.'
+)
+```
+
+We determine the optimal sample size and plot the evaluation results.
+
+```{r optimal_03, eval=TRUE, include=FALSE}
   # Determine the minimum sample size to accounf for 95% of representativeness of the covariate diversity
-  optimal_n <- results %>%
-    filter(Perc >=95) %>% 
-    filter(KL ==min(KL) | N == min(N) | Perc ==min(Perc) ) %>% 
-    filter(N == min(N))
-  optimal_n
+  optimal_n <- mean_result %>%
+  filter(Perc >=95) %>% 
+  filter(KL ==min(KL) | N == min(N) | Perc ==min(Perc) ) %>% 
+  filter(N == min(N))
+optimal_n
 
+optimal_pass <- results %>%
+  filter(N==optimal_n$N) %>%
+  mutate(IDX = 1:n()) %>%
+  filter(Perc==max(Perc))
   
 ```
 
 
-```{r fig:tag-for-figure, fig.cap="Covariates and distribution of samples", eval=TRUE, include=TRUE}
-
-N_final <- samples_storage[paste0("N",optimal_n$N)][[1]]
-plot(cov.dat[[1]])
-points(N_final)
-  
-```
-
-
+The following figure shows the evolution of the KL divergence and % of repressentativenes with growing sample sizes. The red dot identifies the trial with the optimal sample size for the area in relation to the covariates analysed.
 
 ```{r fig:plot_KLfunction_03, fig.cap="KL Divergence and Proportion of Representativeness as function of sample size",fig.width=8, fig.height=5, eval=TRUE, include=TRUE}
 
-plot_ly(results,
+plot_ly(mean_result,
         x = ~N,
         y = ~KL,
         mode = "lines+markers",
@@ -238,8 +268,8 @@ plot_ly(results,
                       showgrid = T, 
                       dtick = 50, 
                       tickfont = list(size = 11)),
-         yaxis = list(title = "KL divergence", showgrid = F ),
-         yaxis2 = list(title = "Representativeness (%)",
+         yaxis = list(title = "mean KL divergence", showgrid = F ),
+         yaxis2 = list(title = "mean Representativeness (%)",
                        overlaying = "y", side = "right"),
          legend = list(orientation = "h", y = 1.2, x = 0.1,
                        traceorder = "normal"),
@@ -250,7 +280,15 @@ plot_ly(results,
 
 ```
 
+Finally, we represent the optimal distribution of samples over the study area according to these specific results. 
 
+```{r fig:tag-for-figure, fig.cap="Covariates and optimal number and distribution of samples", eval=TRUE, include=TRUE}
+
+plot(cov.dat[[1]])
+N_final <- samples_storage[paste0("N",optimal_n$N,"_",optimal_pass$IDX)][[1]]
+points(N_final)
+  
+```
 
 
 
