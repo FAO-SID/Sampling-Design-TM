@@ -1,5 +1,12 @@
+fig:strata-plot
 introduction
 legacy_data
 data-preparation
 representativeness-of-the-legacy-soil-data
-creating-a-new-sampling-design
+creating-a-sampling-design
+determining-the-optimal-sample-size
+stratified-random-sampling-design
+general-procedure
+strata-creation
+stratified-random-sampling
+stratified-random-sampling-for-large-areas

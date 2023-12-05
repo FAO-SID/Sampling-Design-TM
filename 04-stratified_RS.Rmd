@@ -1,0 +1,432 @@
+
+# Stratified Random Sampling Design
+
+Stratified random sampling is a technique where the study area is divided into different `groups` or `strata` based on certain environmental traits, and a number of random samples are taken from within each group. One of the primary advantages of stratified sampling is its ability to capture the diversity within a population by making sure each group is represented. It can provide a more accurate reflection of the entire population compared to random sampling, especially when the groups are distinct and have unique qualities. This approach is particularly beneficial when certain subgroups within the population are specifically noteworthy. It also allows for more precise estimates with a smaller total sample size compared to simple random choice. Stratified sampling presents some disadvantages. Achieving effective categories requires a proper definition and delineation of the initial information to create the `strata`. The classification of the environmental information into categories and ensuring fair portrayal of each can be intricate and time-taking, and mislabeling elements into an improper group can lead to skewed outcomes.
+
+## General Procedure
+
+The creation of a  stratified random sampling design involves the identification of relevant features describing the environmental diversity in the area (soil and land use are the environmental variables generally used to define strata), delineation of the strata, determination of the number of samples to distribute to each stratum, followed by random sampling within it. By identifying relevant classes, combining them to define strata, and allocating an appropriate number of samples to each stratum, a representative sample can be obtained. Random sampling within each stratum helps to ensure that the sample is unbiased and provides a fair representation of the overall conditions in the area.
+
+The first question is about how many samples must be retrieved from each strata. The sampling scheme starts with the definition of the total number of samples to collect. In this case, the determination of the sample size is a complex and highly variable process based, among others, on the specific goals of the study, the variability of environmental proxies, the statistical requirements for accuracy and confidence, as well as additional considerations such as accessibility, costs and available resources. The optimal number of samples can be determined following the method proposed in Chapter 2 of this manual. The number of samples within each stratum is calculated using an area-weighted approach taking into account the relative area of each stratum. The sampling design in this section must also comply with the following requirements:
+
+   *  All sampling strata must have a minimum size of 100 hectares.
+   *  All sampling strata must be represented by at least 2 samples.
+
+This sampling process ensures the representativeness of the environmental combinations present across the area while maintaining an efficient and feasible field sampling campaign.
+
+### Strata creation
+
+We must determine the kind of information that will be used to construct the `strata`. In this manual, we present a simple procedure to build strata based on data from two environmental layers: soil groups and land use classification data. The information should be provided in the form of vector shapefiles with associated information databases. The data on both sets often comprises a large number of categories, that would lead to a very large number of `strata`. Thus, it is desirable to make an effort of aggregating similar categories within each input data set, to reduce, as much as possible, the number of categories while still capturing the most of the valuable variability in the area.
+
+The fist step is to set-up the RStudio environment and load the required packages:
+
+
+```{r strata-setup, eval=TRUE, include=FALSE, warning=FALSE}
+
+# Load packages as a vector objects
+  packages <- c("sf", "terra", "tidyverse", "rmapshaper", "units","plyr", "mapview")
+  lapply(packages, require, character.only = TRUE) # Load packages
+  rm(packages) # Remove object to save memory space 
+
+  # Set working directory to source file location
+  #setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
+```
+
+
+```{r load_wd_strata, eval=TRUE, include=FALSE, warning=FALSE}
+
+# Set working directory to source file location
+  #setwd("/Users/luislado/Dropbox/Github/Sampling_Design_GSP")
+
+```
+
+
+We must define the number of samples to distribute in the sampling design, and the soil and land use information layers to build the strata. We also define a REPLACEMENT parameter to account for a reduction of the sampling area according to a certain area using predefined bounding-box, that can be also here defined.
+
+
+```{r strata-parameters, eval=TRUE, include=FALSE, warning=FALSE}
+
+  # Define number of samples
+    n <- 242
+
+  # Define soil map data
+    soil <- st_read("../soil_sampling/JAM/soilph.shp")
+  # Define Land use  data
+    lc <- st_read("../soil_sampling/JAM/Land_use.shp")
+
+    # Define a bounding box (optional). If REPLACEMENT = TRUE, then the bounding-box shapefile (bb), must be specified and the uncomment the line in the code below
+    REPLACEMENT = FALSE
+    # bb <- st_read("your_bounding_box.shp")
+    
+
+```
+
+We proceed with the calculation of soil groups. In this example, soil information is stored in the field `TYPES`. We have analysed the extent to which the information in this field can be synthesized to eliminate redundancy when creating the `strata`. ^[This exploratory work is a prerequisite and must be adapted specifically to each soil and land use dataset]
+
+```{r soil-aggregation, eval=TRUE, include=FALSE, warning=FALSE}
+  
+  # Determine Soil Groups
+  unique(soil$USDA_CLASS)
+
+  soil$USDA_CLASS[soil$USDA_CLASS=="molisol"] <- "mollisol"
+  soil$USDA_CLASS[soil$USDA_CLASS=="mollisols"] <- "mollisol"
+  soil$USDA_CLASS[soil$USDA_CLASS=="ultisols"] <- "ultisol"
+  soil$USDA_CLASS[soil$USDA_CLASS=="histisol"] <- "histosol"
+  soil$USDA_CLASS[soil$SOIL_PH=="River Wash"] <- "riverwash"
+  soil$USDA_CLASS[is.na(soil$USDA_CLASS)] <- "undetermined"
+  #unique(soil$USDA_CLASS)
+  
+  # Select classes to use (NA and water are deleted)
+  selected.classes <- c("inceptisol","vertisol","entisol","oxisol","mollisol","alfisol",  
+  "ultisol","histosol","undetermined")
+  soil <- soil[which(soil$USDA_CLASS %in% selected.classes),]
+  
+  # Check geometry
+  soil <- st_make_valid(soil)
+  # Explode polygons
+  soil <- ms_explode(soil )
+  soil <- st_cast(soil, 'POLYGON')
+  st_write(soil, "../soil_sampling/JAM/soil_classes.shp", delete_dsn = TRUE)
+
+```
+
+```{r soil-aggregated-plot, eval=TRUE, include=TRUE, fig.cap="Plot of the soil classes"}
+
+  # Plot final map with the aggregated soil information
+  #mapview(soil["USDA_CLASS"], alpha=0, homebutton=T)
+
+```
+
+
+A similar procedure is performed on the land use dataset.
+
+```{r landuse-aggregation, eval=TRUE, include=FALSE, warning=FALSE}
+  # Calculate Land use Groups
+
+  # Clip land use data  by bounding area if exist
+  if (exists("bb")) {
+    lc <- st_intersection(lc, bb)
+  } else {
+    lc <- lc
+  }
+
+ unique(lc$DESCRIPTIO)
+ lu <- read_csv("../soil_sampling/JAM/lu_classes.csv",show_col_types = FALSE)
+  
+  lc <- left_join(lc,lu)
+  unique(lc$LU)
+  # Combine classes and delete classes # DELETE MANGROVES
+  selected.classes <- c("Agriculture","Savanna","Forest","Grassland")
+
+  lc <- lc[which(lc$LU %in% selected.classes),]
+  unique(lc$LU)
+  
+  # Check and simplify geometry
+  lc <- st_make_valid(lc)
+
+  # Convert to polygons
+  lc <- st_cast(lc, 'POLYGON')
+  lc <- na.omit(lc)
+  # Write land use strata as shapefile
+  st_write(lc, "../soil_sampling/JAM/lc_aggregated.shp", delete_dsn = TRUE)
+  
+
+```
+
+```{r landuse-aggregated-plot, eval=TRUE, include=TRUE, fig.cap="Plot of the land use classes"}
+
+  # Plot final map with the aggregated land use information
+  #mapview(lc["LU"], alpha=0, homebutton=T)
+
+```
+
+To create the soil-land use `strata` we must combine both classified datasets.
+
+
+```{r combine-data, eval=TRUE, include=TRUE} 
+  # Combine soil and land use layers
+  soil_lc <- st_intersection(soil, lc)  
+  soil_lc$soil_lc <- paste0(soil_lc$USDA_CLASS, "_", soil_lc$LU)
+  soil_lc <- soil_lc %>% dplyr::select(soil_lc, geometry)
+```
+
+Finally, to comply with the initial requirements of the sampling design, we calculate the areas of each polygon, delete all features with extent lesser than 100 has.  
+
+```{r select-area, eval=TRUE, include=FALSE} 
+  
+  # Select by Area. Convert to area to ha and select polygons with more than 100 has
+  soil_lc$area <- st_area(soil_lc)/10000 
+  soil_lc$area <- as.vector(soil_lc$area)
+  soil_lc <- soil_lc %>% 
+    group_by(soil_lc) %>% 
+    mutate(area = sum(area))
+  soil_lc <- soil_lc[soil_lc$area > 100,]
+  plot(soil_lc[1])
+  
+  # Replace blank spaces with underscore symbol to keep names uniform
+  soil_lc$soil_lc <- str_replace_all(soil_lc$soil_lc, " ", "_")
+  
+  # List final strata
+  unique(soil_lc$soil_lc)
+  
+  # Create a column of strata numeric codes
+  soil_lc$code <- as.character(as.numeric(as.factor(soil_lc$soil_lc)))
+  
+  # List final strata
+  unique(soil_lc$soil_lc)
+  
+  # Create a column of strata numeric codes
+  soil_lc$code <- as.character(as.numeric(as.factor(soil_lc$soil_lc)))
+   # Write final sampling strata map
+  st_write(soil_lc, "../soil_sampling/JAM/strata.shp", delete_dsn = TRUE)
+
+```
+
+The final strata map is shown in Figure XX.
+
+```{r strata-plot, eval=TRUE, include=TRUE, fig.cap="Plot of strata"}
+
+   # Plot final map of stratum
+  #mapview(soil_lc["soil_lc"], alpha=0, homebutton=T)
+  terra::plot(soil_lc["soil_lc"], border=NA, main="Strata classes")
+
+```
+
+
+### Stratified random sampling
+
+
+
+```{r random-sampling, eval=TRUE, include=FALSE}
+# Stratified Simple Random Sampling over Soil/Land use Strata -------------------------------------------
+  
+  # Clean memory
+  rm(list=setdiff(ls(), c("r","n","distance.buffer","REPLACEMENT", "samples.buffer"))) 
+  
+  # Read in shapefile containing polygons and their areas
+  polygons <- st_read("../soil_sampling/JAM/strata.shp")
+  if(REPLACEMENT){
+    polygons = st_intersection(polygons,distance.buffer)
+  }
+  
+
+polygons$area <- st_area(polygons) # calculate the area of each polygon
+
+# Create a new column to group polygons by a common attribute
+polygons$group <- polygons$soil_lc
+# Drop units to allow computations
+polygons <- drop_units(polygons)
+
+# Calculate the total area of all polygons in each group
+group_areas <- polygons %>%
+  dplyr::group_by(group)  %>% 
+  dplyr::summarize(total_area = sum(area))
+# Add a code to each group
+group_codes <- polygons %>% group_by(group) %>%
+  dplyr::summarize(code = first(code)) 
+
+group_areas <- left_join(group_areas,st_drop_geometry(group_codes), by = "group")
+
+# Ensure minimum of 2 samples at each polygon in each group
+group_areas$sample_count <- 2
+
+# Calculate the number of samples per group based on relative area
+group_areas$sample_count <- group_areas$sample_count+round(group_areas$total_area/sum(group_areas$total_area) * 
+                                                             (n-sum(group_areas$sample_count)))
+
+while (sum(group_areas$sample_count) != n) {
+  if (sum(group_areas$sample_count) > n) {
+    # Reduce sample count for the largest polygon until total count is n
+    max_index <- which.max(group_areas$sample_count)
+    group_areas$sample_count[max_index] <- group_areas$sample_count[max_index] - 1
+  } else {
+    # Increase sample count for the smallest polygon until total count is n
+    min_index <- which.min(group_areas$sample_count)
+    group_areas$sample_count[min_index] <- group_areas$sample_count[min_index] + 1
+  }
+}
+#sum(group_areas$sample_count) 
+
+polygons <- left_join(polygons, st_drop_geometry(group_areas), by = c("soil_lc"="group"))
+polygons <- dplyr::select(polygons, soil_lc, code.x, sample_count, geometry)
+
+# Generate random points within each strata of size 3 tmes the required samples for each strata ----
+x <- spatSample(x = vect(group_areas), size = group_areas$sample_count * 3, method = "random")
+
+# Compute sampling points for strata
+z <- x %>% 
+  st_as_sf() %>% 
+  dplyr::group_by(code) %>% 
+  dplyr::mutate(sample_count = as.numeric(sample_count),
+         order = seq_along(code),
+         ID = paste0(code, ".", order),
+         type = ifelse(sample_count >= order, "Target", "Replacement")) %>% 
+  vect()
+
+# Find missing samples
+missing.data <- left_join(group_areas,data.frame(z) %>%
+                            dplyr::filter(type=="Target") %>%
+                            dplyr::group_by(code) %>%
+                            tally()) %>%
+  dplyr::mutate(diff=sample_count-n)
+
+# Determine missing sampled strata
+missing.strata <- which(is.na(missing.data$diff))
+
+# Determine missing sampling point in strata (undersampled strata)
+missing.sample = which(missing.data$diff != 0)
+missing.number <- as.numeric(unlist(st_drop_geometry(missing.data[(missing.sample <- which(missing.data$diff != 0)),7])))
+
+# Compute sampling points for missing sampled strata
+x.missing.strata <- x[1]
+x.missing.strata$sample_count<- 0
+
+for(i in missing.strata){
+  xx.missing.strata <- x[1]
+  xx.missing.strata$sample_count<- 0
+  nn=0
+  while (sum(xx.missing.strata$sample_count) < 
+         group_areas[group_areas$code==i,][["sample_count"]]*5) {
+    
+    while(nn < group_areas[group_areas$code==i,][["sample_count"]]*3){
+      my.missing.strata <- spatSample(x = vect(group_areas[group_areas$code %in% i,]),
+                                      size =  group_areas[group_areas$code==i,][["sample_count"]]*5,
+                                      method = "random")
+      nn <- nn + nrow(data.frame(my.missing.strata))
+    }
+    xx.missing.strata <- rbind(xx.missing.strata,my.missing.strata)
+    print(sum(xx.missing.strata$sample_count))
+  }
+  print(i)
+  print(xx.missing.strata)
+  x.missing.strata <- rbind(x.missing.strata,xx.missing.strata)
+}
+
+# Join initial sampling with missing sampling strata data
+x <- rbind(x, x.missing.strata)
+
+# Compute sampling points for missing samples (regular sampling)
+x.missing.sample <- x[1]
+
+for(i in missing.sample){
+  xx.missing.sample <- x[1]
+  xx.missing.sample$sample_count<- 0
+  while (sum(xx.missing.sample$sample_count) < (group_areas[group_areas$code==i,][["sample_count"]]*3)) {
+    my.missing.sample <- spatSample(x = vect(group_areas[group_areas$code %in% i,]),
+                                    size = as.numeric(vect(group_areas[group_areas$code %in% i,])[[4]])+
+                                      (group_areas[group_areas$code==i,][["sample_count"]]*3), method = "random")
+    
+    xx.missing.sample <- rbind(xx.missing.sample,my.missing.sample)
+    print(sum(xx.missing.sample$sample_count))
+  }
+  print(i)
+  print(xx.missing.sample)
+  x.missing.sample <- rbind(x.missing.sample,xx.missing.sample)
+}
+
+# Join initial sampling with missing sampling strata data and with missing samples 
+x <- rbind(x, x.missing.sample)
+
+# Remove extra artificial replacements 
+x <- x[x$sample_count > 0,]
+
+# Convert to Shapefile
+z <- x %>% 
+  st_as_sf() %>% 
+  dplyr::group_by(code) %>% 
+  dplyr::mutate(sample_count = as.numeric(sample_count),
+         order = seq_along(code),
+         ID = paste0(code, ".", order),
+         type = ifelse(sample_count >= order, "Target", "Replacement")) %>% 
+  vect()
+
+# Break-------------------------------------------------------------------------
+
+# Export data to Shapefile ----
+  
+  # Write sampling points to shp
+  writeVector(z, "../soil_sampling/JAM/sampling_points.shp", overwrite=TRUE)
+  
+  # Write sampling data as csv
+  z <- st_as_sf(z) %>% st_transform(crs = 4326)
+  z_df <- z %>% 
+    st_coordinates() %>% 
+    cbind(z) %>% 
+    st_drop_geometry() %>% 
+    dplyr::select(ID, type, code, order, X, Y, group)
+  write_csv(z_df, "../soil_sampling/JAM/sampling_points.csv")
+  
+  legend <- z_df %>% 
+    dplyr::select(code, group) %>% 
+    unique()
+  legend <- arrange(legend, as.numeric(code))
+  write_csv(legend, "../soil_sampling/JAM/legend_JAM.csv")  
+  
+  n;nrow(z[z$type=="Target",])
+
+
+```
+
+
+```{r fig:sampling-plot, eval=TRUE, include=TRUE, warning=FALSE, fig.cap="Plot of strata and sampling points"}
+
+  soil_lc <- st_read("../soil_sampling/JAM/strata_diss.shp")
+  soil_lc <- st_cast(soil_lc, 'POLYGON')
+  target <- st_read("../soil_sampling/JAM/sampling_points.shp")
+  target <- target[target$type=="Target",]
+  # Plot final map with the aggregated land use information
+  #mapview(soil_lc["soil_lc"], alpha=0, homebutton=T) + mapview(z[z$type=="Target",], color = "white", col.regions = "tomato")
+  terra::plot(soil_lc["soil_lc"], border=NA, main="Strata classes")
+  terra::points(target[target$type=="Target",])
+  
+
+
+```
+
+
+## Stratified random sampling for large areas
+
+The implementation of a stratified random sampling, along with target and replacement points, can present operating difficulties when dealing with areas of significant size and with locations that are hard to reach. To address this issue, the sampling approach can be modified by excluding areas with limited accessibility.
+
+This modification can streamline fieldwork operations and establish a feasible sampling method while still retaining the essence of the stratified random sampling framework. By excluding areas with limited accessibility, the sampling design can be adjusted to ensure a more practical and effective approach to data collection.
+
+ * **Delineation of sampling accessibility:** The sampling area can be further limited based on accessibility considerations. Areas with very limited accessibility, defined as regions located more than 1 kilometre away from a main road or access path, may be excluded from sampling areas. To accomplish this, a map of main roads and paths can be used to establish a sampling buffer that includes areas within a 1-kilometre buffer around the road infrastructures. This exclusion helps to eliminate the most remote and challenging-to-access areas. An additional layer of accessibility information can be incorporated based on population distribution in the country, considering that, if population is present, there is a high change that points in the surroundings can be accessible for sampling. In this case, populated nuclei are vectorized into points, and a 250-meter buffer is then generated around each point. These resulting areas can be then added to the 1-kilometre buffer around the roads, which collectively defined the final sampling area.
+ 
+ * **Substitution of replacement points with replacement areas in close proximity to the target points:** The sampling design presented before included designated replacement points to serve as substitutes for each target point in the case that it would be inaccessible during fieldwork. However, this approach presented challenges, particularly for large areas, as the replacement point could be located far from the target point, resulting in significant logistical efforts. This limitation posed a risk of delays in completing the sampling campaign within the allocated time frame. To address this challenge, an alternative strategy is to replace the idea of replacement points with replacement areas situated in the immediate vicinity of the target point. The replacement area for each target point is now confined within a 500-meter buffer surrounding the target and falls within the same sampling stratum. This approach concentrates sampling and replacement activities within a specific geographic area, streamlining the overall process. By reducing the need for extensive travel, this method enhances efficiency and facilitates sample collection. Figure 2 illustrates the distribution of sampling points and replacement areas for visualization.
+ 
+  * **Additional area exclusion:** Some areas can be identified as not suitable for sampling purposes. This is the case of certain natural protected areas, conflict regions presenting risks for field operators, etc. These areas must be identified masked at an initial stage of the design to exclude them from the sampling strata.
+ 
+ The procedure is the same as that previously presented, with the difference that buffers and exclusion areas must be masked-out from the strata map before performing the random-sampling.
+ 
+ 
+```{r replacement-areas, eval=FALSE, include=TRUE} 
+
+ # Compute sampling areas WITH REPLACEMENT -----
+  if(REPLACEMENT){
+      # Load strata
+      soil_lc <- st_read("../soil_sampling/JAM/strata.shp")
+    
+      # Read sampling. points from previous step
+      z <- st_read("../soil_sampling/JAM/sampling_points.shp")
+      
+      # Define buffer of 500 meters (coordinate system must be in metric base)
+      samples.buffer = 500
+      buf.samples <- st_buffer(z, dist=samples.buffer)
+    
+      # Intersect buffers
+      samples_buffer = st_intersection(soil_lc, buf.samples)
+      samples_buffer <- samples_buffer[samples_buffer$type=="Target",]
+      samples_buffer <- samples_buffer[samples_buffer$soil_lc==samples_buffer$group,]
+      # Save Sampling areas
+      st_write(samples_buffer, paste0('../soil_sampling/JAM/replacement_areas_', samples.buffer, '.shp'), delete_dsn = TRUE)
+      
+      # Write target points only
+      targets <- z[z$type=="Target",]
+      st_write(targets, '../soil_sampling/JAM/sampling_points_TAR.shp', delete_dsn = TRUE)
+  }
+
+```
+
+
+

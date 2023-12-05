@@ -6,6 +6,6 @@ bookdown::gitbook:
       before: |
         <li><a href="./">Soil Sampling Design</a></li>
       after: |
-        <li><a href="https://bookdown.org" target="blank">Global Soil Partnership</a></li>
-    edit: https://github.com/luislado/bookdown-tutorial/edit/master/%s
+        <li><a href="https://www.fao.org/global-soil-partnership/en/" target="blank">Global Soil Partnership</a></li>
+    edit: https://github.com/luislado/Sampling_Design_GSP/edit/master/%s
     download: ["pdf"]

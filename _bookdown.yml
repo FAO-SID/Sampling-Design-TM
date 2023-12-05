@@ -7,6 +7,7 @@ rmd_files: [
   "01-intro.Rmd",
   "02-legacy_data.Rmd",
   "03-optimal_n.Rmd",
+  "04-stratified_RS.Rmd",
   "07-references.Rmd"]
 delete_merged_file: true 
 output_dir: "docs"

@@ -1,35 +1,34 @@
 # (PART) Part two - Soil Sampling Design {-} 
 
-# Creating a new sampling design
+# Creating a sampling design
 
+## Determining the optimal sample size
 
+Several strategies exist for designing soil sampling, including regular, random, and stratified sampling. Each strategy comes with its own set of advantages and limitations, which must be carefully considered before commencing a soil sampling campaign. Regular sampling, also called grid sampling, is straightforward and ensures uniform coverage, making it suitable for spatial analysis and detecting trends. However, it may introduce bias and miss small-scale variability. Generally, random sampling may require a larger number of samples to accurately capture soil variability compared to stratified sampling, which is more targeted. Nonetheless, from a statistical standpoint, random sampling is often preferred. It effectively minimizes selection bias by giving every part of the study area an equal chance of being selected. This approach yields a sample that is truly representative of the entire population, leading to more accurate, broadly applicable conclusions. Random sampling also supports valid statistical inferences, ensures reliability of results, and simplifies the estimation of errors, thereby facilitating a broad spectrum of statistical analyses.
 
-Determining the optimal sample size
+Crucially, the determination of both the number and locations of soil samples is a pivotal factor in the success of any sampling campaign. The chosen strategy directly influences the representativeness and accuracy of the soil data collected, which in turn impacts the quality of the conclusions drawn from the study.
 
+```{r setup_wd_03, eval=FALSE, include=FALSE}
 
-We load R packages and define the working directory to the directory in which the actual file is located and load the environmental rasters from the `data` folder.
-
-
-```{r setup_wd_03, eval=FALSE, include=TRUE}
-# Load packages as a vector objects
+  # Load packages as a vector objects
   packages <- c("sp", "terra", "clhs", "entropy", "tripack","manipulate","dplyr","plotly") # Create a vector of packages to use
   lapply(packages, require, character.only = TRUE) # Load packages
   rm(packages) # Remove object to save memory space 
 
-# Set working directory to source file location
+  # Set working directory to source file location
   setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 ```
 
 ```{r load_wd_03, eval=TRUE, include=FALSE}
 
-# Set working directory to source file location
+  # Set working directory to source file location
   setwd("/Users/luislado/Dropbox/Github/Sampling_Design_GSP")
 
 ```
 
 ```{r load_data_03, eval=TRUE, include=TRUE}
-## Load raster covariate data----
+  ## Load raster covariate data----
   # Read Spatial data covariates as rasters with terra
   rasters <- "data/rasters"
   cov.dat <-  list.files(rasters, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
@@ -51,30 +50,31 @@ We load R packages and define the working directory to the directory in which th
   number_of_samples <- c()
   prop_explained <- c()
   klo_samples <-c()
-    
+  samples_storage <- list()
+
   # Define the number of samples to be tested in a loop (from initial to final) and the step of the sequence
   initial.n <- 10
-  final.n <- 500
-  by.n <- 20
+  final.n <- 400
+  by.n <- 5
   
 ```
 
 
-```{r compute_n_optimal_03, eval=TRUE, include=TRUE}
+```{r compute_n_optimal_03, eval=TRUE, include=TRUE, fig.cap="Distribution of covariates in the sample space"}
 
   for (dede in seq(initial.n, final.n, by=by.n)){
     p.dat_I <- spatSample(cov.dat,dede, na.rm=TRUE,xy=TRUE,method="random")
     p.dat_I_sp <-  p.dat_I 
     coordinates(p.dat_I_sp)<- ~ x + y 
+    # Store sampling scheme in list
+    samples_storage[[paste0("N", dede)]] <- p.dat_I_sp
+    # Get covariate values for each point
     p.dat_I <- p.dat_I[3:ncol(p.dat_I)]
   
-  
   ## Comparison of population and sample distributions ----
-  
-    # Kullback-Leibler (KL) divergence
+     # Kullback-Leibler (KL) divergence
     
-    # Quantiles of the population
-    # Number of bins
+    # Quantiles of the study area: Number of bins
     nb<- 25
     #quantile matrix (of the covariate data)
     q.mat<- matrix(NA, nrow=(nb+1), ncol= nlyr(cov.dat))
@@ -87,8 +87,7 @@ We load R packages and define the working directory to the directory in which th
       j<- j+1}
     q.mat
     
-    # Hypercube of population
-    
+    # Hypercube of covariates in study area
     cov.dat.df <- as.data.frame(cov.dat) # convert SpatRaster to dataframe
     cov.mat<- matrix(1, nrow=nb, ncol=ncol(q.mat))
     for (i in 1:nrow(cov.dat.df)){ # the number of pixels
@@ -107,8 +106,7 @@ We load R packages and define the working directory to the directory in which th
       }
     }
     cov.mat
-    
-    
+
     # Compare whole study area covariate space with the selected sample
     # Sample data hypercube (essentially the same script as for the grid data but just doing it on the sample data)
     h.mat<- matrix(1, nrow=nb, ncol=ncol(q.mat))
@@ -179,7 +177,7 @@ We load R packages and define the working directory to the directory in which th
 ```
 
 
-Next Figure shows the distribution of covariates in the sample space.
+Figure \@ref(fig:chunk-compute_n_optimal_03) shows the distribution of covariates in the sample space.
 
 
 ```{r plot_pca_03, eval=TRUE, include=TRUE, fig.cap="Distribution of covariates in the sample space"}
@@ -190,6 +188,7 @@ Next Figure shows the distribution of covariates in the sample space.
 
 
 ```{r results_03, eval=TRUE, include=TRUE}
+
   # Merge data from number of samples, KL Divercence and % representativeness 
   results <- data.frame(number_of_samples,klo_samples,prop_explained)
   names(results)<-c("N","KL","Perc")
@@ -205,16 +204,17 @@ Next Figure shows the distribution of covariates in the sample space.
 ```
 
 
-```{r plot_covandsamples_03, eval=TRUE, include=TRUE, fig.cap="Covariates and distribution of samples"}
+```{r fig:tag-for-figure, fig.cap="Covariates and distribution of samples", eval=TRUE, include=TRUE}
 
-  plot(cov.dat[[1]])
-  points(p.dat_I_sp )
+N_final <- samples_storage[paste0("N",optimal_n$N)][[1]]
+plot(cov.dat[[1]])
+points(N_final)
   
 ```
 
 
 
-```{r plot_KLfunction_03, eval=TRUE, include=TRUE, fig.cap="KL Divergence and Proportion of Representativeness as function of sample size",fig.width=8, fig.height=5}
+```{r fig:plot_KLfunction_03, fig.cap="KL Divergence and Proportion of Representativeness as function of sample size",fig.width=8, fig.height=5, eval=TRUE, include=TRUE}
 
 plot_ly(results,
         x = ~N,
@@ -249,6 +249,9 @@ plot_ly(results,
 
 
 ```
+
+
+
 
 
 
