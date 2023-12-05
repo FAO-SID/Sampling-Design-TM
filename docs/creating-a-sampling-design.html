@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="legacy_data.html"/>
-<link rel="next" href="stratified-random-sampling-design.html"/>
+<link rel="next" href="stratified-sampling-design.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -186,14 +186,15 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="3.1" data-path="creating-a-sampling-design.html"><a href="creating-a-sampling-design.html#determining-the-optimal-sample-size"><i class="fa fa-check"></i><b>3.1</b> Determining the optimal sample size</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="stratified-random-sampling-design.html"><a href="stratified-random-sampling-design.html"><i class="fa fa-check"></i><b>4</b> Stratified Random Sampling Design</a>
+<li class="chapter" data-level="4" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html"><i class="fa fa-check"></i><b>4</b> Stratified Sampling Design</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="stratified-random-sampling-design.html"><a href="stratified-random-sampling-design.html#general-procedure"><i class="fa fa-check"></i><b>4.1</b> General Procedure</a>
+<li class="chapter" data-level="4.1" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#general-procedure"><i class="fa fa-check"></i><b>4.1</b> General Procedure</a>
 <ul>
-<li class="chapter" data-level="4.1.1" data-path="stratified-random-sampling-design.html"><a href="stratified-random-sampling-design.html#strata-creation"><i class="fa fa-check"></i><b>4.1.1</b> Strata creation</a></li>
-<li class="chapter" data-level="4.1.2" data-path="stratified-random-sampling-design.html"><a href="stratified-random-sampling-design.html#stratified-random-sampling"><i class="fa fa-check"></i><b>4.1.2</b> Stratified random sampling</a></li>
+<li class="chapter" data-level="4.1.1" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#strata-creation"><i class="fa fa-check"></i><b>4.1.1</b> Strata creation</a></li>
+<li class="chapter" data-level="4.1.2" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-random-sampling"><i class="fa fa-check"></i><b>4.1.2</b> Stratified random sampling</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="stratified-random-sampling-design.html"><a href="stratified-random-sampling-design.html#stratified-random-sampling-for-large-areas"><i class="fa fa-check"></i><b>4.2</b> Stratified random sampling for large areas</a></li>
+<li class="chapter" data-level="4.2" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-random-sampling-for-large-areas"><i class="fa fa-check"></i><b>4.2</b> Stratified random sampling for large areas</a></li>
+<li class="chapter" data-level="4.3" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-regular-sampling"><i class="fa fa-check"></i><b>4.3</b> Stratified regular sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -222,12 +223,15 @@ Soil Sampling Design</p></a>
 <div id="determining-the-optimal-sample-size" class="section level2 hasAnchor" number="3.1">
 <h2><span class="header-section-number">3.1</span> Determining the optimal sample size<a href="creating-a-sampling-design.html#determining-the-optimal-sample-size" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Several strategies exist for designing soil sampling, including regular, random, and stratified sampling. Each strategy comes with its own set of advantages and limitations, which must be carefully considered before commencing a soil sampling campaign. Regular sampling, also called grid sampling, is straightforward and ensures uniform coverage, making it suitable for spatial analysis and detecting trends. However, it may introduce bias and miss small-scale variability. Generally, random sampling may require a larger number of samples to accurately capture soil variability compared to stratified sampling, which is more targeted. Nonetheless, from a statistical standpoint, random sampling is often preferred. It effectively minimizes selection bias by giving every part of the study area an equal chance of being selected. This approach yields a sample that is truly representative of the entire population, leading to more accurate, broadly applicable conclusions. Random sampling also supports valid statistical inferences, ensures reliability of results, and simplifies the estimation of errors, thereby facilitating a broad spectrum of statistical analyses.</p>
-<p>Crucially, the determination of both the number and locations of soil samples is a pivotal factor in the success of any sampling campaign. The chosen strategy directly influences the representativeness and accuracy of the soil data collected, which in turn impacts the quality of the conclusions drawn from the study.</p>
+<p>The determination of both the number and locations of soil samples is an important element in the success of any sampling campaign. The chosen strategy directly influences the representativeness and accuracy of the soil data collected, which in turn impacts the quality of the conclusions drawn from the study.</p>
+<p>In this exercise, we make use of the data provided by <span class="citation">(<a href="#ref-Malone" role="doc-biblioref">Malone, Minansy and Brungard, 2019</a>)</span> with 4 raster covariates in a 100 has area. We want to determine the minimal number of soil samples that must be collated to capture at least the 95% of variability within the environmental covariates. The procedure start with random distribution of a low number of samples in the area, determine the values of the spatial covariates, and compare them with those representing the whole diversity in the area at pixel scale. The comparisons are made using the <code>'KL divergence'</code> and the <code>'% of repressentativeness'</code> - i.e. the variability of covariate information in the complete area related to the variability of covariate information in the dataset of samples. Further information can be found in the original work of <span class="citation">(<a href="#ref-Malone" role="doc-biblioref">Malone, Minansy and Brungard, 2019</a>)</span>.</p>
+<p>The initial section of the script is related to setup options in the methodology. We load of R packages, define the working directory, load covariate data and store it as <code>SpatRaster</code> object. Here, parameter related to further aspects of the analyses such as the initial and final number of samples, and the increment step are defined.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="creating-a-sampling-design.html#cb16-1" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Load raster covariate data----</span></span>
 <span id="cb16-2"><a href="creating-a-sampling-design.html#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Read Spatial data covariates as rasters with terra</span></span>
 <span id="cb16-3"><a href="creating-a-sampling-design.html#cb16-3" aria-hidden="true" tabindex="-1"></a>  rasters <span class="ot">&lt;-</span> <span class="st">&quot;data/rasters&quot;</span></span>
 <span id="cb16-4"><a href="creating-a-sampling-design.html#cb16-4" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span>  <span class="fu">list.files</span>(rasters, <span class="at">pattern =</span> <span class="st">&quot;tif$&quot;</span>,  <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb16-5"><a href="creating-a-sampling-design.html#cb16-5" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(cov.dat)</span></code></pre></div>
+<p>We can see the covariates in a plot.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="creating-a-sampling-design.html#cb17-1" aria-hidden="true" tabindex="-1"></a>   <span class="fu">plot</span>(cov.dat)</span></code></pre></div>
 <div class="figure">
 <img src="Technical_Manual-on-Sampling-Design_files/figure-html/plot_covdata_03-1.png" alt="Plot of the covariates" width="672" />
@@ -235,127 +239,135 @@ Soil Sampling Design</p></a>
 (#fig:plot_covdata_03)Plot of the covariates
 </p>
 </div>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="creating-a-sampling-design.html#cb18-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define empty vectors to store results</span></span>
-<span id="cb18-2"><a href="creating-a-sampling-design.html#cb18-2" aria-hidden="true" tabindex="-1"></a>  number_of_samples <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb18-3"><a href="creating-a-sampling-design.html#cb18-3" aria-hidden="true" tabindex="-1"></a>  prop_explained <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb18-4"><a href="creating-a-sampling-design.html#cb18-4" aria-hidden="true" tabindex="-1"></a>  klo_samples <span class="ot">&lt;-</span><span class="fu">c</span>()</span>
-<span id="cb18-5"><a href="creating-a-sampling-design.html#cb18-5" aria-hidden="true" tabindex="-1"></a>  samples_storage <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb18-6"><a href="creating-a-sampling-design.html#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="creating-a-sampling-design.html#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define the number of samples to be tested in a loop (from initial to final) and the step of the sequence</span></span>
-<span id="cb18-8"><a href="creating-a-sampling-design.html#cb18-8" aria-hidden="true" tabindex="-1"></a>  initial.n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb18-9"><a href="creating-a-sampling-design.html#cb18-9" aria-hidden="true" tabindex="-1"></a>  final.n <span class="ot">&lt;-</span> <span class="dv">400</span></span>
-<span id="cb18-10"><a href="creating-a-sampling-design.html#cb18-10" aria-hidden="true" tabindex="-1"></a>  by.n <span class="ot">&lt;-</span> <span class="dv">5</span></span></code></pre></div>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="creating-a-sampling-design.html#cb19-1" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (dede <span class="cf">in</span> <span class="fu">seq</span>(initial.n, final.n, <span class="at">by=</span>by.n)){</span>
-<span id="cb19-2"><a href="creating-a-sampling-design.html#cb19-2" aria-hidden="true" tabindex="-1"></a>    p.dat_I <span class="ot">&lt;-</span> <span class="fu">spatSample</span>(cov.dat,dede, <span class="at">na.rm=</span><span class="cn">TRUE</span>,<span class="at">xy=</span><span class="cn">TRUE</span>,<span class="at">method=</span><span class="st">&quot;random&quot;</span>)</span>
-<span id="cb19-3"><a href="creating-a-sampling-design.html#cb19-3" aria-hidden="true" tabindex="-1"></a>    p.dat_I_sp <span class="ot">&lt;-</span>  p.dat_I </span>
-<span id="cb19-4"><a href="creating-a-sampling-design.html#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coordinates</span>(p.dat_I_sp)<span class="ot">&lt;-</span> <span class="er">~</span> x <span class="sc">+</span> y </span>
-<span id="cb19-5"><a href="creating-a-sampling-design.html#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Store sampling scheme in list</span></span>
-<span id="cb19-6"><a href="creating-a-sampling-design.html#cb19-6" aria-hidden="true" tabindex="-1"></a>    samples_storage[[<span class="fu">paste0</span>(<span class="st">&quot;N&quot;</span>, dede)]] <span class="ot">&lt;-</span> p.dat_I_sp</span>
-<span id="cb19-7"><a href="creating-a-sampling-design.html#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get covariate values for each point</span></span>
-<span id="cb19-8"><a href="creating-a-sampling-design.html#cb19-8" aria-hidden="true" tabindex="-1"></a>    p.dat_I <span class="ot">&lt;-</span> p.dat_I[<span class="dv">3</span><span class="sc">:</span><span class="fu">ncol</span>(p.dat_I)]</span>
-<span id="cb19-9"><a href="creating-a-sampling-design.html#cb19-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-10"><a href="creating-a-sampling-design.html#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Comparison of population and sample distributions ----</span></span>
-<span id="cb19-11"><a href="creating-a-sampling-design.html#cb19-11" aria-hidden="true" tabindex="-1"></a>     <span class="co"># Kullback-Leibler (KL) divergence</span></span>
-<span id="cb19-12"><a href="creating-a-sampling-design.html#cb19-12" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb19-13"><a href="creating-a-sampling-design.html#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Quantiles of the study area: Number of bins</span></span>
-<span id="cb19-14"><a href="creating-a-sampling-design.html#cb19-14" aria-hidden="true" tabindex="-1"></a>    nb<span class="ot">&lt;-</span> <span class="dv">25</span></span>
-<span id="cb19-15"><a href="creating-a-sampling-design.html#cb19-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">#quantile matrix (of the covariate data)</span></span>
-<span id="cb19-16"><a href="creating-a-sampling-design.html#cb19-16" aria-hidden="true" tabindex="-1"></a>    q.mat<span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow=</span>(nb<span class="sc">+</span><span class="dv">1</span>), <span class="at">ncol=</span> <span class="fu">nlyr</span>(cov.dat))</span>
-<span id="cb19-17"><a href="creating-a-sampling-design.html#cb19-17" aria-hidden="true" tabindex="-1"></a>    j<span class="ot">=</span><span class="dv">1</span></span>
-<span id="cb19-18"><a href="creating-a-sampling-design.html#cb19-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlyr</span>(cov.dat)){ <span class="co">#note the index start here</span></span>
-<span id="cb19-19"><a href="creating-a-sampling-design.html#cb19-19" aria-hidden="true" tabindex="-1"></a>      <span class="co">#get a quantile matrix together of the covariates</span></span>
-<span id="cb19-20"><a href="creating-a-sampling-design.html#cb19-20" aria-hidden="true" tabindex="-1"></a>      ran1 <span class="ot">&lt;-</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">2</span>] <span class="sc">-</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">1</span>]</span>
-<span id="cb19-21"><a href="creating-a-sampling-design.html#cb19-21" aria-hidden="true" tabindex="-1"></a>      step1<span class="ot">&lt;-</span> ran1<span class="sc">/</span>nb </span>
-<span id="cb19-22"><a href="creating-a-sampling-design.html#cb19-22" aria-hidden="true" tabindex="-1"></a>      q.mat[,j]<span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">1</span>], <span class="at">to =</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">2</span>], <span class="at">by =</span>step1)</span>
-<span id="cb19-23"><a href="creating-a-sampling-design.html#cb19-23" aria-hidden="true" tabindex="-1"></a>      j<span class="ot">&lt;-</span> j<span class="sc">+</span><span class="dv">1</span>}</span>
-<span id="cb19-24"><a href="creating-a-sampling-design.html#cb19-24" aria-hidden="true" tabindex="-1"></a>    q.mat</span>
-<span id="cb19-25"><a href="creating-a-sampling-design.html#cb19-25" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb19-26"><a href="creating-a-sampling-design.html#cb19-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Hypercube of covariates in study area</span></span>
-<span id="cb19-27"><a href="creating-a-sampling-design.html#cb19-27" aria-hidden="true" tabindex="-1"></a>    cov.dat.df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(cov.dat) <span class="co"># convert SpatRaster to dataframe</span></span>
-<span id="cb19-28"><a href="creating-a-sampling-design.html#cb19-28" aria-hidden="true" tabindex="-1"></a>    cov.mat<span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow=</span>nb, <span class="at">ncol=</span><span class="fu">ncol</span>(q.mat))</span>
-<span id="cb19-29"><a href="creating-a-sampling-design.html#cb19-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(cov.dat.df)){ <span class="co"># the number of pixels</span></span>
-<span id="cb19-30"><a href="creating-a-sampling-design.html#cb19-30" aria-hidden="true" tabindex="-1"></a>      cntj<span class="ot">&lt;-</span> <span class="dv">1</span> </span>
-<span id="cb19-31"><a href="creating-a-sampling-design.html#cb19-31" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(cov.dat.df)){ <span class="co">#for each column</span></span>
-<span id="cb19-32"><a href="creating-a-sampling-design.html#cb19-32" aria-hidden="true" tabindex="-1"></a>        dd<span class="ot">&lt;-</span> cov.dat.df[i,j]  </span>
-<span id="cb19-33"><a href="creating-a-sampling-design.html#cb19-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nb){  <span class="co">#for each quantile</span></span>
-<span id="cb19-34"><a href="creating-a-sampling-design.html#cb19-34" aria-hidden="true" tabindex="-1"></a>          kl<span class="ot">&lt;-</span> q.mat[k, cntj] </span>
-<span id="cb19-35"><a href="creating-a-sampling-design.html#cb19-35" aria-hidden="true" tabindex="-1"></a>          ku<span class="ot">&lt;-</span> q.mat[k<span class="sc">+</span><span class="dv">1</span>, cntj] </span>
-<span id="cb19-36"><a href="creating-a-sampling-design.html#cb19-36" aria-hidden="true" tabindex="-1"></a>          <span class="cf">if</span> (<span class="fu">is.na</span>(dd)) {</span>
-<span id="cb19-37"><a href="creating-a-sampling-design.html#cb19-37" aria-hidden="true" tabindex="-1"></a>            <span class="fu">print</span>(<span class="st">&#39;Missing&#39;</span>)</span>
-<span id="cb19-38"><a href="creating-a-sampling-design.html#cb19-38" aria-hidden="true" tabindex="-1"></a>          }</span>
-<span id="cb19-39"><a href="creating-a-sampling-design.html#cb19-39" aria-hidden="true" tabindex="-1"></a>          <span class="cf">else</span> <span class="cf">if</span> (dd <span class="sc">&gt;=</span> kl <span class="sc">&amp;</span> dd <span class="sc">&lt;=</span> ku){cov.mat[k, cntj]<span class="ot">&lt;-</span> cov.mat[k, cntj] <span class="sc">+</span> <span class="dv">1</span>} </span>
-<span id="cb19-40"><a href="creating-a-sampling-design.html#cb19-40" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb19-41"><a href="creating-a-sampling-design.html#cb19-41" aria-hidden="true" tabindex="-1"></a>        cntj<span class="ot">&lt;-</span> cntj<span class="sc">+</span><span class="dv">1</span></span>
-<span id="cb19-42"><a href="creating-a-sampling-design.html#cb19-42" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb19-43"><a href="creating-a-sampling-design.html#cb19-43" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb19-44"><a href="creating-a-sampling-design.html#cb19-44" aria-hidden="true" tabindex="-1"></a>    cov.mat</span>
-<span id="cb19-45"><a href="creating-a-sampling-design.html#cb19-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-46"><a href="creating-a-sampling-design.html#cb19-46" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compare whole study area covariate space with the selected sample</span></span>
-<span id="cb19-47"><a href="creating-a-sampling-design.html#cb19-47" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Sample data hypercube (essentially the same script as for the grid data but just doing it on the sample data)</span></span>
-<span id="cb19-48"><a href="creating-a-sampling-design.html#cb19-48" aria-hidden="true" tabindex="-1"></a>    h.mat<span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow=</span>nb, <span class="at">ncol=</span><span class="fu">ncol</span>(q.mat))</span>
-<span id="cb19-49"><a href="creating-a-sampling-design.html#cb19-49" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb19-50"><a href="creating-a-sampling-design.html#cb19-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (ii <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(p.dat_I)){ <span class="co"># the number of observations</span></span>
-<span id="cb19-51"><a href="creating-a-sampling-design.html#cb19-51" aria-hidden="true" tabindex="-1"></a>      cntj<span class="ot">&lt;-</span> <span class="dv">1</span> </span>
-<span id="cb19-52"><a href="creating-a-sampling-design.html#cb19-52" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (jj <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(p.dat_I)){ <span class="co">#for each column</span></span>
-<span id="cb19-53"><a href="creating-a-sampling-design.html#cb19-53" aria-hidden="true" tabindex="-1"></a>        dd<span class="ot">&lt;-</span> p.dat_I[ii,jj]  </span>
-<span id="cb19-54"><a href="creating-a-sampling-design.html#cb19-54" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (kk <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nb){  <span class="co">#for each quantile</span></span>
-<span id="cb19-55"><a href="creating-a-sampling-design.html#cb19-55" aria-hidden="true" tabindex="-1"></a>          kl<span class="ot">&lt;-</span> q.mat[kk, cntj] </span>
-<span id="cb19-56"><a href="creating-a-sampling-design.html#cb19-56" aria-hidden="true" tabindex="-1"></a>          ku<span class="ot">&lt;-</span> q.mat[kk<span class="sc">+</span><span class="dv">1</span>, cntj] </span>
-<span id="cb19-57"><a href="creating-a-sampling-design.html#cb19-57" aria-hidden="true" tabindex="-1"></a>          <span class="cf">if</span> (dd <span class="sc">&gt;=</span> kl <span class="sc">&amp;</span> dd <span class="sc">&lt;=</span> ku){h.mat[kk, cntj]<span class="ot">&lt;-</span> h.mat[kk, cntj] <span class="sc">+</span> <span class="dv">1</span>}</span>
-<span id="cb19-58"><a href="creating-a-sampling-design.html#cb19-58" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb19-59"><a href="creating-a-sampling-design.html#cb19-59" aria-hidden="true" tabindex="-1"></a>        cntj<span class="ot">&lt;-</span> cntj<span class="sc">+</span><span class="dv">1</span></span>
-<span id="cb19-60"><a href="creating-a-sampling-design.html#cb19-60" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb19-61"><a href="creating-a-sampling-design.html#cb19-61" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb19-62"><a href="creating-a-sampling-design.html#cb19-62" aria-hidden="true" tabindex="-1"></a>    h.mat </span>
-<span id="cb19-63"><a href="creating-a-sampling-design.html#cb19-63" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb19-64"><a href="creating-a-sampling-design.html#cb19-64" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb19-65"><a href="creating-a-sampling-design.html#cb19-65" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Compute Kullback-Leibler (KL) divergence</span></span>
-<span id="cb19-66"><a href="creating-a-sampling-design.html#cb19-66" aria-hidden="true" tabindex="-1"></a>    kl.index <span class="ot">&lt;-</span><span class="fu">c</span>()</span>
-<span id="cb19-67"><a href="creating-a-sampling-design.html#cb19-67" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(cov.dat.df)){</span>
-<span id="cb19-68"><a href="creating-a-sampling-design.html#cb19-68" aria-hidden="true" tabindex="-1"></a>      kl <span class="ot">&lt;-</span>    <span class="fu">KL.empirical</span>(<span class="fu">c</span>(cov.mat[,i]), <span class="fu">c</span>(h.mat[,i]))</span>
-<span id="cb19-69"><a href="creating-a-sampling-design.html#cb19-69" aria-hidden="true" tabindex="-1"></a>      kl.index <span class="ot">&lt;-</span> <span class="fu">c</span>(kl.index,kl)</span>
-<span id="cb19-70"><a href="creating-a-sampling-design.html#cb19-70" aria-hidden="true" tabindex="-1"></a>      klo <span class="ot">&lt;-</span>  <span class="fu">mean</span>(kl.index)</span>
-<span id="cb19-71"><a href="creating-a-sampling-design.html#cb19-71" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb19-72"><a href="creating-a-sampling-design.html#cb19-72" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-73"><a href="creating-a-sampling-design.html#cb19-73" aria-hidden="true" tabindex="-1"></a>    <span class="do">#### Representativeness of the Legacy Dataset: ----</span></span>
-<span id="cb19-74"><a href="creating-a-sampling-design.html#cb19-74" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Calculate the proportion of &quot;env. variables&quot; in the covariate spectra that fall within the convex hull of variables in the &quot;environmental sample space&quot;</span></span>
-<span id="cb19-75"><a href="creating-a-sampling-design.html#cb19-75" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Principal component of the legacy data sample</span></span>
-<span id="cb19-76"><a href="creating-a-sampling-design.html#cb19-76" aria-hidden="true" tabindex="-1"></a>    pca.s <span class="ot">=</span> <span class="fu">prcomp</span>(p.dat_I,<span class="at">scale=</span><span class="cn">TRUE</span>, <span class="at">center=</span><span class="cn">TRUE</span>)</span>
-<span id="cb19-77"><a href="creating-a-sampling-design.html#cb19-77" aria-hidden="true" tabindex="-1"></a>    scores_pca1 <span class="ot">=</span> <span class="fu">as.data.frame</span>(pca.s<span class="sc">$</span>x)</span>
-<span id="cb19-78"><a href="creating-a-sampling-design.html#cb19-78" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot the first 2 principal components and convex hull</span></span>
-<span id="cb19-79"><a href="creating-a-sampling-design.html#cb19-79" aria-hidden="true" tabindex="-1"></a>    rand.tr <span class="ot">&lt;-</span> <span class="fu">tri.mesh</span>(scores_pca1[,<span class="dv">1</span>],scores_pca1[,<span class="dv">2</span>],<span class="st">&quot;remove&quot;</span>) <span class="co"># Delaunay triangulation </span></span>
-<span id="cb19-80"><a href="creating-a-sampling-design.html#cb19-80" aria-hidden="true" tabindex="-1"></a>    rand.ch<span class="ot">&lt;-</span><span class="fu">convex.hull</span>(rand.tr, <span class="at">plot.it=</span>F) <span class="co"># convex hull</span></span>
-<span id="cb19-81"><a href="creating-a-sampling-design.html#cb19-81" aria-hidden="true" tabindex="-1"></a>    pr_poly <span class="ot">=</span> <span class="fu">cbind</span>(<span class="at">x=</span><span class="fu">c</span>(rand.ch<span class="sc">$</span>x),<span class="at">y=</span><span class="fu">c</span>(rand.ch<span class="sc">$</span>y)) <span class="co"># save the convex hull vertices</span></span>
-<span id="cb19-82"><a href="creating-a-sampling-design.html#cb19-82" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot(scores_pca1[,1], scores_pca1[,2], xlab=&quot;PCA 1&quot;, ylab=&quot;PCA 2&quot;, xlim=c(min(scores_pca1[,1:2]), max(scores_pca1[,1:2])),ylim=c(min(scores_pca1[,1:2]), max(scores_pca1[,1:2])), main=&#39;Convex hull of soil legacy data&#39;)</span></span>
-<span id="cb19-83"><a href="creating-a-sampling-design.html#cb19-83" aria-hidden="true" tabindex="-1"></a>    <span class="co"># lines(c(rand.ch$x,rand.ch$x[1]), c(rand.ch$y,rand.ch$y[1]),col=&quot;red&quot;,lwd=1) # draw the convex hull (domain of legacy data)</span></span>
-<span id="cb19-84"><a href="creating-a-sampling-design.html#cb19-84" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb19-85"><a href="creating-a-sampling-design.html#cb19-85" aria-hidden="true" tabindex="-1"></a>    <span class="co"># PCA projection of study area population onto the principal components</span></span>
-<span id="cb19-86"><a href="creating-a-sampling-design.html#cb19-86" aria-hidden="true" tabindex="-1"></a>    PCA_projection<span class="ot">&lt;-</span> <span class="fu">predict</span>(pca.s, cov.dat.df) <span class="co"># Project study area population onto sample PC</span></span>
-<span id="cb19-87"><a href="creating-a-sampling-design.html#cb19-87" aria-hidden="true" tabindex="-1"></a>    newScores <span class="ot">=</span> <span class="fu">cbind</span>(<span class="at">x=</span>PCA_projection[,<span class="dv">1</span>],<span class="at">y=</span>PCA_projection[,<span class="dv">2</span>]) <span class="co"># PC scores of projected population</span></span>
-<span id="cb19-88"><a href="creating-a-sampling-design.html#cb19-88" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check which points fall within the polygon</span></span>
-<span id="cb19-89"><a href="creating-a-sampling-design.html#cb19-89" aria-hidden="true" tabindex="-1"></a>    pip <span class="ot">&lt;-</span> <span class="fu">point.in.polygon</span>(newScores[,<span class="dv">2</span>], newScores[,<span class="dv">1</span>], pr_poly[,<span class="dv">2</span>],pr_poly[,<span class="dv">1</span>],<span class="at">mode.checked=</span><span class="cn">FALSE</span>)</span>
-<span id="cb19-90"><a href="creating-a-sampling-design.html#cb19-90" aria-hidden="true" tabindex="-1"></a>    newScores <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(newScores, pip))</span>
-<span id="cb19-91"><a href="creating-a-sampling-design.html#cb19-91" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot the polygon and all points to be checked</span></span>
-<span id="cb19-92"><a href="creating-a-sampling-design.html#cb19-92" aria-hidden="true" tabindex="-1"></a>    <span class="co"># if(dede == final.n){</span></span>
-<span id="cb19-93"><a href="creating-a-sampling-design.html#cb19-93" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot(newScores, xlab=&quot;PCA 1&quot;, ylab=&quot;PCA 2&quot;, xlim=c(min(newScores[,1:2]), max(newScores[,1:2])), ylim=c(min(newScores[,1:2]), max(newScores[,1:2])), col=&#39;black&#39;, main=&#39;Environmental space plots over the convex hull of soil legacy data&#39;)</span></span>
-<span id="cb19-94"><a href="creating-a-sampling-design.html#cb19-94" aria-hidden="true" tabindex="-1"></a>    <span class="co"># polygon(pr_poly,col=&#39;#99999990&#39;)</span></span>
-<span id="cb19-95"><a href="creating-a-sampling-design.html#cb19-95" aria-hidden="true" tabindex="-1"></a>    <span class="co"># # Plot points outside convex hull  </span></span>
-<span id="cb19-96"><a href="creating-a-sampling-design.html#cb19-96" aria-hidden="true" tabindex="-1"></a>    <span class="co"># points(newScores[which(newScores$pip==0),1:2],pch=&#39;X&#39;, col=&#39;red&#39;)</span></span>
-<span id="cb19-97"><a href="creating-a-sampling-design.html#cb19-97" aria-hidden="true" tabindex="-1"></a>    <span class="co"># }</span></span>
-<span id="cb19-98"><a href="creating-a-sampling-design.html#cb19-98" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Proportion of the conditions in the study area that fall within the convex hull</span></span>
-<span id="cb19-99"><a href="creating-a-sampling-design.html#cb19-99" aria-hidden="true" tabindex="-1"></a>    <span class="co">#sum(newScores$pip)/nrow(newScores)*100 </span></span>
-<span id="cb19-100"><a href="creating-a-sampling-design.html#cb19-100" aria-hidden="true" tabindex="-1"></a>  klo_samples <span class="ot">&lt;-</span> <span class="fu">c</span>(klo_samples,klo)</span>
-<span id="cb19-101"><a href="creating-a-sampling-design.html#cb19-101" aria-hidden="true" tabindex="-1"></a>  prop_explained <span class="ot">&lt;-</span> <span class="fu">c</span>(prop_explained,<span class="fu">sum</span>(newScores<span class="sc">$</span>pip)<span class="sc">/</span><span class="fu">nrow</span>(newScores)<span class="sc">*</span><span class="dv">100</span>)</span>
-<span id="cb19-102"><a href="creating-a-sampling-design.html#cb19-102" aria-hidden="true" tabindex="-1"></a>  number_of_samples <span class="ot">&lt;-</span> <span class="fu">c</span>(number_of_samples,dede)</span>
-<span id="cb19-103"><a href="creating-a-sampling-design.html#cb19-103" aria-hidden="true" tabindex="-1"></a>  <span class="co"># print(paste(&quot;N samples = &quot;,dede, &quot; out of &quot;,final.n, &quot; ;KL = &quot;, klo, &quot;;Proportion = &quot;, sum(newScores$pip)/nrow(newScores)*100 ))</span></span>
-<span id="cb19-104"><a href="creating-a-sampling-design.html#cb19-104" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb19-105"><a href="creating-a-sampling-design.html#cb19-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-106"><a href="creating-a-sampling-design.html#cb19-106" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot the polygon and all points to be checked</span></span>
-<span id="cb19-107"><a href="creating-a-sampling-design.html#cb19-107" aria-hidden="true" tabindex="-1"></a>     <span class="fu">plot</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">xlab=</span><span class="st">&quot;PCA 1&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;PCA 2&quot;</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="fu">min</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]), <span class="fu">max</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])), <span class="at">ylim=</span><span class="fu">c</span>(<span class="fu">min</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]), <span class="fu">max</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])),</span>
-<span id="cb19-108"><a href="creating-a-sampling-design.html#cb19-108" aria-hidden="true" tabindex="-1"></a>          <span class="at">col=</span><span class="st">&#39;black&#39;</span>, <span class="at">main=</span><span class="st">&#39;Environmental space plots over the convex hull of soil legacy data&#39;</span>)</span>
-<span id="cb19-109"><a href="creating-a-sampling-design.html#cb19-109" aria-hidden="true" tabindex="-1"></a>     <span class="fu">polygon</span>(pr_poly,<span class="at">col=</span><span class="st">&#39;#99999990&#39;</span>)</span>
-<span id="cb19-110"><a href="creating-a-sampling-design.html#cb19-110" aria-hidden="true" tabindex="-1"></a>    <span class="co"># # Plot points outside convex hull  </span></span>
-<span id="cb19-111"><a href="creating-a-sampling-design.html#cb19-111" aria-hidden="true" tabindex="-1"></a>     <span class="fu">points</span>(newScores[<span class="fu">which</span>(newScores<span class="sc">$</span>pip<span class="sc">==</span><span class="dv">0</span>),<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">col=</span><span class="st">&#39;red&#39;</span>, <span class="at">pch=</span><span class="dv">12</span>, <span class="at">cex =</span><span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="creating-a-sampling-design.html#cb18-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define the number of samples to be tested in a loop (from initial to final) and the step of the sequence</span></span>
+<span id="cb18-2"><a href="creating-a-sampling-design.html#cb18-2" aria-hidden="true" tabindex="-1"></a>  initial.n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb18-3"><a href="creating-a-sampling-design.html#cb18-3" aria-hidden="true" tabindex="-1"></a>  final.n <span class="ot">&lt;-</span> <span class="dv">400</span></span>
+<span id="cb18-4"><a href="creating-a-sampling-design.html#cb18-4" aria-hidden="true" tabindex="-1"></a>  by.n <span class="ot">&lt;-</span> <span class="dv">5</span></span></code></pre></div>
+<p>The second section is where the analyses of divergence and repressentativeness of the sampling scheme are calculated.</p>
+<p>The analyses are performed in a loop using growing numbers of samples at each trial. Some empty vectors are defined to store the output results at each loop. At each trial of sample size `‘N’, soil samples are located randomly on the space of covariates, and 10 replicates are calculated to determine the amount intervariability in KL divergence and repressentativeness in the trial. The final results for each sample size correspond to the mean results obtained from each pass at the corresponding size. The optimal sample size selected correspond to the minimum sample size that accounts for at least 95% of the variability of information in the covariates within the area. The optimal sampling schema proposed correspond to the random scheme at the optimal sample size with higher value of repressentativeness.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="creating-a-sampling-design.html#cb19-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define empty vectors to store results</span></span>
+<span id="cb19-2"><a href="creating-a-sampling-design.html#cb19-2" aria-hidden="true" tabindex="-1"></a>  number_of_samples <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb19-3"><a href="creating-a-sampling-design.html#cb19-3" aria-hidden="true" tabindex="-1"></a>  prop_explained <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb19-4"><a href="creating-a-sampling-design.html#cb19-4" aria-hidden="true" tabindex="-1"></a>  klo_samples <span class="ot">&lt;-</span><span class="fu">c</span>()</span>
+<span id="cb19-5"><a href="creating-a-sampling-design.html#cb19-5" aria-hidden="true" tabindex="-1"></a>  samples_storage <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb19-6"><a href="creating-a-sampling-design.html#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="creating-a-sampling-design.html#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="creating-a-sampling-design.html#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (dede <span class="cf">in</span> <span class="fu">seq</span>(initial.n, final.n, <span class="at">by=</span>by.n)){</span>
+<span id="cb19-9"><a href="creating-a-sampling-design.html#cb19-9" aria-hidden="true" tabindex="-1"></a> <span class="cf">for</span> (kaka <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>){</span>
+<span id="cb19-10"><a href="creating-a-sampling-design.html#cb19-10" aria-hidden="true" tabindex="-1"></a>    p.dat_I <span class="ot">&lt;-</span> <span class="fu">spatSample</span>(cov.dat,dede, <span class="at">na.rm=</span><span class="cn">TRUE</span>,<span class="at">xy=</span><span class="cn">TRUE</span>,<span class="at">method=</span><span class="st">&quot;random&quot;</span>)</span>
+<span id="cb19-11"><a href="creating-a-sampling-design.html#cb19-11" aria-hidden="true" tabindex="-1"></a>    p.dat_I_sp <span class="ot">&lt;-</span>  p.dat_I </span>
+<span id="cb19-12"><a href="creating-a-sampling-design.html#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coordinates</span>(p.dat_I_sp)<span class="ot">&lt;-</span> <span class="er">~</span> x <span class="sc">+</span> y </span>
+<span id="cb19-13"><a href="creating-a-sampling-design.html#cb19-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-14"><a href="creating-a-sampling-design.html#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Store samples in list</span></span>
+<span id="cb19-15"><a href="creating-a-sampling-design.html#cb19-15" aria-hidden="true" tabindex="-1"></a>  samples_storage[[<span class="fu">paste0</span>(<span class="st">&quot;N&quot;</span>, dede,<span class="st">&quot;_&quot;</span>,kaka)]] <span class="ot">&lt;-</span> p.dat_I_sp</span>
+<span id="cb19-16"><a href="creating-a-sampling-design.html#cb19-16" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb19-17"><a href="creating-a-sampling-design.html#cb19-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-18"><a href="creating-a-sampling-design.html#cb19-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get covariate values for each point</span></span>
+<span id="cb19-19"><a href="creating-a-sampling-design.html#cb19-19" aria-hidden="true" tabindex="-1"></a>    p.dat_I <span class="ot">&lt;-</span> p.dat_I[<span class="dv">3</span><span class="sc">:</span><span class="fu">ncol</span>(p.dat_I)]</span>
+<span id="cb19-20"><a href="creating-a-sampling-design.html#cb19-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-21"><a href="creating-a-sampling-design.html#cb19-21" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Comparison of population and sample distributions ----</span></span>
+<span id="cb19-22"><a href="creating-a-sampling-design.html#cb19-22" aria-hidden="true" tabindex="-1"></a>     <span class="co"># Kullback-Leibler (KL) divergence</span></span>
+<span id="cb19-23"><a href="creating-a-sampling-design.html#cb19-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-24"><a href="creating-a-sampling-design.html#cb19-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Quantiles of the study area: Number of bins</span></span>
+<span id="cb19-25"><a href="creating-a-sampling-design.html#cb19-25" aria-hidden="true" tabindex="-1"></a>    nb<span class="ot">&lt;-</span> <span class="dv">25</span></span>
+<span id="cb19-26"><a href="creating-a-sampling-design.html#cb19-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">#quantile matrix (of the covariate data)</span></span>
+<span id="cb19-27"><a href="creating-a-sampling-design.html#cb19-27" aria-hidden="true" tabindex="-1"></a>    q.mat<span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow=</span>(nb<span class="sc">+</span><span class="dv">1</span>), <span class="at">ncol=</span> <span class="fu">nlyr</span>(cov.dat))</span>
+<span id="cb19-28"><a href="creating-a-sampling-design.html#cb19-28" aria-hidden="true" tabindex="-1"></a>    j<span class="ot">=</span><span class="dv">1</span></span>
+<span id="cb19-29"><a href="creating-a-sampling-design.html#cb19-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlyr</span>(cov.dat)){ <span class="co">#note the index start here</span></span>
+<span id="cb19-30"><a href="creating-a-sampling-design.html#cb19-30" aria-hidden="true" tabindex="-1"></a>      <span class="co">#get a quantile matrix together of the covariates</span></span>
+<span id="cb19-31"><a href="creating-a-sampling-design.html#cb19-31" aria-hidden="true" tabindex="-1"></a>      ran1 <span class="ot">&lt;-</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">2</span>] <span class="sc">-</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">1</span>]</span>
+<span id="cb19-32"><a href="creating-a-sampling-design.html#cb19-32" aria-hidden="true" tabindex="-1"></a>      step1<span class="ot">&lt;-</span> ran1<span class="sc">/</span>nb </span>
+<span id="cb19-33"><a href="creating-a-sampling-design.html#cb19-33" aria-hidden="true" tabindex="-1"></a>      q.mat[,j]<span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">1</span>], <span class="at">to =</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">2</span>], <span class="at">by =</span>step1)</span>
+<span id="cb19-34"><a href="creating-a-sampling-design.html#cb19-34" aria-hidden="true" tabindex="-1"></a>      j<span class="ot">&lt;-</span> j<span class="sc">+</span><span class="dv">1</span>}</span>
+<span id="cb19-35"><a href="creating-a-sampling-design.html#cb19-35" aria-hidden="true" tabindex="-1"></a>    q.mat</span>
+<span id="cb19-36"><a href="creating-a-sampling-design.html#cb19-36" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-37"><a href="creating-a-sampling-design.html#cb19-37" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Hypercube of covariates in study area</span></span>
+<span id="cb19-38"><a href="creating-a-sampling-design.html#cb19-38" aria-hidden="true" tabindex="-1"></a>    cov.dat.df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(cov.dat) <span class="co"># convert SpatRaster to dataframe</span></span>
+<span id="cb19-39"><a href="creating-a-sampling-design.html#cb19-39" aria-hidden="true" tabindex="-1"></a>    cov.mat<span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow=</span>nb, <span class="at">ncol=</span><span class="fu">ncol</span>(q.mat))</span>
+<span id="cb19-40"><a href="creating-a-sampling-design.html#cb19-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(cov.dat.df)){ <span class="co"># the number of pixels</span></span>
+<span id="cb19-41"><a href="creating-a-sampling-design.html#cb19-41" aria-hidden="true" tabindex="-1"></a>      cntj<span class="ot">&lt;-</span> <span class="dv">1</span> </span>
+<span id="cb19-42"><a href="creating-a-sampling-design.html#cb19-42" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(cov.dat.df)){ <span class="co">#for each column</span></span>
+<span id="cb19-43"><a href="creating-a-sampling-design.html#cb19-43" aria-hidden="true" tabindex="-1"></a>        dd<span class="ot">&lt;-</span> cov.dat.df[i,j]  </span>
+<span id="cb19-44"><a href="creating-a-sampling-design.html#cb19-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nb){  <span class="co">#for each quantile</span></span>
+<span id="cb19-45"><a href="creating-a-sampling-design.html#cb19-45" aria-hidden="true" tabindex="-1"></a>          kl<span class="ot">&lt;-</span> q.mat[k, cntj] </span>
+<span id="cb19-46"><a href="creating-a-sampling-design.html#cb19-46" aria-hidden="true" tabindex="-1"></a>          ku<span class="ot">&lt;-</span> q.mat[k<span class="sc">+</span><span class="dv">1</span>, cntj] </span>
+<span id="cb19-47"><a href="creating-a-sampling-design.html#cb19-47" aria-hidden="true" tabindex="-1"></a>          <span class="cf">if</span> (<span class="fu">is.na</span>(dd)) {</span>
+<span id="cb19-48"><a href="creating-a-sampling-design.html#cb19-48" aria-hidden="true" tabindex="-1"></a>            <span class="fu">print</span>(<span class="st">&#39;Missing&#39;</span>)</span>
+<span id="cb19-49"><a href="creating-a-sampling-design.html#cb19-49" aria-hidden="true" tabindex="-1"></a>          }</span>
+<span id="cb19-50"><a href="creating-a-sampling-design.html#cb19-50" aria-hidden="true" tabindex="-1"></a>          <span class="cf">else</span> <span class="cf">if</span> (dd <span class="sc">&gt;=</span> kl <span class="sc">&amp;</span> dd <span class="sc">&lt;=</span> ku){cov.mat[k, cntj]<span class="ot">&lt;-</span> cov.mat[k, cntj] <span class="sc">+</span> <span class="dv">1</span>} </span>
+<span id="cb19-51"><a href="creating-a-sampling-design.html#cb19-51" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb19-52"><a href="creating-a-sampling-design.html#cb19-52" aria-hidden="true" tabindex="-1"></a>        cntj<span class="ot">&lt;-</span> cntj<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb19-53"><a href="creating-a-sampling-design.html#cb19-53" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb19-54"><a href="creating-a-sampling-design.html#cb19-54" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb19-55"><a href="creating-a-sampling-design.html#cb19-55" aria-hidden="true" tabindex="-1"></a>    cov.mat</span>
+<span id="cb19-56"><a href="creating-a-sampling-design.html#cb19-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-57"><a href="creating-a-sampling-design.html#cb19-57" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compare whole study area covariate space with the selected sample</span></span>
+<span id="cb19-58"><a href="creating-a-sampling-design.html#cb19-58" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Sample data hypercube (essentially the same script as for the grid data but just doing it on the sample data)</span></span>
+<span id="cb19-59"><a href="creating-a-sampling-design.html#cb19-59" aria-hidden="true" tabindex="-1"></a>    h.mat<span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow=</span>nb, <span class="at">ncol=</span><span class="fu">ncol</span>(q.mat))</span>
+<span id="cb19-60"><a href="creating-a-sampling-design.html#cb19-60" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-61"><a href="creating-a-sampling-design.html#cb19-61" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (ii <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(p.dat_I)){ <span class="co"># the number of observations</span></span>
+<span id="cb19-62"><a href="creating-a-sampling-design.html#cb19-62" aria-hidden="true" tabindex="-1"></a>      cntj<span class="ot">&lt;-</span> <span class="dv">1</span> </span>
+<span id="cb19-63"><a href="creating-a-sampling-design.html#cb19-63" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (jj <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(p.dat_I)){ <span class="co">#for each column</span></span>
+<span id="cb19-64"><a href="creating-a-sampling-design.html#cb19-64" aria-hidden="true" tabindex="-1"></a>        dd<span class="ot">&lt;-</span> p.dat_I[ii,jj]  </span>
+<span id="cb19-65"><a href="creating-a-sampling-design.html#cb19-65" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (kk <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nb){  <span class="co">#for each quantile</span></span>
+<span id="cb19-66"><a href="creating-a-sampling-design.html#cb19-66" aria-hidden="true" tabindex="-1"></a>          kl<span class="ot">&lt;-</span> q.mat[kk, cntj] </span>
+<span id="cb19-67"><a href="creating-a-sampling-design.html#cb19-67" aria-hidden="true" tabindex="-1"></a>          ku<span class="ot">&lt;-</span> q.mat[kk<span class="sc">+</span><span class="dv">1</span>, cntj] </span>
+<span id="cb19-68"><a href="creating-a-sampling-design.html#cb19-68" aria-hidden="true" tabindex="-1"></a>          <span class="cf">if</span> (dd <span class="sc">&gt;=</span> kl <span class="sc">&amp;</span> dd <span class="sc">&lt;=</span> ku){h.mat[kk, cntj]<span class="ot">&lt;-</span> h.mat[kk, cntj] <span class="sc">+</span> <span class="dv">1</span>}</span>
+<span id="cb19-69"><a href="creating-a-sampling-design.html#cb19-69" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb19-70"><a href="creating-a-sampling-design.html#cb19-70" aria-hidden="true" tabindex="-1"></a>        cntj<span class="ot">&lt;-</span> cntj<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb19-71"><a href="creating-a-sampling-design.html#cb19-71" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb19-72"><a href="creating-a-sampling-design.html#cb19-72" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb19-73"><a href="creating-a-sampling-design.html#cb19-73" aria-hidden="true" tabindex="-1"></a>    h.mat </span>
+<span id="cb19-74"><a href="creating-a-sampling-design.html#cb19-74" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-75"><a href="creating-a-sampling-design.html#cb19-75" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-76"><a href="creating-a-sampling-design.html#cb19-76" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Compute Kullback-Leibler (KL) divergence</span></span>
+<span id="cb19-77"><a href="creating-a-sampling-design.html#cb19-77" aria-hidden="true" tabindex="-1"></a>    kl.index <span class="ot">&lt;-</span><span class="fu">c</span>()</span>
+<span id="cb19-78"><a href="creating-a-sampling-design.html#cb19-78" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(cov.dat.df)){</span>
+<span id="cb19-79"><a href="creating-a-sampling-design.html#cb19-79" aria-hidden="true" tabindex="-1"></a>      kl <span class="ot">&lt;-</span>    <span class="fu">KL.empirical</span>(<span class="fu">c</span>(cov.mat[,i]), <span class="fu">c</span>(h.mat[,i]))</span>
+<span id="cb19-80"><a href="creating-a-sampling-design.html#cb19-80" aria-hidden="true" tabindex="-1"></a>      kl.index <span class="ot">&lt;-</span> <span class="fu">c</span>(kl.index,kl)</span>
+<span id="cb19-81"><a href="creating-a-sampling-design.html#cb19-81" aria-hidden="true" tabindex="-1"></a>      klo <span class="ot">&lt;-</span>  <span class="fu">mean</span>(kl.index)</span>
+<span id="cb19-82"><a href="creating-a-sampling-design.html#cb19-82" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb19-83"><a href="creating-a-sampling-design.html#cb19-83" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-84"><a href="creating-a-sampling-design.html#cb19-84" aria-hidden="true" tabindex="-1"></a>    <span class="do">#### Representativeness of the Legacy Dataset: ----</span></span>
+<span id="cb19-85"><a href="creating-a-sampling-design.html#cb19-85" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Calculate the proportion of &quot;env. variables&quot; in the covariate spectra that fall within the convex hull of variables in the &quot;environmental sample space&quot;</span></span>
+<span id="cb19-86"><a href="creating-a-sampling-design.html#cb19-86" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Principal component of the legacy data sample</span></span>
+<span id="cb19-87"><a href="creating-a-sampling-design.html#cb19-87" aria-hidden="true" tabindex="-1"></a>    pca.s <span class="ot">=</span> <span class="fu">prcomp</span>(p.dat_I,<span class="at">scale=</span><span class="cn">TRUE</span>, <span class="at">center=</span><span class="cn">TRUE</span>)</span>
+<span id="cb19-88"><a href="creating-a-sampling-design.html#cb19-88" aria-hidden="true" tabindex="-1"></a>    scores_pca1 <span class="ot">=</span> <span class="fu">as.data.frame</span>(pca.s<span class="sc">$</span>x)</span>
+<span id="cb19-89"><a href="creating-a-sampling-design.html#cb19-89" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot the first 2 principal components and convex hull</span></span>
+<span id="cb19-90"><a href="creating-a-sampling-design.html#cb19-90" aria-hidden="true" tabindex="-1"></a>    rand.tr <span class="ot">&lt;-</span> <span class="fu">tri.mesh</span>(scores_pca1[,<span class="dv">1</span>],scores_pca1[,<span class="dv">2</span>],<span class="st">&quot;remove&quot;</span>) <span class="co"># Delaunay triangulation </span></span>
+<span id="cb19-91"><a href="creating-a-sampling-design.html#cb19-91" aria-hidden="true" tabindex="-1"></a>    rand.ch<span class="ot">&lt;-</span><span class="fu">convex.hull</span>(rand.tr, <span class="at">plot.it=</span>F) <span class="co"># convex hull</span></span>
+<span id="cb19-92"><a href="creating-a-sampling-design.html#cb19-92" aria-hidden="true" tabindex="-1"></a>    pr_poly <span class="ot">=</span> <span class="fu">cbind</span>(<span class="at">x=</span><span class="fu">c</span>(rand.ch<span class="sc">$</span>x),<span class="at">y=</span><span class="fu">c</span>(rand.ch<span class="sc">$</span>y)) <span class="co"># save the convex hull vertices</span></span>
+<span id="cb19-93"><a href="creating-a-sampling-design.html#cb19-93" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot(scores_pca1[,1], scores_pca1[,2], xlab=&quot;PCA 1&quot;, ylab=&quot;PCA 2&quot;, xlim=c(min(scores_pca1[,1:2]), max(scores_pca1[,1:2])),ylim=c(min(scores_pca1[,1:2]), max(scores_pca1[,1:2])), main=&#39;Convex hull of soil legacy data&#39;)</span></span>
+<span id="cb19-94"><a href="creating-a-sampling-design.html#cb19-94" aria-hidden="true" tabindex="-1"></a>    <span class="co"># lines(c(rand.ch$x,rand.ch$x[1]), c(rand.ch$y,rand.ch$y[1]),col=&quot;red&quot;,lwd=1) # draw the convex hull (domain of legacy data)</span></span>
+<span id="cb19-95"><a href="creating-a-sampling-design.html#cb19-95" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-96"><a href="creating-a-sampling-design.html#cb19-96" aria-hidden="true" tabindex="-1"></a>    <span class="co"># PCA projection of study area population onto the principal components</span></span>
+<span id="cb19-97"><a href="creating-a-sampling-design.html#cb19-97" aria-hidden="true" tabindex="-1"></a>    PCA_projection<span class="ot">&lt;-</span> <span class="fu">predict</span>(pca.s, cov.dat.df) <span class="co"># Project study area population onto sample PC</span></span>
+<span id="cb19-98"><a href="creating-a-sampling-design.html#cb19-98" aria-hidden="true" tabindex="-1"></a>    newScores <span class="ot">=</span> <span class="fu">cbind</span>(<span class="at">x=</span>PCA_projection[,<span class="dv">1</span>],<span class="at">y=</span>PCA_projection[,<span class="dv">2</span>]) <span class="co"># PC scores of projected population</span></span>
+<span id="cb19-99"><a href="creating-a-sampling-design.html#cb19-99" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check which points fall within the polygon</span></span>
+<span id="cb19-100"><a href="creating-a-sampling-design.html#cb19-100" aria-hidden="true" tabindex="-1"></a>    pip <span class="ot">&lt;-</span> <span class="fu">point.in.polygon</span>(newScores[,<span class="dv">2</span>], newScores[,<span class="dv">1</span>], pr_poly[,<span class="dv">2</span>],pr_poly[,<span class="dv">1</span>],<span class="at">mode.checked=</span><span class="cn">FALSE</span>)</span>
+<span id="cb19-101"><a href="creating-a-sampling-design.html#cb19-101" aria-hidden="true" tabindex="-1"></a>    newScores <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(newScores, pip))</span>
+<span id="cb19-102"><a href="creating-a-sampling-design.html#cb19-102" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot the polygon and all points to be checked</span></span>
+<span id="cb19-103"><a href="creating-a-sampling-design.html#cb19-103" aria-hidden="true" tabindex="-1"></a>    <span class="co"># if(dede == final.n){</span></span>
+<span id="cb19-104"><a href="creating-a-sampling-design.html#cb19-104" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot(newScores, xlab=&quot;PCA 1&quot;, ylab=&quot;PCA 2&quot;, xlim=c(min(newScores[,1:2]), max(newScores[,1:2])), ylim=c(min(newScores[,1:2]), max(newScores[,1:2])), col=&#39;black&#39;, main=&#39;Environmental space plots over the convex hull of soil legacy data&#39;)</span></span>
+<span id="cb19-105"><a href="creating-a-sampling-design.html#cb19-105" aria-hidden="true" tabindex="-1"></a>    <span class="co"># polygon(pr_poly,col=&#39;#99999990&#39;)</span></span>
+<span id="cb19-106"><a href="creating-a-sampling-design.html#cb19-106" aria-hidden="true" tabindex="-1"></a>    <span class="co"># # Plot points outside convex hull  </span></span>
+<span id="cb19-107"><a href="creating-a-sampling-design.html#cb19-107" aria-hidden="true" tabindex="-1"></a>    <span class="co"># points(newScores[which(newScores$pip==0),1:2],pch=&#39;X&#39;, col=&#39;red&#39;)</span></span>
+<span id="cb19-108"><a href="creating-a-sampling-design.html#cb19-108" aria-hidden="true" tabindex="-1"></a>    <span class="co"># }</span></span>
+<span id="cb19-109"><a href="creating-a-sampling-design.html#cb19-109" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Proportion of the conditions in the study area that fall within the convex hull</span></span>
+<span id="cb19-110"><a href="creating-a-sampling-design.html#cb19-110" aria-hidden="true" tabindex="-1"></a>    <span class="co">#sum(newScores$pip)/nrow(newScores)*100 </span></span>
+<span id="cb19-111"><a href="creating-a-sampling-design.html#cb19-111" aria-hidden="true" tabindex="-1"></a>  klo_samples <span class="ot">&lt;-</span> <span class="fu">c</span>(klo_samples,klo)</span>
+<span id="cb19-112"><a href="creating-a-sampling-design.html#cb19-112" aria-hidden="true" tabindex="-1"></a>  prop_explained <span class="ot">&lt;-</span> <span class="fu">c</span>(prop_explained,<span class="fu">sum</span>(newScores<span class="sc">$</span>pip)<span class="sc">/</span><span class="fu">nrow</span>(newScores)<span class="sc">*</span><span class="dv">100</span>)</span>
+<span id="cb19-113"><a href="creating-a-sampling-design.html#cb19-113" aria-hidden="true" tabindex="-1"></a>  number_of_samples <span class="ot">&lt;-</span> <span class="fu">c</span>(number_of_samples,dede)</span>
+<span id="cb19-114"><a href="creating-a-sampling-design.html#cb19-114" aria-hidden="true" tabindex="-1"></a>  <span class="co">#print(paste(&quot;N samples = &quot;,dede, &quot; out of &quot;,final.n, &quot; ;kaka = &quot;,kaka,&quot; ;KL = &quot;, klo, &quot;;Proportion = &quot;, sep sum(newScores$pip)/nrow(newScores)*100 ))</span></span>
+<span id="cb19-115"><a href="creating-a-sampling-design.html#cb19-115" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb19-116"><a href="creating-a-sampling-design.html#cb19-116" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb19-117"><a href="creating-a-sampling-design.html#cb19-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-118"><a href="creating-a-sampling-design.html#cb19-118" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot the polygon and all points to be checked</span></span>
+<span id="cb19-119"><a href="creating-a-sampling-design.html#cb19-119" aria-hidden="true" tabindex="-1"></a>     <span class="fu">plot</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">xlab=</span><span class="st">&quot;PCA 1&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;PCA 2&quot;</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="fu">min</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]), <span class="fu">max</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])), <span class="at">ylim=</span><span class="fu">c</span>(<span class="fu">min</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]), <span class="fu">max</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])),</span>
+<span id="cb19-120"><a href="creating-a-sampling-design.html#cb19-120" aria-hidden="true" tabindex="-1"></a>          <span class="at">col=</span><span class="st">&#39;black&#39;</span>, <span class="at">main=</span><span class="st">&#39;Environmental space plots over the convex hull of soil legacy data&#39;</span>)</span>
+<span id="cb19-121"><a href="creating-a-sampling-design.html#cb19-121" aria-hidden="true" tabindex="-1"></a>     <span class="fu">polygon</span>(pr_poly,<span class="at">col=</span><span class="st">&#39;#99999990&#39;</span>)</span>
+<span id="cb19-122"><a href="creating-a-sampling-design.html#cb19-122" aria-hidden="true" tabindex="-1"></a>    <span class="co"># # Plot points outside convex hull  </span></span>
+<span id="cb19-123"><a href="creating-a-sampling-design.html#cb19-123" aria-hidden="true" tabindex="-1"></a>     <span class="fu">points</span>(newScores[<span class="fu">which</span>(newScores<span class="sc">$</span>pip<span class="sc">==</span><span class="dv">0</span>),<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">col=</span><span class="st">&#39;red&#39;</span>, <span class="at">pch=</span><span class="dv">12</span>, <span class="at">cex =</span><span class="dv">1</span>)</span></code></pre></div>
 <div class="figure">
 <img src="Technical_Manual-on-Sampling-Design_files/figure-html/compute_n_optimal_03-1.png" alt="Distribution of covariates in the sample space" width="672" />
 <p class="caption">
@@ -363,65 +375,473 @@ Soil Sampling Design</p></a>
 </p>
 </div>
 <p>Figure @ref(fig:chunk-compute_n_optimal_03) shows the distribution of covariates in the sample space.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="creating-a-sampling-design.html#cb20-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Merge data from number of samples, KL Divercence and % representativeness </span></span>
-<span id="cb20-2"><a href="creating-a-sampling-design.html#cb20-2" aria-hidden="true" tabindex="-1"></a>  results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(number_of_samples,klo_samples,prop_explained)</span>
-<span id="cb20-3"><a href="creating-a-sampling-design.html#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(results)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">&quot;N&quot;</span>,<span class="st">&quot;KL&quot;</span>,<span class="st">&quot;Perc&quot;</span>)</span>
-<span id="cb20-4"><a href="creating-a-sampling-design.html#cb20-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb20-5"><a href="creating-a-sampling-design.html#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Determine the minimum sample size to accounf for 95% of representativeness of the covariate diversity</span></span>
-<span id="cb20-6"><a href="creating-a-sampling-design.html#cb20-6" aria-hidden="true" tabindex="-1"></a>  optimal_n <span class="ot">&lt;-</span> results <span class="sc">%&gt;%</span></span>
-<span id="cb20-7"><a href="creating-a-sampling-design.html#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Perc <span class="sc">&gt;=</span><span class="dv">95</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb20-8"><a href="creating-a-sampling-design.html#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(KL <span class="sc">==</span><span class="fu">min</span>(KL) <span class="sc">|</span> N <span class="sc">==</span> <span class="fu">min</span>(N) <span class="sc">|</span> Perc <span class="sc">==</span><span class="fu">min</span>(Perc) ) <span class="sc">%&gt;%</span> </span>
-<span id="cb20-9"><a href="creating-a-sampling-design.html#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(N <span class="sc">==</span> <span class="fu">min</span>(N))</span>
-<span id="cb20-10"><a href="creating-a-sampling-design.html#cb20-10" aria-hidden="true" tabindex="-1"></a>  optimal_n</span></code></pre></div>
-<pre><code>##     N         KL    Perc
-## 1 125 0.09369913 95.4094</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="creating-a-sampling-design.html#cb22-1" aria-hidden="true" tabindex="-1"></a>N_final <span class="ot">&lt;-</span> samples_storage[<span class="fu">paste0</span>(<span class="st">&quot;N&quot;</span>,optimal_n<span class="sc">$</span>N)][[<span class="dv">1</span>]]</span>
-<span id="cb22-2"><a href="creating-a-sampling-design.html#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cov.dat[[<span class="dv">1</span>]])</span>
-<span id="cb22-3"><a href="creating-a-sampling-design.html#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(N_final)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="creating-a-sampling-design.html#cb20-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb20-2"><a href="creating-a-sampling-design.html#cb20-2" aria-hidden="true" tabindex="-1"></a>  mean_result, <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb20-3"><a href="creating-a-sampling-design.html#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">&#39;Mean results for each trial of sample size at increasing steps of 10 samples.&#39;</span></span>
+<span id="cb20-4"><a href="creating-a-sampling-design.html#cb20-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<table>
+<caption><span id="tab:results-table-03">Table 3.1: </span>Mean results for each trial of sample size at increasing steps of 10 samples.</caption>
+<thead>
+<tr class="header">
+<th align="right">N</th>
+<th align="right">KL</th>
+<th align="right">Perc</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">10</td>
+<td align="right">0.3518549</td>
+<td align="right">44.11609</td>
+</tr>
+<tr class="even">
+<td align="right">15</td>
+<td align="right">0.3071532</td>
+<td align="right">65.56831</td>
+</tr>
+<tr class="odd">
+<td align="right">20</td>
+<td align="right">0.2556290</td>
+<td align="right">65.80556</td>
+</tr>
+<tr class="even">
+<td align="right">25</td>
+<td align="right">0.2214708</td>
+<td align="right">69.84109</td>
+</tr>
+<tr class="odd">
+<td align="right">30</td>
+<td align="right">0.2110388</td>
+<td align="right">75.15339</td>
+</tr>
+<tr class="even">
+<td align="right">35</td>
+<td align="right">0.1971834</td>
+<td align="right">78.14610</td>
+</tr>
+<tr class="odd">
+<td align="right">40</td>
+<td align="right">0.1887099</td>
+<td align="right">80.37850</td>
+</tr>
+<tr class="even">
+<td align="right">45</td>
+<td align="right">0.1766162</td>
+<td align="right">83.57096</td>
+</tr>
+<tr class="odd">
+<td align="right">50</td>
+<td align="right">0.1523718</td>
+<td align="right">81.41470</td>
+</tr>
+<tr class="even">
+<td align="right">55</td>
+<td align="right">0.1474070</td>
+<td align="right">85.94350</td>
+</tr>
+<tr class="odd">
+<td align="right">60</td>
+<td align="right">0.1491097</td>
+<td align="right">87.08122</td>
+</tr>
+<tr class="even">
+<td align="right">65</td>
+<td align="right">0.1317207</td>
+<td align="right">88.23218</td>
+</tr>
+<tr class="odd">
+<td align="right">70</td>
+<td align="right">0.1192009</td>
+<td align="right">88.41205</td>
+</tr>
+<tr class="even">
+<td align="right">75</td>
+<td align="right">0.1092193</td>
+<td align="right">85.88612</td>
+</tr>
+<tr class="odd">
+<td align="right">80</td>
+<td align="right">0.1216378</td>
+<td align="right">89.94041</td>
+</tr>
+<tr class="even">
+<td align="right">85</td>
+<td align="right">0.1151734</td>
+<td align="right">88.31384</td>
+</tr>
+<tr class="odd">
+<td align="right">90</td>
+<td align="right">0.1023475</td>
+<td align="right">90.16553</td>
+</tr>
+<tr class="even">
+<td align="right">95</td>
+<td align="right">0.0970486</td>
+<td align="right">90.87288</td>
+</tr>
+<tr class="odd">
+<td align="right">100</td>
+<td align="right">0.1048872</td>
+<td align="right">88.46833</td>
+</tr>
+<tr class="even">
+<td align="right">105</td>
+<td align="right">0.0880369</td>
+<td align="right">92.16509</td>
+</tr>
+<tr class="odd">
+<td align="right">110</td>
+<td align="right">0.0878656</td>
+<td align="right">91.63650</td>
+</tr>
+<tr class="even">
+<td align="right">115</td>
+<td align="right">0.0862375</td>
+<td align="right">91.83845</td>
+</tr>
+<tr class="odd">
+<td align="right">120</td>
+<td align="right">0.0790402</td>
+<td align="right">92.73670</td>
+</tr>
+<tr class="even">
+<td align="right">125</td>
+<td align="right">0.0771005</td>
+<td align="right">92.06577</td>
+</tr>
+<tr class="odd">
+<td align="right">130</td>
+<td align="right">0.0738950</td>
+<td align="right">93.15162</td>
+</tr>
+<tr class="even">
+<td align="right">135</td>
+<td align="right">0.0765852</td>
+<td align="right">92.01280</td>
+</tr>
+<tr class="odd">
+<td align="right">140</td>
+<td align="right">0.0701455</td>
+<td align="right">93.54999</td>
+</tr>
+<tr class="even">
+<td align="right">145</td>
+<td align="right">0.0702231</td>
+<td align="right">92.95740</td>
+</tr>
+<tr class="odd">
+<td align="right">150</td>
+<td align="right">0.0707444</td>
+<td align="right">93.72545</td>
+</tr>
+<tr class="even">
+<td align="right">155</td>
+<td align="right">0.0644864</td>
+<td align="right">94.30258</td>
+</tr>
+<tr class="odd">
+<td align="right">160</td>
+<td align="right">0.0623248</td>
+<td align="right">94.58398</td>
+</tr>
+<tr class="even">
+<td align="right">165</td>
+<td align="right">0.0660325</td>
+<td align="right">95.29133</td>
+</tr>
+<tr class="odd">
+<td align="right">170</td>
+<td align="right">0.0578361</td>
+<td align="right">93.98256</td>
+</tr>
+<tr class="even">
+<td align="right">175</td>
+<td align="right">0.0592599</td>
+<td align="right">94.08409</td>
+</tr>
+<tr class="odd">
+<td align="right">180</td>
+<td align="right">0.0572684</td>
+<td align="right">95.19642</td>
+</tr>
+<tr class="even">
+<td align="right">185</td>
+<td align="right">0.0495774</td>
+<td align="right">94.51997</td>
+</tr>
+<tr class="odd">
+<td align="right">190</td>
+<td align="right">0.0556484</td>
+<td align="right">94.69433</td>
+</tr>
+<tr class="even">
+<td align="right">195</td>
+<td align="right">0.0533918</td>
+<td align="right">95.28581</td>
+</tr>
+<tr class="odd">
+<td align="right">200</td>
+<td align="right">0.0532031</td>
+<td align="right">94.55860</td>
+</tr>
+<tr class="even">
+<td align="right">205</td>
+<td align="right">0.0492082</td>
+<td align="right">94.98676</td>
+</tr>
+<tr class="odd">
+<td align="right">210</td>
+<td align="right">0.0514231</td>
+<td align="right">94.74840</td>
+</tr>
+<tr class="even">
+<td align="right">215</td>
+<td align="right">0.0466886</td>
+<td align="right">95.36416</td>
+</tr>
+<tr class="odd">
+<td align="right">220</td>
+<td align="right">0.0464444</td>
+<td align="right">95.76584</td>
+</tr>
+<tr class="even">
+<td align="right">225</td>
+<td align="right">0.0431872</td>
+<td align="right">94.82675</td>
+</tr>
+<tr class="odd">
+<td align="right">230</td>
+<td align="right">0.0501655</td>
+<td align="right">96.31428</td>
+</tr>
+<tr class="even">
+<td align="right">235</td>
+<td align="right">0.0458288</td>
+<td align="right">95.79673</td>
+</tr>
+<tr class="odd">
+<td align="right">240</td>
+<td align="right">0.0408755</td>
+<td align="right">96.06489</td>
+</tr>
+<tr class="even">
+<td align="right">245</td>
+<td align="right">0.0429205</td>
+<td align="right">95.62238</td>
+</tr>
+<tr class="odd">
+<td align="right">250</td>
+<td align="right">0.0390137</td>
+<td align="right">96.38270</td>
+</tr>
+<tr class="even">
+<td align="right">255</td>
+<td align="right">0.0401230</td>
+<td align="right">95.71397</td>
+</tr>
+<tr class="odd">
+<td align="right">260</td>
+<td align="right">0.0402541</td>
+<td align="right">95.88722</td>
+</tr>
+<tr class="even">
+<td align="right">265</td>
+<td align="right">0.0400733</td>
+<td align="right">96.63319</td>
+</tr>
+<tr class="odd">
+<td align="right">270</td>
+<td align="right">0.0362251</td>
+<td align="right">96.28890</td>
+</tr>
+<tr class="even">
+<td align="right">275</td>
+<td align="right">0.0386870</td>
+<td align="right">96.29111</td>
+</tr>
+<tr class="odd">
+<td align="right">280</td>
+<td align="right">0.0391780</td>
+<td align="right">96.83183</td>
+</tr>
+<tr class="even">
+<td align="right">285</td>
+<td align="right">0.0343351</td>
+<td align="right">96.27676</td>
+</tr>
+<tr class="odd">
+<td align="right">290</td>
+<td align="right">0.0374738</td>
+<td align="right">96.52726</td>
+</tr>
+<tr class="even">
+<td align="right">295</td>
+<td align="right">0.0357760</td>
+<td align="right">96.30324</td>
+</tr>
+<tr class="odd">
+<td align="right">300</td>
+<td align="right">0.0368803</td>
+<td align="right">96.10020</td>
+</tr>
+<tr class="even">
+<td align="right">305</td>
+<td align="right">0.0346702</td>
+<td align="right">96.74685</td>
+</tr>
+<tr class="odd">
+<td align="right">310</td>
+<td align="right">0.0333631</td>
+<td align="right">96.26241</td>
+</tr>
+<tr class="even">
+<td align="right">315</td>
+<td align="right">0.0320239</td>
+<td align="right">96.83403</td>
+</tr>
+<tr class="odd">
+<td align="right">320</td>
+<td align="right">0.0332431</td>
+<td align="right">96.87155</td>
+</tr>
+<tr class="even">
+<td align="right">325</td>
+<td align="right">0.0324300</td>
+<td align="right">96.87045</td>
+</tr>
+<tr class="odd">
+<td align="right">330</td>
+<td align="right">0.0301637</td>
+<td align="right">96.52284</td>
+</tr>
+<tr class="even">
+<td align="right">335</td>
+<td align="right">0.0284224</td>
+<td align="right">96.68837</td>
+</tr>
+<tr class="odd">
+<td align="right">340</td>
+<td align="right">0.0315602</td>
+<td align="right">97.02163</td>
+</tr>
+<tr class="even">
+<td align="right">345</td>
+<td align="right">0.0316147</td>
+<td align="right">96.78106</td>
+</tr>
+<tr class="odd">
+<td align="right">350</td>
+<td align="right">0.0292346</td>
+<td align="right">96.78768</td>
+</tr>
+<tr class="even">
+<td align="right">355</td>
+<td align="right">0.0296361</td>
+<td align="right">96.72589</td>
+</tr>
+<tr class="odd">
+<td align="right">360</td>
+<td align="right">0.0291997</td>
+<td align="right">96.76893</td>
+</tr>
+<tr class="even">
+<td align="right">365</td>
+<td align="right">0.0311916</td>
+<td align="right">97.41448</td>
+</tr>
+<tr class="odd">
+<td align="right">370</td>
+<td align="right">0.0278109</td>
+<td align="right">97.25116</td>
+</tr>
+<tr class="even">
+<td align="right">375</td>
+<td align="right">0.0304999</td>
+<td align="right">97.48400</td>
+</tr>
+<tr class="odd">
+<td align="right">380</td>
+<td align="right">0.0300525</td>
+<td align="right">97.13088</td>
+</tr>
+<tr class="even">
+<td align="right">385</td>
+<td align="right">0.0266320</td>
+<td align="right">97.53145</td>
+</tr>
+<tr class="odd">
+<td align="right">390</td>
+<td align="right">0.0265782</td>
+<td align="right">97.07680</td>
+</tr>
+<tr class="even">
+<td align="right">395</td>
+<td align="right">0.0271291</td>
+<td align="right">96.96094</td>
+</tr>
+<tr class="odd">
+<td align="right">400</td>
+<td align="right">0.0286131</td>
+<td align="right">96.85058</td>
+</tr>
+</tbody>
+</table>
+<p>We determine the optimal sample size and plot the evaluation results.</p>
+<p>The following figure shows the evolution of the KL divergence and % of repressentativenes with growing sample sizes. The red dot identifies the trial with the optimal sample size for the area in relation to the covariates analysed.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="creating-a-sampling-design.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(mean_result,</span>
+<span id="cb21-2"><a href="creating-a-sampling-design.html#cb21-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="sc">~</span>N,</span>
+<span id="cb21-3"><a href="creating-a-sampling-design.html#cb21-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="sc">~</span>KL,</span>
+<span id="cb21-4"><a href="creating-a-sampling-design.html#cb21-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">mode =</span> <span class="st">&quot;lines+markers&quot;</span>,</span>
+<span id="cb21-5"><a href="creating-a-sampling-design.html#cb21-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">&quot;scatter&quot;</span>,</span>
+<span id="cb21-6"><a href="creating-a-sampling-design.html#cb21-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">name =</span> <span class="st">&quot;KL divergence&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb21-7"><a href="creating-a-sampling-design.html#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_trace</span>(<span class="at">x =</span> <span class="sc">~</span>N,</span>
+<span id="cb21-8"><a href="creating-a-sampling-design.html#cb21-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">y =</span> <span class="sc">~</span>Perc,</span>
+<span id="cb21-9"><a href="creating-a-sampling-design.html#cb21-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">mode =</span> <span class="st">&quot;lines+markers&quot;</span>,</span>
+<span id="cb21-10"><a href="creating-a-sampling-design.html#cb21-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">type =</span> <span class="st">&quot;scatter&quot;</span>,</span>
+<span id="cb21-11"><a href="creating-a-sampling-design.html#cb21-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">yaxis =</span> <span class="st">&quot;y2&quot;</span>,</span>
+<span id="cb21-12"><a href="creating-a-sampling-design.html#cb21-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">name =</span> <span class="st">&quot;% Representativeness&quot;</span>)  <span class="sc">%&gt;%</span></span>
+<span id="cb21-13"><a href="creating-a-sampling-design.html#cb21-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_trace</span>(<span class="at">x =</span> <span class="sc">~</span>optimal_n<span class="sc">$</span>N,</span>
+<span id="cb21-14"><a href="creating-a-sampling-design.html#cb21-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">y =</span> <span class="sc">~</span>optimal_n<span class="sc">$</span>Perc,</span>
+<span id="cb21-15"><a href="creating-a-sampling-design.html#cb21-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">yaxis =</span> <span class="st">&quot;y2&quot;</span>,</span>
+<span id="cb21-16"><a href="creating-a-sampling-design.html#cb21-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">mode =</span> <span class="st">&quot;markers&quot;</span>,</span>
+<span id="cb21-17"><a href="creating-a-sampling-design.html#cb21-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">name =</span> <span class="st">&quot;Optimal N&quot;</span>,</span>
+<span id="cb21-18"><a href="creating-a-sampling-design.html#cb21-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">marker =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">8</span>, <span class="at">color =</span> <span class="st">&#39;#d62728&#39;</span>,<span class="at">line =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">&#39;black&#39;</span>, <span class="at">width =</span> <span class="dv">1</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb21-19"><a href="creating-a-sampling-design.html#cb21-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">&quot;N&quot;</span>, </span>
+<span id="cb21-20"><a href="creating-a-sampling-design.html#cb21-20" aria-hidden="true" tabindex="-1"></a>                      <span class="at">showgrid =</span> T, </span>
+<span id="cb21-21"><a href="creating-a-sampling-design.html#cb21-21" aria-hidden="true" tabindex="-1"></a>                      <span class="at">dtick =</span> <span class="dv">50</span>, </span>
+<span id="cb21-22"><a href="creating-a-sampling-design.html#cb21-22" aria-hidden="true" tabindex="-1"></a>                      <span class="at">tickfont =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">11</span>)),</span>
+<span id="cb21-23"><a href="creating-a-sampling-design.html#cb21-23" aria-hidden="true" tabindex="-1"></a>         <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">&quot;mean KL divergence&quot;</span>, <span class="at">showgrid =</span> F ),</span>
+<span id="cb21-24"><a href="creating-a-sampling-design.html#cb21-24" aria-hidden="true" tabindex="-1"></a>         <span class="at">yaxis2 =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">&quot;mean Representativeness (%)&quot;</span>,</span>
+<span id="cb21-25"><a href="creating-a-sampling-design.html#cb21-25" aria-hidden="true" tabindex="-1"></a>                       <span class="at">overlaying =</span> <span class="st">&quot;y&quot;</span>, <span class="at">side =</span> <span class="st">&quot;right&quot;</span>),</span>
+<span id="cb21-26"><a href="creating-a-sampling-design.html#cb21-26" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend =</span> <span class="fu">list</span>(<span class="at">orientation =</span> <span class="st">&quot;h&quot;</span>, <span class="at">y =</span> <span class="fl">1.2</span>, <span class="at">x =</span> <span class="fl">0.1</span>,</span>
+<span id="cb21-27"><a href="creating-a-sampling-design.html#cb21-27" aria-hidden="true" tabindex="-1"></a>                       <span class="at">traceorder =</span> <span class="st">&quot;normal&quot;</span>),</span>
+<span id="cb21-28"><a href="creating-a-sampling-design.html#cb21-28" aria-hidden="true" tabindex="-1"></a>         <span class="at">margin =</span> <span class="fu">list</span>(<span class="at">t =</span> <span class="dv">50</span>, <span class="at">b =</span> <span class="dv">50</span>, <span class="at">r =</span> <span class="dv">100</span>, <span class="at">l =</span> <span class="dv">80</span>),</span>
+<span id="cb21-29"><a href="creating-a-sampling-design.html#cb21-29" aria-hidden="true" tabindex="-1"></a>         <span class="at">hovermode =</span> <span class="st">&#39;x&#39;</span>)  <span class="sc">%&gt;%</span> </span>
+<span id="cb21-30"><a href="creating-a-sampling-design.html#cb21-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">config</span>(<span class="at">displayModeBar =</span> <span class="cn">FALSE</span>) </span></code></pre></div>
 <div class="figure">
-<img src="Technical_Manual-on-Sampling-Design_files/figure-html/fig:tag-for-figure-1.png" alt="Covariates and distribution of samples" width="672" />
-<p class="caption">
-(#fig:fig:tag-for-figure)Covariates and distribution of samples
-</p>
-</div>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="creating-a-sampling-design.html#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(results,</span>
-<span id="cb23-2"><a href="creating-a-sampling-design.html#cb23-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="sc">~</span>N,</span>
-<span id="cb23-3"><a href="creating-a-sampling-design.html#cb23-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="sc">~</span>KL,</span>
-<span id="cb23-4"><a href="creating-a-sampling-design.html#cb23-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">mode =</span> <span class="st">&quot;lines+markers&quot;</span>,</span>
-<span id="cb23-5"><a href="creating-a-sampling-design.html#cb23-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">&quot;scatter&quot;</span>,</span>
-<span id="cb23-6"><a href="creating-a-sampling-design.html#cb23-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">name =</span> <span class="st">&quot;KL divergence&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb23-7"><a href="creating-a-sampling-design.html#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_trace</span>(<span class="at">x =</span> <span class="sc">~</span>N,</span>
-<span id="cb23-8"><a href="creating-a-sampling-design.html#cb23-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">y =</span> <span class="sc">~</span>Perc,</span>
-<span id="cb23-9"><a href="creating-a-sampling-design.html#cb23-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">mode =</span> <span class="st">&quot;lines+markers&quot;</span>,</span>
-<span id="cb23-10"><a href="creating-a-sampling-design.html#cb23-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">type =</span> <span class="st">&quot;scatter&quot;</span>,</span>
-<span id="cb23-11"><a href="creating-a-sampling-design.html#cb23-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">yaxis =</span> <span class="st">&quot;y2&quot;</span>,</span>
-<span id="cb23-12"><a href="creating-a-sampling-design.html#cb23-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">name =</span> <span class="st">&quot;% Representativeness&quot;</span>)  <span class="sc">%&gt;%</span></span>
-<span id="cb23-13"><a href="creating-a-sampling-design.html#cb23-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_trace</span>(<span class="at">x =</span> <span class="sc">~</span>optimal_n<span class="sc">$</span>N,</span>
-<span id="cb23-14"><a href="creating-a-sampling-design.html#cb23-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">y =</span> <span class="sc">~</span>optimal_n<span class="sc">$</span>Perc,</span>
-<span id="cb23-15"><a href="creating-a-sampling-design.html#cb23-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">yaxis =</span> <span class="st">&quot;y2&quot;</span>,</span>
-<span id="cb23-16"><a href="creating-a-sampling-design.html#cb23-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">mode =</span> <span class="st">&quot;markers&quot;</span>,</span>
-<span id="cb23-17"><a href="creating-a-sampling-design.html#cb23-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">name =</span> <span class="st">&quot;Optimal N&quot;</span>,</span>
-<span id="cb23-18"><a href="creating-a-sampling-design.html#cb23-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">marker =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">8</span>, <span class="at">color =</span> <span class="st">&#39;#d62728&#39;</span>,<span class="at">line =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">&#39;black&#39;</span>, <span class="at">width =</span> <span class="dv">1</span>))) <span class="sc">%&gt;%</span></span>
-<span id="cb23-19"><a href="creating-a-sampling-design.html#cb23-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">&quot;N&quot;</span>, </span>
-<span id="cb23-20"><a href="creating-a-sampling-design.html#cb23-20" aria-hidden="true" tabindex="-1"></a>                      <span class="at">showgrid =</span> T, </span>
-<span id="cb23-21"><a href="creating-a-sampling-design.html#cb23-21" aria-hidden="true" tabindex="-1"></a>                      <span class="at">dtick =</span> <span class="dv">50</span>, </span>
-<span id="cb23-22"><a href="creating-a-sampling-design.html#cb23-22" aria-hidden="true" tabindex="-1"></a>                      <span class="at">tickfont =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">11</span>)),</span>
-<span id="cb23-23"><a href="creating-a-sampling-design.html#cb23-23" aria-hidden="true" tabindex="-1"></a>         <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">&quot;KL divergence&quot;</span>, <span class="at">showgrid =</span> F ),</span>
-<span id="cb23-24"><a href="creating-a-sampling-design.html#cb23-24" aria-hidden="true" tabindex="-1"></a>         <span class="at">yaxis2 =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">&quot;Representativeness (%)&quot;</span>,</span>
-<span id="cb23-25"><a href="creating-a-sampling-design.html#cb23-25" aria-hidden="true" tabindex="-1"></a>                       <span class="at">overlaying =</span> <span class="st">&quot;y&quot;</span>, <span class="at">side =</span> <span class="st">&quot;right&quot;</span>),</span>
-<span id="cb23-26"><a href="creating-a-sampling-design.html#cb23-26" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend =</span> <span class="fu">list</span>(<span class="at">orientation =</span> <span class="st">&quot;h&quot;</span>, <span class="at">y =</span> <span class="fl">1.2</span>, <span class="at">x =</span> <span class="fl">0.1</span>,</span>
-<span id="cb23-27"><a href="creating-a-sampling-design.html#cb23-27" aria-hidden="true" tabindex="-1"></a>                       <span class="at">traceorder =</span> <span class="st">&quot;normal&quot;</span>),</span>
-<span id="cb23-28"><a href="creating-a-sampling-design.html#cb23-28" aria-hidden="true" tabindex="-1"></a>         <span class="at">margin =</span> <span class="fu">list</span>(<span class="at">t =</span> <span class="dv">50</span>, <span class="at">b =</span> <span class="dv">50</span>, <span class="at">r =</span> <span class="dv">100</span>, <span class="at">l =</span> <span class="dv">80</span>),</span>
-<span id="cb23-29"><a href="creating-a-sampling-design.html#cb23-29" aria-hidden="true" tabindex="-1"></a>         <span class="at">hovermode =</span> <span class="st">&#39;x&#39;</span>)  <span class="sc">%&gt;%</span> </span>
-<span id="cb23-30"><a href="creating-a-sampling-design.html#cb23-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">config</span>(<span class="at">displayModeBar =</span> <span class="cn">FALSE</span>) </span></code></pre></div>
-<div class="figure">
-<div id="htmlwidget-00fc9852b5a4cec2d293" style="width:768px;height:480px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-00fc9852b5a4cec2d293">{"x":{"visdat":{"23737e4c79d":["function () ","plotlyVisDat"]},"cur_data":"23737e4c79d","attrs":{"23737e4c79d":{"x":{},"y":{},"mode":"lines+markers","name":"KL divergence","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"},"23737e4c79d.1":{"x":{},"y":{},"mode":"lines+markers","name":"% Representativeness","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter","yaxis":"y2","inherit":true},"23737e4c79d.2":{"x":{},"y":{},"mode":"markers","name":"Optimal N","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter","yaxis":"y2","marker":{"size":8,"color":"#d62728","line":{"color":"black","width":1}},"inherit":true}},"layout":{"margin":{"b":50,"l":80,"t":50,"r":100},"xaxis":{"domain":[0,1],"automargin":true,"title":"N","showgrid":true,"dtick":50,"tickfont":{"size":11}},"yaxis":{"domain":[0,1],"automargin":true,"title":"KL divergence","showgrid":false},"yaxis2":{"title":"Representativeness (%)","overlaying":"y","side":"right"},"legend":{"orientation":"h","y":1.2,"x":0.1,"traceorder":"normal"},"hovermode":"x","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"x":[10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,140,145,150,155,160,165,170,175,180,185,190,195,200,205,210,215,220,225,230,235,240,245,250,255,260,265,270,275,280,285,290,295,300,305,310,315,320,325,330,335,340,345,350,355,360,365,370,375,380,385,390,395,400],"y":[0.357479773779968,0.34972586309049,0.291812233810535,0.277600385989149,0.207298831349259,0.171584235154156,0.185459903691542,0.154968498884867,0.168128298678572,0.152829958530446,0.171650813095818,0.119207064945355,0.134966818773965,0.112248525414197,0.131577376034072,0.0875118205694002,0.0982574229492494,0.0881919652881945,0.090623061589204,0.0979889984155538,0.0963445519735155,0.0865698677797454,0.0656259708847137,0.0936991312461883,0.0947588916222206,0.0993051865098203,0.0749040753903538,0.0610343078794879,0.0618929693000816,0.0670961231830285,0.0596254455135199,0.050405367815271,0.0656595051067248,0.0656360416445442,0.0541887737328438,0.0611481031493049,0.0591247685328396,0.0553658132199656,0.0591899237297171,0.0518856455054978,0.0572409196605001,0.0524987956911731,0.0438814114432898,0.0505935678855192,0.0497653645467714,0.0447047307813591,0.0436928550711781,0.0371504896013405,0.0439639848068232,0.0494107358334999,0.0308937574289523,0.0338993697083982,0.0411361348203075,0.0317783853096252,0.0318328335130269,0.0339031275827777,0.0440190861378869,0.0352243060100388,0.0340427051422671,0.0342857823168919,0.0334977343426516,0.0339459727805225,0.0315645976889504,0.0402342052414514,0.0283193917534771,0.0266834525083998,0.040455845093741,0.032993075757952,0.0328785318825275,0.0270296111946794,0.0224215701286877,0.0278825037148623,0.0282268999705348,0.0281511943241104,0.0269127939880708,0.0237671022957946,0.0224373270271386,0.0255302483604536,0.0248704462566801],"mode":"lines+markers","name":"KL divergence","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,140,145,150,155,160,165,170,175,180,185,190,195,200,205,210,215,220,225,230,235,240,245,250,255,260,265,270,275,280,285,290,295,300,305,310,315,320,325,330,335,340,345,350,355,360,365,370,375,380,385,390,395,400],"y":[38.7000662105496,69.4438313838005,76.9035532994924,75.9766056058265,86.5371882586625,78.9119399691017,64.6104612668285,87.8062237916575,75.0386228205694,85.4998896490841,92.2423306113441,89.4504524387552,90.3332597660561,80.8982564555286,93.0147870227323,77.1132200397263,92.2312955197528,93.3789450452439,89.1525049657912,89.1635400573825,89.6159788126241,91.1608916354006,87.1330832045906,95.4094018980358,93.7982785257118,94.272787464136,90.2670492165085,91.392628558817,91.5471198410947,92.5182079011256,90.6643125137939,93.4230854116089,96.4908408739793,94.0520856323107,94.2396821893622,95.5638931803134,95.6852791878173,97.0646656367248,94.824542043699,95.1004193334805,96.6011917898919,93.3348046788788,96.1597881262415,95.8618406532774,96.0273670271463,94.8355771352902,95.2438755241669,95.0342087839329,96.0494372103288,95.420436989627,92.6726991834032,95.4425071728095,97.1639814610461,96.733612888987,96.6674023394394,97.7157360406091,98.2454204369896,97.2081218274112,98.1902449790333,95.2769807989406,97.8150518649305,95.9390862944162,95.0673140587067,96.5570514235268,96.8218936217171,94.7472964025601,97.7709114985654,97.8150518649305,96.3142794085191,98.1902449790333,96.7887883469433,97.4067534760539,97.6053851246965,97.3405429265063,96.4025601412492,96.6674023394394,95.5307879055396,97.4508938424189,97.241227102185],"mode":"lines+markers","name":"% Representativeness","type":"scatter","yaxis":"y2","marker":{"color":"rgba(255,127,14,1)","line":{"color":"rgba(255,127,14,1)"}},"error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"line":{"color":"rgba(255,127,14,1)"},"xaxis":"x","frame":null},{"x":[125],"y":[95.4094018980358],"mode":"markers","name":"Optimal N","type":"scatter","yaxis":"y2","marker":{"color":"#d62728","size":8,"line":{"color":"black","width":1}},"error_y":{"color":"rgba(44,160,44,1)"},"error_x":{"color":"rgba(44,160,44,1)"},"line":{"color":"rgba(44,160,44,1)"},"xaxis":"x","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-056e2e5bf646177c8531" style="width:768px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-056e2e5bf646177c8531">{"x":{"visdat":{"2cf53c174219":["function () ","plotlyVisDat"]},"cur_data":"2cf53c174219","attrs":{"2cf53c174219":{"x":{},"y":{},"mode":"lines+markers","name":"KL divergence","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"},"2cf53c174219.1":{"x":{},"y":{},"mode":"lines+markers","name":"% Representativeness","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter","yaxis":"y2","inherit":true},"2cf53c174219.2":{"x":{},"y":{},"mode":"markers","name":"Optimal N","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter","yaxis":"y2","marker":{"size":8,"color":"#d62728","line":{"color":"black","width":1}},"inherit":true}},"layout":{"margin":{"b":50,"l":80,"t":50,"r":100},"xaxis":{"domain":[0,1],"automargin":true,"title":"N","showgrid":true,"dtick":50,"tickfont":{"size":11}},"yaxis":{"domain":[0,1],"automargin":true,"title":"mean KL divergence","showgrid":false},"yaxis2":{"title":"mean Representativeness (%)","overlaying":"y","side":"right"},"legend":{"orientation":"h","y":1.2,"x":0.1,"traceorder":"normal"},"hovermode":"x","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"x":[10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,140,145,150,155,160,165,170,175,180,185,190,195,200,205,210,215,220,225,230,235,240,245,250,255,260,265,270,275,280,285,290,295,300,305,310,315,320,325,330,335,340,345,350,355,360,365,370,375,380,385,390,395,400],"y":[0.351854869994291,0.307153210397731,0.255628984349024,0.221470816595176,0.21103883496752,0.197183433018968,0.188709947736661,0.17661617973732,0.152371763781389,0.147407030354879,0.149109664535024,0.13172066942569,0.119200889611923,0.10921933164318,0.121637780130981,0.115173370165731,0.102347473152256,0.097048568141654,0.104887204402214,0.0880368673756073,0.0878655664650944,0.0862375430949179,0.0790402462078932,0.0771005482225025,0.0738949569929598,0.0765851984981981,0.0701455166163096,0.0702230884527902,0.0707444377364946,0.064486411380979,0.0623248385890288,0.0660324537102075,0.0578360788168861,0.0592599342421106,0.0572683763136339,0.0495774112710359,0.055648415589619,0.0533917721091403,0.0532030549586824,0.0492081599665013,0.0514231119444642,0.0466886380280355,0.0464443918463631,0.0431871959533821,0.050165537624186,0.0458287920214929,0.0408754837160074,0.0429205415172995,0.0390137136464629,0.0401230186219805,0.0402540905105526,0.0400732841258714,0.03622506262826,0.0386870338547882,0.0391779542903579,0.0343350714096106,0.037473806800704,0.0357759632002641,0.0368802790575097,0.0346701563365878,0.0333630995624966,0.0320238995695447,0.0332430721009177,0.0324300288661593,0.0301636967477983,0.0284224396360797,0.0315602021322907,0.0316146585612257,0.0292346089119055,0.0296361417155163,0.0291997414318685,0.0311915506456367,0.0278109377070051,0.0304999163892674,0.0300524742375773,0.0266320452306964,0.0265782056624738,0.0271290867446825,0.0286131019236729],"mode":"lines+markers","name":"KL divergence","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,140,145,150,155,160,165,170,175,180,185,190,195,200,205,210,215,220,225,230,235,240,245,250,255,260,265,270,275,280,285,290,295,300,305,310,315,320,325,330,335,340,345,350,355,360,365,370,375,380,385,390,395,400],"y":[44.1160891635401,65.5683072169499,65.805561686162,69.8410946810858,75.1533877731185,78.1461046126683,80.3785036415802,83.5709556389318,81.4146987419996,85.9435003310527,87.0812182741117,88.2321783270801,88.4120503200177,85.8861178547782,89.9404105054072,88.3138380048554,90.1655263738689,90.8728757448687,88.4683292871331,92.1650849702053,91.6365040829839,91.8384462591039,92.7367027146325,92.0657691458839,93.1516221584639,92.0128007062459,93.5499889649084,92.9574045464577,93.7254469212095,94.3025822114324,94.5839770470095,95.2913264180093,93.9825645552858,94.0840873979254,95.1964246303244,94.5199735157802,94.6943279629221,95.2858088722136,94.5585963363496,94.9867578900905,94.7483999117193,95.3641580225116,95.7658353564335,94.8267490620172,96.3142794085191,95.796733612889,96.0648863385566,95.6223791657471,96.3826969763849,95.7139704259545,95.8872213639373,96.6331935555065,96.2888986978592,96.2911057161774,96.8318252041492,96.2767600971088,96.5272566762304,96.3032443169278,96.1001986316486,96.7468549988965,96.2624144780402,96.8340322224674,96.8715515338777,96.8704480247186,96.5228426395939,96.6883690134628,97.0216287795189,96.7810637828294,96.7876848377842,96.7258883248731,96.768925182079,97.4144780401677,97.2511586846171,97.4839991171927,97.1308761862723,97.5314500110351,97.0768042374752,96.9609357757669,96.8505848598543],"mode":"lines+markers","name":"% Representativeness","type":"scatter","yaxis":"y2","marker":{"color":"rgba(255,127,14,1)","line":{"color":"rgba(255,127,14,1)"}},"error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"line":{"color":"rgba(255,127,14,1)"},"xaxis":"x","frame":null},{"x":[165],"y":[95.2913264180093],"mode":"markers","name":"Optimal N","type":"scatter","yaxis":"y2","marker":{"color":"#d62728","size":8,"line":{"color":"black","width":1}},"error_y":{"color":"rgba(44,160,44,1)"},"error_x":{"color":"rgba(44,160,44,1)"},"line":{"color":"rgba(44,160,44,1)"},"xaxis":"x","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 (#fig:fig:plot_KLfunction_03)KL Divergence and Proportion of Representativeness as function of sample size
 </p>
 </div>
+<p>Finally, we represent the optimal distribution of samples over the study area according to these specific results.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="creating-a-sampling-design.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cov.dat[[<span class="dv">1</span>]])</span>
+<span id="cb22-2"><a href="creating-a-sampling-design.html#cb22-2" aria-hidden="true" tabindex="-1"></a>N_final <span class="ot">&lt;-</span> samples_storage[<span class="fu">paste0</span>(<span class="st">&quot;N&quot;</span>,optimal_n<span class="sc">$</span>N,<span class="st">&quot;_&quot;</span>,optimal_pass<span class="sc">$</span>IDX)][[<span class="dv">1</span>]]</span>
+<span id="cb22-3"><a href="creating-a-sampling-design.html#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(N_final)</span></code></pre></div>
+<div class="figure">
+<img src="Technical_Manual-on-Sampling-Design_files/figure-html/fig:tag-for-figure-1.png" alt="Covariates and optimal number and distribution of samples" width="672" />
+<p class="caption">
+(#fig:fig:tag-for-figure)Covariates and optimal number and distribution of samples
+</p>
+</div>
 
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body">
+<div id="ref-Malone" class="csl-entry">
+<strong>Malone, B.P., Minansy, B. &amp; Brungard, C.</strong> 2019. Some methods to improve the utility of conditioned latin hypercube sampling. <em>PeerJ</em>, 7: e6451. <a href="https://doi.org/10.7717/peerj.6451">https://doi.org/10.7717/peerj.6451</a>
 </div>
 </div>
             </section>
@@ -430,7 +850,7 @@ Soil Sampling Design</p></a>
         </div>
       </div>
 <a href="legacy_data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="stratified-random-sampling-design.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="stratified-sampling-design.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

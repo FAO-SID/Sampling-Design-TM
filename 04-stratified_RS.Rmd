@@ -1,5 +1,5 @@
 
-# Stratified Random Sampling Design
+# Stratified Sampling Design
 
 Stratified random sampling is a technique where the study area is divided into different `groups` or `strata` based on certain environmental traits, and a number of random samples are taken from within each group. One of the primary advantages of stratified sampling is its ability to capture the diversity within a population by making sure each group is represented. It can provide a more accurate reflection of the entire population compared to random sampling, especially when the groups are distinct and have unique qualities. This approach is particularly beneficial when certain subgroups within the population are specifically noteworthy. It also allows for more precise estimates with a smaller total sample size compared to simple random choice. Stratified sampling presents some disadvantages. Achieving effective categories requires a proper definition and delineation of the initial information to create the `strata`. The classification of the environmental information into categories and ensuring fair portrayal of each can be intricate and time-taking, and mislabeling elements into an improper group can lead to skewed outcomes.
 
@@ -196,15 +196,13 @@ The final strata map is shown in Figure XX.
 
 ### Stratified random sampling
 
-
-
 ```{r random-sampling, eval=TRUE, include=FALSE}
 # Stratified Simple Random Sampling over Soil/Land use Strata -------------------------------------------
   
   # Clean memory
   rm(list=setdiff(ls(), c("r","n","distance.buffer","REPLACEMENT", "samples.buffer"))) 
   
-  # Read in shapefile containing polygons and their areas
+  # Read strata shapefile
   polygons <- st_read("../soil_sampling/JAM/strata.shp")
   if(REPLACEMENT){
     polygons = st_intersection(polygons,distance.buffer)
@@ -251,7 +249,7 @@ while (sum(group_areas$sample_count) != n) {
 polygons <- left_join(polygons, st_drop_geometry(group_areas), by = c("soil_lc"="group"))
 polygons <- dplyr::select(polygons, soil_lc, code.x, sample_count, geometry)
 
-# Generate random points within each strata of size 3 tmes the required samples for each strata ----
+# Generate random points within each strata of size 3 times the required samples for each strata ----
 x <- spatSample(x = vect(group_areas), size = group_areas$sample_count * 3, method = "random")
 
 # Compute sampling points for strata
@@ -306,7 +304,7 @@ for(i in missing.strata){
 # Join initial sampling with missing sampling strata data
 x <- rbind(x, x.missing.strata)
 
-# Compute sampling points for missing samples (regular sampling)
+# Compute sampling points for missing samples (random sampling)
 x.missing.sample <- x[1]
 
 for(i in missing.sample){
@@ -341,28 +339,12 @@ z <- x %>%
          type = ifelse(sample_count >= order, "Target", "Replacement")) %>% 
   vect()
 
-# Break-------------------------------------------------------------------------
-
 # Export data to Shapefile ----
   
   # Write sampling points to shp
   writeVector(z, "../soil_sampling/JAM/sampling_points.shp", overwrite=TRUE)
-  
-  # Write sampling data as csv
-  z <- st_as_sf(z) %>% st_transform(crs = 4326)
-  z_df <- z %>% 
-    st_coordinates() %>% 
-    cbind(z) %>% 
-    st_drop_geometry() %>% 
-    dplyr::select(ID, type, code, order, X, Y, group)
-  write_csv(z_df, "../soil_sampling/JAM/sampling_points.csv")
-  
-  legend <- z_df %>% 
-    dplyr::select(code, group) %>% 
-    unique()
-  legend <- arrange(legend, as.numeric(code))
-  write_csv(legend, "../soil_sampling/JAM/legend_JAM.csv")  
-  
+
+  # Check whether the number of initial target points equals the final target points 
   n;nrow(z[z$type=="Target",])
 
 
@@ -379,8 +361,6 @@ z <- x %>%
   #mapview(soil_lc["soil_lc"], alpha=0, homebutton=T) + mapview(z[z$type=="Target",], color = "white", col.regions = "tomato")
   terra::plot(soil_lc["soil_lc"], border=NA, main="Strata classes")
   terra::points(target[target$type=="Target",])
-  
-
 
 ```
 
@@ -425,6 +405,179 @@ This modification can streamline fieldwork operations and establish a feasible s
       targets <- z[z$type=="Target",]
       st_write(targets, '../soil_sampling/JAM/sampling_points_TAR.shp', delete_dsn = TRUE)
   }
+
+```
+
+## Stratified regular sampling
+
+The procedure for creating a stratified regular sampling design is identical to that presented for stratified random sampling, with the only distinction that the locations of the sampling points are distributed in a regular spatial grid. This transformation is achieved by changing the method from 'random' to 'regular' in the spatSample functions within the script above. 
+
+```{r regular-sampling, eval=TRUE, include=FALSE}
+      # Stratified Simple regular Sampling over Soil/Land use Strata -------------------------------------------
+      
+      # Clean memory
+      rm(list=setdiff(ls(), c("r","n","distance.buffer","REPLACEMENT", "samples.buffer"))) 
+      
+      # Read strata shapefile
+      polygons <- st_read("../soil_sampling/JAM/strata.shp")
+      if(REPLACEMENT){
+        polygons = st_intersection(polygons,distance.buffer)
+      }
+      
+      
+      polygons$area <- st_area(polygons) # calculate the area of each polygon
+      
+      # Create a new column to group polygons by a common attribute
+      polygons$group <- polygons$soil_lc
+      # Drop units to allow computations
+      polygons <- drop_units(polygons)
+      
+      # Calculate the total area of all polygons in each group
+      group_areas <- polygons %>%
+        dplyr::group_by(group)  %>% 
+        dplyr::summarize(total_area = sum(area))
+      # Add a code to each group
+      group_codes <- polygons %>% group_by(group) %>%
+        dplyr::summarize(code = first(code)) 
+      
+      group_areas <- left_join(group_areas,st_drop_geometry(group_codes), by = "group")
+      
+      # Ensure minimum of 2 samples at each polygon in each group
+      group_areas$sample_count <- 2
+      
+      # Calculate the number of samples per group based on relative area
+      group_areas$sample_count <- group_areas$sample_count+round(group_areas$total_area/sum(group_areas$total_area) * 
+                                                                   (n-sum(group_areas$sample_count)))
+      
+      while (sum(group_areas$sample_count) != n) {
+        if (sum(group_areas$sample_count) > n) {
+          # Reduce sample count for the largest polygon until total count is n
+          max_index <- which.max(group_areas$sample_count)
+          group_areas$sample_count[max_index] <- group_areas$sample_count[max_index] - 1
+        } else {
+          # Increase sample count for the smallest polygon until total count is n
+          min_index <- which.min(group_areas$sample_count)
+          group_areas$sample_count[min_index] <- group_areas$sample_count[min_index] + 1
+        }
+      }
+      #sum(group_areas$sample_count) 
+      
+      polygons <- left_join(polygons, st_drop_geometry(group_areas), by = c("soil_lc"="group"))
+      polygons <- dplyr::select(polygons, soil_lc, code.x, sample_count, geometry)
+      
+      # Generate regular points within each strata of size 3 times the required samples for each strata ----
+      x <- spatSample(x = vect(group_areas), size = group_areas$sample_count * 3, method = "regular")
+      
+      # Compute sampling points for strata
+      z <- x %>% 
+        st_as_sf() %>% 
+        dplyr::group_by(code) %>% 
+        dplyr::mutate(sample_count = as.numeric(sample_count),
+                      order = seq_along(code),
+                      ID = paste0(code, ".", order),
+                      type = ifelse(sample_count >= order, "Target", "Replacement")) %>% 
+        vect()
+      
+      # Find missing samples
+      missing.data <- left_join(group_areas,data.frame(z) %>%
+                                  dplyr::filter(type=="Target") %>%
+                                  dplyr::group_by(code) %>%
+                                  tally()) %>%
+        dplyr::mutate(diff=sample_count-n)
+      
+      # Determine missing sampled strata
+      missing.strata <- which(is.na(missing.data$diff))
+      
+      # Determine missing sampling point in strata (undersampled strata)
+      missing.sample = which(missing.data$diff != 0)
+      missing.number <- as.numeric(unlist(st_drop_geometry(missing.data[(missing.sample <- which(missing.data$diff != 0)),7])))
+      
+      # Compute sampling points for missing sampled strata
+      x.missing.strata <- x[1]
+      x.missing.strata$sample_count<- 0
+      
+      for(i in missing.strata){
+        xx.missing.strata <- x[1]
+        xx.missing.strata$sample_count<- 0
+        nn=0
+        while (sum(xx.missing.strata$sample_count) < 
+               group_areas[group_areas$code==i,][["sample_count"]]*5) {
+          
+          while(nn < group_areas[group_areas$code==i,][["sample_count"]]*3){
+            my.missing.strata <- spatSample(x = vect(group_areas[group_areas$code %in% i,]),
+                                            size =  group_areas[group_areas$code==i,][["sample_count"]]*5,
+                                            method = "regular")
+            nn <- nn + nrow(data.frame(my.missing.strata))
+          }
+          xx.missing.strata <- rbind(xx.missing.strata,my.missing.strata)
+          print(sum(xx.missing.strata$sample_count))
+        }
+        print(i)
+        print(xx.missing.strata)
+        x.missing.strata <- rbind(x.missing.strata,xx.missing.strata)
+      }
+      
+      # Join initial sampling with missing sampling strata data
+      x <- rbind(x, x.missing.strata)
+      
+      # Compute sampling points for missing samples (regular sampling)
+      x.missing.sample <- x[1]
+      
+      for(i in missing.sample){
+        xx.missing.sample <- x[1]
+        xx.missing.sample$sample_count<- 0
+        while (sum(xx.missing.sample$sample_count) < (group_areas[group_areas$code==i,][["sample_count"]]*3)) {
+          my.missing.sample <- spatSample(x = vect(group_areas[group_areas$code %in% i,]),
+                                          size = as.numeric(vect(group_areas[group_areas$code %in% i,])[[4]])+
+                                            (group_areas[group_areas$code==i,][["sample_count"]]*3), method = "regular")
+          
+          xx.missing.sample <- rbind(xx.missing.sample,my.missing.sample)
+          print(sum(xx.missing.sample$sample_count))
+        }
+        print(i)
+        print(xx.missing.sample)
+        x.missing.sample <- rbind(x.missing.sample,xx.missing.sample)
+      }
+      
+      # Join initial sampling with missing sampling strata data and with missing samples 
+      x <- rbind(x, x.missing.sample)
+      
+      # Remove extra artificial replacements 
+      x <- x[x$sample_count > 0,]
+      
+      # Convert to Shapefile
+      z <- x %>% 
+        st_as_sf() %>% 
+        dplyr::group_by(code) %>% 
+        dplyr::mutate(sample_count = as.numeric(sample_count),
+                      order = seq_along(code),
+                      ID = paste0(code, ".", order),
+                      type = ifelse(sample_count >= order, "Target", "Replacement")) %>% 
+        vect()
+      
+      # Export data to Shapefile ----
+      
+      # Write sampling points to shp
+      writeVector(z, "../soil_sampling/JAM/grid_sampling_points.shp", overwrite=TRUE)
+      
+      # Check whether the number of initial target points equals the final target points 
+      n;nrow(z[z$type=="Target",])
+
+```
+
+
+
+
+```{r fig:regular-sampling-plot, eval=TRUE, include=TRUE, warning=FALSE, fig.cap="Plot of strata and sampling points"}
+
+  soil_lc <- st_read("../soil_sampling/JAM/strata_diss.shp")
+  soil_lc <- st_cast(soil_lc, 'POLYGON')
+  target <- st_read("../soil_sampling/JAM/grid_sampling_points.shp")
+  target <- target[target$type=="Target",]
+  # Plot final map with the aggregated land use information
+  #mapview(soil_lc["soil_lc"], alpha=0, homebutton=T) + mapview(z[z$type=="Target",], color = "white", col.regions = "tomato")
+  terra::plot(soil_lc["soil_lc"], border=NA, main="Strata classes")
+  terra::points(target[target$type=="Target",])
 
 ```
 

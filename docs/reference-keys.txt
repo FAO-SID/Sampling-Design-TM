@@ -1,3 +1,4 @@
+tab:results-table-03
 fig:strata-plot
 introduction
 legacy_data
@@ -5,8 +6,9 @@ data-preparation
 representativeness-of-the-legacy-soil-data
 creating-a-sampling-design
 determining-the-optimal-sample-size
-stratified-random-sampling-design
+stratified-sampling-design
 general-procedure
 strata-creation
 stratified-random-sampling
 stratified-random-sampling-for-large-areas
+stratified-regular-sampling
