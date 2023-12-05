@@ -74,3 +74,32 @@ author = {Nathalie Cruz Sena and Gustavo Vieira Veloso and Alisson Oliveira Lope
 keywords = {Digital soil mapping, Sampling design, Field accessibility, cLHS},
 abstract = {The cLHS is considered as a robust sampling strategy for the selection of representative samples of the landscape, which uses environmental variables and their multivariate distributions. In this study, we propose a method based on cLHS for selecting soil sampling points in areas of difficult access, with the objective of minimizing inaccessibility problems in field campaigns, considering obtaining alternative samples with a lower cost and time demand. The study aims to analyze, above all, the practical operational performance of the method based on the potential and restrictions for application in digital soil mapping. For this, five predictive models (GBM, RF, SVM, kNN and C5.0) were initially used to select the most important variables to be inserted in the cLHS. The k-means method was applied to select the alternative points closest to the original points of the cLHS. Restrictions such as the euclidean distance from roads and the exclusion of urban and mining areas were incorporated. Approximately 30% of the original sample points of the cLHS could not be accessed in the field, the main operational restriction was due to the lack of access/routes to the selected points. However, the use of alternative sampling points allowed greater flexibility and accessibility in the field, where it was possible to collect 17% of the points and reduce the demand for time and cost. With this, the sampling strategy adopted made it possible to obtain an ideal minimum size of sampling points to be used in predictive models in digital soil mapping studies.}
 }
+
+@incollection{BRUS2006183,
+title = {Chapter 14 Designing Spatial Coverage Samples Using the k-means Clustering Algorithm},
+editor = {P. Lagacherie and A.B. McBratney and M. Voltz},
+series = {Developments in Soil Science},
+publisher = {Elsevier},
+volume = {31},
+pages = {183-192},
+year = {2006},
+booktitle = {Digital Soil Mapping},
+issn = {0166-2481},
+doi = {https://doi.org/10.1016/S0166-2481(06)31014-8},
+url = {https://www.sciencedirect.com/science/article/pii/S0166248106310148},
+author = {D.J. Brus and J.J. {de Gruijter} and J.W. {van Groenigen}},
+abstract = {In situations where we do not want to use available environmental data at the sampling stage of a soil survey because we are uncertain about the correlation with the soil attribute, the best thing we can do is to disperse the points in geographical space. This chapter describes a simple method for selecting such spatial coverage samples. The study area is partitioned into geographically compact subregions from which one point is selected purposively. The partitioning is done by clustering the cells of a fine raster with the k-means clustering algorithm, using the x- and y-coordinates of the midpoints of the cells as classification variables. The centroids of the clusters are used as sample points. The method was tested in two case studies. In the first study, the locations of 23 points were optimised within a square area, and in the second study, 32 points were added to 6 prior points in an irregular shaped area. In both studies, the average kriging variance (AKV) and maximum kriging variance (MaxKV) for the spatial coverage samples were compared with the AKV and MaxKV for the geostatistical samples obtained by directly minimising these criteria with the spatial simulated annealing (SSA) algorithm. The AKV values for the spatial coverage samples and the geostatistical samples obtained with AKV as a minimisation criterion were comparable. If we want to minimise MaxKV, then the SSA procedure is preferable.}
+}
+
+@Book{Brus2022,
+  title = {Spatial Sampling with R},
+  author = {Brus, D.J.},
+  publisher = {Chapman and Hall/CRC},
+  address = {Boca Raton, Florida},
+  year = {2022},
+  edition = {1st},
+  note = {ISBN 9781032193854},
+  doi = {https://doi.org/10.1201/9781003258940},
+  url = {https://dickbrus.github.io/SpatialSamplingwithR/},
+}
+

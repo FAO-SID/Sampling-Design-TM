@@ -11,3 +11,6 @@ The term "conditioned" refers to the way the sampling is adapted or conditioned 
 
 
 cHLS is also used to determine the optimal number of samples that cover the entire auxiliary data variability.   
+
+
+[@SENA2021e00354] proposed a strategy for sampling in difficult access areas using cLHS.
