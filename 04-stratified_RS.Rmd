@@ -577,7 +577,9 @@ The procedure for creating a stratified regular sampling design is identical to 
   # Plot final map with the aggregated land use information
   #mapview(soil_lc["soil_lc"], alpha=0, homebutton=T) + mapview(z[z$type=="Target",], color = "white", col.regions = "tomato")
   terra::plot(soil_lc["soil_lc"], border=NA, main="Strata classes")
-  terra::points(target[target$type=="Target",])
+  #terra::points(target[target$type=="Target","type"], pch=16, col="black")
+  
+
 
 ```
 

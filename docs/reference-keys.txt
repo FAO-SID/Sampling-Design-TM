@@ -1,4 +1,3 @@
-tab:results-table-03
 fig:strata-plot
 introduction
 legacy_data

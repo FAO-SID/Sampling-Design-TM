@@ -170,7 +170,7 @@ In this case, the KL-divergence value is `r round(klo,3)`, indicating that the l
 Finally, we can also determine the degree in which our legacy soil dataset is representative of the existing environmental conditions in the study area. For that, we calculate the proportion of pixels in the study area that would fall within the convex hull polygon delineated upon the environmental conditions found at the soil legacy data locations only. The convex hull polygon is created upon a Principal Component transformation of the covariate data in the soil legacy data and using the outter limits of the scores of the points projected on the two main Components.
 
 
-```{r fig-legacy_data_adequacy, eval=T, include=TRUE}
+```{r fig-legacy_data_adequacy, eval=T, include=TRUE, fig.cap="PCA plot of the covariates"}
 #### Representativeness of the Legacy Dataset: ----
   ## Calculate the proportion of "env. variables" in the covariate spectra that fall within the convex hull of variables in the "environmental sample space"
   

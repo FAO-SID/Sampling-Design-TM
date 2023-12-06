@@ -1,7 +1,5 @@
 # Introduction 
 
-
-
 Understanding the spatial distribution of soil properties is crucial for making informed decisions in various fields, from precision agriculture to environmental conservation. The success of soil mapping activities relies on the existence of proper data collated through meticulous soil sampling protocols. The spatial variation of soil properties across landscapes necessitates strategic planning to ensure representative and reliable data collection. 
 
 In this manual, we explore the intricacies of soil sampling design, including the critical factors that influence the accuracy and effectiveness of soil data field sampling. We present examples of various sampling methods, ranging from traditional grid-based approaches to advanced statistical sampling strategies. We include methods for systematic, random and stratified sampling, evaluating their strengths and weaknesses in the context of DSM. We aim to provide researchers and practitioners with the knowledge necessary to select the most suitable approach for their specific objectives.
@@ -23,3 +21,5 @@ cHLS is also used to determine the optimal number of samples that cover the enti
 
 
 [@SENA2021e00354] proposed a strategy for sampling in difficult access areas using cLHS.
+
+[@CLIFFORD201462] Pragmatic soil survey design using flexible Latin hypercube sampling for difficult access.

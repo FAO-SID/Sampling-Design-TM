@@ -23,7 +23,7 @@
 <meta name="author" content="Rodríguez Lado, L., Angelini, M.E, Naypewe, N., Luotto, I., Yigini, Y." />
 
 
-<meta name="date" content="2023-12-05" />
+<meta name="date" content="2023-12-06" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -52,13 +52,13 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
-<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.1/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
 <link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
 <script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
-<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
@@ -236,23 +236,23 @@ Soil Sampling Design</p></a>
 <p>The fist step is to set-up the RStudio environment and load the required packages:</p>
 <p>We must define the number of samples to distribute in the sampling design, and the soil and land use information layers to build the strata. We also define a REPLACEMENT parameter to account for a reduction of the sampling area according to a certain area using predefined bounding-box, that can be also here defined.</p>
 <p>We proceed with the calculation of soil groups. In this example, soil information is stored in the field <code>TYPES</code>. We have analysed the extent to which the information in this field can be synthesized to eliminate redundancy when creating the <code>strata</code>. <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="stratified-sampling-design.html#cb23-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot final map with the aggregated soil information</span></span>
-<span id="cb23-2"><a href="stratified-sampling-design.html#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#mapview(soil[&quot;USDA_CLASS&quot;], alpha=0, homebutton=T)</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="stratified-sampling-design.html#cb22-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot final map with the aggregated soil information</span></span>
+<span id="cb22-2"><a href="stratified-sampling-design.html#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#mapview(soil[&quot;USDA_CLASS&quot;], alpha=0, homebutton=T)</span></span></code></pre></div>
 <p>A similar procedure is performed on the land use dataset.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="stratified-sampling-design.html#cb24-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot final map with the aggregated land use information</span></span>
-<span id="cb24-2"><a href="stratified-sampling-design.html#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#mapview(lc[&quot;LU&quot;], alpha=0, homebutton=T)</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="stratified-sampling-design.html#cb23-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot final map with the aggregated land use information</span></span>
+<span id="cb23-2"><a href="stratified-sampling-design.html#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#mapview(lc[&quot;LU&quot;], alpha=0, homebutton=T)</span></span></code></pre></div>
 <p>To create the soil-land use <code>strata</code> we must combine both classified datasets.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="stratified-sampling-design.html#cb25-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine soil and land use layers</span></span>
-<span id="cb25-2"><a href="stratified-sampling-design.html#cb25-2" aria-hidden="true" tabindex="-1"></a>  soil_lc <span class="ot">&lt;-</span> <span class="fu">st_intersection</span>(soil, lc)  </span></code></pre></div>
-<pre><code>## Warning: attribute variables are assumed to be spatially constant throughout all
-## geometries</code></pre>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="stratified-sampling-design.html#cb27-1" aria-hidden="true" tabindex="-1"></a>  soil_lc<span class="sc">$</span>soil_lc <span class="ot">&lt;-</span> <span class="fu">paste0</span>(soil_lc<span class="sc">$</span>USDA_CLASS, <span class="st">&quot;_&quot;</span>, soil_lc<span class="sc">$</span>LU)</span>
-<span id="cb27-2"><a href="stratified-sampling-design.html#cb27-2" aria-hidden="true" tabindex="-1"></a>  soil_lc <span class="ot">&lt;-</span> soil_lc <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(soil_lc, geometry)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="stratified-sampling-design.html#cb24-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine soil and land use layers</span></span>
+<span id="cb24-2"><a href="stratified-sampling-design.html#cb24-2" aria-hidden="true" tabindex="-1"></a>  soil_lc <span class="ot">&lt;-</span> <span class="fu">st_intersection</span>(soil, lc)  </span></code></pre></div>
+<pre><code>## Warning: attribute variables are assumed to be spatially constant throughout
+## all geometries</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="stratified-sampling-design.html#cb26-1" aria-hidden="true" tabindex="-1"></a>  soil_lc<span class="sc">$</span>soil_lc <span class="ot">&lt;-</span> <span class="fu">paste0</span>(soil_lc<span class="sc">$</span>USDA_CLASS, <span class="st">&quot;_&quot;</span>, soil_lc<span class="sc">$</span>LU)</span>
+<span id="cb26-2"><a href="stratified-sampling-design.html#cb26-2" aria-hidden="true" tabindex="-1"></a>  soil_lc <span class="ot">&lt;-</span> soil_lc <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(soil_lc, geometry)</span></code></pre></div>
 <p>Finally, to comply with the initial requirements of the sampling design, we calculate the areas of each polygon, delete all features with extent lesser than 100 has.</p>
 <p>The final strata map is shown in Figure XX.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="stratified-sampling-design.html#cb28-1" aria-hidden="true" tabindex="-1"></a>   <span class="co"># Plot final map of stratum</span></span>
-<span id="cb28-2"><a href="stratified-sampling-design.html#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#mapview(soil_lc[&quot;soil_lc&quot;], alpha=0, homebutton=T)</span></span>
-<span id="cb28-3"><a href="stratified-sampling-design.html#cb28-3" aria-hidden="true" tabindex="-1"></a>  terra<span class="sc">::</span><span class="fu">plot</span>(soil_lc[<span class="st">&quot;soil_lc&quot;</span>], <span class="at">border=</span><span class="cn">NA</span>, <span class="at">main=</span><span class="st">&quot;Strata classes&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="stratified-sampling-design.html#cb27-1" aria-hidden="true" tabindex="-1"></a>   <span class="co"># Plot final map of stratum</span></span>
+<span id="cb27-2"><a href="stratified-sampling-design.html#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#mapview(soil_lc[&quot;soil_lc&quot;], alpha=0, homebutton=T)</span></span>
+<span id="cb27-3"><a href="stratified-sampling-design.html#cb27-3" aria-hidden="true" tabindex="-1"></a>  terra<span class="sc">::</span><span class="fu">plot</span>(soil_lc[<span class="st">&quot;soil_lc&quot;</span>], <span class="at">border=</span><span class="cn">NA</span>, <span class="at">main=</span><span class="st">&quot;Strata classes&quot;</span>)</span></code></pre></div>
 <div class="figure"><span style="display:block;" id="fig:strata-plot"></span>
 <img src="Technical_Manual-on-Sampling-Design_files/figure-html/strata-plot-1.png" alt="Plot of strata" width="672" />
 <p class="caption">
@@ -262,30 +262,30 @@ Figure 4.1: Plot of strata
 </div>
 <div id="stratified-random-sampling" class="section level3 hasAnchor" number="4.1.2">
 <h3><span class="header-section-number">4.1.2</span> Stratified random sampling<a href="stratified-sampling-design.html#stratified-random-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="stratified-sampling-design.html#cb29-1" aria-hidden="true" tabindex="-1"></a>  soil_lc <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/strata_diss.shp&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="stratified-sampling-design.html#cb28-1" aria-hidden="true" tabindex="-1"></a>  soil_lc <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/strata_diss.shp&quot;</span>)</span></code></pre></div>
 <pre><code>## Reading layer `strata_diss&#39; from data source 
-##   `/Users/luislado/Dropbox/Github/soil_sampling/JAM/strata_diss.shp&#39; 
+##   `/Users/luislado/Library/CloudStorage/Dropbox/Github/soil_sampling/JAM/strata_diss.shp&#39; 
 ##   using driver `ESRI Shapefile&#39;
 ## Simple feature collection with 35 features and 3 fields
 ## Geometry type: MULTIPOLYGON
 ## Dimension:     XY
 ## Bounding box:  xmin: 605462.5 ymin: 617449.8 xmax: 836425 ymax: 708262.5
 ## Projected CRS: JAD2001 / Jamaica Metric Grid</code></pre>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="stratified-sampling-design.html#cb31-1" aria-hidden="true" tabindex="-1"></a>  soil_lc <span class="ot">&lt;-</span> <span class="fu">st_cast</span>(soil_lc, <span class="st">&#39;POLYGON&#39;</span>)</span>
-<span id="cb31-2"><a href="stratified-sampling-design.html#cb31-2" aria-hidden="true" tabindex="-1"></a>  target <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/sampling_points.shp&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="stratified-sampling-design.html#cb30-1" aria-hidden="true" tabindex="-1"></a>  soil_lc <span class="ot">&lt;-</span> <span class="fu">st_cast</span>(soil_lc, <span class="st">&#39;POLYGON&#39;</span>)</span>
+<span id="cb30-2"><a href="stratified-sampling-design.html#cb30-2" aria-hidden="true" tabindex="-1"></a>  target <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/sampling_points.shp&quot;</span>)</span></code></pre></div>
 <pre><code>## Reading layer `sampling_points&#39; from data source 
-##   `/Users/luislado/Dropbox/Github/soil_sampling/JAM/sampling_points.shp&#39; 
+##   `/Users/luislado/Library/CloudStorage/Dropbox/Github/soil_sampling/JAM/sampling_points.shp&#39; 
 ##   using driver `ESRI Shapefile&#39;
-## Simple feature collection with 680 features and 7 fields
+## Simple feature collection with 682 features and 7 fields
 ## Geometry type: POINT
 ## Dimension:     XY
-## Bounding box:  xmin: 606547.5 ymin: 621024 xmax: 834433.7 ymax: 707228.4
+## Bounding box:  xmin: 608085 ymin: 620377.6 xmax: 834672.6 ymax: 705309
 ## Projected CRS: JAD2001 / Jamaica Metric Grid</code></pre>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="stratified-sampling-design.html#cb33-1" aria-hidden="true" tabindex="-1"></a>  target <span class="ot">&lt;-</span> target[target<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;Target&quot;</span>,]</span>
-<span id="cb33-2"><a href="stratified-sampling-design.html#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot final map with the aggregated land use information</span></span>
-<span id="cb33-3"><a href="stratified-sampling-design.html#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#mapview(soil_lc[&quot;soil_lc&quot;], alpha=0, homebutton=T) + mapview(z[z$type==&quot;Target&quot;,], color = &quot;white&quot;, col.regions = &quot;tomato&quot;)</span></span>
-<span id="cb33-4"><a href="stratified-sampling-design.html#cb33-4" aria-hidden="true" tabindex="-1"></a>  terra<span class="sc">::</span><span class="fu">plot</span>(soil_lc[<span class="st">&quot;soil_lc&quot;</span>], <span class="at">border=</span><span class="cn">NA</span>, <span class="at">main=</span><span class="st">&quot;Strata classes&quot;</span>)</span>
-<span id="cb33-5"><a href="stratified-sampling-design.html#cb33-5" aria-hidden="true" tabindex="-1"></a>  terra<span class="sc">::</span><span class="fu">points</span>(target[target<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;Target&quot;</span>,])</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="stratified-sampling-design.html#cb32-1" aria-hidden="true" tabindex="-1"></a>  target <span class="ot">&lt;-</span> target[target<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;Target&quot;</span>,]</span>
+<span id="cb32-2"><a href="stratified-sampling-design.html#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot final map with the aggregated land use information</span></span>
+<span id="cb32-3"><a href="stratified-sampling-design.html#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#mapview(soil_lc[&quot;soil_lc&quot;], alpha=0, homebutton=T) + mapview(z[z$type==&quot;Target&quot;,], color = &quot;white&quot;, col.regions = &quot;tomato&quot;)</span></span>
+<span id="cb32-4"><a href="stratified-sampling-design.html#cb32-4" aria-hidden="true" tabindex="-1"></a>  terra<span class="sc">::</span><span class="fu">plot</span>(soil_lc[<span class="st">&quot;soil_lc&quot;</span>], <span class="at">border=</span><span class="cn">NA</span>, <span class="at">main=</span><span class="st">&quot;Strata classes&quot;</span>)</span>
+<span id="cb32-5"><a href="stratified-sampling-design.html#cb32-5" aria-hidden="true" tabindex="-1"></a>  terra<span class="sc">::</span><span class="fu">points</span>(target[target<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;Target&quot;</span>,])</span></code></pre></div>
 <div class="figure">
 <img src="Technical_Manual-on-Sampling-Design_files/figure-html/fig:sampling-plot-1.png" alt="Plot of strata and sampling points" width="672" />
 <p class="caption">
@@ -304,63 +304,63 @@ Figure 4.1: Plot of strata
 <li><p><strong>Additional area exclusion:</strong> Some areas can be identified as not suitable for sampling purposes. This is the case of certain natural protected areas, conflict regions presenting risks for field operators, etc. These areas must be identified masked at an initial stage of the design to exclude them from the sampling strata.</p></li>
 </ul>
 <p>The procedure is the same as that previously presented, with the difference that buffers and exclusion areas must be masked-out from the strata map before performing the random-sampling.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="stratified-sampling-design.html#cb34-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># Compute sampling areas WITH REPLACEMENT -----</span></span>
-<span id="cb34-2"><a href="stratified-sampling-design.html#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(REPLACEMENT){</span>
-<span id="cb34-3"><a href="stratified-sampling-design.html#cb34-3" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Load strata</span></span>
-<span id="cb34-4"><a href="stratified-sampling-design.html#cb34-4" aria-hidden="true" tabindex="-1"></a>      soil_lc <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/strata.shp&quot;</span>)</span>
-<span id="cb34-5"><a href="stratified-sampling-design.html#cb34-5" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb34-6"><a href="stratified-sampling-design.html#cb34-6" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Read sampling. points from previous step</span></span>
-<span id="cb34-7"><a href="stratified-sampling-design.html#cb34-7" aria-hidden="true" tabindex="-1"></a>      z <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/sampling_points.shp&quot;</span>)</span>
-<span id="cb34-8"><a href="stratified-sampling-design.html#cb34-8" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb34-9"><a href="stratified-sampling-design.html#cb34-9" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Define buffer of 500 meters (coordinate system must be in metric base)</span></span>
-<span id="cb34-10"><a href="stratified-sampling-design.html#cb34-10" aria-hidden="true" tabindex="-1"></a>      samples.buffer <span class="ot">=</span> <span class="dv">500</span></span>
-<span id="cb34-11"><a href="stratified-sampling-design.html#cb34-11" aria-hidden="true" tabindex="-1"></a>      buf.samples <span class="ot">&lt;-</span> <span class="fu">st_buffer</span>(z, <span class="at">dist=</span>samples.buffer)</span>
-<span id="cb34-12"><a href="stratified-sampling-design.html#cb34-12" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb34-13"><a href="stratified-sampling-design.html#cb34-13" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Intersect buffers</span></span>
-<span id="cb34-14"><a href="stratified-sampling-design.html#cb34-14" aria-hidden="true" tabindex="-1"></a>      samples_buffer <span class="ot">=</span> <span class="fu">st_intersection</span>(soil_lc, buf.samples)</span>
-<span id="cb34-15"><a href="stratified-sampling-design.html#cb34-15" aria-hidden="true" tabindex="-1"></a>      samples_buffer <span class="ot">&lt;-</span> samples_buffer[samples_buffer<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;Target&quot;</span>,]</span>
-<span id="cb34-16"><a href="stratified-sampling-design.html#cb34-16" aria-hidden="true" tabindex="-1"></a>      samples_buffer <span class="ot">&lt;-</span> samples_buffer[samples_buffer<span class="sc">$</span>soil_lc<span class="sc">==</span>samples_buffer<span class="sc">$</span>group,]</span>
-<span id="cb34-17"><a href="stratified-sampling-design.html#cb34-17" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Save Sampling areas</span></span>
-<span id="cb34-18"><a href="stratified-sampling-design.html#cb34-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_write</span>(samples_buffer, <span class="fu">paste0</span>(<span class="st">&#39;../soil_sampling/JAM/replacement_areas_&#39;</span>, samples.buffer, <span class="st">&#39;.shp&#39;</span>), <span class="at">delete_dsn =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb34-19"><a href="stratified-sampling-design.html#cb34-19" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb34-20"><a href="stratified-sampling-design.html#cb34-20" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Write target points only</span></span>
-<span id="cb34-21"><a href="stratified-sampling-design.html#cb34-21" aria-hidden="true" tabindex="-1"></a>      targets <span class="ot">&lt;-</span> z[z<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;Target&quot;</span>,]</span>
-<span id="cb34-22"><a href="stratified-sampling-design.html#cb34-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_write</span>(targets, <span class="st">&#39;../soil_sampling/JAM/sampling_points_TAR.shp&#39;</span>, <span class="at">delete_dsn =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb34-23"><a href="stratified-sampling-design.html#cb34-23" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="stratified-sampling-design.html#cb33-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># Compute sampling areas WITH REPLACEMENT -----</span></span>
+<span id="cb33-2"><a href="stratified-sampling-design.html#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(REPLACEMENT){</span>
+<span id="cb33-3"><a href="stratified-sampling-design.html#cb33-3" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Load strata</span></span>
+<span id="cb33-4"><a href="stratified-sampling-design.html#cb33-4" aria-hidden="true" tabindex="-1"></a>      soil_lc <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/strata.shp&quot;</span>)</span>
+<span id="cb33-5"><a href="stratified-sampling-design.html#cb33-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb33-6"><a href="stratified-sampling-design.html#cb33-6" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Read sampling. points from previous step</span></span>
+<span id="cb33-7"><a href="stratified-sampling-design.html#cb33-7" aria-hidden="true" tabindex="-1"></a>      z <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/sampling_points.shp&quot;</span>)</span>
+<span id="cb33-8"><a href="stratified-sampling-design.html#cb33-8" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb33-9"><a href="stratified-sampling-design.html#cb33-9" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Define buffer of 500 meters (coordinate system must be in metric base)</span></span>
+<span id="cb33-10"><a href="stratified-sampling-design.html#cb33-10" aria-hidden="true" tabindex="-1"></a>      samples.buffer <span class="ot">=</span> <span class="dv">500</span></span>
+<span id="cb33-11"><a href="stratified-sampling-design.html#cb33-11" aria-hidden="true" tabindex="-1"></a>      buf.samples <span class="ot">&lt;-</span> <span class="fu">st_buffer</span>(z, <span class="at">dist=</span>samples.buffer)</span>
+<span id="cb33-12"><a href="stratified-sampling-design.html#cb33-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb33-13"><a href="stratified-sampling-design.html#cb33-13" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Intersect buffers</span></span>
+<span id="cb33-14"><a href="stratified-sampling-design.html#cb33-14" aria-hidden="true" tabindex="-1"></a>      samples_buffer <span class="ot">=</span> <span class="fu">st_intersection</span>(soil_lc, buf.samples)</span>
+<span id="cb33-15"><a href="stratified-sampling-design.html#cb33-15" aria-hidden="true" tabindex="-1"></a>      samples_buffer <span class="ot">&lt;-</span> samples_buffer[samples_buffer<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;Target&quot;</span>,]</span>
+<span id="cb33-16"><a href="stratified-sampling-design.html#cb33-16" aria-hidden="true" tabindex="-1"></a>      samples_buffer <span class="ot">&lt;-</span> samples_buffer[samples_buffer<span class="sc">$</span>soil_lc<span class="sc">==</span>samples_buffer<span class="sc">$</span>group,]</span>
+<span id="cb33-17"><a href="stratified-sampling-design.html#cb33-17" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Save Sampling areas</span></span>
+<span id="cb33-18"><a href="stratified-sampling-design.html#cb33-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_write</span>(samples_buffer, <span class="fu">paste0</span>(<span class="st">&#39;../soil_sampling/JAM/replacement_areas_&#39;</span>, samples.buffer, <span class="st">&#39;.shp&#39;</span>), <span class="at">delete_dsn =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb33-19"><a href="stratified-sampling-design.html#cb33-19" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb33-20"><a href="stratified-sampling-design.html#cb33-20" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Write target points only</span></span>
+<span id="cb33-21"><a href="stratified-sampling-design.html#cb33-21" aria-hidden="true" tabindex="-1"></a>      targets <span class="ot">&lt;-</span> z[z<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;Target&quot;</span>,]</span>
+<span id="cb33-22"><a href="stratified-sampling-design.html#cb33-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_write</span>(targets, <span class="st">&#39;../soil_sampling/JAM/sampling_points_TAR.shp&#39;</span>, <span class="at">delete_dsn =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb33-23"><a href="stratified-sampling-design.html#cb33-23" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
 </div>
 <div id="stratified-regular-sampling" class="section level2 hasAnchor" number="4.3">
 <h2><span class="header-section-number">4.3</span> Stratified regular sampling<a href="stratified-sampling-design.html#stratified-regular-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The procedure for creating a stratified regular sampling design is identical to that presented for stratified random sampling, with the only distinction that the locations of the sampling points are distributed in a regular spatial grid. This transformation is achieved by changing the method from ‘random’ to ‘regular’ in the spatSample functions within the script above.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="stratified-sampling-design.html#cb35-1" aria-hidden="true" tabindex="-1"></a>  soil_lc <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/strata_diss.shp&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="stratified-sampling-design.html#cb34-1" aria-hidden="true" tabindex="-1"></a>  soil_lc <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/strata_diss.shp&quot;</span>)</span></code></pre></div>
 <pre><code>## Reading layer `strata_diss&#39; from data source 
-##   `/Users/luislado/Dropbox/Github/soil_sampling/JAM/strata_diss.shp&#39; 
+##   `/Users/luislado/Library/CloudStorage/Dropbox/Github/soil_sampling/JAM/strata_diss.shp&#39; 
 ##   using driver `ESRI Shapefile&#39;
 ## Simple feature collection with 35 features and 3 fields
 ## Geometry type: MULTIPOLYGON
 ## Dimension:     XY
 ## Bounding box:  xmin: 605462.5 ymin: 617449.8 xmax: 836425 ymax: 708262.5
 ## Projected CRS: JAD2001 / Jamaica Metric Grid</code></pre>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="stratified-sampling-design.html#cb37-1" aria-hidden="true" tabindex="-1"></a>  soil_lc <span class="ot">&lt;-</span> <span class="fu">st_cast</span>(soil_lc, <span class="st">&#39;POLYGON&#39;</span>)</span>
-<span id="cb37-2"><a href="stratified-sampling-design.html#cb37-2" aria-hidden="true" tabindex="-1"></a>  target <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/grid_sampling_points.shp&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="stratified-sampling-design.html#cb36-1" aria-hidden="true" tabindex="-1"></a>  soil_lc <span class="ot">&lt;-</span> <span class="fu">st_cast</span>(soil_lc, <span class="st">&#39;POLYGON&#39;</span>)</span>
+<span id="cb36-2"><a href="stratified-sampling-design.html#cb36-2" aria-hidden="true" tabindex="-1"></a>  target <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/grid_sampling_points.shp&quot;</span>)</span></code></pre></div>
 <pre><code>## Reading layer `grid_sampling_points&#39; from data source 
-##   `/Users/luislado/Dropbox/Github/soil_sampling/JAM/grid_sampling_points.shp&#39; 
+##   `/Users/luislado/Library/CloudStorage/Dropbox/Github/soil_sampling/JAM/grid_sampling_points.shp&#39; 
 ##   using driver `ESRI Shapefile&#39;
 ## Simple feature collection with 736 features and 7 fields
 ## Geometry type: POINT
 ## Dimension:     XY
 ## Bounding box:  xmin: 607607.8 ymin: 619416.4 xmax: 835113.6 ymax: 705960.9
 ## Projected CRS: JAD2001 / Jamaica Metric Grid</code></pre>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="stratified-sampling-design.html#cb39-1" aria-hidden="true" tabindex="-1"></a>  target <span class="ot">&lt;-</span> target[target<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;Target&quot;</span>,]</span>
-<span id="cb39-2"><a href="stratified-sampling-design.html#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot final map with the aggregated land use information</span></span>
-<span id="cb39-3"><a href="stratified-sampling-design.html#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#mapview(soil_lc[&quot;soil_lc&quot;], alpha=0, homebutton=T) + mapview(z[z$type==&quot;Target&quot;,], color = &quot;white&quot;, col.regions = &quot;tomato&quot;)</span></span>
-<span id="cb39-4"><a href="stratified-sampling-design.html#cb39-4" aria-hidden="true" tabindex="-1"></a>  terra<span class="sc">::</span><span class="fu">plot</span>(soil_lc[<span class="st">&quot;soil_lc&quot;</span>], <span class="at">border=</span><span class="cn">NA</span>, <span class="at">main=</span><span class="st">&quot;Strata classes&quot;</span>)</span>
-<span id="cb39-5"><a href="stratified-sampling-design.html#cb39-5" aria-hidden="true" tabindex="-1"></a>  terra<span class="sc">::</span><span class="fu">points</span>(target[target<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;Target&quot;</span>,])</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="stratified-sampling-design.html#cb38-1" aria-hidden="true" tabindex="-1"></a>  target <span class="ot">&lt;-</span> target[target<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;Target&quot;</span>,]</span>
+<span id="cb38-2"><a href="stratified-sampling-design.html#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot final map with the aggregated land use information</span></span>
+<span id="cb38-3"><a href="stratified-sampling-design.html#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#mapview(soil_lc[&quot;soil_lc&quot;], alpha=0, homebutton=T) + mapview(z[z$type==&quot;Target&quot;,], color = &quot;white&quot;, col.regions = &quot;tomato&quot;)</span></span>
+<span id="cb38-4"><a href="stratified-sampling-design.html#cb38-4" aria-hidden="true" tabindex="-1"></a>  terra<span class="sc">::</span><span class="fu">plot</span>(soil_lc[<span class="st">&quot;soil_lc&quot;</span>], <span class="at">border=</span><span class="cn">NA</span>, <span class="at">main=</span><span class="st">&quot;Strata classes&quot;</span>)</span></code></pre></div>
 <div class="figure">
 <img src="Technical_Manual-on-Sampling-Design_files/figure-html/fig:regular-sampling-plot-1.png" alt="Plot of strata and sampling points" width="672" />
 <p class="caption">
 (#fig:fig:regular-sampling-plot)Plot of strata and sampling points
 </p>
 </div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="stratified-sampling-design.html#cb39-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">#terra::points(target[target$type==&quot;Target&quot;,&quot;type&quot;], pch=16, col=&quot;black&quot;)</span></span></code></pre></div>
 
 </div>
 </div>
