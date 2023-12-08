@@ -269,11 +269,11 @@ optimal_n <- length(which(normalized <0.95))+1
 ```
 
 
-The following figure shows the evolution of the KL divergence and % of repressentativenes with growing sample sizes. The red dot identifies the trial with the optimal sample size for the area in relation to the covariates analysed.
+The following figure shows the cumulative distribution function (cdf) of the KL divergence and the % of representativeness with growing sample sizes. Representativeness increases with the increasing sample size, while KL divergence decreases as expected. The red dot identifies the trial with the optimal sample size for the area in relation to the covariates analysed.
 
 ```{r fig-8, fig.cap="KL Divergence and Proportion of Representativeness as function of sample size",fig.width=8, fig.height=5, eval=TRUE, include=TRUE}
 
-# PLot cdf and optimal sampling point
+# Plot cdf and optimal sampling point
 x <- xx
 y <- normalized
 

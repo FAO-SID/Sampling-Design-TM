@@ -89,18 +89,19 @@ We proceed with the calculation of soil groups. In this example, soil informatio
   # Explode polygons
   soil <- ms_explode(soil )
   soil <- st_cast(soil, 'POLYGON')
-  st_write(soil, "../soil_sampling/JAM/soil_classes.shp", delete_dsn = TRUE)
+  #st_write(soil, "../soil_sampling/JAM/soil_classes.shp", delete_dsn = TRUE)
 
 ```
 
 
-The soil classes used to build the strata are shown in Figure \@ref(fig:fig-9a).
 
-
-```{r fig-9a, fig.cap="Plot of the soil classes", eval=TRUE, include=TRUE}
+```{r fig-10, fig.cap="Plot of the soil classes", eval=FALSE, include=FALSE}
+  
+#The soil classes used to build the strata are shown in Figure \@ref(fig:fig-10).
 
   # Plot final map with the aggregated soil information
-  mapview(soil["USDA_CLASS"], alpha=0, homebutton=T, layer.name = "Soils")
+mv <- mapview(soil["USDA_CLASS"], alpha=0, homebutton=T, layer.name = "Soils")
+mv@map
 
 ```
 
@@ -136,18 +137,20 @@ A similar procedure is performed on the land use dataset.
   lc <- st_cast(lc, 'POLYGON')
   lc <- na.omit(lc)
   # Write land use strata as shapefile
-  st_write(lc, "../soil_sampling/JAM/lc_aggregated.shp", delete_dsn = TRUE)
+  #st_write(lc, "../soil_sampling/JAM/lc_aggregated.shp", delete_dsn = TRUE)
   
 
 ```
 
-Figure  \@ref(fig:fig-9b) shows the landuse classes to build the strata.
 
-```{r fig-9b, fig.cap="Plot of the land use classes", eval=TRUE, include=TRUE}
 
+```{r fig-11, fig.cap="Plot of the land use classes", eval=FALSE, include=FALSE}
+
+  # Figure  \@ref(fig:fig-11) shows the landuse classes to build the strata.
+  
   # Plot final map with the aggregated land use information
-  mapview(lc["LU"], alpha=0, homebutton=T, layer.name = "Landuse")
-
+  mv <- mapview(lc["LU"], alpha=0, homebutton=T, layer.name = "Landuse")
+  mv@map
 ```
 
 To create the soil-land use `strata` we must combine both classified datasets.
@@ -188,22 +191,26 @@ Finally, to comply with the initial requirements of the sampling design, we calc
   # Create a column of strata numeric codes
   soil_lc$code <- as.character(as.numeric(as.factor(soil_lc$soil_lc)))
    # Write final sampling strata map
-  st_write(soil_lc, "../soil_sampling/JAM/strata.shp", delete_dsn = TRUE)
+  #st_write(soil_lc, "../soil_sampling/JAM/strata.shp", delete_dsn = TRUE)
 
 ```
 
-The final strata map is shown in Figure  \@ref(fig:fig-10).
+The final strata map is shown in Figure  \@ref(fig:fig-12).
 
-```{r fig-10, eval=TRUE, include=TRUE, fig.cap="Plot of strata"}
+```{r fig-12, eval=TRUE, include=TRUE, fig.cap="Plot of strata"}
 
    # Plot final map of stratum
-  mapview(soil_lc["soil_lc"], alpha=0, homebutton=T)
   #terra::plot(soil_lc["soil_lc"], border=NA, main="Strata classes")
+  mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T)
+  mv@map
 
 ```
 
 
-### Stratified random sampling
+## Stratified random sampling
+
+This example demonstrates how to establish a stratified random sampling approach within the previously defined strata polygons. The allocation of sample points is proportionate to the stratum areas, with the condition that each stratum must contain a minimum of 2 samples. The determination of sampling points, referred to as `'target points'`, is made during the initial phase of the sampling design and takes into consideration factors such as the area to be sampled, budget constraints, and available personnel. Additionally, a set number of `'replacement points'` must be designated to act as substitutes for 'target points' in cases where some of the original target points cannot be accessed or sampled. These 'replacement points' are systematically indexed, with each index indicating which 'target point' it serves as a substitute for.
+
 
 ```{r random-sampling, eval=TRUE, include=FALSE}
 # Stratified Simple Random Sampling over Soil/Land use Strata -------------------------------------------
@@ -351,7 +358,7 @@ z <- x %>%
 # Export data to Shapefile ----
   
   # Write sampling points to shp
-  writeVector(z, "../soil_sampling/JAM/sampling_points.shp", overwrite=TRUE)
+  #writeVector(z, "../soil_sampling/JAM/sampling_points.shp", overwrite=TRUE)
 
   # Check whether the number of initial target points equals the final target points 
   n;nrow(z[z$type=="Target",])
@@ -360,19 +367,17 @@ z <- x %>%
 ```
 
 
+Results are shown in Figure \@ref(fig:fig-13).
 
-```{r fig-11, fig.cap="Plot of strata and sampling points", eval=TRUE, include=TRUE}
+```{r fig-13, fig.cap="Plot of strata and random, sampling points", eval=TRUE, include=TRUE}
 
-  ##soil_lc <- st_read("../soil_sampling/JAM/strata_diss.shp")
-  #soil_lc <- st_cast(soil_lc, 'POLYGON')
-  #target <- st_read("../soil_sampling/JAM/sampling_points.shp")
-  #target <- target[target$type=="Target",]
-  # Plot final map with the aggregated land use information
-  mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") + mapview(z[z$type=="Target",], color = "white", cex=3, col.regions = "tomato",layer.name = "Target Points")
-  #terra::plot(soil_lc["soil_lc"], border=NA, main="Strata classes")
-  #terra::points(target[target$type=="Target",])
+  mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") +
+  mapview(z[z$type=="Target",], color = "white", cex=3, col.regions = "tomato",layer.name = "Target Points")
+  mv@map
 
 ```
+
+
 
 
 ## Stratified random sampling for large areas
@@ -409,11 +414,11 @@ This modification can streamline fieldwork operations and establish a feasible s
       samples_buffer <- samples_buffer[samples_buffer$type=="Target",]
       samples_buffer <- samples_buffer[samples_buffer$soil_lc==samples_buffer$group,]
       # Save Sampling areas
-      st_write(samples_buffer, paste0('../soil_sampling/JAM/replacement_areas_', samples.buffer, '.shp'), delete_dsn = TRUE)
+      #st_write(samples_buffer, paste0('../soil_sampling/JAM/replacement_areas_', samples.buffer, '.shp'), delete_dsn = TRUE)
       
       # Write target points only
       targets <- z[z$type=="Target",]
-      st_write(targets, '../soil_sampling/JAM/sampling_points_TAR.shp', delete_dsn = TRUE)
+      #st_write(targets, '../soil_sampling/JAM/sampling_points_TAR.shp', delete_dsn = TRUE)
   }
 
 ```
@@ -568,7 +573,7 @@ z <- x %>%
 # Export data to Shapefile ----
   
   # Write sampling points to shp
-  writeVector(z, "../soil_sampling/JAM/grid_sampling_points.shp", overwrite=TRUE)
+  #writeVector(z, "../soil_sampling/JAM/grid_sampling_points.shp", overwrite=TRUE)
 
   # Check whether the number of initial target points equals the final target points 
   n;nrow(z[z$type=="Target",])
@@ -576,10 +581,10 @@ z <- x %>%
 ```
 
 
-```{r fig-12, fig.cap="Plot of strata and regular sampling points", eval=TRUE, include=TRUE}
+```{r fig-14, fig.cap="Plot of strata and regular sampling points", eval=TRUE, include=TRUE}
 
-  mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") + mapview(z[z$type=="Target",], cex=3, color = "white", col.regions = "tomato",layer.name = "Target Points")
-
+  mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") + mapview(z[z$type=="Target",], cex=3, color = "white", col.regions = "tomato",layer.name = "Target Points")
+  mv@map
 ```
 
 
