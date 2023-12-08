@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>4.2 Stratified random sampling for large areas |  Soil Sampling Design</title>
+  <title>4.3 Stratified random sampling for large areas |  Soil Sampling Design</title>
   <meta name="description" content="Technical Manual on Soil Sampling Design - SoilFer Project" />
   <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="4.2 Stratified random sampling for large areas |  Soil Sampling Design" />
+  <meta property="og:title" content="4.3 Stratified random sampling for large areas |  Soil Sampling Design" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="Technical Manual on Soil Sampling Design - SoilFer Project" />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="4.2 Stratified random sampling for large areas |  Soil Sampling Design" />
+  <meta name="twitter:title" content="4.3 Stratified random sampling for large areas |  Soil Sampling Design" />
   
   <meta name="twitter:description" content="Technical Manual on Soil Sampling Design - SoilFer Project" />
   
@@ -30,7 +30,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="general-procedure.html"/>
+<link rel="prev" href="stratified-random-sampling.html"/>
 <link rel="next" href="stratified-regular-sampling.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -203,10 +203,10 @@ div.csl-indent {
 <li class="chapter" data-level="4.1" data-path="general-procedure.html"><a href="general-procedure.html"><i class="fa fa-check"></i><b>4.1</b> General Procedure</a>
 <ul>
 <li class="chapter" data-level="4.1.1" data-path="general-procedure.html"><a href="general-procedure.html#strata-creation"><i class="fa fa-check"></i><b>4.1.1</b> Strata creation</a></li>
-<li class="chapter" data-level="4.1.2" data-path="general-procedure.html"><a href="general-procedure.html#stratified-random-sampling"><i class="fa fa-check"></i><b>4.1.2</b> Stratified random sampling</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="stratified-random-sampling-for-large-areas.html"><a href="stratified-random-sampling-for-large-areas.html"><i class="fa fa-check"></i><b>4.2</b> Stratified random sampling for large areas</a></li>
-<li class="chapter" data-level="4.3" data-path="stratified-regular-sampling.html"><a href="stratified-regular-sampling.html"><i class="fa fa-check"></i><b>4.3</b> Stratified regular sampling</a></li>
+<li class="chapter" data-level="4.2" data-path="stratified-random-sampling.html"><a href="stratified-random-sampling.html"><i class="fa fa-check"></i><b>4.2</b> Stratified random sampling</a></li>
+<li class="chapter" data-level="4.3" data-path="stratified-random-sampling-for-large-areas.html"><a href="stratified-random-sampling-for-large-areas.html"><i class="fa fa-check"></i><b>4.3</b> Stratified random sampling for large areas</a></li>
+<li class="chapter" data-level="4.4" data-path="stratified-regular-sampling.html"><a href="stratified-regular-sampling.html"><i class="fa fa-check"></i><b>4.4</b> Stratified regular sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
@@ -227,8 +227,8 @@ Soil Sampling Design</p></a>
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="stratified-random-sampling-for-large-areas" class="section level2 hasAnchor" number="4.2">
-<h2><span class="header-section-number">4.2</span> Stratified random sampling for large areas<a href="stratified-random-sampling-for-large-areas.html#stratified-random-sampling-for-large-areas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="stratified-random-sampling-for-large-areas" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Stratified random sampling for large areas<a href="stratified-random-sampling-for-large-areas.html#stratified-random-sampling-for-large-areas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The implementation of a stratified random sampling, along with target and replacement points, can present operating difficulties when dealing with areas of significant size and with locations that are hard to reach. To address this issue, the sampling approach can be modified by excluding areas with limited accessibility.</p>
 <p>This modification can streamline fieldwork operations and establish a feasible sampling method while still retaining the essence of the stratified random sampling framework. By excluding areas with limited accessibility, the sampling design can be adjusted to ensure a more practical and effective approach to data collection.</p>
 <ul>
@@ -237,36 +237,36 @@ Soil Sampling Design</p></a>
 <li><p><strong>Additional area exclusion:</strong> Some areas can be identified as not suitable for sampling purposes. This is the case of certain natural protected areas, conflict regions presenting risks for field operators, etc. These areas must be identified masked at an initial stage of the design to exclude them from the sampling strata.</p></li>
 </ul>
 <p>The procedure is the same as that previously presented, with the difference that buffers and exclusion areas must be masked-out from the strata map before performing the random-sampling.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="stratified-random-sampling-for-large-areas.html#cb26-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># Compute sampling areas WITH REPLACEMENT -----</span></span>
-<span id="cb26-2"><a href="stratified-random-sampling-for-large-areas.html#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(REPLACEMENT){</span>
-<span id="cb26-3"><a href="stratified-random-sampling-for-large-areas.html#cb26-3" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Load strata</span></span>
-<span id="cb26-4"><a href="stratified-random-sampling-for-large-areas.html#cb26-4" aria-hidden="true" tabindex="-1"></a>      soil_lc <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/strata.shp&quot;</span>)</span>
-<span id="cb26-5"><a href="stratified-random-sampling-for-large-areas.html#cb26-5" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb26-6"><a href="stratified-random-sampling-for-large-areas.html#cb26-6" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Read sampling. points from previous step</span></span>
-<span id="cb26-7"><a href="stratified-random-sampling-for-large-areas.html#cb26-7" aria-hidden="true" tabindex="-1"></a>      z <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/sampling_points.shp&quot;</span>)</span>
-<span id="cb26-8"><a href="stratified-random-sampling-for-large-areas.html#cb26-8" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb26-9"><a href="stratified-random-sampling-for-large-areas.html#cb26-9" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Define buffer of 500 meters (coordinate system must be in metric base)</span></span>
-<span id="cb26-10"><a href="stratified-random-sampling-for-large-areas.html#cb26-10" aria-hidden="true" tabindex="-1"></a>      samples.buffer <span class="ot">=</span> <span class="dv">500</span></span>
-<span id="cb26-11"><a href="stratified-random-sampling-for-large-areas.html#cb26-11" aria-hidden="true" tabindex="-1"></a>      buf.samples <span class="ot">&lt;-</span> <span class="fu">st_buffer</span>(z, <span class="at">dist=</span>samples.buffer)</span>
-<span id="cb26-12"><a href="stratified-random-sampling-for-large-areas.html#cb26-12" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb26-13"><a href="stratified-random-sampling-for-large-areas.html#cb26-13" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Intersect buffers</span></span>
-<span id="cb26-14"><a href="stratified-random-sampling-for-large-areas.html#cb26-14" aria-hidden="true" tabindex="-1"></a>      samples_buffer <span class="ot">=</span> <span class="fu">st_intersection</span>(soil_lc, buf.samples)</span>
-<span id="cb26-15"><a href="stratified-random-sampling-for-large-areas.html#cb26-15" aria-hidden="true" tabindex="-1"></a>      samples_buffer <span class="ot">&lt;-</span> samples_buffer[samples_buffer<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;Target&quot;</span>,]</span>
-<span id="cb26-16"><a href="stratified-random-sampling-for-large-areas.html#cb26-16" aria-hidden="true" tabindex="-1"></a>      samples_buffer <span class="ot">&lt;-</span> samples_buffer[samples_buffer<span class="sc">$</span>soil_lc<span class="sc">==</span>samples_buffer<span class="sc">$</span>group,]</span>
-<span id="cb26-17"><a href="stratified-random-sampling-for-large-areas.html#cb26-17" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Save Sampling areas</span></span>
-<span id="cb26-18"><a href="stratified-random-sampling-for-large-areas.html#cb26-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_write</span>(samples_buffer, <span class="fu">paste0</span>(<span class="st">&#39;../soil_sampling/JAM/replacement_areas_&#39;</span>, samples.buffer, <span class="st">&#39;.shp&#39;</span>), <span class="at">delete_dsn =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb26-19"><a href="stratified-random-sampling-for-large-areas.html#cb26-19" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb26-20"><a href="stratified-random-sampling-for-large-areas.html#cb26-20" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Write target points only</span></span>
-<span id="cb26-21"><a href="stratified-random-sampling-for-large-areas.html#cb26-21" aria-hidden="true" tabindex="-1"></a>      targets <span class="ot">&lt;-</span> z[z<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;Target&quot;</span>,]</span>
-<span id="cb26-22"><a href="stratified-random-sampling-for-large-areas.html#cb26-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_write</span>(targets, <span class="st">&#39;../soil_sampling/JAM/sampling_points_TAR.shp&#39;</span>, <span class="at">delete_dsn =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb26-23"><a href="stratified-random-sampling-for-large-areas.html#cb26-23" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="stratified-random-sampling-for-large-areas.html#cb22-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># Compute sampling areas WITH REPLACEMENT -----</span></span>
+<span id="cb22-2"><a href="stratified-random-sampling-for-large-areas.html#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(REPLACEMENT){</span>
+<span id="cb22-3"><a href="stratified-random-sampling-for-large-areas.html#cb22-3" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Load strata</span></span>
+<span id="cb22-4"><a href="stratified-random-sampling-for-large-areas.html#cb22-4" aria-hidden="true" tabindex="-1"></a>      soil_lc <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/strata.shp&quot;</span>)</span>
+<span id="cb22-5"><a href="stratified-random-sampling-for-large-areas.html#cb22-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb22-6"><a href="stratified-random-sampling-for-large-areas.html#cb22-6" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Read sampling. points from previous step</span></span>
+<span id="cb22-7"><a href="stratified-random-sampling-for-large-areas.html#cb22-7" aria-hidden="true" tabindex="-1"></a>      z <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/sampling_points.shp&quot;</span>)</span>
+<span id="cb22-8"><a href="stratified-random-sampling-for-large-areas.html#cb22-8" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb22-9"><a href="stratified-random-sampling-for-large-areas.html#cb22-9" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Define buffer of 500 meters (coordinate system must be in metric base)</span></span>
+<span id="cb22-10"><a href="stratified-random-sampling-for-large-areas.html#cb22-10" aria-hidden="true" tabindex="-1"></a>      samples.buffer <span class="ot">=</span> <span class="dv">500</span></span>
+<span id="cb22-11"><a href="stratified-random-sampling-for-large-areas.html#cb22-11" aria-hidden="true" tabindex="-1"></a>      buf.samples <span class="ot">&lt;-</span> <span class="fu">st_buffer</span>(z, <span class="at">dist=</span>samples.buffer)</span>
+<span id="cb22-12"><a href="stratified-random-sampling-for-large-areas.html#cb22-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb22-13"><a href="stratified-random-sampling-for-large-areas.html#cb22-13" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Intersect buffers</span></span>
+<span id="cb22-14"><a href="stratified-random-sampling-for-large-areas.html#cb22-14" aria-hidden="true" tabindex="-1"></a>      samples_buffer <span class="ot">=</span> <span class="fu">st_intersection</span>(soil_lc, buf.samples)</span>
+<span id="cb22-15"><a href="stratified-random-sampling-for-large-areas.html#cb22-15" aria-hidden="true" tabindex="-1"></a>      samples_buffer <span class="ot">&lt;-</span> samples_buffer[samples_buffer<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;Target&quot;</span>,]</span>
+<span id="cb22-16"><a href="stratified-random-sampling-for-large-areas.html#cb22-16" aria-hidden="true" tabindex="-1"></a>      samples_buffer <span class="ot">&lt;-</span> samples_buffer[samples_buffer<span class="sc">$</span>soil_lc<span class="sc">==</span>samples_buffer<span class="sc">$</span>group,]</span>
+<span id="cb22-17"><a href="stratified-random-sampling-for-large-areas.html#cb22-17" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Save Sampling areas</span></span>
+<span id="cb22-18"><a href="stratified-random-sampling-for-large-areas.html#cb22-18" aria-hidden="true" tabindex="-1"></a>      <span class="co">#st_write(samples_buffer, paste0(&#39;../soil_sampling/JAM/replacement_areas_&#39;, samples.buffer, &#39;.shp&#39;), delete_dsn = TRUE)</span></span>
+<span id="cb22-19"><a href="stratified-random-sampling-for-large-areas.html#cb22-19" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb22-20"><a href="stratified-random-sampling-for-large-areas.html#cb22-20" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Write target points only</span></span>
+<span id="cb22-21"><a href="stratified-random-sampling-for-large-areas.html#cb22-21" aria-hidden="true" tabindex="-1"></a>      targets <span class="ot">&lt;-</span> z[z<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;Target&quot;</span>,]</span>
+<span id="cb22-22"><a href="stratified-random-sampling-for-large-areas.html#cb22-22" aria-hidden="true" tabindex="-1"></a>      <span class="co">#st_write(targets, &#39;../soil_sampling/JAM/sampling_points_TAR.shp&#39;, delete_dsn = TRUE)</span></span>
+<span id="cb22-23"><a href="stratified-random-sampling-for-large-areas.html#cb22-23" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="general-procedure.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="stratified-random-sampling.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="stratified-regular-sampling.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
