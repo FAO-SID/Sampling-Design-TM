@@ -1,11 +1,19 @@
 bookdown::gitbook:
+  lib_dir: assets
+  split_by: section
+  config:
+    toolbar:
+      position: static
   css: style.css
   includes:
-  config:
     toc:
       before: |
-        <li><a href="./">Soil Sampling Design</a></li>
+        <li><a href="./">Soil Samping Design</a></li>
       after: |
-        <li><a href="https://www.fao.org/global-soil-partnership/en/" target="blank">Global Soil Partnership</a></li>
-    edit: https://github.com/luislado/Sampling_Design_GSP/edit/master/%s
+        <li><a href="https://bookdown.org" target="blank">Published within SoilFer</a></li>
+    edit: https://github.com/luislado/bookdown-tutorial/edit/master/%s
     download: ["pdf"]
+bookdown::pdf_book:
+  keep_tex: true
+
+  

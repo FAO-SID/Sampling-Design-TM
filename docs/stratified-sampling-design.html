@@ -5,42 +5,42 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 4 Stratified Sampling Design |  Soil Sampling Design</title>
-  <meta name="description" content="Technical Manual on Soil Sampling Design within the SoilFer Project." />
+  <meta name="description" content="Technical Manual on Soil Sampling Design - SoilFer Project" />
   <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 4 Stratified Sampling Design |  Soil Sampling Design" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:description" content="Technical Manual on Soil Sampling Design within the SoilFer Project." />
+  <meta property="og:description" content="Technical Manual on Soil Sampling Design - SoilFer Project" />
   
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Chapter 4 Stratified Sampling Design |  Soil Sampling Design" />
   
-  <meta name="twitter:description" content="Technical Manual on Soil Sampling Design within the SoilFer Project." />
+  <meta name="twitter:description" content="Technical Manual on Soil Sampling Design - SoilFer Project" />
   
 
 <meta name="author" content="Rodríguez Lado, L., Angelini, M.E, Naypewe, N., Luotto, I., Yigini, Y." />
 
 
-<meta name="date" content="2023-12-06" />
+<meta name="date" content="2023-12-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="creating-a-sampling-design.html"/>
-<link rel="next" href="references.html"/>
-<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link rel="prev" href="determining-the-optimal-sample-size.html"/>
+<link rel="next" href="general-procedure.html"/>
+<script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
-<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
 
 
 
@@ -49,16 +49,31 @@
 
 
 
-<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
-<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
-<script src="libs/plotly-binding-4.10.1/plotly.js"></script>
-<script src="libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
-<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+<link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="assets/plotly-binding-4.10.0/plotly.js"></script>
+<script src="assets/typedarray-0.1/typedarray.min.js"></script>
+<link href="assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<link href="assets/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="assets/leaflet-1.3.1/leaflet.js"></script>
+<link href="assets/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="assets/proj4-2.6.2/proj4.min.js"></script>
+<script src="assets/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="assets/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="assets/leaflet-binding-2.1.1/leaflet.js"></script>
+<script src="assets/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="assets/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script>
+<link href="assets/HomeButton-0.0.1/home-button.css" rel="stylesheet" />
+<script src="assets/HomeButton-0.0.1/home-button.js"></script>
+<script src="assets/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<script src="assets/clipboard-0.0.1/setClipboardText.js"></script>
+<link href="assets/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
+<link href="assets/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
 
 
 <style type="text/css">
@@ -166,40 +181,34 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">Soil Sampling Design</a></li>
-
-<li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Licence</a></li>
-<li class="chapter" data-level="" data-path="abbreviations-and-acronyms.html"><a href="abbreviations-and-acronyms.html"><i class="fa fa-check"></i>Abbreviations and acronyms</a></li>
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
 <ul>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#conditioned-latin-hypercube-sampling-clhs"><i class="fa fa-check"></i>Conditioned Latin Hypercube Sampling (cLHS)</a></li>
+<li class="chapter" data-level="1.1" data-path="manual-structure.html"><a href="manual-structure.html"><i class="fa fa-check"></i><b>1.1</b> Manual Structure</a></li>
+<li class="chapter" data-level="" data-path="conditioned-latin-hypercube-sampling-clhs.html"><a href="conditioned-latin-hypercube-sampling-clhs.html"><i class="fa fa-check"></i>Conditioned Latin Hypercube Sampling (cLHS)</a></li>
 </ul></li>
 <li class="part"><span><b>Part one - Soil Legacy Data</b></span></li>
 <li class="chapter" data-level="2" data-path="legacy_data.html"><a href="legacy_data.html"><i class="fa fa-check"></i><b>2</b> Evaluating Soil Legacy Data Sampling for DSM</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="legacy_data.html"><a href="legacy_data.html#data-preparation"><i class="fa fa-check"></i><b>2.1</b> Data Preparation</a></li>
-<li class="chapter" data-level="2.2" data-path="legacy_data.html"><a href="legacy_data.html#representativeness-of-the-legacy-soil-data"><i class="fa fa-check"></i><b>2.2</b> Representativeness of the Legacy Soil Data</a></li>
+<li class="chapter" data-level="2.1" data-path="data-preparation.html"><a href="data-preparation.html"><i class="fa fa-check"></i><b>2.1</b> Data Preparation</a></li>
+<li class="chapter" data-level="2.2" data-path="representativeness-of-the-legacy-soil-data.html"><a href="representativeness-of-the-legacy-soil-data.html"><i class="fa fa-check"></i><b>2.2</b> Representativeness of the Legacy Soil Data</a></li>
 </ul></li>
 <li class="part"><span><b>I Part two - Soil Sampling Design</b></span></li>
 <li class="chapter" data-level="3" data-path="creating-a-sampling-design.html"><a href="creating-a-sampling-design.html"><i class="fa fa-check"></i><b>3</b> Creating a sampling design</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="creating-a-sampling-design.html"><a href="creating-a-sampling-design.html#determining-the-optimal-sample-size"><i class="fa fa-check"></i><b>3.1</b> Determining the optimal sample size</a></li>
+<li class="chapter" data-level="3.1" data-path="determining-the-optimal-sample-size.html"><a href="determining-the-optimal-sample-size.html"><i class="fa fa-check"></i><b>3.1</b> Determining the optimal sample size</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html"><i class="fa fa-check"></i><b>4</b> Stratified Sampling Design</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#general-procedure"><i class="fa fa-check"></i><b>4.1</b> General Procedure</a>
+<li class="chapter" data-level="4.1" data-path="general-procedure.html"><a href="general-procedure.html"><i class="fa fa-check"></i><b>4.1</b> General Procedure</a>
 <ul>
-<li class="chapter" data-level="4.1.1" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#strata-creation"><i class="fa fa-check"></i><b>4.1.1</b> Strata creation</a></li>
-<li class="chapter" data-level="4.1.2" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-random-sampling"><i class="fa fa-check"></i><b>4.1.2</b> Stratified random sampling</a></li>
+<li class="chapter" data-level="4.1.1" data-path="general-procedure.html"><a href="general-procedure.html#strata-creation"><i class="fa fa-check"></i><b>4.1.1</b> Strata creation</a></li>
+<li class="chapter" data-level="4.1.2" data-path="general-procedure.html"><a href="general-procedure.html#stratified-random-sampling"><i class="fa fa-check"></i><b>4.1.2</b> Stratified random sampling</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-random-sampling-for-large-areas"><i class="fa fa-check"></i><b>4.2</b> Stratified random sampling for large areas</a></li>
-<li class="chapter" data-level="4.3" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-regular-sampling"><i class="fa fa-check"></i><b>4.3</b> Stratified regular sampling</a></li>
+<li class="chapter" data-level="4.2" data-path="stratified-random-sampling-for-large-areas.html"><a href="stratified-random-sampling-for-large-areas.html"><i class="fa fa-check"></i><b>4.2</b> Stratified random sampling for large areas</a></li>
+<li class="chapter" data-level="4.3" data-path="stratified-regular-sampling.html"><a href="stratified-regular-sampling.html"><i class="fa fa-check"></i><b>4.3</b> Stratified regular sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
-<li class="divider"></li>
-<li><a href="https://www.fao.org/global-soil-partnership/en/" target="blank">Global Soil Partnership</a></li>
-
 </ul>
 
       </nav>
@@ -221,172 +230,24 @@ Soil Sampling Design</p></a>
 <div id="stratified-sampling-design" class="section level1 hasAnchor" number="4">
 <h1><span class="header-section-number">Chapter 4</span> Stratified Sampling Design<a href="stratified-sampling-design.html#stratified-sampling-design" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Stratified random sampling is a technique where the study area is divided into different <code>groups</code> or <code>strata</code> based on certain environmental traits, and a number of random samples are taken from within each group. One of the primary advantages of stratified sampling is its ability to capture the diversity within a population by making sure each group is represented. It can provide a more accurate reflection of the entire population compared to random sampling, especially when the groups are distinct and have unique qualities. This approach is particularly beneficial when certain subgroups within the population are specifically noteworthy. It also allows for more precise estimates with a smaller total sample size compared to simple random choice. Stratified sampling presents some disadvantages. Achieving effective categories requires a proper definition and delineation of the initial information to create the <code>strata</code>. The classification of the environmental information into categories and ensuring fair portrayal of each can be intricate and time-taking, and mislabeling elements into an improper group can lead to skewed outcomes.</p>
-<div id="general-procedure" class="section level2 hasAnchor" number="4.1">
-<h2><span class="header-section-number">4.1</span> General Procedure<a href="stratified-sampling-design.html#general-procedure" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The creation of a stratified random sampling design involves the identification of relevant features describing the environmental diversity in the area (soil and land use are the environmental variables generally used to define strata), delineation of the strata, determination of the number of samples to distribute to each stratum, followed by random sampling within it. By identifying relevant classes, combining them to define strata, and allocating an appropriate number of samples to each stratum, a representative sample can be obtained. Random sampling within each stratum helps to ensure that the sample is unbiased and provides a fair representation of the overall conditions in the area.</p>
-<p>The first question is about how many samples must be retrieved from each strata. The sampling scheme starts with the definition of the total number of samples to collect. In this case, the determination of the sample size is a complex and highly variable process based, among others, on the specific goals of the study, the variability of environmental proxies, the statistical requirements for accuracy and confidence, as well as additional considerations such as accessibility, costs and available resources. The optimal number of samples can be determined following the method proposed in Chapter 2 of this manual. The number of samples within each stratum is calculated using an area-weighted approach taking into account the relative area of each stratum. The sampling design in this section must also comply with the following requirements:</p>
-<ul>
-<li>All sampling strata must have a minimum size of 100 hectares.</li>
-<li>All sampling strata must be represented by at least 2 samples.</li>
-</ul>
-<p>This sampling process ensures the representativeness of the environmental combinations present across the area while maintaining an efficient and feasible field sampling campaign.</p>
-<div id="strata-creation" class="section level3 hasAnchor" number="4.1.1">
-<h3><span class="header-section-number">4.1.1</span> Strata creation<a href="stratified-sampling-design.html#strata-creation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>We must determine the kind of information that will be used to construct the <code>strata</code>. In this manual, we present a simple procedure to build strata based on data from two environmental layers: soil groups and land use classification data. The information should be provided in the form of vector shapefiles with associated information databases. The data on both sets often comprises a large number of categories, that would lead to a very large number of <code>strata</code>. Thus, it is desirable to make an effort of aggregating similar categories within each input data set, to reduce, as much as possible, the number of categories while still capturing the most of the valuable variability in the area.</p>
-<p>The fist step is to set-up the RStudio environment and load the required packages:</p>
-<p>We must define the number of samples to distribute in the sampling design, and the soil and land use information layers to build the strata. We also define a REPLACEMENT parameter to account for a reduction of the sampling area according to a certain area using predefined bounding-box, that can be also here defined.</p>
-<p>We proceed with the calculation of soil groups. In this example, soil information is stored in the field <code>TYPES</code>. We have analysed the extent to which the information in this field can be synthesized to eliminate redundancy when creating the <code>strata</code>. <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="stratified-sampling-design.html#cb22-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot final map with the aggregated soil information</span></span>
-<span id="cb22-2"><a href="stratified-sampling-design.html#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#mapview(soil[&quot;USDA_CLASS&quot;], alpha=0, homebutton=T)</span></span></code></pre></div>
-<p>A similar procedure is performed on the land use dataset.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="stratified-sampling-design.html#cb23-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot final map with the aggregated land use information</span></span>
-<span id="cb23-2"><a href="stratified-sampling-design.html#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#mapview(lc[&quot;LU&quot;], alpha=0, homebutton=T)</span></span></code></pre></div>
-<p>To create the soil-land use <code>strata</code> we must combine both classified datasets.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="stratified-sampling-design.html#cb24-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine soil and land use layers</span></span>
-<span id="cb24-2"><a href="stratified-sampling-design.html#cb24-2" aria-hidden="true" tabindex="-1"></a>  soil_lc <span class="ot">&lt;-</span> <span class="fu">st_intersection</span>(soil, lc)  </span></code></pre></div>
-<pre><code>## Warning: attribute variables are assumed to be spatially constant throughout
-## all geometries</code></pre>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="stratified-sampling-design.html#cb26-1" aria-hidden="true" tabindex="-1"></a>  soil_lc<span class="sc">$</span>soil_lc <span class="ot">&lt;-</span> <span class="fu">paste0</span>(soil_lc<span class="sc">$</span>USDA_CLASS, <span class="st">&quot;_&quot;</span>, soil_lc<span class="sc">$</span>LU)</span>
-<span id="cb26-2"><a href="stratified-sampling-design.html#cb26-2" aria-hidden="true" tabindex="-1"></a>  soil_lc <span class="ot">&lt;-</span> soil_lc <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(soil_lc, geometry)</span></code></pre></div>
-<p>Finally, to comply with the initial requirements of the sampling design, we calculate the areas of each polygon, delete all features with extent lesser than 100 has.</p>
-<p>The final strata map is shown in Figure XX.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="stratified-sampling-design.html#cb27-1" aria-hidden="true" tabindex="-1"></a>   <span class="co"># Plot final map of stratum</span></span>
-<span id="cb27-2"><a href="stratified-sampling-design.html#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#mapview(soil_lc[&quot;soil_lc&quot;], alpha=0, homebutton=T)</span></span>
-<span id="cb27-3"><a href="stratified-sampling-design.html#cb27-3" aria-hidden="true" tabindex="-1"></a>  terra<span class="sc">::</span><span class="fu">plot</span>(soil_lc[<span class="st">&quot;soil_lc&quot;</span>], <span class="at">border=</span><span class="cn">NA</span>, <span class="at">main=</span><span class="st">&quot;Strata classes&quot;</span>)</span></code></pre></div>
-<div class="figure"><span style="display:block;" id="fig:strata-plot"></span>
-<img src="Technical_Manual-on-Sampling-Design_files/figure-html/strata-plot-1.png" alt="Plot of strata" width="672" />
-<p class="caption">
-Figure 4.1: Plot of strata
-</p>
-</div>
-</div>
-<div id="stratified-random-sampling" class="section level3 hasAnchor" number="4.1.2">
-<h3><span class="header-section-number">4.1.2</span> Stratified random sampling<a href="stratified-sampling-design.html#stratified-random-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="stratified-sampling-design.html#cb28-1" aria-hidden="true" tabindex="-1"></a>  soil_lc <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/strata_diss.shp&quot;</span>)</span></code></pre></div>
-<pre><code>## Reading layer `strata_diss&#39; from data source 
-##   `/Users/luislado/Library/CloudStorage/Dropbox/Github/soil_sampling/JAM/strata_diss.shp&#39; 
-##   using driver `ESRI Shapefile&#39;
-## Simple feature collection with 35 features and 3 fields
-## Geometry type: MULTIPOLYGON
-## Dimension:     XY
-## Bounding box:  xmin: 605462.5 ymin: 617449.8 xmax: 836425 ymax: 708262.5
-## Projected CRS: JAD2001 / Jamaica Metric Grid</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="stratified-sampling-design.html#cb30-1" aria-hidden="true" tabindex="-1"></a>  soil_lc <span class="ot">&lt;-</span> <span class="fu">st_cast</span>(soil_lc, <span class="st">&#39;POLYGON&#39;</span>)</span>
-<span id="cb30-2"><a href="stratified-sampling-design.html#cb30-2" aria-hidden="true" tabindex="-1"></a>  target <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/sampling_points.shp&quot;</span>)</span></code></pre></div>
-<pre><code>## Reading layer `sampling_points&#39; from data source 
-##   `/Users/luislado/Library/CloudStorage/Dropbox/Github/soil_sampling/JAM/sampling_points.shp&#39; 
-##   using driver `ESRI Shapefile&#39;
-## Simple feature collection with 682 features and 7 fields
-## Geometry type: POINT
-## Dimension:     XY
-## Bounding box:  xmin: 608085 ymin: 620377.6 xmax: 834672.6 ymax: 705309
-## Projected CRS: JAD2001 / Jamaica Metric Grid</code></pre>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="stratified-sampling-design.html#cb32-1" aria-hidden="true" tabindex="-1"></a>  target <span class="ot">&lt;-</span> target[target<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;Target&quot;</span>,]</span>
-<span id="cb32-2"><a href="stratified-sampling-design.html#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot final map with the aggregated land use information</span></span>
-<span id="cb32-3"><a href="stratified-sampling-design.html#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#mapview(soil_lc[&quot;soil_lc&quot;], alpha=0, homebutton=T) + mapview(z[z$type==&quot;Target&quot;,], color = &quot;white&quot;, col.regions = &quot;tomato&quot;)</span></span>
-<span id="cb32-4"><a href="stratified-sampling-design.html#cb32-4" aria-hidden="true" tabindex="-1"></a>  terra<span class="sc">::</span><span class="fu">plot</span>(soil_lc[<span class="st">&quot;soil_lc&quot;</span>], <span class="at">border=</span><span class="cn">NA</span>, <span class="at">main=</span><span class="st">&quot;Strata classes&quot;</span>)</span>
-<span id="cb32-5"><a href="stratified-sampling-design.html#cb32-5" aria-hidden="true" tabindex="-1"></a>  terra<span class="sc">::</span><span class="fu">points</span>(target[target<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;Target&quot;</span>,])</span></code></pre></div>
-<div class="figure">
-<img src="Technical_Manual-on-Sampling-Design_files/figure-html/fig:sampling-plot-1.png" alt="Plot of strata and sampling points" width="672" />
-<p class="caption">
-(#fig:fig:sampling-plot)Plot of strata and sampling points
-</p>
-</div>
-</div>
-</div>
-<div id="stratified-random-sampling-for-large-areas" class="section level2 hasAnchor" number="4.2">
-<h2><span class="header-section-number">4.2</span> Stratified random sampling for large areas<a href="stratified-sampling-design.html#stratified-random-sampling-for-large-areas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The implementation of a stratified random sampling, along with target and replacement points, can present operating difficulties when dealing with areas of significant size and with locations that are hard to reach. To address this issue, the sampling approach can be modified by excluding areas with limited accessibility.</p>
-<p>This modification can streamline fieldwork operations and establish a feasible sampling method while still retaining the essence of the stratified random sampling framework. By excluding areas with limited accessibility, the sampling design can be adjusted to ensure a more practical and effective approach to data collection.</p>
-<ul>
-<li><p><strong>Delineation of sampling accessibility:</strong> The sampling area can be further limited based on accessibility considerations. Areas with very limited accessibility, defined as regions located more than 1 kilometre away from a main road or access path, may be excluded from sampling areas. To accomplish this, a map of main roads and paths can be used to establish a sampling buffer that includes areas within a 1-kilometre buffer around the road infrastructures. This exclusion helps to eliminate the most remote and challenging-to-access areas. An additional layer of accessibility information can be incorporated based on population distribution in the country, considering that, if population is present, there is a high change that points in the surroundings can be accessible for sampling. In this case, populated nuclei are vectorized into points, and a 250-meter buffer is then generated around each point. These resulting areas can be then added to the 1-kilometre buffer around the roads, which collectively defined the final sampling area.</p></li>
-<li><p><strong>Substitution of replacement points with replacement areas in close proximity to the target points:</strong> The sampling design presented before included designated replacement points to serve as substitutes for each target point in the case that it would be inaccessible during fieldwork. However, this approach presented challenges, particularly for large areas, as the replacement point could be located far from the target point, resulting in significant logistical efforts. This limitation posed a risk of delays in completing the sampling campaign within the allocated time frame. To address this challenge, an alternative strategy is to replace the idea of replacement points with replacement areas situated in the immediate vicinity of the target point. The replacement area for each target point is now confined within a 500-meter buffer surrounding the target and falls within the same sampling stratum. This approach concentrates sampling and replacement activities within a specific geographic area, streamlining the overall process. By reducing the need for extensive travel, this method enhances efficiency and facilitates sample collection. Figure 2 illustrates the distribution of sampling points and replacement areas for visualization.</p></li>
-<li><p><strong>Additional area exclusion:</strong> Some areas can be identified as not suitable for sampling purposes. This is the case of certain natural protected areas, conflict regions presenting risks for field operators, etc. These areas must be identified masked at an initial stage of the design to exclude them from the sampling strata.</p></li>
-</ul>
-<p>The procedure is the same as that previously presented, with the difference that buffers and exclusion areas must be masked-out from the strata map before performing the random-sampling.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="stratified-sampling-design.html#cb33-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># Compute sampling areas WITH REPLACEMENT -----</span></span>
-<span id="cb33-2"><a href="stratified-sampling-design.html#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(REPLACEMENT){</span>
-<span id="cb33-3"><a href="stratified-sampling-design.html#cb33-3" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Load strata</span></span>
-<span id="cb33-4"><a href="stratified-sampling-design.html#cb33-4" aria-hidden="true" tabindex="-1"></a>      soil_lc <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/strata.shp&quot;</span>)</span>
-<span id="cb33-5"><a href="stratified-sampling-design.html#cb33-5" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb33-6"><a href="stratified-sampling-design.html#cb33-6" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Read sampling. points from previous step</span></span>
-<span id="cb33-7"><a href="stratified-sampling-design.html#cb33-7" aria-hidden="true" tabindex="-1"></a>      z <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/sampling_points.shp&quot;</span>)</span>
-<span id="cb33-8"><a href="stratified-sampling-design.html#cb33-8" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb33-9"><a href="stratified-sampling-design.html#cb33-9" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Define buffer of 500 meters (coordinate system must be in metric base)</span></span>
-<span id="cb33-10"><a href="stratified-sampling-design.html#cb33-10" aria-hidden="true" tabindex="-1"></a>      samples.buffer <span class="ot">=</span> <span class="dv">500</span></span>
-<span id="cb33-11"><a href="stratified-sampling-design.html#cb33-11" aria-hidden="true" tabindex="-1"></a>      buf.samples <span class="ot">&lt;-</span> <span class="fu">st_buffer</span>(z, <span class="at">dist=</span>samples.buffer)</span>
-<span id="cb33-12"><a href="stratified-sampling-design.html#cb33-12" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb33-13"><a href="stratified-sampling-design.html#cb33-13" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Intersect buffers</span></span>
-<span id="cb33-14"><a href="stratified-sampling-design.html#cb33-14" aria-hidden="true" tabindex="-1"></a>      samples_buffer <span class="ot">=</span> <span class="fu">st_intersection</span>(soil_lc, buf.samples)</span>
-<span id="cb33-15"><a href="stratified-sampling-design.html#cb33-15" aria-hidden="true" tabindex="-1"></a>      samples_buffer <span class="ot">&lt;-</span> samples_buffer[samples_buffer<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;Target&quot;</span>,]</span>
-<span id="cb33-16"><a href="stratified-sampling-design.html#cb33-16" aria-hidden="true" tabindex="-1"></a>      samples_buffer <span class="ot">&lt;-</span> samples_buffer[samples_buffer<span class="sc">$</span>soil_lc<span class="sc">==</span>samples_buffer<span class="sc">$</span>group,]</span>
-<span id="cb33-17"><a href="stratified-sampling-design.html#cb33-17" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Save Sampling areas</span></span>
-<span id="cb33-18"><a href="stratified-sampling-design.html#cb33-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_write</span>(samples_buffer, <span class="fu">paste0</span>(<span class="st">&#39;../soil_sampling/JAM/replacement_areas_&#39;</span>, samples.buffer, <span class="st">&#39;.shp&#39;</span>), <span class="at">delete_dsn =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb33-19"><a href="stratified-sampling-design.html#cb33-19" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb33-20"><a href="stratified-sampling-design.html#cb33-20" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Write target points only</span></span>
-<span id="cb33-21"><a href="stratified-sampling-design.html#cb33-21" aria-hidden="true" tabindex="-1"></a>      targets <span class="ot">&lt;-</span> z[z<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;Target&quot;</span>,]</span>
-<span id="cb33-22"><a href="stratified-sampling-design.html#cb33-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_write</span>(targets, <span class="st">&#39;../soil_sampling/JAM/sampling_points_TAR.shp&#39;</span>, <span class="at">delete_dsn =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb33-23"><a href="stratified-sampling-design.html#cb33-23" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
-</div>
-<div id="stratified-regular-sampling" class="section level2 hasAnchor" number="4.3">
-<h2><span class="header-section-number">4.3</span> Stratified regular sampling<a href="stratified-sampling-design.html#stratified-regular-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The procedure for creating a stratified regular sampling design is identical to that presented for stratified random sampling, with the only distinction that the locations of the sampling points are distributed in a regular spatial grid. This transformation is achieved by changing the method from ‘random’ to ‘regular’ in the spatSample functions within the script above.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="stratified-sampling-design.html#cb34-1" aria-hidden="true" tabindex="-1"></a>  soil_lc <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/strata_diss.shp&quot;</span>)</span></code></pre></div>
-<pre><code>## Reading layer `strata_diss&#39; from data source 
-##   `/Users/luislado/Library/CloudStorage/Dropbox/Github/soil_sampling/JAM/strata_diss.shp&#39; 
-##   using driver `ESRI Shapefile&#39;
-## Simple feature collection with 35 features and 3 fields
-## Geometry type: MULTIPOLYGON
-## Dimension:     XY
-## Bounding box:  xmin: 605462.5 ymin: 617449.8 xmax: 836425 ymax: 708262.5
-## Projected CRS: JAD2001 / Jamaica Metric Grid</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="stratified-sampling-design.html#cb36-1" aria-hidden="true" tabindex="-1"></a>  soil_lc <span class="ot">&lt;-</span> <span class="fu">st_cast</span>(soil_lc, <span class="st">&#39;POLYGON&#39;</span>)</span>
-<span id="cb36-2"><a href="stratified-sampling-design.html#cb36-2" aria-hidden="true" tabindex="-1"></a>  target <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;../soil_sampling/JAM/grid_sampling_points.shp&quot;</span>)</span></code></pre></div>
-<pre><code>## Reading layer `grid_sampling_points&#39; from data source 
-##   `/Users/luislado/Library/CloudStorage/Dropbox/Github/soil_sampling/JAM/grid_sampling_points.shp&#39; 
-##   using driver `ESRI Shapefile&#39;
-## Simple feature collection with 736 features and 7 fields
-## Geometry type: POINT
-## Dimension:     XY
-## Bounding box:  xmin: 607607.8 ymin: 619416.4 xmax: 835113.6 ymax: 705960.9
-## Projected CRS: JAD2001 / Jamaica Metric Grid</code></pre>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="stratified-sampling-design.html#cb38-1" aria-hidden="true" tabindex="-1"></a>  target <span class="ot">&lt;-</span> target[target<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;Target&quot;</span>,]</span>
-<span id="cb38-2"><a href="stratified-sampling-design.html#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot final map with the aggregated land use information</span></span>
-<span id="cb38-3"><a href="stratified-sampling-design.html#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#mapview(soil_lc[&quot;soil_lc&quot;], alpha=0, homebutton=T) + mapview(z[z$type==&quot;Target&quot;,], color = &quot;white&quot;, col.regions = &quot;tomato&quot;)</span></span>
-<span id="cb38-4"><a href="stratified-sampling-design.html#cb38-4" aria-hidden="true" tabindex="-1"></a>  terra<span class="sc">::</span><span class="fu">plot</span>(soil_lc[<span class="st">&quot;soil_lc&quot;</span>], <span class="at">border=</span><span class="cn">NA</span>, <span class="at">main=</span><span class="st">&quot;Strata classes&quot;</span>)</span></code></pre></div>
-<div class="figure">
-<img src="Technical_Manual-on-Sampling-Design_files/figure-html/fig:regular-sampling-plot-1.png" alt="Plot of strata and sampling points" width="672" />
-<p class="caption">
-(#fig:fig:regular-sampling-plot)Plot of strata and sampling points
-</p>
-</div>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="stratified-sampling-design.html#cb39-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">#terra::points(target[target$type==&quot;Target&quot;,&quot;type&quot;], pch=16, col=&quot;black&quot;)</span></span></code></pre></div>
-
-</div>
-</div>
-<div class="footnotes">
-<hr />
-<ol start="1">
-<li id="fn1"><p>This exploratory work is a prerequisite and must be adapted specifically to each soil and land use dataset<a href="stratified-sampling-design.html#fnref1" class="footnote-back">↩︎</a></p></li>
-</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="creating-a-sampling-design.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="determining-the-optimal-sample-size.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="general-procedure.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
-<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script src="assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
@@ -407,8 +268,8 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/luislado/Sampling_Design_GSP/edit/master/04-stratified_RS.Rmd",
-"text": "Edit"
+"link": null,
+"text": null
 },
 "history": {
 "link": null,
@@ -418,13 +279,16 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["Technical_Manual on Sampling Design.pdf"],
+"download": null,
 "search": {
 "engine": "fuse",
 "options": null
 },
 "toc": {
 "collapse": "subsection"
+},
+"toolbar": {
+"position": "static"
 }
 });
 });

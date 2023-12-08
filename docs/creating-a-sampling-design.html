@@ -5,42 +5,42 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 3 Creating a sampling design |  Soil Sampling Design</title>
-  <meta name="description" content="Technical Manual on Soil Sampling Design within the SoilFer Project." />
+  <meta name="description" content="Technical Manual on Soil Sampling Design - SoilFer Project" />
   <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 3 Creating a sampling design |  Soil Sampling Design" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:description" content="Technical Manual on Soil Sampling Design within the SoilFer Project." />
+  <meta property="og:description" content="Technical Manual on Soil Sampling Design - SoilFer Project" />
   
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Chapter 3 Creating a sampling design |  Soil Sampling Design" />
   
-  <meta name="twitter:description" content="Technical Manual on Soil Sampling Design within the SoilFer Project." />
+  <meta name="twitter:description" content="Technical Manual on Soil Sampling Design - SoilFer Project" />
   
 
 <meta name="author" content="Rodríguez Lado, L., Angelini, M.E, Naypewe, N., Luotto, I., Yigini, Y." />
 
 
-<meta name="date" content="2023-12-06" />
+<meta name="date" content="2023-12-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="legacy_data.html"/>
-<link rel="next" href="stratified-sampling-design.html"/>
-<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link rel="prev" href="representativeness-of-the-legacy-soil-data.html"/>
+<link rel="next" href="determining-the-optimal-sample-size.html"/>
+<script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
-<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
 
 
 
@@ -49,16 +49,31 @@
 
 
 
-<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
-<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
-<script src="libs/plotly-binding-4.10.1/plotly.js"></script>
-<script src="libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
-<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+<link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="assets/plotly-binding-4.10.0/plotly.js"></script>
+<script src="assets/typedarray-0.1/typedarray.min.js"></script>
+<link href="assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<link href="assets/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="assets/leaflet-1.3.1/leaflet.js"></script>
+<link href="assets/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="assets/proj4-2.6.2/proj4.min.js"></script>
+<script src="assets/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="assets/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="assets/leaflet-binding-2.1.1/leaflet.js"></script>
+<script src="assets/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="assets/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script>
+<link href="assets/HomeButton-0.0.1/home-button.css" rel="stylesheet" />
+<script src="assets/HomeButton-0.0.1/home-button.js"></script>
+<script src="assets/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<script src="assets/clipboard-0.0.1/setClipboardText.js"></script>
+<link href="assets/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
+<link href="assets/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
 
 
 <style type="text/css">
@@ -166,40 +181,34 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">Soil Sampling Design</a></li>
-
-<li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Licence</a></li>
-<li class="chapter" data-level="" data-path="abbreviations-and-acronyms.html"><a href="abbreviations-and-acronyms.html"><i class="fa fa-check"></i>Abbreviations and acronyms</a></li>
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
 <ul>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#conditioned-latin-hypercube-sampling-clhs"><i class="fa fa-check"></i>Conditioned Latin Hypercube Sampling (cLHS)</a></li>
+<li class="chapter" data-level="1.1" data-path="manual-structure.html"><a href="manual-structure.html"><i class="fa fa-check"></i><b>1.1</b> Manual Structure</a></li>
+<li class="chapter" data-level="" data-path="conditioned-latin-hypercube-sampling-clhs.html"><a href="conditioned-latin-hypercube-sampling-clhs.html"><i class="fa fa-check"></i>Conditioned Latin Hypercube Sampling (cLHS)</a></li>
 </ul></li>
 <li class="part"><span><b>Part one - Soil Legacy Data</b></span></li>
 <li class="chapter" data-level="2" data-path="legacy_data.html"><a href="legacy_data.html"><i class="fa fa-check"></i><b>2</b> Evaluating Soil Legacy Data Sampling for DSM</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="legacy_data.html"><a href="legacy_data.html#data-preparation"><i class="fa fa-check"></i><b>2.1</b> Data Preparation</a></li>
-<li class="chapter" data-level="2.2" data-path="legacy_data.html"><a href="legacy_data.html#representativeness-of-the-legacy-soil-data"><i class="fa fa-check"></i><b>2.2</b> Representativeness of the Legacy Soil Data</a></li>
+<li class="chapter" data-level="2.1" data-path="data-preparation.html"><a href="data-preparation.html"><i class="fa fa-check"></i><b>2.1</b> Data Preparation</a></li>
+<li class="chapter" data-level="2.2" data-path="representativeness-of-the-legacy-soil-data.html"><a href="representativeness-of-the-legacy-soil-data.html"><i class="fa fa-check"></i><b>2.2</b> Representativeness of the Legacy Soil Data</a></li>
 </ul></li>
 <li class="part"><span><b>I Part two - Soil Sampling Design</b></span></li>
 <li class="chapter" data-level="3" data-path="creating-a-sampling-design.html"><a href="creating-a-sampling-design.html"><i class="fa fa-check"></i><b>3</b> Creating a sampling design</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="creating-a-sampling-design.html"><a href="creating-a-sampling-design.html#determining-the-optimal-sample-size"><i class="fa fa-check"></i><b>3.1</b> Determining the optimal sample size</a></li>
+<li class="chapter" data-level="3.1" data-path="determining-the-optimal-sample-size.html"><a href="determining-the-optimal-sample-size.html"><i class="fa fa-check"></i><b>3.1</b> Determining the optimal sample size</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html"><i class="fa fa-check"></i><b>4</b> Stratified Sampling Design</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#general-procedure"><i class="fa fa-check"></i><b>4.1</b> General Procedure</a>
+<li class="chapter" data-level="4.1" data-path="general-procedure.html"><a href="general-procedure.html"><i class="fa fa-check"></i><b>4.1</b> General Procedure</a>
 <ul>
-<li class="chapter" data-level="4.1.1" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#strata-creation"><i class="fa fa-check"></i><b>4.1.1</b> Strata creation</a></li>
-<li class="chapter" data-level="4.1.2" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-random-sampling"><i class="fa fa-check"></i><b>4.1.2</b> Stratified random sampling</a></li>
+<li class="chapter" data-level="4.1.1" data-path="general-procedure.html"><a href="general-procedure.html#strata-creation"><i class="fa fa-check"></i><b>4.1.1</b> Strata creation</a></li>
+<li class="chapter" data-level="4.1.2" data-path="general-procedure.html"><a href="general-procedure.html#stratified-random-sampling"><i class="fa fa-check"></i><b>4.1.2</b> Stratified random sampling</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-random-sampling-for-large-areas"><i class="fa fa-check"></i><b>4.2</b> Stratified random sampling for large areas</a></li>
-<li class="chapter" data-level="4.3" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-regular-sampling"><i class="fa fa-check"></i><b>4.3</b> Stratified regular sampling</a></li>
+<li class="chapter" data-level="4.2" data-path="stratified-random-sampling-for-large-areas.html"><a href="stratified-random-sampling-for-large-areas.html"><i class="fa fa-check"></i><b>4.2</b> Stratified random sampling for large areas</a></li>
+<li class="chapter" data-level="4.3" data-path="stratified-regular-sampling.html"><a href="stratified-regular-sampling.html"><i class="fa fa-check"></i><b>4.3</b> Stratified regular sampling</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
-<li class="divider"></li>
-<li><a href="https://www.fao.org/global-soil-partnership/en/" target="blank">Global Soil Partnership</a></li>
-
 </ul>
 
       </nav>
@@ -220,132 +229,24 @@ Soil Sampling Design</p></a>
             <section class="normal" id="section-">
 <div id="creating-a-sampling-design" class="section level1 hasAnchor" number="3">
 <h1><span class="header-section-number">Chapter 3</span> Creating a sampling design<a href="creating-a-sampling-design.html#creating-a-sampling-design" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="determining-the-optimal-sample-size" class="section level2 hasAnchor" number="3.1">
-<h2><span class="header-section-number">3.1</span> Determining the optimal sample size<a href="creating-a-sampling-design.html#determining-the-optimal-sample-size" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Several strategies exist for designing soil sampling, including regular, random, and stratified sampling. Each strategy comes with its own set of advantages and limitations, which must be carefully considered before commencing a soil sampling campaign. Regular sampling, also called grid sampling, is straightforward and ensures uniform coverage, making it suitable for spatial analysis and detecting trends. However, it may introduce bias and miss small-scale variability. Generally, random sampling may require a larger number of samples to accurately capture soil variability compared to stratified sampling, which is more targeted. Nonetheless, from a statistical standpoint, random sampling is often preferred. It effectively minimizes selection bias by giving every part of the study area an equal chance of being selected. This approach yields a sample that is truly representative of the entire population, leading to more accurate, broadly applicable conclusions. Random sampling also supports valid statistical inferences, ensures reliability of results, and simplifies the estimation of errors, thereby facilitating a broad spectrum of statistical analyses.</p>
-<p>The determination of both the number and locations of soil samples is an important element in the success of any sampling campaign. The chosen strategy directly influences the representativeness and accuracy of the soil data collected, which in turn impacts the quality of the conclusions drawn from the study.</p>
-<p>In this exercise, we make use of the data provided by <span class="citation">(<a href="#ref-Malone" role="doc-biblioref">Malone, Minansy and Brungard, 2019</a>)</span> with 4 raster covariates in a 100 has area. We want to determine the minimal number of soil samples that must be collated to capture at least the 95% of variability within the environmental covariates. The procedure start with random distribution of a low number of samples in the area, determine the values of the spatial covariates, and compare them with those representing the whole diversity in the area at pixel scale. The comparisons are made using the <code>'KL divergence'</code> and the <code>'% of repressentativeness'</code> - i.e. the variability of covariate information in the complete area related to the variability of covariate information in the dataset of samples. Further information can be found in the original work of <span class="citation">(<a href="#ref-Malone" role="doc-biblioref">Malone, Minansy and Brungard, 2019</a>)</span>.</p>
-<p>The initial section of the script is related to setup options in the methodology. We load of R packages, define the working directory, load covariate data and store it as <code>SpatRaster</code> object. Here, parameter related to further aspects of the analyses such as the initial and final number of samples, and the increment step are defined.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="creating-a-sampling-design.html#cb16-1" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Load raster covariate data----</span></span>
-<span id="cb16-2"><a href="creating-a-sampling-design.html#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Read Spatial data covariates as rasters with terra</span></span>
-<span id="cb16-3"><a href="creating-a-sampling-design.html#cb16-3" aria-hidden="true" tabindex="-1"></a>  rasters <span class="ot">&lt;-</span> <span class="st">&quot;data/rasters&quot;</span></span>
-<span id="cb16-4"><a href="creating-a-sampling-design.html#cb16-4" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span>  <span class="fu">list.files</span>(rasters, <span class="at">pattern =</span> <span class="st">&quot;tif$&quot;</span>,  <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb16-5"><a href="creating-a-sampling-design.html#cb16-5" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(cov.dat)</span></code></pre></div>
-<p>We can see the covariates in a plot.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="creating-a-sampling-design.html#cb17-1" aria-hidden="true" tabindex="-1"></a>   <span class="fu">plot</span>(cov.dat)</span></code></pre></div>
-<div class="figure">
-<img src="Technical_Manual-on-Sampling-Design_files/figure-html/plot_covdata_03-1.png" alt="Plot of the covariates" width="672" />
-<p class="caption">
-(#fig:plot_covdata_03)Plot of the covariates
-</p>
-</div>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="creating-a-sampling-design.html#cb18-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define the number of samples to be tested in a loop (from initial to final) and the step of the sequence</span></span>
-<span id="cb18-2"><a href="creating-a-sampling-design.html#cb18-2" aria-hidden="true" tabindex="-1"></a>  initial.n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb18-3"><a href="creating-a-sampling-design.html#cb18-3" aria-hidden="true" tabindex="-1"></a>  final.n <span class="ot">&lt;-</span> <span class="dv">300</span></span>
-<span id="cb18-4"><a href="creating-a-sampling-design.html#cb18-4" aria-hidden="true" tabindex="-1"></a>  by.n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb18-5"><a href="creating-a-sampling-design.html#cb18-5" aria-hidden="true" tabindex="-1"></a>  iters <span class="ot">&lt;-</span> <span class="dv">10</span></span></code></pre></div>
-<p>The second section is where the analyses of divergence and repressentativeness of the sampling scheme are calculated.</p>
-<p>The analyses are performed in a loop using growing numbers of samples at each trial. Some empty vectors are defined to store the output results at each loop. At each trial of sample size `‘N’, soil samples are located randomly on the space of covariates, and 10 replicates are calculated to determine the amount intervariability in KL divergence and repressentativeness in the trial. The final results for each sample size correspond to the mean results obtained from each pass at the corresponding size. The optimal sample size selected correspond to the minimum sample size that accounts for at least 95% of the variability of information in the covariates within the area. The optimal sampling schema proposed correspond to the random scheme at the optimal sample size with higher value of repressentativeness.</p>
-<p>Figure @ref(fig:chunk-compute_n_optimal_03) shows the distribution of covariates in the sample space.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="creating-a-sampling-design.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the polygon and all points to be checked</span></span>
-<span id="cb19-2"><a href="creating-a-sampling-design.html#cb19-2" aria-hidden="true" tabindex="-1"></a>     <span class="fu">plot</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">xlab=</span><span class="st">&quot;PCA 1&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;PCA 2&quot;</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="fu">min</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]), <span class="fu">max</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])), <span class="at">ylim=</span><span class="fu">c</span>(<span class="fu">min</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]), <span class="fu">max</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])),</span>
-<span id="cb19-3"><a href="creating-a-sampling-design.html#cb19-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">col=</span><span class="st">&#39;black&#39;</span>, <span class="at">main=</span><span class="st">&#39;Environmental space plots over the convex hull of soil legacy data&#39;</span>)</span>
-<span id="cb19-4"><a href="creating-a-sampling-design.html#cb19-4" aria-hidden="true" tabindex="-1"></a>     <span class="fu">polygon</span>(pr_poly,<span class="at">col=</span><span class="st">&#39;#99999990&#39;</span>)</span>
-<span id="cb19-5"><a href="creating-a-sampling-design.html#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># # Plot points outside convex hull  </span></span>
-<span id="cb19-6"><a href="creating-a-sampling-design.html#cb19-6" aria-hidden="true" tabindex="-1"></a>     <span class="fu">points</span>(newScores[<span class="fu">which</span>(newScores<span class="sc">$</span>pip<span class="sc">==</span><span class="dv">0</span>),<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">col=</span><span class="st">&#39;red&#39;</span>, <span class="at">pch=</span><span class="dv">12</span>, <span class="at">cex =</span><span class="dv">1</span>)</span></code></pre></div>
-<div class="figure">
-<img src="Technical_Manual-on-Sampling-Design_files/figure-html/plot_pca_03-1.png" alt="Distribution of covariates in the sample space" width="672" />
-<p class="caption">
-(#fig:plot_pca_03)Distribution of covariates in the sample space
-</p>
-</div>
-<p>We determine the optimal sample size and plot the evaluation results.</p>
-<p>The following figure shows the evolution of the KL divergence and % of repressentativenes with growing sample sizes. The red dot identifies the trial with the optimal sample size for the area in relation to the covariates analysed.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="creating-a-sampling-design.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># PLot cdf and optimal sampling point</span></span>
-<span id="cb20-2"><a href="creating-a-sampling-design.html#cb20-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> xx</span>
-<span id="cb20-3"><a href="creating-a-sampling-design.html#cb20-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> normalized</span>
-<span id="cb20-4"><a href="creating-a-sampling-design.html#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-5"><a href="creating-a-sampling-design.html#cb20-5" aria-hidden="true" tabindex="-1"></a>mydata <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(x,y)</span>
-<span id="cb20-6"><a href="creating-a-sampling-design.html#cb20-6" aria-hidden="true" tabindex="-1"></a>opti <span class="ot">&lt;-</span> mydata[mydata<span class="sc">$</span>x<span class="sc">==</span>optimal_n,]</span>
-<span id="cb20-7"><a href="creating-a-sampling-design.html#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-8"><a href="creating-a-sampling-design.html#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(mydata,</span>
-<span id="cb20-9"><a href="creating-a-sampling-design.html#cb20-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="sc">~</span><span class="fu">seq</span>(initial.n, final.n,by.n),</span>
-<span id="cb20-10"><a href="creating-a-sampling-design.html#cb20-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="sc">~</span><span class="fu">fitted</span>(fit1),</span>
-<span id="cb20-11"><a href="creating-a-sampling-design.html#cb20-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">mode =</span> <span class="st">&quot;lines+markers&quot;</span>,</span>
-<span id="cb20-12"><a href="creating-a-sampling-design.html#cb20-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">&quot;scatter&quot;</span>,</span>
-<span id="cb20-13"><a href="creating-a-sampling-design.html#cb20-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">name =</span> <span class="st">&quot;KL divergence&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb20-14"><a href="creating-a-sampling-design.html#cb20-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_trace</span>(<span class="at">x =</span> <span class="sc">~</span>x,</span>
-<span id="cb20-15"><a href="creating-a-sampling-design.html#cb20-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">y =</span> <span class="sc">~</span>y,</span>
-<span id="cb20-16"><a href="creating-a-sampling-design.html#cb20-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">mode =</span> <span class="st">&quot;lines+markers&quot;</span>,</span>
-<span id="cb20-17"><a href="creating-a-sampling-design.html#cb20-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">type =</span> <span class="st">&quot;scatter&quot;</span>,</span>
-<span id="cb20-18"><a href="creating-a-sampling-design.html#cb20-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">yaxis =</span> <span class="st">&quot;y2&quot;</span>,</span>
-<span id="cb20-19"><a href="creating-a-sampling-design.html#cb20-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">name =</span> <span class="st">&quot;Fitted representativeness&quot;</span>)  <span class="sc">%&gt;%</span></span>
-<span id="cb20-20"><a href="creating-a-sampling-design.html#cb20-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_trace</span>(<span class="at">x =</span> <span class="sc">~</span>opti<span class="sc">$</span>x,</span>
-<span id="cb20-21"><a href="creating-a-sampling-design.html#cb20-21" aria-hidden="true" tabindex="-1"></a>            <span class="at">y =</span> <span class="sc">~</span>opti<span class="sc">$</span>y,</span>
-<span id="cb20-22"><a href="creating-a-sampling-design.html#cb20-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">yaxis =</span> <span class="st">&quot;y2&quot;</span>,</span>
-<span id="cb20-23"><a href="creating-a-sampling-design.html#cb20-23" aria-hidden="true" tabindex="-1"></a>            <span class="at">mode =</span> <span class="st">&quot;markers&quot;</span>,</span>
-<span id="cb20-24"><a href="creating-a-sampling-design.html#cb20-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">name =</span> <span class="st">&quot;Optimal N&quot;</span>,</span>
-<span id="cb20-25"><a href="creating-a-sampling-design.html#cb20-25" aria-hidden="true" tabindex="-1"></a>            <span class="at">marker =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">8</span>, <span class="at">color =</span> <span class="st">&#39;#d62728&#39;</span>,<span class="at">line =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">&#39;black&#39;</span>, <span class="at">width =</span> <span class="dv">1</span>))) <span class="sc">%&gt;%</span></span>
-<span id="cb20-26"><a href="creating-a-sampling-design.html#cb20-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">&quot;N&quot;</span>, </span>
-<span id="cb20-27"><a href="creating-a-sampling-design.html#cb20-27" aria-hidden="true" tabindex="-1"></a>                      <span class="at">showgrid =</span> T, </span>
-<span id="cb20-28"><a href="creating-a-sampling-design.html#cb20-28" aria-hidden="true" tabindex="-1"></a>                      <span class="at">dtick =</span> <span class="dv">50</span>, </span>
-<span id="cb20-29"><a href="creating-a-sampling-design.html#cb20-29" aria-hidden="true" tabindex="-1"></a>                      <span class="at">tickfont =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">11</span>)),</span>
-<span id="cb20-30"><a href="creating-a-sampling-design.html#cb20-30" aria-hidden="true" tabindex="-1"></a>         <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">&quot;mean KL divergence&quot;</span>, <span class="at">showgrid =</span> F ),</span>
-<span id="cb20-31"><a href="creating-a-sampling-design.html#cb20-31" aria-hidden="true" tabindex="-1"></a>         <span class="at">yaxis2 =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">&quot;Representativeness (%)&quot;</span>,</span>
-<span id="cb20-32"><a href="creating-a-sampling-design.html#cb20-32" aria-hidden="true" tabindex="-1"></a>                       <span class="at">overlaying =</span> <span class="st">&quot;y&quot;</span>, <span class="at">side =</span> <span class="st">&quot;right&quot;</span>),</span>
-<span id="cb20-33"><a href="creating-a-sampling-design.html#cb20-33" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend =</span> <span class="fu">list</span>(<span class="at">orientation =</span> <span class="st">&quot;h&quot;</span>, <span class="at">y =</span> <span class="fl">1.2</span>, <span class="at">x =</span> <span class="fl">0.1</span>,</span>
-<span id="cb20-34"><a href="creating-a-sampling-design.html#cb20-34" aria-hidden="true" tabindex="-1"></a>                       <span class="at">traceorder =</span> <span class="st">&quot;normal&quot;</span>),</span>
-<span id="cb20-35"><a href="creating-a-sampling-design.html#cb20-35" aria-hidden="true" tabindex="-1"></a>         <span class="at">margin =</span> <span class="fu">list</span>(<span class="at">t =</span> <span class="dv">50</span>, <span class="at">b =</span> <span class="dv">50</span>, <span class="at">r =</span> <span class="dv">100</span>, <span class="at">l =</span> <span class="dv">80</span>),</span>
-<span id="cb20-36"><a href="creating-a-sampling-design.html#cb20-36" aria-hidden="true" tabindex="-1"></a>         <span class="at">hovermode =</span> <span class="st">&#39;x&#39;</span>)  <span class="sc">%&gt;%</span> </span>
-<span id="cb20-37"><a href="creating-a-sampling-design.html#cb20-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">config</span>(<span class="at">displayModeBar =</span> <span class="cn">FALSE</span>) </span></code></pre></div>
-<div class="figure">
-<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-d03c9b0df367abb511cd" style="width:768px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-d03c9b0df367abb511cd">{"x":{"visdat":{"2ca94a995c":["function () ","plotlyVisDat"]},"cur_data":"2ca94a995c","attrs":{"2ca94a995c":{"x":{},"y":{},"mode":"lines+markers","name":"KL divergence","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"},"2ca94a995c.1":{"x":{},"y":{},"mode":"lines+markers","name":"Fitted representativeness","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter","yaxis":"y2","inherit":true},"2ca94a995c.2":{"x":{},"y":{},"mode":"markers","name":"Optimal N","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter","yaxis":"y2","marker":{"size":8,"color":"#d62728","line":{"color":"black","width":1}},"inherit":true}},"layout":{"margin":{"b":50,"l":80,"t":50,"r":100},"xaxis":{"domain":[0,1],"automargin":true,"title":"N","showgrid":true,"dtick":50,"tickfont":{"size":11}},"yaxis":{"domain":[0,1],"automargin":true,"title":"mean KL divergence","showgrid":false},"yaxis2":{"title":"Representativeness (%)","overlaying":"y","side":"right"},"legend":{"orientation":"h","y":1.2,"x":0.1,"traceorder":"normal"},"hovermode":"x","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"x":[10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300],"y":[0.94050765848505,0.69980041604516,0.523852093264806,0.395240207824964,0.301229552792803,0.232511150684392,0.18228047431353,0.1455636594392,0.118724990483951,0.0991068903367882,0.0847667658684008,0.0742846514828964,0.0666226034837304,0.0610219224204987,0.0569280263269926,0.0539355357646477,0.0517481329676084,0.0501492203238385,0.0489804727818369,0.048126160432593,0.0475016888817732,0.0470452226746201,0.0467115623213196,0.0464676686231224,0.046289391115975,0.0461590766806714,0.046063821523023,0.0459941934343351,0.0459432978098459,0.0459060949418518],"mode":"lines+markers","name":"KL divergence","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,271,272,273,274,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300],"y":[0,0.0308557594615636,0.0607595221575565,0.0897406601681833,0.117827639353031,0.145048047310814,0.17142862047647,0.196995270382227,0.221773109108436,0.24578647394916,0.269058951316758,0.291613399908939,0.313471973161032,0.334656141005542,0.355186710960348,0.375083848566271,0.394367097194076,0.413055397240361,0.431167104731203,0.448720009351815,0.465731351919936,0.482217841320108,0.498195670915483,0.513680534453271,0.528687641479455,0.543231732277912,0.557327092348625,0.570987566439184,0.584226572143376,0.597057113080221,0.60949179166639,0.621542821494546,0.633222039329791,0.644540916735969,0.655510571343273,0.666141777768202,0.676444978196608,0.686430292640225,0.696107528876745,0.705486192083218,0.71457549417223,0.723384362840025,0.731921450335475,0.740195141958488,0.748213564296224,0.75598459320519,0.763515861547067,0.770814766685858,0.777888477753734,0.784743942692696,0.791387895078984,0.797826860736937,0.804067164148782,0.810114934666674,0.815976112533067,0.821656454715342,0.827161540560413,0.832496777274879,0.83766740523609,0.842678503139349,0.847534992986313,0.85224164491948,0.856803081907521,0.861223784286052,0.86550809415831,0.869660219660056,0.87368423909289,0.877584104930043,0.881363647698572,0.885026579741785,0.888576498865579,0.892016891872277,0.895351137985434,0.898582512168984,0.901714188343968,0.90474924250603,0.90769065574672,0.910541317181582,0.913304026787902,0.915981498154899,0.918576361149076,0.921091164497317,0.923528378290306,0.925890396408698,0.928179538874435,0.930398054129521,0.932548121244484,0.934631852058706,0.936651293254716,0.938608428368477,0.94050517973766,0.942343410389802,0.944124925872207,0.945851476025394,0.947524756701825,0.949146411431605,0.950718033036789,0.952241165195888,0.953717303960098,0.955147899222751,0.956534356143433,0.957878036528158,0.959180260166961,0.960442306130224,0.961665414025004,0.962850785212598,0.96399958398855,0.965112938726238,0.966191942985192,0.967237656585206,0.968251106647317,0.969233288602661,0.970185167170211,0.971107677304335,0.972001725113135,0.972868188748443,0.973707919268356,0.974521741473164,0.975310454715489,0.97607483368542,0.976815629171433,0.977533568797828,0.97822935773942,0.978903679414173,0.979557196154464,0.980190549857649,0.980804362616536,0.981399237330425,0.981975758297285,0.982534491787664,0.98307598660089,0.983600774604115,0.984109371254724,0.984602276106628,0.985079973300937,0.98554293204149,0.985991607055721,0.9864264390413,0.986847855098991,0.987256269152165,0.987652082353362,0.988035683478309,0.988407449307784,0.988767744997701,0.989116924437769,0.989455330599092,0.989783295871044,0.990101142387743,0.990409182344463,0.990707718304277,0.990997043495239,0.991277442098401,0.991549189526938,0.991812552696667,0.992067790288219,0.992315153001114,0.992554883800009,0.992787218153342,0.99301238426461,0.99323060329652,0.993442089588216,0.993647050865808,0.993845688446407,0.99403819743586,0.994224766920387,0.994405580152308,0.994580814730033,0.994750642772508,0.994915231088269,0.995074741339287,0.995229330199753,0.995379149509973,0.995524346425501,0.995665063561683,0.995801439133734,0.995933607092498,0.996061697256015,0.996185835437034,0.996306143566585,0.996422739813746,0.996535738701706,0.996645251220258,0.996751384934811,0.996854244092046,0.996953929722305,0.99705053973883,0.997144169033932,0.997234909572197,0.997322850480816,0.997408078137127,0.997490676253458,0.997570725959347,0.997648305881234,0.997723492219686,0.997796358824245,0.997866977265963,0.997935416907701,0.998001744972258,0.9980660266084,0.99812832495485,0.998188701202303,0.998247214653529,0.998303922781623,0.998358881286455,0.998412144149379,0.998463763686255,0.998513790598838,0.99856227402457,0.998609261584854,0.99865479943182,0.998698932293662,0.99874170351857,0.998783155117304,0.998823327804464,0.998862261038475,0.998899993060345,0.998936560931231,0.998972000568833,0.99900634678268,0.999039633308318,0.999071892840445,0.999103157065025,0.999133456690413,0.999162821477511,0.999191280269009,0.999218861017706,0.999245590813971,0.99927149591235,0.999296601757355,0.999320933008454,0.999344513564294,0.999367366586173,0.999389514520792,0.999410979122299,0.99943178147366,0.999451942007365,0.999471480525498,0.999490416219185,0.99950876768745,0.999526552955473,0.999543789492306,0.999560494228023,0.999576683570353,0.999592373420796,0.999607579190239,0.999622315814097,0.99963659776698,0.99965043907691,0.999663853339102,0.999676853729316,0.999689453016797,0.99970166357682,0.999713497402845,0.999724966118294,0.999736080987971,0.999746852929127,0.999757292522179,0.999767410021106,0.999777215363522,0.999786718180431,0.999795927805692,0.999804853285186,0.999813503385698,0.999821886603532,0.999830011172855,0.999837885073782,0.999845516040218,0.999852911567453,0.999860078919523,0.999867025136346,0.999873757040636,0.999880281244607,0.999886604156463,0.999892731986695,0.999898670754184,0.999904426292105,0.999910004253666,0.999915410117652,0.999920649193812,0.999925726628073,0.999930647407593,0.999935416365662,0.999940038186447,0.999944517409593,0.999948858434684,0.999953065525562,0.999957142814517,0.999961094306346,0.999964923882282,0.999968635303813,0.999972232216372,0.999975718152919,0.999979096537413,0.999982370688169,0.999985543821125,0.999988619052998,0.99999159940434,0.999994487802515,0.999997287084564,1],"mode":"lines+markers","name":"Fitted representativeness","type":"scatter","yaxis":"y2","marker":{"color":"rgba(255,127,14,1)","line":{"color":"rgba(255,127,14,1)"}},"error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"line":{"color":"rgba(255,127,14,1)"},"xaxis":"x","frame":null},{"x":[97],"y":[0.950718033036789],"mode":"markers","name":"Optimal N","type":"scatter","yaxis":"y2","marker":{"color":"#d62728","size":8,"line":{"color":"black","width":1}},"error_y":{"color":"rgba(44,160,44,1)"},"error_x":{"color":"rgba(44,160,44,1)"},"line":{"color":"rgba(44,160,44,1)"},"xaxis":"x","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-<p class="caption">
-(#fig:fig:plot_KLfunction_03)KL Divergence and Proportion of Representativeness as function of sample size
-</p>
-</div>
-<p>Finally, we represent the optimal distribution of samples over the study area according to these specific results.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="creating-a-sampling-design.html#cb21-1" aria-hidden="true" tabindex="-1"></a>optimal_iteration <span class="ot">&lt;-</span> results <span class="sc">%&gt;%</span></span>
-<span id="cb21-2"><a href="creating-a-sampling-design.html#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(N<span class="sc">==</span><span class="fu">ceiling</span>(optimal_n<span class="sc">/</span><span class="dv">10</span>)<span class="sc">*</span><span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb21-3"><a href="creating-a-sampling-design.html#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">IDX =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb21-4"><a href="creating-a-sampling-design.html#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Perc<span class="sc">==</span><span class="fu">max</span>(Perc))</span>
-<span id="cb21-5"><a href="creating-a-sampling-design.html#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-6"><a href="creating-a-sampling-design.html#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cov.dat[[<span class="dv">1</span>]])</span>
-<span id="cb21-7"><a href="creating-a-sampling-design.html#cb21-7" aria-hidden="true" tabindex="-1"></a>N_final <span class="ot">&lt;-</span> samples_storage[<span class="fu">paste0</span>(<span class="st">&quot;N&quot;</span>,<span class="fu">ceiling</span>(optimal_n<span class="sc">/</span><span class="dv">10</span>)<span class="sc">*</span><span class="dv">10</span>,<span class="st">&quot;_&quot;</span>, optimal_iteration<span class="sc">$</span>IDX)][[<span class="dv">1</span>]]</span>
-<span id="cb21-8"><a href="creating-a-sampling-design.html#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(N_final)</span></code></pre></div>
-<div class="figure">
-<img src="Technical_Manual-on-Sampling-Design_files/figure-html/fig:tag-for-figure-1.png" alt="Covariates and optimal number and distribution of samples" width="672" />
-<p class="caption">
-(#fig:fig:tag-for-figure)Covariates and optimal number and distribution of samples
-</p>
-</div>
-
-</div>
-</div>
-<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div id="refs" class="references csl-bib-body">
-<div id="ref-Malone" class="csl-entry">
-<strong>Malone, B.P., Minansy, B. &amp; Brungard, C.</strong> 2019. Some methods to improve the utility of conditioned latin hypercube sampling. <em>PeerJ</em>, 7: e6451. <a href="https://doi.org/10.7717/peerj.6451">https://doi.org/10.7717/peerj.6451</a>
-</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="legacy_data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="stratified-sampling-design.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="representativeness-of-the-legacy-soil-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="determining-the-optimal-sample-size.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
-<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script src="assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
@@ -366,8 +267,8 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/luislado/Sampling_Design_GSP/edit/master/03-optimal_n.Rmd",
-"text": "Edit"
+"link": null,
+"text": null
 },
 "history": {
 "link": null,
@@ -377,13 +278,16 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["Technical_Manual on Sampling Design.pdf"],
+"download": null,
 "search": {
 "engine": "fuse",
 "options": null
 },
 "toc": {
 "collapse": "subsection"
+},
+"toolbar": {
+"position": "static"
 }
 });
 });

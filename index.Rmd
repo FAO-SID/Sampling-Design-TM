@@ -1,4 +1,4 @@
---- 
+---
 title:  |
   <img src="images/frontcover.png" style="top:0px;height:300px;" align="right" />
   Soil Sampling Design
@@ -10,44 +10,12 @@ documentclass: book
 bibliography: [references.bib]
 biblio-style: apalike
 link-citations: yes
-description: "Technical Manual on Soil Sampling Design within the SoilFer Project."
+description: "Technical Manual on Soil Sampling Design - SoilFer Project"
 csl: food-and-agriculture-organization-of-the-united-nations.csl
 ---
 
-
 # Licence {-}
 
-This Technical Manual is licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+The Guideline Manual is made available under the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 IGO licence
 
-[CC BY-NC-SA 4.0 LEGAL CODE](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.en).
-
-
-# Abbreviations and acronyms {-}
-
-CRAN
-
-:   Comprehensive R archive network
-
-DSM
-
-:   Digital soil mapping 
-
-GEE
-
-:   Google Earth Engine
-
-GIS
-
-:   Geographic Information Systems
-
-GSP
-
-:   Global Soil Partnership
-
-INSII
-
-:   International Network of Soil Information Institutions
-
-ITPS
-
-:   Intergovernmental Technical Panel on Soils
+[CC BY-NC-SA 3.0 IGO](https://creativecommons.org/licenses/by-nc-sa/3.0/igo/legalcode).

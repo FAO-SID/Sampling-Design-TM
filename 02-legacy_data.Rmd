@@ -28,21 +28,22 @@ We must load the required packages and data for the analyses. We make use of the
 We define the working directory to the directory in which the actual file is located and load the soil legacy sampling points and the environmental rasters from the `data` folder. To avoid the definition of each environmental covariate, we first retrieve all files with the `.tif` extension and then create a `SpatRaster` object with all of them in a row.
 
 
-```{r setup_wd, eval=FALSE, include=TRUE}
+```{r setup_wd, eval=TRUE, include=TRUE}
 
 # Set working directory to source file location
-  setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+  #setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 ```
 
 ```{r load_wd, eval=TRUE, include=FALSE}
 
 # Set working directory to source file location
-  setwd("/Users/luislado/Dropbox/Github/Sampling_Design_GSP")
+  setwd("/Users/luislado/Dropbox/Github/Sampling_Design")
 
 ```
 
-```{r fig-load_data, eval=TRUE, include=TRUE, fig.cap="Plot of the covariates"}
+
+```{r load_covariates, eval=TRUE, include=TRUE}
 
 ## Load soil legacy point data
   p.dat <- terra::vect("data/shapes/legacy_soils.shp")
@@ -52,10 +53,16 @@ We define the working directory to the directory in which the actual file is loc
   rasters <- "data/rasters"
   cov.dat <-  list.files(rasters, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
   cov.dat <- terra::rast(cov.dat)
-  # Plot covariates
-  plot(cov.dat)
-  
+
 ```
+
+
+```{r, fig-3, fig.cap = "Covariates", echo = FALSE}
+
+ plot(cov.dat)
+
+```
+
 
 
 
@@ -170,7 +177,7 @@ In this case, the KL-divergence value is `r round(klo,3)`, indicating that the l
 Finally, we can also determine the degree in which our legacy soil dataset is representative of the existing environmental conditions in the study area. For that, we calculate the proportion of pixels in the study area that would fall within the convex hull polygon delineated upon the environmental conditions found at the soil legacy data locations only. The convex hull polygon is created upon a Principal Component transformation of the covariate data in the soil legacy data and using the outter limits of the scores of the points projected on the two main Components.
 
 
-```{r fig-legacy_data_adequacy, eval=T, include=TRUE, fig.cap="PCA plot of the covariates"}
+```{r, fig-4, fig.cap = "PCA plot of the covariate", echo = FALSE}
 #### Representativeness of the Legacy Dataset: ----
   ## Calculate the proportion of "env. variables" in the covariate spectra that fall within the convex hull of variables in the "environmental sample space"
   
@@ -202,3 +209,5 @@ Finally, we can also determine the degree in which our legacy soil dataset is re
 ```
 
 This indicates that `r round(sum(newScores$pip)/nrow(newScores)*100,1)`\% of the existing conditions in the study area fall within the convex hull delineated with the data in the  soil samples, showing the adequacy of the proposed legacy data for DSM.
+
+
