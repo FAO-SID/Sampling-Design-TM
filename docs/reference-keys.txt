@@ -25,6 +25,5 @@ stratified-random-sampling
 stratified-random-sampling-for-large-areas
 stratified-regular-sampling
 conditioned-latin-hypercube-sampling
-procedure
 clhs-design
 replacement-areas-in-clhs-design
