@@ -8,6 +8,9 @@ fig:fig-9
 fig:fig-12
 fig:fig-13
 fig:fig-14
+fig:fig-15
+fig:fig-16
+fig:fig-17
 introduction
 manual-structure
 legacy_data
@@ -21,3 +24,7 @@ strata-creation
 stratified-random-sampling
 stratified-random-sampling-for-large-areas
 stratified-regular-sampling
+conditioned-latin-hypercube-sampling
+procedure
+clhs-design
+replacement-areas-in-clhs-design

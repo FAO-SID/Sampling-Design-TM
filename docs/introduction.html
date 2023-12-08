@@ -23,7 +23,7 @@
 <meta name="author" content="Rodríguez Lado, L., Angelini, M.E, Naypewe, N., Luotto, I., Yigini, Y." />
 
 
-<meta name="date" content="2023-12-07" />
+<meta name="date" content="2023-12-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -188,7 +188,6 @@ div.csl-indent {
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
 <ul>
 <li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#manual-structure"><i class="fa fa-check"></i><b>1.1</b> Manual Structure</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#conditioned-latin-hypercube-sampling-clhs"><i class="fa fa-check"></i>Conditioned Latin Hypercube Sampling (cLHS)</a></li>
 </ul></li>
 <li class="part"><span><b>Part one - Soil Legacy Data</b></span></li>
 <li class="chapter" data-level="2" data-path="legacy_data.html"><a href="legacy_data.html"><i class="fa fa-check"></i><b>2</b> Evaluating Soil Legacy Data Sampling for DSM</a>
@@ -210,6 +209,14 @@ div.csl-indent {
 <li class="chapter" data-level="4.2" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-random-sampling"><i class="fa fa-check"></i><b>4.2</b> Stratified random sampling</a></li>
 <li class="chapter" data-level="4.3" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-random-sampling-for-large-areas"><i class="fa fa-check"></i><b>4.3</b> Stratified random sampling for large areas</a></li>
 <li class="chapter" data-level="4.4" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-regular-sampling"><i class="fa fa-check"></i><b>4.4</b> Stratified regular sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html"><i class="fa fa-check"></i><b>5</b> Conditioned Latin Hypercube Sampling</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#procedure"><i class="fa fa-check"></i><b>5.1</b> Procedure</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#clhs-design"><i class="fa fa-check"></i><b>5.1.1</b> cLHS design</a></li>
+<li class="chapter" data-level="5.1.2" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#replacement-areas-in-clhs-design"><i class="fa fa-check"></i><b>5.1.2</b> Replacement areas in cLHS design</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -236,28 +243,10 @@ div.csl-indent {
 <h1><span class="header-section-number">Chapter 1</span> Introduction<a href="introduction.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Understanding the spatial distribution of soil properties is crucial for making informed decisions in various fields, from precision agriculture to environmental conservation. The success of soil mapping activities relies on the existence of proper data collated through meticulous soil sampling protocols. The spatial variation of soil properties across landscapes necessitates strategic planning to ensure representative and reliable data collection.</p>
 <p>In this manual, we explore the intricacies of soil sampling design, including the critical factors that influence the accuracy and effectiveness of soil data field sampling. We present examples of various sampling methods, ranging from traditional grid-based approaches to advanced statistical sampling strategies. We include methods for systematic, random and stratified sampling, evaluating their strengths and weaknesses in the context of DSM. We aim to provide researchers and practitioners with the knowledge necessary to select the most suitable approach for their specific objectives.</p>
-<p>We have used a common structure for file paths in the exercises. By default, the RStudio console points to the folder where the project is located. Thus, R scripts appear in the root of the working directory and data files are in a <code>'data/'</code> directory within the root, with <code>'.shp'</code> and <code>'.tif'</code> files located within the sub-folders <code>'data/shapes'</code> and <code>'data/rasters'</code> respectively. Following this recommendation simplifies the definition of paths and execution of the scripts. If users desire to change their storage paths, they have to properly adjust data paths in the R scripts.</p>
-<p>We use examples based on the data and scripts at <span class="citation">(<a href="#ref-Malone" role="doc-biblioref">Malone, Minansy and Brungard, 2019</a>)</span>, which can be found at the <a href="https://bitbucket.org/brendo1001/clhc_sampling/src/master/">repository</a>.</p>
 <div id="manual-structure" class="section level2 hasAnchor" number="1.1">
 <h2><span class="header-section-number">1.1</span> Manual Structure<a href="introduction.html#manual-structure" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A centralised data repository for soil data offers a multitude of benefits, spanning from enhanced accessibility and data sharing to improved data quality and informed decision-making.</p>
-<ul>
-<li>Accessibility: A single repository provides a unified access point for various stakeholders, including researchers, farmers, policymakers, and educators, facilitating easy retrieval of information. Centralization promotes interdisciplinary research and collaboration by making soil data accessible across different scientific and agricultural disciplines.</li>
-<li>Quality: A centralised data repository ensures that data from various sources is standardised in format, making it easier to compare and analyse and providing better control over the quality of soil data, as it can be vetted and validated through standardised protocols.</li>
-<li>Efficient Data Management: Centralised repositories provide organised storage, making it easier to manage vast amounts of soil data efficiently. Central repositories ensure long-term preservation of soil data, protecting it from loss due to localised issues like technical failures or organisational changes.</li>
-<li>Improved Data Analysis and Research: Having a centralised repository means researchers can access more comprehensive data sets, leading to more robust and inclusive research outcomes. Centralization facilitates the application of advanced data analytics, including AI and machine learning, to uncover deeper insights and patterns in soil data.</li>
-<li>Support for Policy and Decision Making: Access to comprehensive soil data aids policymakers in developing informed, evidence-based agricultural and environmental policies. This support can be crucial in managing risks related to agriculture, such as soil degradation, contamination, and climate change impacts.</li>
-<li>Enhanced Educational and Outreach Opportunities: A centralised soil data repository serves as an invaluable resource for educational institutions, enhancing learning and research opportunities for students.and it can also play a role in raising public awareness about soil health and sustainable agricultural practices.</li>
-<li>Facilitation of Digital Initiatives: Centralised data repositories are essential for digital soil mapping initiatives, providing the necessary data to create detailed and accurate soil maps. They facilitate the integration of soil data with other technological tools, like GIS and remote sensing, enhancing the scope of soil analysis and interpretation.</li>
-<li>Global Collaboration and Benchmarking: A centralised repository can serve as a platform for international collaboration, sharing best practices and data across borders. It allows for benchmarking and comparative studies at a global scale, essential for understanding and addressing global soil health issues.</li>
-</ul>
-<p>A centralised data repository for soil data is a powerful tool that can transform how soil information is managed and utilised. By providing a platform for standardised, high-quality, and accessible soil data, it supports a range of activities from scientific research to policy making, ultimately contributing to more sustainable and informed management of soil resources worldwide.</p>
-</div>
-<div id="conditioned-latin-hypercube-sampling-clhs" class="section level2 unnumbered hasAnchor">
-<h2>Conditioned Latin Hypercube Sampling (cLHS)<a href="introduction.html#conditioned-latin-hypercube-sampling-clhs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Conditioned Latin Hypercube Sampling (cLHS) is an advanced statistical method used for sampling multidimensional data developed within the context of digital Soil Mapping. It’s an extension of the basic Latin Hypercube Sampling (LHS) technique, a statistical method for generating a distribution of samples of a random variable. The main advantage of LHS over simple random sampling is its ability to ensure that the entire range of the auxiliary variables are explored. It divides the range of each variable into intervals of equal probability and samples each interval.</p>
-<p>The term “conditioned” refers to the way the sampling is adapted or conditioned based on specific requirements or constraints. It often involves conditioning the sampling process on one or more additional variables or criteria. This helps in generating samples that are not just representative in terms of the range of values, but also in terms of their relationships or distributions. cLHS is particularly useful for sampling from multivariate data, where there are multiple interrelated variables as it occurs in soil surveys. The main advantage of cLHS is its efficiency in sampling and its ability to better capture the structure and relationships within the data, compared to simpler sampling methods, and ensures that the samples are representative not just of the range of each variable, but also of their interrelations. Detailed information on cLHS can be found in <span class="citation">(<a href="#ref-minasny2006" role="doc-biblioref">Minasny and Mcbratney, 2006</a>)</span></p>
-<p>cHLS is also used to determine the optimal number of samples that cover the entire auxiliary data variability.</p>
+<p>We use examples based on the data and scripts at <span class="citation">(<a href="#ref-Malone" role="doc-biblioref">Malone, Minansy and Brungard, 2019</a>)</span>, which can be found at the <a href="https://bitbucket.org/brendo1001/clhc_sampling/src/master/">repository</a>.</p>
+<p>We have used a common structure for file paths in the exercises. By default, the RStudio console points to the folder where the project is located. Thus, R scripts appear in the root of the working directory and data files are in a <code>'data/'</code> directory within the root, with <code>'.shp'</code> and <code>'.tif'</code> files located within the sub-folders <code>'data/shapes'</code> and <code>'data/rasters'</code> respectively. Following this recommendation simplifies the definition of paths and execution of the scripts. If users desire to change their storage paths, they have to properly adjust data paths in the R scripts.</p>
 <p><span class="citation">(<a href="#ref-SENA2021e00354" role="doc-biblioref">Sena <em>et al.</em>, 2021</a>)</span> proposed a strategy for sampling in difficult access areas using cLHS.</p>
 <p><span class="citation">(<a href="#ref-CLIFFORD201462" role="doc-biblioref">Clifford <em>et al.</em>, 2014</a>)</span> Pragmatic soil survey design using flexible Latin hypercube sampling for difficult access.</p>
 
@@ -273,9 +262,6 @@ div.csl-indent {
 </div>
 <div id="ref-Malone" class="csl-entry">
 <strong>Malone, B.P., Minansy, B. &amp; Brungard, C.</strong> 2019. Some methods to improve the utility of conditioned latin hypercube sampling. <em>PeerJ</em>, 7: e6451. <a href="https://doi.org/10.7717/peerj.6451">https://doi.org/10.7717/peerj.6451</a>
-</div>
-<div id="ref-minasny2006" class="csl-entry">
-<strong>Minasny, B. &amp; Mcbratney, A.</strong> 2006. A conditioned latin hypercube method for sampling in the presence of ancillary information. <em>Computers &amp; Geosciences</em>, 32: 1378–1388. <a href="https://doi.org/10.1016/j.cageo.2005.12.009">https://doi.org/10.1016/j.cageo.2005.12.009</a>
 </div>
 <div id="ref-SENA2021e00354" class="csl-entry">
 <strong>Sena, N.C., Veloso, G.V., Lopes, A.O., Francelino, M.R., Fernandes-Filho, E.I., Senra, E.O., Silva Filho, L.A. da, Condé, V.F., Arruda Silva, D.L. de &amp; Araújo, R.W. de</strong>. 2021. Soil sampling strategy in areas of difficult acess using the cLHS method. <em>Geoderma Regional</em>, 24: e00354. <a href="https://doi.org/10.1016/j.geodrs.2020.e00354">https://doi.org/10.1016/j.geodrs.2020.e00354</a>

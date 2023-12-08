@@ -216,7 +216,7 @@ This example demonstrates how to establish a stratified random sampling approach
 # Stratified Simple Random Sampling over Soil/Land use Strata -------------------------------------------
   
   # Clean memory
-  rm(list=setdiff(ls(), c("r","n","distance.buffer","REPLACEMENT", "samples.buffer", "soil_lc"))) 
+  #rm(list=setdiff(ls(), c("r","n","distance.buffer","REPLACEMENT", "samples.buffer", "soil_lc","optimal_n","cov.dat"))) 
   
   # Read strata shapefile
   polygons <- st_read("../soil_sampling/JAM/strata.shp")

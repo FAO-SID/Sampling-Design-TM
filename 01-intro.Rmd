@@ -5,38 +5,12 @@ Understanding the spatial distribution of soil properties is crucial for making 
 In this manual, we explore the intricacies of soil sampling design, including the critical factors that influence the accuracy and effectiveness of soil data field sampling. We present examples of various sampling methods, ranging from traditional grid-based approaches to advanced statistical sampling strategies. We include methods for systematic, random and stratified sampling, evaluating their strengths and weaknesses in the context of DSM. We aim to provide researchers and practitioners with the knowledge necessary to select the most suitable approach for their specific objectives.
 
 
-We have used a common structure for file paths in the exercises. By default, the RStudio console points to the folder where the project is located. Thus, R scripts appear in the root of the working directory and data files are in a `'data/'` directory within the root, with `'.shp'` and `'.tif'` files located within the sub-folders `'data/shapes'` and `'data/rasters'` respectively. Following this recommendation simplifies the definition of paths and execution of the scripts. If users desire to change their storage paths, they have to properly adjust data paths in the R scripts.
-
-We use examples based on the data and scripts at [@Malone], which can be found at the [repository](https://bitbucket.org/brendo1001/clhc_sampling/src/master/).
-
-
 
 ## Manual Structure
 
+We use examples based on the data and scripts at [@Malone], which can be found at the [repository](https://bitbucket.org/brendo1001/clhc_sampling/src/master/).
 
-A centralised data repository for soil data offers a multitude of benefits, spanning from enhanced accessibility and data sharing to improved data quality and informed decision-making.
-
-* Accessibility: A single repository provides a unified access point for various stakeholders, including researchers, farmers, policymakers, and educators, facilitating easy retrieval of information. Centralization promotes interdisciplinary research and collaboration by making soil data accessible across different scientific and agricultural disciplines.
-* Quality: A centralised data repository ensures that data from various sources is standardised in format, making it easier to compare and analyse and providing better control over the quality of soil data, as it can be vetted and validated through standardised protocols.
-* Efficient Data Management: Centralised repositories provide organised storage, making it easier to manage vast amounts of soil data efficiently. Central repositories ensure long-term preservation of soil data, protecting it from loss due to localised issues like technical failures or organisational changes.
-* Improved Data Analysis and Research: Having a centralised repository means researchers can access more comprehensive data sets, leading to more robust and inclusive research outcomes. Centralization facilitates the application of advanced data analytics, including AI and machine learning, to uncover deeper insights and patterns in soil data.
-* Support for Policy and Decision Making: Access to comprehensive soil data aids policymakers in developing informed, evidence-based agricultural and environmental policies. This support can be crucial in managing risks related to agriculture, such as soil degradation, contamination, and climate change impacts.
-* Enhanced Educational and Outreach Opportunities: A centralised soil data repository serves as an invaluable resource for educational institutions, enhancing learning and research opportunities for students.and it can also play a role in raising public awareness about soil health and sustainable agricultural practices.
-* Facilitation of Digital Initiatives: Centralised data repositories are essential for digital soil mapping initiatives, providing the necessary data to create detailed and accurate soil maps. They facilitate the integration of soil data with other technological tools, like GIS and remote sensing, enhancing the scope of soil analysis and interpretation.
-* Global Collaboration and Benchmarking: A centralised repository can serve as a platform for international collaboration, sharing best practices and data across borders. It allows for benchmarking and comparative studies at a global scale, essential for understanding and addressing global soil health issues.
-
-A centralised data repository for soil data is a powerful tool that can transform how soil information is managed and utilised. By providing a platform for standardised, high-quality, and accessible soil data, it supports a range of activities from scientific research to policy making, ultimately contributing to more sustainable and informed management of soil resources worldwide.
-
-
-
-## Conditioned Latin Hypercube Sampling (cLHS) {-}
-
-Conditioned Latin Hypercube Sampling (cLHS) is an advanced statistical method used for sampling multidimensional data developed within the context of digital Soil Mapping. It's an extension of the basic Latin Hypercube Sampling (LHS) technique, a statistical method for generating a distribution of samples of a random variable. The main advantage of LHS over simple random sampling is its ability to ensure that the entire range of the auxiliary variables are explored. It divides the range of each variable into intervals of equal probability and samples each interval.
-
-The term "conditioned" refers to the way the sampling is adapted or conditioned based on specific requirements or constraints. It often involves conditioning the sampling process on one or more additional variables or criteria. This helps in generating samples that are not just representative in terms of the range of values, but also in terms of their relationships or distributions. cLHS is particularly useful for sampling from multivariate data, where there are multiple interrelated variables as it occurs in soil surveys. The main advantage of cLHS is its efficiency in sampling and its ability to better capture the structure and relationships within the data, compared to simpler sampling methods, and ensures that the samples are representative not just of the range of each variable, but also of their interrelations. Detailed information on cLHS can be found in [@minasny2006]
-
-
-cHLS is also used to determine the optimal number of samples that cover the entire auxiliary data variability.   
+We have used a common structure for file paths in the exercises. By default, the RStudio console points to the folder where the project is located. Thus, R scripts appear in the root of the working directory and data files are in a `'data/'` directory within the root, with `'.shp'` and `'.tif'` files located within the sub-folders `'data/shapes'` and `'data/rasters'` respectively. Following this recommendation simplifies the definition of paths and execution of the scripts. If users desire to change their storage paths, they have to properly adjust data paths in the R scripts.
 
 
 [@SENA2021e00354] proposed a strategy for sampling in difficult access areas using cLHS.

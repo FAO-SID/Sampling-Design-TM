@@ -15,7 +15,7 @@ The initial section of the script is related to setup options in the methodology
 ```{r setup_wd_03, eval=FALSE, include=FALSE}
 
   # Load packages as a vector objects
-  packages <- c("sp", "terra", "clhs", "entropy", "tripack","manipulate","dplyr","plotly") # Create a vector of packages to use
+  packages <- c("sp", "terra", "clhs", "entropy", "tripack","manipulate","dplyr","plotly", "raster", "maptools") # Create a vector of packages to use
   lapply(packages, require, character.only = TRUE) # Load packages
   rm(packages) # Remove object to save memory space 
 
