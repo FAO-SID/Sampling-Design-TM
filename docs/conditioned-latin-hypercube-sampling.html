@@ -212,13 +212,10 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="5" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html"><i class="fa fa-check"></i><b>5</b> Conditioned Latin Hypercube Sampling</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#clhs-design"><i class="fa fa-check"></i><b>5.1</b> cLHS design</a>
-<ul>
-<li class="chapter" data-level="5.1.1" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#general-procedure-1"><i class="fa fa-check"></i><b>5.1.1</b> General Procedure</a></li>
-<li class="chapter" data-level="5.1.2" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#including-existing-legacy-data-in-a-chls-sampling-design"><i class="fa fa-check"></i><b>5.1.2</b> Including existing legacy data in a cHLS sampling design</a></li>
-<li class="chapter" data-level="5.1.3" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#cost-constrained-implementation"><i class="fa fa-check"></i><b>5.1.3</b> Cost-constrained implementation</a></li>
-</ul></li>
-<li class="chapter" data-level="5.2" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#replacement-areas-in-clhs-design"><i class="fa fa-check"></i><b>5.2</b> Replacement areas in cLHS design</a></li>
+<li class="chapter" data-level="5.1" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#clhs-design-general-procedure"><i class="fa fa-check"></i><b>5.1</b> cLHS design: General Procedure</a></li>
+<li class="chapter" data-level="5.2" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#including-existing-legacy-data-in-a-chls-sampling-design"><i class="fa fa-check"></i><b>5.2</b> Including existing legacy data in a cHLS sampling design</a></li>
+<li class="chapter" data-level="5.3" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#cost-constrained-implementation"><i class="fa fa-check"></i><b>5.3</b> Cost-constrained implementation</a></li>
+<li class="chapter" data-level="5.4" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#replacement-areas-in-clhs-design"><i class="fa fa-check"></i><b>5.4</b> Replacement areas in cLHS design</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -245,12 +242,10 @@ div.csl-indent {
 <h1><span class="header-section-number">Chapter 5</span> Conditioned Latin Hypercube Sampling<a href="conditioned-latin-hypercube-sampling.html#conditioned-latin-hypercube-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Conditioned Latin Hypercube Sampling (cLHS) is an advanced statistical method used for sampling multidimensional data developed within the context of digital Soil Mapping. It’s an extension of the basic Latin Hypercube Sampling (LHS) technique, a statistical method for generating a distribution of samples of a random variable. The main advantage of LHS over simple random sampling is its ability to ensure that the entire range of the auxiliary variables are explored. It divides the range of each variable into intervals of equal probability and samples each interval.</p>
 <p>The term “conditioned” refers to the way the sampling is adapted or conditioned based on specific requirements or constraints. It often involves conditioning the sampling process on one or more additional variables or criteria. This helps in generating samples that are not just representative in terms of the range of values, but also in terms of their relationships or distributions. cLHS is particularly useful for sampling from multivariate data, where there are multiple interrelated variables as it occurs in soil surveys. The main advantage of cLHS is its efficiency in sampling and its ability to better capture the structure and relationships within the data, compared to simpler sampling methods, and ensures that the samples are representative not just of the range of each variable, but also of their interrelations. Detailed information on cLHS can be found in <span class="citation">(<a href="#ref-minasny2006" role="doc-biblioref">Minasny and Mcbratney, 2006</a>)</span></p>
-<div id="clhs-design" class="section level2 hasAnchor" number="5.1">
-<h2><span class="header-section-number">5.1</span> cLHS design<a href="conditioned-latin-hypercube-sampling.html#clhs-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="general-procedure-1" class="section level3 hasAnchor" number="5.1.1">
-<h3><span class="header-section-number">5.1.1</span> General Procedure<a href="conditioned-latin-hypercube-sampling.html#general-procedure-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="clhs-design-general-procedure" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> cLHS design: General Procedure<a href="conditioned-latin-hypercube-sampling.html#clhs-design-general-procedure" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>As for stratified sampling, the creation target points from a conditioned Latin Hypercube Sampling design involves the identification of the relevant features describing the environmental diversity in the area. In this case, the environmental parameters are incorporated in the form of raster covariates. The determination of the optimal number of samples in the design is also required. This step can be calculated following the information already provided in this manual.</p>
-<p>With the optimal sampling size of 98 calculated before, we can conduct conditioned Latin Hypercube Sampling design for the area in the example using the R package <code>'cLHS'</code> available at CRAN.</p>
+<p>With the optimal sampling size of 94 calculated before, we can conduct conditioned Latin Hypercube Sampling design for the area in the example using the R package <code>'cLHS'</code> available at CRAN.</p>
 <p>We use the rasters of ‘ECd’, ‘ECs’, ‘elevation’, ‘yield’ as covariates in the exercise, which we convert to a raster.</p>
 <pre><code>## 
 ## Attaching package: &#39;raster&#39;</code></pre>
@@ -280,8 +275,8 @@ Figure 5.1: Distribution of cLHS sampling points in the study area
 </p>
 </div>
 </div>
-<div id="including-existing-legacy-data-in-a-chls-sampling-design" class="section level3 hasAnchor" number="5.1.2">
-<h3><span class="header-section-number">5.1.2</span> Including existing legacy data in a cHLS sampling design<a href="conditioned-latin-hypercube-sampling.html#including-existing-legacy-data-in-a-chls-sampling-design" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="including-existing-legacy-data-in-a-chls-sampling-design" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Including existing legacy data in a cHLS sampling design<a href="conditioned-latin-hypercube-sampling.html#including-existing-legacy-data-in-a-chls-sampling-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In situations where there are legacy soil data samples available, it would be interesting to include them in the cLHS design to increase the diversity of covriates and avoid oversampling for some conditions. In this cases, the ancillary data can be included in the design as additional points to the clhs fuction.</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="conditioned-latin-hypercube-sampling.html#cb29-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Read Spatial data covariates as rasters with terra</span></span>
 <span id="cb29-2"><a href="conditioned-latin-hypercube-sampling.html#cb29-2" aria-hidden="true" tabindex="-1"></a>  rasters <span class="ot">&lt;-</span> <span class="st">&quot;data/rasters&quot;</span></span>
@@ -315,8 +310,8 @@ Figure 5.2: cLHS sampling points with legacy data
 </p>
 </div>
 </div>
-<div id="cost-constrained-implementation" class="section level3 hasAnchor" number="5.1.3">
-<h3><span class="header-section-number">5.1.3</span> Cost-constrained implementation<a href="conditioned-latin-hypercube-sampling.html#cost-constrained-implementation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="cost-constrained-implementation" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Cost-constrained implementation<a href="conditioned-latin-hypercube-sampling.html#cost-constrained-implementation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>CLHS can also be implemented taking into account environmental features such as terrain (elevation, slope) or accessibility (distance to roads) that can alter the sampling process. This is done by defining constraints as ‘cost’ layers in the options of the <code>'clhs'</code> function.</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="conditioned-latin-hypercube-sampling.html#cb32-1" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(cov.dat)</span>
 <span id="cb32-2"><a href="conditioned-latin-hypercube-sampling.html#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Create a cLHS sampling point set----</span></span>
@@ -329,9 +324,8 @@ Figure 5.3: cLHS sampling with cost layers
 </p>
 </div>
 </div>
-</div>
-<div id="replacement-areas-in-clhs-design" class="section level2 hasAnchor" number="5.2">
-<h2><span class="header-section-number">5.2</span> Replacement areas in cLHS design<a href="conditioned-latin-hypercube-sampling.html#replacement-areas-in-clhs-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="replacement-areas-in-clhs-design" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Replacement areas in cLHS design<a href="conditioned-latin-hypercube-sampling.html#replacement-areas-in-clhs-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The <code>'cLHS'</code> package incorporates methods for the delineation of replacement locations that could be utilized in the case any sampling point is unreachable. In this case, the function determines the probability of similarity to each point in an area determined by a buffer distance around the points.</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="conditioned-latin-hypercube-sampling.html#cb33-1" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Determine the similarity to points in a buffer of distance D</span></span>
 <span id="cb33-2"><a href="conditioned-latin-hypercube-sampling.html#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Note that distance units are expressed in map units, in this case meters</span></span>
@@ -374,7 +368,7 @@ Figure 5.4: Probability of similarity in the buffer for the first cLHS point (in
 <span id="cb35-7"><a href="conditioned-latin-hypercube-sampling.html#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert to a matrix</span></span>
 <span id="cb35-8"><a href="conditioned-latin-hypercube-sampling.html#cb35-8" aria-hidden="true" tabindex="-1"></a>    breaks <span class="ot">&lt;-</span> <span class="fu">matrix</span>(breaks, <span class="at">ncol=</span><span class="dv">3</span>, <span class="at">byrow=</span><span class="cn">TRUE</span>)</span>
 <span id="cb35-9"><a href="conditioned-latin-hypercube-sampling.html#cb35-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reclassify the data in the layers from probabilities to (NA,)</span></span>
-<span id="cb35-10"><a href="conditioned-latin-hypercube-sampling.html#cb35-10" aria-hidden="true" tabindex="-1"></a>    s <span class="ot">=</span> <span class="fu">stack</span>(<span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span>raster<span class="sc">::</span><span class="fu">nlayers</span>(gw), <span class="cf">function</span>(i){<span class="fu">reclassify</span>(gw[[i]], breaks, <span class="at">right=</span><span class="cn">FALSE</span>)}))</span>
+<span id="cb35-10"><a href="conditioned-latin-hypercube-sampling.html#cb35-10" aria-hidden="true" tabindex="-1"></a>    s <span class="ot">=</span> <span class="fu">stack</span>(<span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span>raster<span class="sc">::</span><span class="fu">nlayers</span>(gw), <span class="cf">function</span>(i){raster<span class="sc">::</span><span class="fu">reclassify</span>(gw[[i]], breaks, <span class="at">right=</span><span class="cn">FALSE</span>)}))</span>
 <span id="cb35-11"><a href="conditioned-latin-hypercube-sampling.html#cb35-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">#s</span></span>
 <span id="cb35-12"><a href="conditioned-latin-hypercube-sampling.html#cb35-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot points over reclassified rasters </span></span>
 <span id="cb35-13"><a href="conditioned-latin-hypercube-sampling.html#cb35-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">#plot(s, addfun = fun)</span></span>

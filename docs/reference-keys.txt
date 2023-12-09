@@ -27,8 +27,7 @@ stratified-random-sampling
 stratified-random-sampling-for-large-areas
 stratified-regular-sampling
 conditioned-latin-hypercube-sampling
-clhs-design
-general-procedure-1
+clhs-design-general-procedure
 including-existing-legacy-data-in-a-chls-sampling-design
 cost-constrained-implementation
 replacement-areas-in-clhs-design

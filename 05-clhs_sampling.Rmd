@@ -5,9 +5,7 @@ Conditioned Latin Hypercube Sampling (cLHS) is an advanced statistical method us
 
 The term "conditioned" refers to the way the sampling is adapted or conditioned based on specific requirements or constraints. It often involves conditioning the sampling process on one or more additional variables or criteria. This helps in generating samples that are not just representative in terms of the range of values, but also in terms of their relationships or distributions. cLHS is particularly useful for sampling from multivariate data, where there are multiple interrelated variables as it occurs in soil surveys. The main advantage of cLHS is its efficiency in sampling and its ability to better capture the structure and relationships within the data, compared to simpler sampling methods, and ensures that the samples are representative not just of the range of each variable, but also of their interrelations. Detailed information on cLHS can be found in [@minasny2006]
 
-## cLHS design
-
-### General Procedure 
+## cLHS design: General Procedure
 
 As for stratified sampling, the creation target points from a conditioned Latin Hypercube Sampling design involves the identification of the relevant features describing the environmental diversity in the area. In this case, the environmental parameters are incorporated in the form of raster covariates. The determination of the optimal number of samples in the design is also required. This step can be calculated following the information already provided in this manual.
 
@@ -47,7 +45,7 @@ The distribution of points is shown in Figure \@ref(fig:fig-15).
 
 ```
 
-### Including existing legacy data in a cHLS sampling design
+## Including existing legacy data in a cHLS sampling design
 
 In situations where there are legacy soil data samples available, it would be interesting to include them in the cLHS design to increase the diversity of covriates and avoid oversampling for some conditions. In this cases, the ancillary data can be included in the design as additional points to the clhs fuction.
 
@@ -87,7 +85,7 @@ Figure \@ref(fig:fig-16) shows the distribution of new samples along with legacy
 ```
 
 
-### Cost-constrained implementation
+## Cost-constrained implementation
 
 CLHS can also be implemented taking into account environmental features such as terrain (elevation, slope) or accessibility (distance to roads) that can alter the sampling process. This is done by defining constraints as 'cost' layers in the options of the `'clhs'` function.
 
