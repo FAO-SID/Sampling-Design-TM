@@ -10,7 +10,9 @@ fig:fig-13
 fig:fig-14
 fig:fig-15
 fig:fig-16
-fig:fig-17
+fig:fig-18
+fig:fig-19
+fig:fig-20
 introduction
 manual-structure
 legacy_data
@@ -26,4 +28,7 @@ stratified-random-sampling-for-large-areas
 stratified-regular-sampling
 conditioned-latin-hypercube-sampling
 clhs-design
+general-procedure-1
+including-existing-legacy-data-in-a-chls-sampling-design
+cost-constrained-implementation
 replacement-areas-in-clhs-design

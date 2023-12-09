@@ -7,6 +7,8 @@ The term "conditioned" refers to the way the sampling is adapted or conditioned 
 
 ## cLHS design
 
+### General Procedure 
+
 As for stratified sampling, the creation target points from a conditioned Latin Hypercube Sampling design involves the identification of the relevant features describing the environmental diversity in the area. In this case, the environmental parameters are incorporated in the form of raster covariates. The determination of the optimal number of samples in the design is also required. This step can be calculated following the information already provided in this manual.
 
 With the optimal sampling size of `r optimal_n` calculated before, we can conduct conditioned Latin Hypercube Sampling design for the area in the example using the R package `'cLHS'` available at CRAN. 
@@ -18,7 +20,7 @@ We use the rasters of `r paste(shQuote(names(cov.dat)), collapse = ", ")` as cov
 
   ## Load raster covariate data----
   # Read Spatial data covariates as rasters with terra
-  library(raster)
+library(raster)
   rasters <- "data/rasters"
   cov.dat <-  list.files(rasters, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
   cov.dat <- terra::rast(cov.dat)
@@ -27,13 +29,12 @@ We use the rasters of `r paste(shQuote(names(cov.dat)), collapse = ", ")` as cov
 ```
 
 
-The target points are obtained using the `'cLHS'`function together with the stack of raster covariates and the number of samples. The function uses a number of iterations for the Metropolis-Hastings annealing process, with a default of 10000.
+The target points are obtained using the `'cLHS'`function together with the stack of raster covariates and the number of samples. The function uses a number of iterations for the Metropolis-Hastings annealing process, with a default of 10000. We sample the covariate data set and pick a subset of points equal to the sample size determined previoulsly. 
 
-```{r cLHS_design_05, eval=TRUE, include=TRUE}
+```{r fig-cLHS_design_05, fig.cap="Evolution of the objective function", eval=TRUE, include=TRUE}
 
-  ## Create a cLHS sampling point set----
-    pts <- clhs(cov.dat, size = optimal_n, iter = 10000, progress = FALSE, simple = FALSE)
-
+  pts <- clhs(cov.dat, size = optimal_n, iter = 5000, progress = FALSE, simple = FALSE)
+  plot(pts, c('obj'))
 ```
 
 The distribution of points is shown in Figure \@ref(fig:fig-15).
@@ -44,6 +45,57 @@ The distribution of points is shown in Figure \@ref(fig:fig-15).
     plot(cov.dat[[1]], main="cLHS samples")
     points(pts$sampled_data, col="red", pch = 16)
 
+```
+
+### Including existing legacy data in a cHLS sampling design
+
+In situations where there are legacy soil data samples available, it would be interesting to include them in the cLHS design to increase the diversity of covriates and avoid oversampling for some conditions. In this cases, the ancillary data can be included in the design as additional points to the clhs fuction.
+
+
+```{r clhs-legacy-05, eval=TRUE, include=TRUE}
+  # Read Spatial data covariates as rasters with terra
+  rasters <- "data/rasters"
+  cov.dat <-  list.files(rasters, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
+  cov.dat <- terra::rast(cov.dat)
+# We create an artificial legacy dataset of 20 samples over the study area
+  legacy.data <- spatSample(cov.dat,10, na.rm=TRUE,xy=TRUE,method="random")
+# Get covariates data as a dataframe with coordinates
+  cov.df <- cbind(crds(cov.dat),as.data.frame(cov.dat))
+  # Delete data from pixels outside the study area
+  cov.df <- na.omit(cov.df)
+# Merge legacy and covariate information
+  leg.new <-   rbind(legacy.data, cov.df)
+# Calculate clhs points with legacy data
+    res <- clhs(x = leg.new, size = 30,  iter = 5000,simple = FALSE, progress = FALSE,
+            must.include = c(1:nrow(legacy.data)))
+# Plot objective function
+  plot(res)
+# Get sampling points
+  points <- res$sampled_data
+
+```
+
+Figure \@ref(fig:fig-16) shows the distribution of new samples along with legacy data points.
+
+```{r fig-16, fig.cap="cLHS sampling points with legacy data", eval=TRUE, include=TRUE}
+
+# Plot points
+  plot(cov.dat[[1]], main="Samples (point) and legacy samples (cross)")
+  points(points, col="dodgerblue", pch = 16)
+  points(legacy.data, col="red", pch = 3)
+
+```
+
+
+### Cost-constrained implementation
+
+CLHS can also be implemented taking into account environmental features such as terrain (elevation, slope) or accessibility (distance to roads) that can alter the sampling process. This is done by defining constraints as 'cost' layers in the options of the `'clhs'` function.
+
+```{r fig-18, fig.cap="cLHS sampling with cost layers", eval=TRUE, include=TRUE}
+  cov.dat <- raster::stack(cov.dat)
+  ## Create a cLHS sampling point set----
+  pts <- clhs(cov.dat, size = optimal_n, iter = 5000, progress = FALSE, simple = FALSE, cost = 'elevation',  use.cpp = F)
+  plot(pts, c('obj', 'cost'))
 ```
 
 
@@ -71,13 +123,12 @@ The `'cLHS'` package incorporates methods for the delineation of replacement loc
 
 ```
 
-The similarity probabilities for the first cLHS point is presented on Figure \@ref(fig:fig-16).over the elevation layer. 
+The similarity probabilities for the first cLHS point is presented on Figure \@ref(fig:fig-19) over the elevation layer. 
 
-```{r fig-16, fig.cap="Probability of imilarity in the buffer for the first cLHS point (in black) over elevation. The blue crosses represent the location of the remaining cLHS points from the analysis.", eval=TRUE, include=TRUE}
+```{r fig-19, fig.cap="Probability of similarity in the buffer for the first cLHS point (in black) over elevation. The blue crosses represent the location of the remaining cLHS points from the analysis.", eval=TRUE, include=TRUE}
 
   ## Plot elevation
     plot(cov.dat[[3]], legend=TRUE,main=paste("Similarity Probability over elevation"))
-
   ## Overlay points
     points(pts$sampled_data[1], col = "dodgerblue", pch = 3)
   ## Overlay probability stack for point 1
@@ -100,7 +151,7 @@ The probabilities can then be reclassified using a threshold value to delineate 
     # Convert to a matrix
     breaks <- matrix(breaks, ncol=3, byrow=TRUE)
     # Reclassify the data in the layers from probabilities to (NA,)
-    s = stack(lapply(1:raster::nlayers(gw), function(i){reclassify(gw[[i]], breaks, right=FALSE)}))
+    s = stack(lapply(1:raster::nlayers(gw), function(i){raster::reclassify(gw[[i]], breaks, right=FALSE)}))
     #s
   # Plot points over reclassified rasters 
     #plot(s, addfun = fun)
@@ -121,34 +172,35 @@ The reclassified raster stack is then converted to an object of `'SpatialPolygon
     
     # Add the identifier of the corresponding target point
     for(i in 1: length(s)){
-      s@data$ID[i] <- as.numeric(gsub("1.","",s@polygons[[i]]@ID))
+      s@data$ID[i] <- as.integer(stringr::str_replace(s@polygons[[i]]@ID,"1.",""))
     }
     # Clean the data by storing target ID data only
     s@data <- s@data["ID"]
 
-  
 ```
 
 
-The results are shown in Figure \@ref(fig:fig-17).
+The results are shown in Figure \@ref(fig:fig-20).
 
-```{r fig-17, fig.cap="Distribution of cLHS sampling points in the study area", eval=TRUE, include=TRUE}
+```{r fig-20, fig.cap="Distribution of cLHS sampling points in the study area", eval=TRUE, include=TRUE}
 
     plot(cov.dat[[1]], main=paste("cLHS samples and replacement areas for threshold = ", similarity_threshold))
     plot(s,add=TRUE, col=NA, border="gray40")
-    points(pts$sampled_data, col="red", pch = 16)
+    points(pts$sampled_data, col="red", pch = 3)
 
 ```
 
 
-The layer of replacement areas can finally be exported to a shapefile to be used in any other software.
+The layer of replacement areas can finally be exported to a 'shapefile' to be used in any other software.
 
-```{r cLHS_export_05, eval=FALSE, include=TRUE}
-
-   ## Write replacement areas to polygon shape 
-    writeSpatialShape(s, "replacement_areas")
+```{r cLHS_export_05, eval=FALSE, include=TRUE, warning=FALSE}
     
-   ## Write  cLHS sampling points to shapefile
-    writeSpatialShape(pts$sampled_data, "points")
+   ## Write replacement areas to polygon shape 
+    s <- st_as_sf(s)
+    st_write(s, paste0('replacement_areas_', D, '.shp'), delete_dsn = TRUE)
+   
+    ## Write  cLHS sampling points to shapefile
+    pts <- st_as_sf(pts$sampled_data)
+    st_write(pts, 'target_clhs.shp', delete_dsn = TRUE)
 
 ```

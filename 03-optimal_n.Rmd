@@ -12,10 +12,10 @@ In this exercise, we make use of the data provided by [@Malone] with 4 raster co
 
 The initial section of the script is related to setup options in the methodology. We load of R packages, define the working directory, load covariate data and store it as `SpatRaster` object. Here, parameter related to further aspects of the analyses such as the initial and final number of samples, and the increment step are defined.
 
-```{r setup_wd_03, eval=FALSE, include=FALSE}
+```{r setup_wd_03, eval=FALSE, include=FALSE, echo=FALSE}
 
   # Load packages as a vector objects
-  packages <- c("sp", "terra", "clhs", "entropy", "tripack","manipulate","dplyr","plotly", "raster", "maptools") # Create a vector of packages to use
+  packages <- c("sp", "terra", "raster", "sf", "clhs", "entropy", "tripack","manipulate","dplyr","plotly")
   lapply(packages, require, character.only = TRUE) # Load packages
   rm(packages) # Remove object to save memory space 
 
