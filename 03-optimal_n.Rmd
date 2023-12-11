@@ -1,8 +1,7 @@
 # (PART) Part two - Soil Sampling Design {-} 
 
-# Creating a sampling design
 
-## Determining the optimal sample size
+# Determining the optimal sampling size
 
 Several strategies exist for designing soil sampling, including regular, random, and stratified sampling. Each strategy comes with its own set of advantages and limitations, which must be carefully considered before commencing a soil sampling campaign. Regular sampling, also called grid sampling, is straightforward and ensures uniform coverage, making it suitable for spatial analysis and detecting trends. However, it may introduce bias and miss small-scale variability. Generally, random sampling may require a larger number of samples to accurately capture soil variability compared to stratified sampling, which is more targeted. Nonetheless, from a statistical standpoint, random sampling is often preferred. It effectively minimizes selection bias by giving every part of the study area an equal chance of being selected. This approach yields a sample that is truly representative of the entire population, leading to more accurate, broadly applicable conclusions. Random sampling also supports valid statistical inferences, ensures reliability of results, and simplifies the estimation of errors, thereby facilitating a broad spectrum of statistical analyses.
 
@@ -39,6 +38,7 @@ The initial section of the script is related to setup options in the methodology
   rasters <- "data/rasters"
   cov.dat <-  list.files(rasters, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
   cov.dat <- terra::rast(cov.dat)
+  cov.dat.ras <- raster::stack(cov.dat) 
   
 ```
 
@@ -53,20 +53,21 @@ We can see the covariates in a plot.
 
 ```{r variable_inicialization_03, eval=TRUE, include=TRUE}
 
-  # Define the number of samples to be tested in a loop (from initial to final) and the step of the sequence
+  ## Define the number of samples to be tested in a loop (from initial to final) and the step of the sequence
+
   initial.n <- 10
-  final.n <- 300
+  final.n <- 200
   by.n <- 10
-  iters <- 10
+  iters <- 5
   
 ```
 
 The second section is where the analyses of divergence and representativeness of the sampling scheme are calculated. 
 
-The analyses are performed in a loop using growing numbers of samples at each trial. Some empty vectors are defined to store the output results at each loop. At each trial of sample size `'N'`, soil samples are located randomly on the space of covariates, and `r iters`  replicates are calculated to determine the amount inter variability in KL divergence and representativeness in the trial. The final results for each sample size correspond to the mean results obtained from each iteration at the corresponding sample size. The optimal sample size selected correspond to the minimum sample size that accounts for at least 95% of the variability of information in the covariates within the area. The optimal sampling schema proposed correspond to the random scheme at the optimal sample size with higher value of representativeness. 
+The analyses are performed in a loop using growing numbers of samples at each trial. Some empty vectors are defined to store the output results at each loop. At each trial of sample size `'N'`, soil samples are located at locations where the amount of information in the covariates is maximized according to the conditioned Latin Hypercube sampling method in the `'clhs'` package. A number of `r iters`  replicates are calculated to determine the amount inter variability in KL divergence and representativeness in the trial. The final results for each sample size correspond to the mean results obtained from each iteration at the corresponding sample size. The optimal sample size selected correspond to the minimum sample size that accounts for at least 95% of the variability of information in the covariates within the area. The optimal sampling schema proposed correspond to the random scheme at the optimal sample size with higher value of representativeness. 
 
 
-```{r, fig-6, fig.cap = "Distribution of covariates in the sample space", include = FALSE}
+```{r, fig-6, fig.cap = "Distribution of covariates in the sample space", include = TRUE}
 
   # Define empty vectors to store results
   number_of_samples <- c()
@@ -77,19 +78,15 @@ The analyses are performed in a loop using growing numbers of samples at each tr
 
 for (trial in seq(initial.n, final.n, by=by.n)){
  for (iteration in 1:iters){
-    p.dat_I <- spatSample(cov.dat,trial, na.rm=TRUE,xy=TRUE,method="random")
-    p.dat_I_sp <-  p.dat_I 
-    coordinates(p.dat_I_sp)<- ~ x + y 
-    
-  # Store samples in list
-  samples_storage[[paste0("N", trial,"_",iteration)]] <- p.dat_I_sp
- 
-    
+    p.dat_I <- clhs(cov.dat.ras, size = trial, iter = 5000, progress = FALSE, simple = FALSE)
+
     # Get covariate values for each point
-    p.dat_I <- p.dat_I[3:ncol(p.dat_I)]
-  
-  ## Comparison of population and sample distributions ----
-     # Kullback-Leibler (KL) divergence
+    p.dat_I <- p.dat_I$sampled_data
+
+  # Store samples in list
+  samples_storage[[paste0("N", trial,"_",iteration)]] <- p.dat_I
+
+  ## Comparison of population and sample distributions - Kullback-Leibler (KL) divergence
     
     # Quantiles of the study area: Number of bins
     nb<- 25
@@ -131,7 +128,7 @@ for (trial in seq(initial.n, final.n, by=by.n)){
     for (ii in 1:nrow(p.dat_I)){ # the number of observations
       cntj<- 1 
       for (jj in 1:ncol(p.dat_I)){ #for each column
-        dd<- p.dat_I[ii,jj]  
+        dd <- as.data.frame(p.dat_I)[ii,jj]  
         for (kk in 1:nb){  #for each quantile
           kl<- q.mat[kk, cntj] 
           ku<- q.mat[kk+1, cntj] 
@@ -151,15 +148,15 @@ for (trial in seq(initial.n, final.n, by=by.n)){
       klo <-  mean(kl.index)
     }
   
-    #### Representativeness of the Legacy Dataset: ----
+    ## Representativeness of the Legacy Dataset: ----
     ## Calculate the proportion of "env. variables" in the covariate spectra that fall within the convex hull of variables in the "environmental sample space"
     # Principal component of the legacy data sample
-    pca.s = prcomp(p.dat_I,scale=TRUE, center=TRUE)
+    pca.s = prcomp(data.frame(p.dat_I@data),scale=TRUE, center=TRUE)
     scores_pca1 = as.data.frame(pca.s$x)
     # Plot the first 2 principal components and convex hull
     rand.tr <- tri.mesh(scores_pca1[,1],scores_pca1[,2],"remove") # Delaunay triangulation 
-    rand.ch<-convex.hull(rand.tr, plot.it=F) # convex hull
-    pr_poly = cbind(x=c(rand.ch$x),y=c(rand.ch$y)) # save the convex hull vertices
+    rand.ch <- convex.hull(rand.tr, plot.it=F) # convex hull
+    pr_poly <- cbind(x=c(rand.ch$x),y=c(rand.ch$y)) # save the convex hull vertices
     # plot(scores_pca1[,1], scores_pca1[,2], xlab="PCA 1", ylab="PCA 2", xlim=c(min(scores_pca1[,1:2]), max(scores_pca1[,1:2])),ylim=c(min(scores_pca1[,1:2]), max(scores_pca1[,1:2])), main='Convex hull of soil legacy data')
     # lines(c(rand.ch$x,rand.ch$x[1]), c(rand.ch$y,rand.ch$y[1]),col="red",lwd=1) # draw the convex hull (domain of legacy data)
     
@@ -181,14 +178,14 @@ for (trial in seq(initial.n, final.n, by=by.n)){
   klo_samples <- c(klo_samples,klo)
   prop_explained <- c(prop_explained,sum(newScores$pip)/nrow(newScores)*100)
 number_of_samples <- c(number_of_samples,trial)
-print(paste("N samples = ",trial, " out of ",final.n, "; iteration = ",iteration,"; KL = ", klo, "; Proportion = ", sum(newScores$pip)/nrow(newScores)*100 ))
+#print(paste("N samples = ",trial, " out of ",final.n, "; iteration = ",iteration,"; KL = ", klo, "; Proportion = ", sum(newScores$pip)/nrow(newScores)*100 ))
   }
 }
 
 ```
 
 
-Figure \@ref(fig:chunk-compute_n_optimal_03) shows the distribution of covariates in the sample space.
+Figure \@ref(fig:fig-7) shows the distribution of covariates in the sample space.
 
 
 ```{r  fig-7, eval=TRUE, include=TRUE, fig.cap="Distribution of covariates in the sample space"}
@@ -315,21 +312,22 @@ plot_ly(mydata,
 ```
 
 
-According to Figure \@ref(fig:fig-8), the optimal sampling size for the area, that captures at least 95% of the environmental variability of covariates is `r optimal_n`.
+According to Figure \@ref(fig:fig-8), the optimal sampling size for the area, that captures at least 95% of the environmental variability of covariates is N = `r optimal_n`.
 
-Finally, in  Figure \@ref(fig:fig-9) we represent the optimal distribution of samples over the study area according to these specific results, and taking into account the optimal sampling size and the increasing interval in the sample size. 
+Finally, we can determine the optimal distribution of samples over the study area according to these specific results, taking into account the optimal sampling size and the increasing interval in the sample size. The results are shown in Figure \@ref(fig:fig-9).
 
 
 ```{r fig-9, fig.cap="Covariates and optimal number and distribution of samples", eval=TRUE, include=TRUE}
 
-optimal_iteration <- results %>%
-  filter(N==ceiling(optimal_n/by.n)*by.n) %>%
+optimal_iteration <- results[which(abs(results$N - optimal_n) == max(abs(results$N - optimal_n))),] %>%
   mutate(IDX = 1:n()) %>%
-  filter(Perc==max(Perc))
+  filter(Perc==max(Perc)) 
+optimal_iteration
 
 plot(cov.dat[[1]])
-N_final <- samples_storage[paste0("N",ceiling(optimal_n/by.n)*by.n,"_", optimal_iteration$IDX)][[1]]
+N_final <- samples_storage[paste0("N",optimal_iteration$N,"_", optimal_iteration$IDX)][[1]]
 points(N_final)
+
   
 ```
 

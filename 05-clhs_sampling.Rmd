@@ -18,7 +18,7 @@ We use the rasters of `r paste(shQuote(names(cov.dat)), collapse = ", ")` as cov
 
   ## Load raster covariate data----
   # Read Spatial data covariates as rasters with terra
-library(raster)
+  library(raster)
   rasters <- "data/rasters"
   cov.dat <-  list.files(rasters, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
   cov.dat <- terra::rast(cov.dat)
@@ -83,6 +83,35 @@ Figure \@ref(fig:fig-16) shows the distribution of new samples along with legacy
   points(legacy.data, col="red", pch = 3)
 
 ```
+
+## Workin with large raster data
+
+The cLHS function samples the raster stack to analyse the structure of covariate data in order to determine the optimal location os samples that represent the environmental conditions in the area. In the case of working with large raster sets, the process can be higly computing demanding since all pixels in the raster stack is used in the process. A means to avoid this is to sample  the stack on a regular grid to account for a shorter number of data points and use this information as input within the cLHS function. 
+
+The creation of a regular point grid on the raster stack is straightforward through the function `spatSample` from the `'terra'` package.
+
+
+```{r largedata01-05, fig.cap="cLHS sampling points with legacy data", eval=TRUE, include=TRUE}
+# result is a SpatialPointsDataFrame
+# size is the number of points to generate
+
+regular.sample <- spatSample(cov.dat, size = 500, xy=TRUE, method="regular")
+regular.sample<- na.omit(regular.sample)
+# plot s to see the grid of points
+plot(cov.dat[[1]], main="Regular sampling raster data)")
+points(regular.sample)
+
+```
+
+
+```{r largedata02-05, eval=TRUE, include=TRUE}
+
+regular.sample.clhs <- clhs(regular.sample, size = 100, progress = FALSE, iter = 1000, simple = FALSE)
+plot(regular.sample.clhs)
+plot(regular.sample.clhs, mode=c("obj", "box"))
+
+```
+
 
 
 ## Cost-constrained implementation
@@ -202,3 +231,6 @@ The layer of replacement areas can finally be exported to a 'shapefile' to be us
     st_write(pts, 'target_clhs.shp', delete_dsn = TRUE)
 
 ```
+
+
+

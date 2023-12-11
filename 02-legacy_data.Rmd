@@ -18,7 +18,7 @@ We must load the required packages and data for the analyses. We make use of the
 ```{r load_packages, eval=TRUE, include=F}
 
 # Load packages as a vector objects
-  packages <- c("sp", "terra", "clhs", "entropy", "tripack","manipulate","dplyr","plotly") # Create a vector of packages to use
+  packages <- c("sp", "terra", "raster","clhs", "entropy", "tripack","manipulate","dplyr","plotly") # Create a vector of packages to use
   lapply(packages, require, character.only = TRUE) # Load packages
   rm(packages) # Remove object to save memory space 
   
@@ -75,12 +75,12 @@ KL-divergence compares an 'objective' or reference probability distribution (her
 
 We cross soil and environmental data to create a dataset with the values of the environmental parameters at the locations of the soil samples. 
 
-```{r merge_data, eval=T, include=TRUE}
+```{r merge_data, eval=T, include=TRUE, echo = FALSE}
 
 # Extract environmental data from rasters at soil locations ----
   p.dat_I <- terra::extract(cov.dat, p.dat)
   p.dat_I <- na.omit(p.dat_I) # Remove soil points outside study area
-  str(p.dat_I)
+  #str(p.dat_I)
   
 ```
 
@@ -163,8 +163,8 @@ We calculate the KL-divergence to measure how much the distribution of covariate
       kl.index <- c(kl.index,kl)
       klo <-  mean(kl.index)
     }
-    print(kl.index) # KL divergences of each covariate
-    print(klo) # KL divergence in the existing soil samples
+    #print(kl.index) # KL divergences of each covariate
+    #print(klo) # KL divergence in the existing soil samples
 
 ```
 
@@ -204,7 +204,7 @@ Finally, we can also determine the degree in which our legacy soil dataset is re
   # Plot points outside convex hull  
     points(newScores[which(newScores$pip==0),1:2],pch='X', col='red')
   # Proportion of the conditions in the study area that fall within the convex hull
-    sum(newScores$pip)/nrow(newScores)*100 
+    #sum(newScores$pip)/nrow(newScores)*100 
 
 ```
 
