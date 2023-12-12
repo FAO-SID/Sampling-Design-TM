@@ -248,14 +248,20 @@ div.csl-indent {
 <p>We define the working directory to the directory in which the actual file is located and load the soil legacy sampling points and the environmental rasters from the <code>data</code> folder. To avoid the definition of each environmental covariate, we first retrieve all files with the <code>.tif</code> extension and then create a <code>SpatRaster</code> object with all of them in a row.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="legacy_data.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set working directory to source file location</span></span>
 <span id="cb1-2"><a href="legacy_data.html#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#setwd(dirname(rstudioapi::getActiveDocumentContext()$path))</span></span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="legacy_data.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Load soil legacy point data</span></span>
-<span id="cb2-2"><a href="legacy_data.html#cb2-2" aria-hidden="true" tabindex="-1"></a>  p.dat <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">vect</span>(<span class="st">&quot;data/shapes/legacy_soils.shp&quot;</span>)</span>
-<span id="cb2-3"><a href="legacy_data.html#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="legacy_data.html#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Load raster covariate data----</span></span>
-<span id="cb2-5"><a href="legacy_data.html#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Read Spatial data covariates as rasters with terra</span></span>
-<span id="cb2-6"><a href="legacy_data.html#cb2-6" aria-hidden="true" tabindex="-1"></a>  rasters <span class="ot">&lt;-</span> <span class="st">&quot;data/rasters&quot;</span></span>
-<span id="cb2-7"><a href="legacy_data.html#cb2-7" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span>  <span class="fu">list.files</span>(rasters, <span class="at">pattern =</span> <span class="st">&quot;tif$&quot;</span>,  <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-8"><a href="legacy_data.html#cb2-8" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(cov.dat)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="legacy_data.html#cb2-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Load soil legacy point data and environmental covariates</span></span>
+<span id="cb2-2"><a href="legacy_data.html#cb2-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-3"><a href="legacy_data.html#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Load soil data</span></span>
+<span id="cb2-4"><a href="legacy_data.html#cb2-4" aria-hidden="true" tabindex="-1"></a>    p.dat <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">vect</span>(<span class="st">&quot;clhs_data/shapes/legacy_soils.shp&quot;</span>)</span>
+<span id="cb2-5"><a href="legacy_data.html#cb2-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-6"><a href="legacy_data.html#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Load raster covariate data</span></span>
+<span id="cb2-7"><a href="legacy_data.html#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Read Spatial data covariates as rasters with terra</span></span>
+<span id="cb2-8"><a href="legacy_data.html#cb2-8" aria-hidden="true" tabindex="-1"></a>    rasters <span class="ot">&lt;-</span> <span class="st">&quot;clhs_data/rasters&quot;</span></span>
+<span id="cb2-9"><a href="legacy_data.html#cb2-9" aria-hidden="true" tabindex="-1"></a>    cov.dat <span class="ot">&lt;-</span>  <span class="fu">list.files</span>(rasters, <span class="at">pattern =</span> <span class="st">&quot;tif$&quot;</span>,  <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-10"><a href="legacy_data.html#cb2-10" aria-hidden="true" tabindex="-1"></a>    cov.dat <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(cov.dat)</span>
+<span id="cb2-11"><a href="legacy_data.html#cb2-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-12"><a href="legacy_data.html#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Simplify data rasters for calculations  </span></span>
+<span id="cb2-13"><a href="legacy_data.html#cb2-13" aria-hidden="true" tabindex="-1"></a>    cov.dat <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(cov.dat, <span class="at">fact=</span><span class="dv">2</span>, <span class="at">fun=</span><span class="st">&quot;mean&quot;</span>)</span>
+<span id="cb2-14"><a href="legacy_data.html#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">#setMinMax(cov.dat, force=TRUE) # Force Spatraster to show min and max values</span></span></code></pre></div>
 <div class="figure"><span style="display:block;" id="fig:fig-3"></span>
 <img src="Technical-Manual-Soil-Sampling-Design_files/figure-html/fig-3-1.png" alt="Covariates" width="672" />
 <p class="caption">
@@ -307,11 +313,11 @@ KL-divergence compares an ‘objective’ or reference probability distribution 
 <span id="cb5-4"><a href="legacy_data.html#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (ii <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(p.dat_I)){ <span class="co"># the number of observations</span></span>
 <span id="cb5-5"><a href="legacy_data.html#cb5-5" aria-hidden="true" tabindex="-1"></a>    cntj<span class="ot">&lt;-</span> <span class="dv">1</span> </span>
 <span id="cb5-6"><a href="legacy_data.html#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (jj <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span><span class="fu">ncol</span>(p.dat_I)){ <span class="co">#for each column</span></span>
-<span id="cb5-7"><a href="legacy_data.html#cb5-7" aria-hidden="true" tabindex="-1"></a>      dd<span class="ot">&lt;-</span> p.dat_I[ii,jj]  </span>
+<span id="cb5-7"><a href="legacy_data.html#cb5-7" aria-hidden="true" tabindex="-1"></a>      dd <span class="ot">&lt;-</span> p.dat_I[ii,jj]  </span>
 <span id="cb5-8"><a href="legacy_data.html#cb5-8" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (kk <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nb){  <span class="co">#for each bin</span></span>
-<span id="cb5-9"><a href="legacy_data.html#cb5-9" aria-hidden="true" tabindex="-1"></a>        kl<span class="ot">&lt;-</span> q.mat[kk, cntj] </span>
-<span id="cb5-10"><a href="legacy_data.html#cb5-10" aria-hidden="true" tabindex="-1"></a>        ku<span class="ot">&lt;-</span> q.mat[kk<span class="sc">+</span><span class="dv">1</span>, cntj] </span>
-<span id="cb5-11"><a href="legacy_data.html#cb5-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (dd <span class="sc">&gt;=</span> kl <span class="sc">&amp;</span> dd <span class="sc">&lt;=</span> ku){h.mat[kk, cntj]<span class="ot">&lt;-</span> h.mat[kk, cntj] <span class="sc">+</span> <span class="dv">1</span>}</span>
+<span id="cb5-9"><a href="legacy_data.html#cb5-9" aria-hidden="true" tabindex="-1"></a>        kl <span class="ot">&lt;-</span> q.mat[kk, cntj] </span>
+<span id="cb5-10"><a href="legacy_data.html#cb5-10" aria-hidden="true" tabindex="-1"></a>        ku <span class="ot">&lt;-</span> q.mat[kk<span class="sc">+</span><span class="dv">1</span>, cntj] </span>
+<span id="cb5-11"><a href="legacy_data.html#cb5-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (dd <span class="sc">&gt;=</span> kl <span class="sc">&amp;</span> dd <span class="sc">&lt;=</span> ku){h.mat[kk, cntj] <span class="ot">&lt;-</span> h.mat[kk, cntj] <span class="sc">+</span> <span class="dv">1</span>}</span>
 <span id="cb5-12"><a href="legacy_data.html#cb5-12" aria-hidden="true" tabindex="-1"></a>      }</span>
 <span id="cb5-13"><a href="legacy_data.html#cb5-13" aria-hidden="true" tabindex="-1"></a>      cntj<span class="ot">&lt;-</span> cntj<span class="sc">+</span><span class="dv">1</span></span>
 <span id="cb5-14"><a href="legacy_data.html#cb5-14" aria-hidden="true" tabindex="-1"></a>    }</span>
@@ -330,7 +336,7 @@ KL-divergence compares an ‘objective’ or reference probability distribution 
 <span id="cb6-8"><a href="legacy_data.html#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print(kl.index) # KL divergences of each covariate</span></span>
 <span id="cb6-9"><a href="legacy_data.html#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print(klo) # KL divergence in the existing soil samples</span></span></code></pre></div>
 <p>The KL-divergence is always greater than or equal to zero, and reaches its minimum value (zero) only when P and Q are identical. Thus, lower values of KL-divergence are indicative of a good match between both the sample and the study area spaces, indicating that the sample space is a fair representation of the environmental conditions in the study area.</p>
-<p>In this case, the KL-divergence value is 0.039, indicating that the legacy samples capture most of the environmental variability in the study area.</p>
+<p>In this case, the KL-divergence value is 0.29, indicating that the legacy samples capture most of the environmental variability in the study area.</p>
 <ul>
 <li><strong>Percent of representativeness in relation to the overall environmental conditions</strong></li>
 </ul>
@@ -347,7 +353,7 @@ Figure 2.2: PCA plot of the covariate
 Figure 2.3: PCA plot of the covariate
 </p>
 </div>
-<p>This indicates that 96.5% of the existing conditions in the study area fall within the convex hull delineated with the data in the soil samples, showing the adequacy of the proposed legacy data for DSM.</p>
+<p>This indicates that 78.6% of the existing conditions in the study area fall within the convex hull delineated with the data in the soil samples, showing the adequacy of the proposed legacy data for DSM.</p>
 
 </div>
 </div>

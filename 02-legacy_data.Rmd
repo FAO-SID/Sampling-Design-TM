@@ -44,15 +44,20 @@ We define the working directory to the directory in which the actual file is loc
 
 
 ```{r load_covariates, eval=TRUE, include=TRUE}
-
-## Load soil legacy point data
-  p.dat <- terra::vect("data/shapes/legacy_soils.shp")
-
-## Load raster covariate data----
-  # Read Spatial data covariates as rasters with terra
-  rasters <- "data/rasters"
-  cov.dat <-  list.files(rasters, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
-  cov.dat <- terra::rast(cov.dat)
+  # Load soil legacy point data and environmental covariates
+  
+  # Load soil data
+    p.dat <- terra::vect("clhs_data/shapes/legacy_soils.shp")
+  
+  ## Load raster covariate data
+    # Read Spatial data covariates as rasters with terra
+    rasters <- "clhs_data/rasters"
+    cov.dat <-  list.files(rasters, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
+    cov.dat <- terra::rast(cov.dat)
+    
+    # Simplify data rasters for calculations  
+    cov.dat <- aggregate(cov.dat, fact=2, fun="mean")
+    #setMinMax(cov.dat, force=TRUE) # Force Spatraster to show min and max values
 
 ```
 
@@ -139,11 +144,11 @@ We then calculate the hypercube matrix of covariates in the sample space.
   for (ii in 1:nrow(p.dat_I)){ # the number of observations
     cntj<- 1 
     for (jj in 2:ncol(p.dat_I)){ #for each column
-      dd<- p.dat_I[ii,jj]  
+      dd <- p.dat_I[ii,jj]  
       for (kk in 1:nb){  #for each bin
-        kl<- q.mat[kk, cntj] 
-        ku<- q.mat[kk+1, cntj] 
-        if (dd >= kl & dd <= ku){h.mat[kk, cntj]<- h.mat[kk, cntj] + 1}
+        kl <- q.mat[kk, cntj] 
+        ku <- q.mat[kk+1, cntj] 
+        if (dd >= kl & dd <= ku){h.mat[kk, cntj] <- h.mat[kk, cntj] + 1}
       }
       cntj<- cntj+1
     }

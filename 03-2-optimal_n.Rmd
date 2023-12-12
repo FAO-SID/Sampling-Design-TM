@@ -180,7 +180,7 @@ for (trial in seq(initial.n, final.n, by=by.n)){
   klo_samples <- c(klo_samples,klo)
   prop_explained <- c(prop_explained,sum(newScores$pip)/nrow(newScores)*100)
 number_of_samples <- c(number_of_samples,trial)
-print(paste("N samples = ",trial, " out of ",final.n, "; iteration = ",iteration,"; KL = ", klo, "; Proportion = ", sum(newScores$pip)/nrow(newScores)*100 ))
+#print(paste("N samples = ",trial, " out of ",final.n, "; iteration = ",iteration,"; KL = ", klo, "; Proportion = ", sum(newScores$pip)/nrow(newScores)*100 ))
   }
 }
 
