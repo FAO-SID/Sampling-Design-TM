@@ -43,7 +43,7 @@ We define the working directory to the directory in which the actual file is loc
 ```
 
 
-```{r load_covariates, eval=TRUE, include=TRUE}
+```{r load_covariates, eval=TRUE, include=TRUE, warning=FALSE}
   # Load soil legacy point data and environmental covariates
   
   # Load soil data
@@ -55,8 +55,10 @@ We define the working directory to the directory in which the actual file is loc
     cov.dat <-  list.files(rasters, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
     cov.dat <- terra::rast(cov.dat)
     
-    # Simplify data rasters for calculations  
-    cov.dat <- aggregate(cov.dat, fact=2, fun="mean")
+    #  Artificial dissagregate to build layer statistics
+    cov.dat <- disagg(cov.dat, fact=1, method="bilinear")
+    # Simplify data rasters for calculations 
+    cov.dat <- aggregate(cov.dat, fact=5, fun="mean") # Now you can see the statistics
     #setMinMax(cov.dat, force=TRUE) # Force Spatraster to show min and max values
 
 ```

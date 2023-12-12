@@ -35,9 +35,11 @@ The initial section of the script is related to setup options in the methodology
 
   ## Load raster covariate data----
   # Read Spatial data covariates as rasters with terra
-  rasters <- "data/rasters"
+  rasters <- "clhs_data/rasters"
   cov.dat <-  list.files(rasters, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
   cov.dat <- terra::rast(cov.dat)
+  cov.dat <- aggregate(cov.dat, fact=2, fun="mean")
+  #setMinMax(cov.dat, force=TRUE) # Force Spatraster to show min and max values
   cov.dat.ras <- raster::stack(cov.dat) 
   
 ```
@@ -56,9 +58,9 @@ We can see the covariates in a plot.
   ## Define the number of samples to be tested in a loop (from initial to final) and the step of the sequence
 
   initial.n <- 10
-  final.n <- 200
+  final.n <- 250
   by.n <- 10
-  iters <- 5
+  iters <- 3
   
 ```
 
@@ -112,7 +114,7 @@ for (trial in seq(initial.n, final.n, by=by.n)){
           kl<- q.mat[k, cntj] 
           ku<- q.mat[k+1, cntj] 
           if (is.na(dd)) {
-            print('Missing')
+            print(paste('N_',trial,'_',iteration,'Missing'))
           }
           else if (dd >= kl & dd <= ku){cov.mat[k, cntj]<- cov.mat[k, cntj] + 1} 
         }
@@ -190,11 +192,11 @@ Figure \@ref(fig:fig-7) shows the distribution of covariates in the sample space
 
 ```{r  fig-7, eval=TRUE, include=TRUE, fig.cap="Distribution of covariates in the sample space"}
     
-# Plot the polygon and all points to be checked
+  # Plot the polygon and all points to be checked
      plot(newScores[,1:2], xlab="PCA 1", ylab="PCA 2", xlim=c(min(newScores[,1:2]), max(newScores[,1:2])), ylim=c(min(newScores[,1:2]), max(newScores[,1:2])),
           col='black', main='Environmental space plots over the convex hull of soil legacy data')
      polygon(pr_poly,col='#99999990')
-    # # Plot points outside convex hull  
+  # # Plot points outside convex hull  
      points(newScores[which(newScores$pip==0),1:2], col='red', pch=12, cex =1)
 
 ```
@@ -319,10 +321,12 @@ Finally, we can determine the optimal distribution of samples over the study are
 
 ```{r fig-9, fig.cap="Covariates and optimal number and distribution of samples", eval=TRUE, include=TRUE}
 
-optimal_iteration <- results[which(abs(results$N - optimal_n) == max(abs(results$N - optimal_n))),] %>%
+optimal_iteration <- results[which(abs(results$N - optimal_n) == min(abs(results$N - optimal_n))),] %>%
   mutate(IDX = 1:n()) %>%
   filter(Perc==max(Perc)) 
-optimal_iteration
+
+# Show the optimal iteration
+  optimal_iteration
 
 plot(cov.dat[[1]])
 N_final <- samples_storage[paste0("N",optimal_iteration$N,"_", optimal_iteration$IDX)][[1]]

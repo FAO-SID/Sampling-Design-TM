@@ -19,7 +19,6 @@ fig:fig-22
 fig:fig-23
 fig:fig-24
 introduction
-manual-structure
 legacy_data
 data-preparation
 representativeness-of-the-legacy-soil-data

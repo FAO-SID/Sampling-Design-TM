@@ -3,9 +3,9 @@
 
 Conditioned Latin Hypercube Sampling (cLHS) is an advanced statistical method used for sampling multidimensional data developed within the context of digital Soil Mapping. It's an extension of the basic Latin Hypercube Sampling (LHS) technique, a statistical method for generating a distribution of samples of a random variable. The main advantage of LHS over simple random sampling is its ability to ensure that the entire range of the auxiliary variables are explored. It divides the range of each variable into intervals of equal probability and samples each interval.
 
-The term "conditioned" refers to the way the sampling is adapted or conditioned based on specific requirements or constraints. It often involves conditioning the sampling process on one or more additional variables or criteria. This helps in generating samples that are not just representative in terms of the range of values, but also in terms of their relationships or distributions. cLHS is particularly useful for sampling from multivariate data, where there are multiple interrelated variables as it occurs in soil surveys. The main advantage of cLHS is its efficiency in sampling and its ability to better capture the structure and relationships within the data, compared to simpler sampling methods, and ensures that the samples are representative not just of the range of each variable, but also of their interrelations. Detailed information on cLHS can be found in [@minasny2006]
+The term 'conditioned' refers to the way the sampling is adapted or conditioned based on specific requirements or constraints. It often involves conditioning the sampling process on one or more additional variables or criteria. This helps in generating samples that are not just representative in terms of the range of values, but also in terms of their relationships or distributions. cLHS is particularly useful for sampling from multivariate data, where there are multiple interrelated variables as it occurs in soil surveys. The main advantage of cLHS is its efficiency in sampling and its ability to better capture the structure and relationships within the data, compared to simpler sampling methods, and ensures that the samples are representative not just of the range of each variable, but also of their interrelations. Detailed information on cLHS can be found in [@minasny2006]
 
-## cLHS design: General Procedure
+## cLHS Design
 
 As for stratified sampling, the creation target points from a conditioned Latin Hypercube Sampling design involves the identification of the relevant features describing the environmental diversity in the area. In this case, the environmental parameters are incorporated in the form of raster covariates. The determination of the optimal number of samples in the design is also required. This step can be calculated following the information already provided in this manual.
 
@@ -14,34 +14,45 @@ With the optimal sampling size of `r optimal_n` calculated before, we can conduc
 We use the rasters of `r paste(shQuote(names(cov.dat)), collapse = ", ")` as covariates in the exercise, which we convert to a raster.
 
 
-```{r load_data_05, eval=TRUE, include=TRUE, warning=FALSE,echo=FALSE}
+```{r load_data_05, eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
 
-  ## Load raster covariate data----
   # Read Spatial data covariates as rasters with terra
-  library(raster)
-  rasters <- "data/rasters"
+  rasters <- "clhs_data/rasters"
   cov.dat <-  list.files(rasters, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
-  cov.dat <- terra::rast(cov.dat)
-  cov.dat <- raster::stack(cov.dat)
-  
+  cov.dat <- terra::rast(cov.dat) # SpatRaster from terra
+
 ```
 
 
-The target points are obtained using the `'cLHS'`function together with the stack of raster covariates and the number of samples. The function uses a number of iterations for the Metropolis-Hastings annealing process, with a default of 10000. We sample the covariate data set and pick a subset of points equal to the sample size determined previoulsly. 
+```{r fig-15, fig.cap="Covariates", eval=TRUE, include=TRUE}
+  # Plot of covariates
+  plot(cov.dat)
 
-```{r fig-cLHS_design_05, fig.cap="Evolution of the objective function", eval=TRUE, include=TRUE}
+```
 
-  pts <- clhs(cov.dat, size = optimal_n, iter = 5000, progress = FALSE, simple = FALSE)
+
+The distribution of the sampling points is obtained using the `'cLHS'`function together with the stack of raster covariates and the optimal number of samples calculated in the previous Section. The function uses a number of iterations for the Metropolis-Hastings annealing process, with a default of 10000, to determine the optimal location of samples that account for a maximum of information on the raster covariates (Fig. \@ref(fig:fig-16). . 
+
+
+```{r fig-16, fig.cap="Evolution of the objective function", eval=TRUE, include=TRUE}
+  ## SpatRasters are not allowed in clhs function. They must be transformed to RasterStack from raster
+  cov.dat.ras <- raster::stack(cov.dat) 
+  # Distribute sampling points with clhs
+  pts <- clhs(cov.dat.ras, size = optimal_n, iter = 5000, progress = FALSE, simple = FALSE)
+  # Plot of objective function
   plot(pts, c('obj'))
+
 ```
 
-The distribution of points is shown in Figure \@ref(fig:fig-15).
 
-```{r fig-15, fig.cap="Distribution of cLHS sampling points in the study area", eval=TRUE, include=TRUE}
+
+The distribution of points is shown in Figure \@ref(fig:fig-17).
+
+```{r fig-17, fig.cap="Distribution of cLHS sampling points in the study area", eval=TRUE, include=TRUE}
 
   ## Create a cLHS sampling point set----
     plot(cov.dat[[1]], main="cLHS samples")
-    points(pts$sampled_data, col="red", pch = 16)
+    points(pts$sampled_data, col="red", pch = 1)
 
 ```
 
@@ -51,79 +62,110 @@ In situations where there are legacy soil data samples available, it would be in
 
 
 ```{r clhs-legacy-05, eval=TRUE, include=TRUE}
-  # Read Spatial data covariates as rasters with terra
-  rasters <- "data/rasters"
-  cov.dat <-  list.files(rasters, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
-  cov.dat <- terra::rast(cov.dat)
+
 # We create an artificial legacy dataset of 20 samples over the study area
-  legacy.data <- spatSample(cov.dat,10, na.rm=TRUE,xy=TRUE,method="random")
-# Get covariates data as a dataframe with coordinates
-  cov.df <- cbind(crds(cov.dat),as.data.frame(cov.dat))
-  # Delete data from pixels outside the study area
-  cov.df <- na.omit(cov.df)
+  legacy.data <- spatSample(cov.dat,20, na.rm=TRUE,xy=TRUE,method="random", as.points=T) # works with SpatRaster 
+
+  # Get covariates data as a points
+  cov.df<- as.points(cov.dat)
+  
 # Merge legacy and covariate information
   leg.new <-   rbind(legacy.data, cov.df)
-# Calculate clhs points with legacy data
-    res <- clhs(x = leg.new, size = 30,  iter = 5000,simple = FALSE, progress = FALSE,
+  leg.new <- as.data.frame(leg.new,geom='XY')
+  # Delete data from pixels outside the study area
+  leg.new <- na.omit(leg.new)
+  
+# Calculate clhs 100 points plus locations of legacy data
+    res <- clhs(x = leg.new, size = 100+length(legacy.data),  iter = 10000,simple = FALSE, progress = FALSE,
             must.include = c(1:nrow(legacy.data)))
-# Plot objective function
-  plot(res)
+
 # Get sampling points
   points <- res$sampled_data
 
 ```
 
-Figure \@ref(fig:fig-16) shows the distribution of new samples along with legacy data points.
+Figure \@ref(fig:fig-18) shows the distribution of the created cLHS samples, which also include the position of the original legacy soil data points.
 
-```{r fig-16, fig.cap="cLHS sampling points with legacy data", eval=TRUE, include=TRUE}
+```{r fig-18, fig.cap="cLHS sampling points with legacy data", eval=TRUE, include=TRUE}
 
 # Plot points
-  plot(cov.dat[[1]], main="Samples (point) and legacy samples (cross)")
-  points(points, col="dodgerblue", pch = 16)
-  points(legacy.data, col="red", pch = 3)
-
-```
-
-## Workin with large raster data
-
-The cLHS function samples the raster stack to analyse the structure of covariate data in order to determine the optimal location os samples that represent the environmental conditions in the area. In the case of working with large raster sets, the process can be higly computing demanding since all pixels in the raster stack is used in the process. A means to avoid this is to sample  the stack on a regular grid to account for a shorter number of data points and use this information as input within the cLHS function. 
-
-The creation of a regular point grid on the raster stack is straightforward through the function `spatSample` from the `'terra'` package.
-
-
-```{r largedata01-05, fig.cap="cLHS sampling points with legacy data", eval=TRUE, include=TRUE}
-# result is a SpatialPointsDataFrame
-# size is the number of points to generate
-
-regular.sample <- spatSample(cov.dat, size = 500, xy=TRUE, method="regular")
-regular.sample<- na.omit(regular.sample)
-# plot s to see the grid of points
-plot(cov.dat[[1]], main="Regular sampling raster data)")
-points(regular.sample)
+  plot(cov.dat[[1]], main="cLHS samples (blue circles) and legacy samples (red diamonds)")
+  points(points[,c("x","y")], col="dodgerblue", pch = 1)
+  points(legacy.data, col="red", pch = 5, cex=2)
 
 ```
 
 
-```{r largedata02-05, eval=TRUE, include=TRUE}
+## Working with large raster data
 
-regular.sample.clhs <- clhs(regular.sample, size = 100, progress = FALSE, iter = 1000, simple = FALSE)
-plot(regular.sample.clhs)
-plot(regular.sample.clhs, mode=c("obj", "box"))
+The cLHS function samples the covariates in the raster stack in order to determine the optimal location of samples that best represent the environmental conditions in the area. In the case of working with large raster sets, the process can be highly computing demanding since all pixels in the raster stack are used in the process. There are two simple methods to avoid this constrating:
+
+ * **Aggregation of covariates:**  The quickest solution is to aggregate the covariates in the raster stack to a lower pixel resolution. This is directly performed using the `'aggregate'` function from the `'terra'`package. In case that the raster stack has discrete layers (factor data), the corresponding layers has to be aggregated separately using either the 'min' or 'max' functions to avoid corruption of the data and the results added later to the data of continuous raster layers. 
+
+```{r aggregation-05, eval=FALSE, include=TRUE}
+
+  ## Aggregation of raster stack by a factor of 2. 
+  ## The original 10x10m grid resolution is resampled to 20x20m using the mean value of the pixels in the grid
+    cov.dat <- aggregate(cov.dat, fact=2, fun="mean")
 
 ```
 
 
+ * **Sampling covariate data:** Other method that can be used is to sample the stack (extract the covariates information at point scale)  on a regular grid at a lower resolution than the raster grid and use this information as input within the cLHS function. The creation of a regular point grid on the raster stack is straightforward through the function `spatSample` from the `'terra'` package. In this case we create a regular grid of 1000 points.
 
-## Cost-constrained implementation
+```{r fig-19, fig.cap="Low resolution points of covariate data", eval=TRUE, include=TRUE}
 
-CLHS can also be implemented taking into account environmental features such as terrain (elevation, slope) or accessibility (distance to roads) that can alter the sampling process. This is done by defining constraints as 'cost' layers in the options of the `'clhs'` function.
+  # Create a regular grid of 1000 points on the covariate space
+    regular.sample <- spatSample(cov.dat, size = 1000, xy=TRUE, method="regular", na.rm=TRUE)
+  # plot the points over the 1st raster
+    plot(cov.dat[[1]], main="Regular resampled data")
+    points(regular.sample, col="red", pch = 1)
 
-```{r fig-18, fig.cap="cLHS sampling with cost layers", eval=TRUE, include=TRUE}
-  cov.dat <- raster::stack(cov.dat)
-  ## Create a cLHS sampling point set----
-  pts <- clhs(cov.dat, size = optimal_n, iter = 5000, progress = FALSE, simple = FALSE, cost = 'elevation',  use.cpp = F)
+```
+
+This `dataframe` can be directly used as input in the cLHS function to get locations that best represent the covariate space in the area.
+
+
+```{r fig-20, fig.cap="cLHS sampling points on point-grid transformed raster covariate data", eval=TRUE, include=TRUE}
+
+# Create clhs samples upon the regular grid  
+ regular.sample.clhs <- clhs(regular.sample, size = 100, progress = FALSE, iter = 10000, simple = FALSE)
+# Plot points of clhs samples
+  points <- regular.sample.clhs$sampled_data # Get point coordinates of clhs sampling
+  plot(cov.dat[[1]], main="cLHS samples (red) and covariated resampled points (blue)")
+  points(regular.sample, col="dodgerblue", pch = 1)
+  points(points, col="red", cex=1)
+
+```
+
+Note that the sampling design follows the regular pattern of the regular grid extracted from the raster covariates 
+
+
+## Implemenentation of cost-constrained sampling
+
+There are situation in which the accessibility to some locations is totally or partially restricted such as areas with steep slopes, remote areas, or areas with forbidden access, which highly compromises the sampling process. In these
+situations, the sampling design can constrain the points to particular locations by defining environmental layers that cause an increment in the cost efficiency of the sampling. This is done with the `cost` attribute in the main `'clhs'` function. The following example uses the raster layer "distance to roads" as a cost layer to avoid low accessible points located at large distance from roads while optimizing the representativeness of the remaining environmental covariates.
+
+```{r fig-21, fig.cap="Objective and cost funtions", eval=TRUE, include=TRUE}
+  # Create a cLHS sampling point set with 
+  cost.clhs <- clhs(cov.dat.ras, size = optimal_n, iter = 5000, progress = FALSE, simple = FALSE, cost = 'cost',  use.cpp = T)
+  # Plot objective function
   plot(pts, c('obj', 'cost'))
+
 ```
+
+
+Figure \@ref(fig:fig-22) shows the distribution of the cost constrained `'clhs'` sampling over the `'cost'` surface. The sampling procedure concentrates, as much as possible, sampling sites in locations with lower costs.
+
+
+```{r fig-22, fig.cap="cLHS sampling with cost layers", eval=TRUE, include=TRUE}
+  # Get and plot the point of samples
+  points <- cost.clhs$sampled_data  # Get point coordinates of clhs sampling
+  plot(cov.dat[[2]], main="cLHS samples with 'cost' constraints")
+  points(points, col="red", cex=1)
+  
+```
+
 
 
 ## Replacement areas in cLHS design
@@ -133,16 +175,16 @@ The `'cLHS'` package incorporates methods for the delineation of replacement loc
 ```{r cLHS_buffer_05, eval=TRUE, include=TRUE}
 
   ## Determine the similarity to points in a buffer of distance D
-  # Note that distance units are expressed in map units, in this case meters
-  # If your data is in geographic coordinates, D must be included in geographic units as well
-    D <- 50
+  ## Note that distance units are expressed in map units, in this case meters
+  ## If your data is in geographic coordinates, D must be included in geographic units
+    D <- 200
 
-  ## Compute the buffers around points  
-    gw <- similarity_buffer(cov.dat, pts$sampled_data, buffer = D)
-    ## Plot the first buffers in the stack
+  # Compute the buffers around points  
+    gw <- similarity_buffer(cov.dat.ras, pts$sampled_data, buffer = D)
+    # Plot the first buffers in the stack
       #plot(gw)
-  
-  ## Overlay point location to buffer plots
+
+  # Overlay point location to buffer plots
     # fun <- function() {
     #   plot(pts$sampled_data, add = TRUE, col = "red", pch = 3)
     # }
@@ -150,11 +192,11 @@ The `'cLHS'` package incorporates methods for the delineation of replacement loc
 
 ```
 
-The similarity probabilities for the first cLHS point is presented on Figure \@ref(fig:fig-19) over the elevation layer. 
+The similarity probabilities for the first cLHS point is presented on Figure \@ref(fig:fig-23) over the elevation layer. 
 
-```{r fig-19, fig.cap="Probability of similarity in the buffer for the first cLHS point (in black) over elevation. The blue crosses represent the location of the remaining cLHS points from the analysis.", eval=TRUE, include=TRUE}
+```{r fig-23, fig.cap="Probability of similarity in the buffer for the first cLHS point (in black) over elevation. The blue crosses represent the location of the remaining cLHS points from the analysis.", eval=TRUE, include=TRUE}
 
-  ## Plot elevation
+  # Plot elevation
     plot(cov.dat[[3]], legend=TRUE,main=paste("Similarity Probability over elevation"))
   ## Overlay points
     points(pts$sampled_data[1], col = "dodgerblue", pch = 3)
@@ -169,9 +211,9 @@ The similarity probabilities for the first cLHS point is presented on Figure \@r
 The probabilities can then be reclassified using a threshold value to delineate the areas with higher similarity to each central target point. 
 
 ```{r cLHS_reclass_05, eval=TRUE, include=TRUE}
-  ## Determine the threshold break to determine if the surrounding area can be a replacement or not
+  # Determine the threshold break to determine if the surrounding area can be a replacement or not
     similarity_threshold <- 0.90
-  ## Reclassify buffer raster data according to the threshold break of probability
+  # Reclassify buffer raster data according to the threshold break of probability
   # 1 = similarity >= similarity_break; NA =  similarity <  similarity_break
     # Define a vector with the break intervals and the output values (NA,1) 
     breaks <- c(0, similarity_threshold, NA, similarity_threshold, 1, 1)
@@ -184,7 +226,7 @@ The probabilities can then be reclassified using a threshold value to delineate 
     #plot(s, addfun = fun)
         
   ## Remove temporary objects
-    rm(gw,breaks)
+    #rm(gw,breaks,cov.dat.ras)
 
 ```
 
@@ -207,9 +249,9 @@ The reclassified raster stack is then converted to an object of `'SpatialPolygon
 ```
 
 
-The results are shown in Figure \@ref(fig:fig-20).
+The results are shown in Figure \@ref(fig:fig-24).
 
-```{r fig-20, fig.cap="Distribution of cLHS sampling points in the study area", eval=TRUE, include=TRUE}
+```{r fig-24, fig.cap="Distribution of cLHS sampling points in the study area", eval=TRUE, include=TRUE}
 
     plot(cov.dat[[1]], main=paste("cLHS samples and replacement areas for threshold = ", similarity_threshold))
     plot(s,add=TRUE, col=NA, border="gray40")
@@ -218,7 +260,7 @@ The results are shown in Figure \@ref(fig:fig-20).
 ```
 
 
-The layer of replacement areas can finally be exported to a 'shapefile' to be used in any other software.
+The layer of replacement areas can finally be exported to a `'shapefile'` to be used in any other software.
 
 ```{r cLHS_export_05, eval=FALSE, include=TRUE, warning=FALSE}
     
@@ -226,11 +268,10 @@ The layer of replacement areas can finally be exported to a 'shapefile' to be us
     s <- st_as_sf(s)
     st_write(s, paste0('replacement_areas_', D, '.shp'), delete_dsn = TRUE)
    
-    ## Write  cLHS sampling points to shapefile
+    ## Write cLHS sampling points to shapefile
     pts <- st_as_sf(pts$sampled_data)
     st_write(pts, 'target_clhs.shp', delete_dsn = TRUE)
+    
 
 ```
-
-
 

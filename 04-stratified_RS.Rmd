@@ -24,7 +24,7 @@ The fist step is to set-up the RStudio environment and load the required package
 ```{r strata-setup, eval=TRUE, include=FALSE, warning=FALSE}
 
 # Load packages as a vector objects
-  packages <- c("sf", "terra", "tidyverse", "rmapshaper", "units","plyr", "mapview")
+  packages <- c("sf", "terra", "tidyverse", "rmapshaper", "units","plyr", "mapview", "leaflet")
   lapply(packages, require, character.only = TRUE) # Load packages
   rm(packages) # Remove object to save memory space 
 
@@ -95,12 +95,15 @@ We proceed with the calculation of soil groups. In this example, soil informatio
 
 
 
-```{r fig-10, fig.cap="Plot of the soil classes", eval=FALSE, include=FALSE}
+```{r fig-10, fig.cap="Plot of the soil classes", eval=FALSE, include=TRUE}
   
 #The soil classes used to build the strata are shown in Figure \@ref(fig:fig-10).
 
   # Plot final map with the aggregated soil information
-mv <- mapview(soil["USDA_CLASS"], alpha=0, homebutton=T, layer.name = "Soils")
+
+map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
+  addTiles()
+mv <- mapview(soil["USDA_CLASS"], alpha=0, homebutton=T, layer.name = "Soils", map=map)
 mv@map
 
 ```
@@ -142,15 +145,17 @@ A similar procedure is performed on the land use dataset.
 
 ```
 
+Figure  \@ref(fig:fig-11) shows the landuse classes to build the strata.
 
+```{r fig-11, fig.cap="Plot of the land use classes", eval=FALSE, include=TRUE}
 
-```{r fig-11, fig.cap="Plot of the land use classes", eval=FALSE, include=FALSE}
-
-  # Figure  \@ref(fig:fig-11) shows the landuse classes to build the strata.
+# Plot map with the aggregated land use information
   
-  # Plot final map with the aggregated land use information
-  mv <- mapview(lc["LU"], alpha=0, homebutton=T, layer.name = "Landuse")
+  map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
+  addTiles()
+  mv <- mapview(lc["LU"], alpha=0, homebutton=T, layer.name = "Landuse", map=map)
   mv@map
+
 ```
 
 To create the soil-land use `strata` we must combine both classified datasets.
@@ -200,10 +205,11 @@ The final strata map is shown in Figure  \@ref(fig:fig-12).
 ```{r fig-12, eval=TRUE, include=TRUE, fig.cap="Plot of strata"}
 
    # Plot final map of stratum
-  #terra::plot(soil_lc["soil_lc"], border=NA, main="Strata classes")
-  mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T)
+  map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
+  addTiles()
+  mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata", map=map)
   mv@map
-
+  
 ```
 
 
@@ -369,11 +375,16 @@ z <- x %>%
 
 Results are shown in Figure \@ref(fig:fig-13).
 
-```{r fig-13, fig.cap="Plot of strata and random, sampling points", eval=TRUE, include=TRUE}
+```{r fig-13, fig.cap="Plot of strata and random target and replacement points", eval=TRUE, include=TRUE}
 
+  map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
+  addTiles()
   mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") +
-  mapview(z[z$type=="Target",], color = "white", cex=3, col.regions = "tomato",layer.name = "Target Points")
+    mapview(z[z$type=="Target",], color = "white", cex=3, col.regions = "dodgerblue3",layer.name = "Replacement Points") +
+    mapview(z[z$type=="Target",], color = "white", cex=3, col.regions = "tomato",layer.name = "Target Points", map=map)
   mv@map
+  
+  
 
 ```
 

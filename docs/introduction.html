@@ -23,7 +23,7 @@
 <meta name="author" content="Rodríguez Lado, L., Angelini, M.E, Naypewe, N., Luotto, I., Yigini, Y." />
 
 
-<meta name="date" content="2023-12-11" />
+<meta name="date" content="2023-12-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -66,14 +66,14 @@
 <script src="assets/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
 <link href="assets/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
 <script src="assets/leaflet-binding-2.1.1/leaflet.js"></script>
-<script src="assets/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
-<script src="assets/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script>
 <link href="assets/HomeButton-0.0.1/home-button.css" rel="stylesheet" />
 <script src="assets/HomeButton-0.0.1/home-button.js"></script>
 <script src="assets/HomeButton-0.0.1/easy-button-src.min.js"></script>
 <script src="assets/clipboard-0.0.1/setClipboardText.js"></script>
 <link href="assets/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
 <link href="assets/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
+<script src="assets/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="assets/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script>
 
 
 <style type="text/css">
@@ -185,10 +185,7 @@ div.csl-indent {
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Licence</a></li>
-<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
-<ul>
-<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#manual-structure"><i class="fa fa-check"></i><b>1.1</b> Manual Structure</a></li>
-</ul></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="part"><span><b>Part one - Soil Legacy Data</b></span></li>
 <li class="chapter" data-level="2" data-path="legacy_data.html"><a href="legacy_data.html"><i class="fa fa-check"></i><b>2</b> Evaluating Soil Legacy Data Sampling for DSM</a>
 <ul>
@@ -238,30 +235,20 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="introduction" class="section level1 hasAnchor" number="1">
 <h1><span class="header-section-number">Chapter 1</span> Introduction<a href="introduction.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>Understanding the spatial distribution of soil properties is crucial for making informed decisions in various fields, from precision agriculture to environmental conservation. The success of soil mapping activities relies on the existence of proper data collated through meticulous soil sampling protocols. The spatial variation of soil properties across landscapes necessitates strategic planning to ensure representative and reliable data collection.</p>
-<p>In this manual, we explore the intricacies of soil sampling design, including the critical factors that influence the accuracy and effectiveness of soil data field sampling. We present examples of various sampling methods, ranging from traditional grid-based approaches to advanced statistical sampling strategies. We include methods for systematic, random and stratified sampling, evaluating their strengths and weaknesses in the context of DSM. We aim to provide researchers and practitioners with the knowledge necessary to select the most suitable approach for their specific objectives.</p>
-<div id="manual-structure" class="section level2 hasAnchor" number="1.1">
-<h2><span class="header-section-number">1.1</span> Manual Structure<a href="introduction.html#manual-structure" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>We use examples based on the data and scripts at <span class="citation">(<a href="#ref-Malone" role="doc-biblioref">Malone, Minansy and Brungard, 2019</a>)</span>, which can be found at the <a href="https://bitbucket.org/brendo1001/clhc_sampling/src/master/">repository</a>.</p>
-<p>We have used a common structure for file paths in the exercises. By default, the RStudio console points to the folder where the project is located. Thus, R scripts appear in the root of the working directory and data files are in a <code>'data/'</code> directory within the root, with <code>'.shp'</code> and <code>'.tif'</code> files located within the sub-folders <code>'data/shapes'</code> and <code>'data/rasters'</code> respectively. Following this recommendation simplifies the definition of paths and execution of the scripts. If users desire to change their storage paths, they have to properly adjust data paths in the R scripts.</p>
-<p><span class="citation">(<a href="#ref-SENA2021e00354" role="doc-biblioref">Sena <em>et al.</em>, 2021</a>)</span> proposed a strategy for sampling in difficult access areas using cLHS.</p>
-<p><span class="citation">(<a href="#ref-CLIFFORD201462" role="doc-biblioref">Clifford <em>et al.</em>, 2014</a>)</span> Pragmatic soil survey design using flexible Latin hypercube sampling for difficult access.</p>
+<p>The success of soil mapping activities relies on the existence of proper data collated through detailed soil sampling protocols ensuring representative and reliable soil data collection. This publication does not intend to be an intensive compilation which cover all the intricate possibilities in soil sampling design. In turn, we show a number of different soil sampling protocols through examples, covering both the most common approaches that can be used for the design of field soil sampling and present methodologies to evaluate their accuracy and effectiveness. The last part of the manual is particularly focused in the use of conditional Latin Hypercube Sampling (<code>clhs</code>), a statistical methodology developed specifically for soil sampling from a Digital Soil Mapping perspective.</p>
+<p>The manual is structured in two parts. <code>'Part One'</code> presents a methodology to evaluate the capacity of an existing soil legacy data to represent the potential soil diversity within a certain study area and determine whether it is a valid set for Digital Soil Mapping purposes. We use the Kullback-Leibler divergence (KL) measurement to quantify the difference between the probability distributions of covariate values in the legacy samples set and in the whole area and determine how much information is lost when the sample set is used to approximate the diversity in the existing environmental conditions in the whole area.</p>
+<p>In <code>'Part Two'</code> we present several methods for creating soil sampling designs. We start with the determination of the optimal sample size for describing most of the environmental diversity in the area to the creation of sampling designs. We present examples of various sampling methods, ranging from traditional grid-based approaches to advanced statistical sampling strategies. We include methods for systematic, random and stratified sampling, evaluating their strengths and weaknesses in the context of DSM.</p>
+<p>The manual exercises are written in the statistical environmnent {R} and running in the integrated development environment (IDE) <code>RStudio</code> for simplicify. Some scripts are based on the work and scripts from <span class="citation">(<a href="#ref-Malone" role="doc-biblioref">Malone, Minansy and Brungard, 2019</a>)</span>, which can be found at the <a href="https://bitbucket.org/brendo1001/clhc_sampling/src/master/">repository</a>. The raster data in some examples comes also from the github repository from <a href="https://github.com/dave-white2/data">Dave White</a>.</p>
+<p>We have used a common structure for file paths in the exercises. By default, the <code>'RStudio'</code> console points to the folder where the active file is located (defined by <code>setwd(dirname(rstudioapi::getActiveDocumentContext()$path))</code> in the code). With this structure, R scripts appear in the root of the working directory and data files are in a <code>'data/'</code> directory within the root, with <code>'.shp'</code> and <code>'.tif'</code> files located within the sub-folders <code>'data/shapes'</code> and <code>'data/rasters'</code> respectively. Following this recommendation simplifies the definition of paths and execution of the scripts. If users desire to change their storage paths, they have to properly adjust data paths in the R scripts.</p>
 
-</div>
 </div>
 
 
 
 <h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div id="refs" class="references csl-bib-body">
-<div id="ref-CLIFFORD201462" class="csl-entry">
-<strong>Clifford, D., Payne, J.E., Pringle, M.J., Searle, R. &amp; Butler, N.</strong> 2014. Pragmatic soil survey design using flexible latin hypercube sampling. <em>Computers &amp; Geosciences</em>, 67: 62–68. <a href="https://doi.org/10.1016/j.cageo.2014.03.005">https://doi.org/10.1016/j.cageo.2014.03.005</a>
-</div>
 <div id="ref-Malone" class="csl-entry">
 <strong>Malone, B.P., Minansy, B. &amp; Brungard, C.</strong> 2019. Some methods to improve the utility of conditioned latin hypercube sampling. <em>PeerJ</em>, 7: e6451. <a href="https://doi.org/10.7717/peerj.6451">https://doi.org/10.7717/peerj.6451</a>
-</div>
-<div id="ref-SENA2021e00354" class="csl-entry">
-<strong>Sena, N.C., Veloso, G.V., Lopes, A.O., Francelino, M.R., Fernandes-Filho, E.I., Senra, E.O., Silva Filho, L.A. da, Condé, V.F., Arruda Silva, D.L. de &amp; Araújo, R.W. de</strong>. 2021. Soil sampling strategy in areas of difficult acess using the cLHS method. <em>Geoderma Regional</em>, 24: e00354. <a href="https://doi.org/10.1016/j.geodrs.2020.e00354">https://doi.org/10.1016/j.geodrs.2020.e00354</a>
 </div>
 </div>
             </section>
