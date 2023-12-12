@@ -5,6 +5,8 @@ fig:fig-5
 fig:fig-7
 fig:fig-8
 fig:fig-9
+fig:fig-10
+fig:fig-11
 fig:fig-12
 fig:fig-13
 fig:fig-14

@@ -215,6 +215,6 @@ Finally, we can also determine the degree in which our legacy soil dataset is re
 
 ```
 
-This indicates that `r round(sum(newScores$pip)/nrow(newScores)*100,1)`\% of the existing conditions in the study area fall within the convex hull delineated with the data in the  soil samples, showing the adequacy of the proposed legacy data for DSM.
+This indicates that `r round(sum(newScores$pip)/nrow(newScores)*100,1)`\% of the existing conditions in the study area fall within the convex hull delineated with the data in the  soil samples, showing the level of adequacy of the proposed legacy data for DSM in the area.
 
 

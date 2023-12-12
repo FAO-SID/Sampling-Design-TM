@@ -64,7 +64,8 @@ We must define the number of samples to distribute in the sampling design, and t
 
 ```
 
-We proceed with the calculation of soil groups. In this example, soil information is stored in the field `TYPES`. We have analysed the extent to which the information in this field can be synthesized to eliminate redundancy when creating the `strata`. ^[This exploratory work is a prerequisite and must be adapted specifically to each soil and land use dataset]
+We proceed with the calculation of soil groups. In this example, soil information is stored in the field `TYPES`. We have analysed the extent to which the information in this field can be synthesized to eliminate redundancy when creating the `strata`. ^[This exploratory work is a prerequisite and must be adapted specifically to each soil and land use dataset].
+The results are shown in \@ref(fig:fig-10)
 
 ```{r soil-aggregation, eval=TRUE, include=FALSE, warning=FALSE}
   
@@ -95,16 +96,14 @@ We proceed with the calculation of soil groups. In this example, soil informatio
 
 
 
-```{r fig-10, fig.cap="Plot of the soil classes", eval=FALSE, include=TRUE}
+```{r fig-10, fig.cap="Plot of the soil classes", eval=TRUE, include=TRUE}
   
-#The soil classes used to build the strata are shown in Figure \@ref(fig:fig-10).
+  ## Plot the map of the aggregated soil classes
 
-  # Plot final map with the aggregated soil information
-
-map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
-  addTiles()
-mv <- mapview(soil["USDA_CLASS"], alpha=0, homebutton=T, layer.name = "Soils", map=map)
-mv@map
+    map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
+      addTiles()
+    mv <- mapview(soil["USDA_CLASS"], alpha=0, homebutton=T, layer.name = "Soils", map=map)
+    mv@map
 
 ```
 
@@ -145,9 +144,9 @@ A similar procedure is performed on the land use dataset.
 
 ```
 
-Figure  \@ref(fig:fig-11) shows the landuse classes to build the strata.
+Figure \@ref(fig:fig-11) shows the landuse classes to build the strata.
 
-```{r fig-11, fig.cap="Plot of the land use classes", eval=FALSE, include=TRUE}
+```{r fig-11, fig.cap="Plot of the land use classes", eval=TRUE, include=TRUE}
 
 # Plot map with the aggregated land use information
   
