@@ -17,9 +17,20 @@ We use the rasters of `r paste(shQuote(names(cov.dat)), collapse = ", ")` as cov
 ```{r load_data_05, eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
 
   # Read Spatial data covariates as rasters with terra
-  rasters <- "clhs_data/rasters"
-  cov.dat <-  list.files(rasters, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
+  cov.dat <-  list.files(raster.path, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
   cov.dat <- terra::rast(cov.dat) # SpatRaster from terra
+  
+    ## Load raster covariate data
+    # Read Spatial data covariates as rasters with terra
+    cov.dat <-  list.files(raster.path, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
+    cov.dat <- terra::rast(cov.dat)
+    
+   #  Disaggregate to build layer statistics
+    cov.dat <- disagg(cov.dat, fact=disagg.factor, method="bilinear")
+    # Aggregate to simplify data rasters for calculations 
+    cov.dat <- aggregate(cov.dat, fact=agg.factor, fun="mean") # Now you can see the statistics
+
+  
 
 ```
 
@@ -35,8 +46,7 @@ The distribution of the sampling points is obtained using the `'cLHS'`function t
 
 
 ```{r fig-16, fig.cap="Evolution of the objective function", eval=TRUE, include=TRUE}
-  ## SpatRasters are not allowed in clhs function. They must be transformed to RasterStack from raster
-  cov.dat.ras <- raster::stack(cov.dat) 
+
   # Distribute sampling points with clhs
   pts <- clhs(cov.dat.ras, size = optimal_n, iter = 5000, progress = FALSE, simple = FALSE)
   # Plot of objective function
@@ -128,13 +138,13 @@ This `dataframe` can be directly used as input in the cLHS function to get locat
 
 ```{r fig-20, fig.cap="cLHS sampling points on point-grid transformed raster covariate data", eval=TRUE, include=TRUE}
 
-# Create clhs samples upon the regular grid  
- regular.sample.clhs <- clhs(regular.sample, size = 100, progress = FALSE, iter = 10000, simple = FALSE)
-# Plot points of clhs samples
-  points <- regular.sample.clhs$sampled_data # Get point coordinates of clhs sampling
-  plot(cov.dat[[1]], main="cLHS samples (red) and covariated resampled points (blue)")
-  points(regular.sample, col="dodgerblue", pch = 1)
-  points(points, col="red", cex=1)
+  # Create clhs samples upon the regular grid  
+   regular.sample.clhs <- clhs(regular.sample, size = 100, progress = FALSE, iter = 10000, simple = FALSE)
+  # Plot points of clhs samples
+    points <- regular.sample.clhs$sampled_data # Get point coordinates of clhs sampling
+    plot(cov.dat[[1]], main="cLHS samples (red) and covariated resampled points (blue)")
+    points(regular.sample, col="dodgerblue", pch = 1)
+    points(points, col="red", cex=1)
 
 ```
 
@@ -175,20 +185,8 @@ The `'cLHS'` package incorporates methods for the delineation of replacement loc
 ```{r cLHS_buffer_05, eval=TRUE, include=TRUE}
 
   ## Determine the similarity to points in a buffer of distance D
-  ## Note that distance units are expressed in map units, in this case meters
-  ## If your data is in geographic coordinates, D must be included in geographic units
-    D <- 200
-
   # Compute the buffers around points  
     gw <- similarity_buffer(cov.dat.ras, pts$sampled_data, buffer = D)
-    # Plot the first buffers in the stack
-      #plot(gw)
-
-  # Overlay point location to buffer plots
-    # fun <- function() {
-    #   plot(pts$sampled_data, add = TRUE, col = "red", pch = 3)
-    # }
-    # plot(gw, addfun = fun)
 
 ```
 

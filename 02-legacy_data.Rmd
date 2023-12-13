@@ -28,10 +28,10 @@ We must load the required packages and data for the analyses. We make use of the
 We define the working directory to the directory in which the actual file is located and load the soil legacy sampling points and the environmental rasters from the `data` folder. To avoid the definition of each environmental covariate, we first retrieve all files with the `.tif` extension and then create a `SpatRaster` object with all of them in a row.
 
 
-```{r setup_wd, eval=TRUE, include=TRUE}
+```{r setup_wd, eval=FALSE, include=TRUE}
 
-# Set working directory to source file location
-  #setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+  ## Set working directory to source file location
+    setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 ```
 
@@ -42,31 +42,51 @@ We define the working directory to the directory in which the actual file is loc
 
 ```
 
+Here we define a number of variables that will be used during the exercises in this manual. They include the path to raster and shp files, aggregation and disagregation factors, and buffer distances to define potential sampling areas from sampling points. These variables are later described at the appropriate section in the manual.
+
+```{r global-variables, eval=TRUE, include=FALSE, warning=FALSE}
+  ## Definition of some global variables
+
+  # Path to rasters
+    raster.path <- "clhs_data/rasters"
+  # Path to shapes
+    shp.path <- "clhs_data/shapes"
+  # Aggregation factor
+    agg.factor = 5
+  # Disaggregation factor
+    disagg.factor = 1
+  # Buffer distance for replacement areas in clhs
+  ## Note that distance units are expressed in map units, in this case meters
+  ## If your data is in geographic coordinates, D must be included in geographic units
+    D <- 200
+
+```
+
+
+
 
 ```{r load_covariates, eval=TRUE, include=TRUE, warning=FALSE}
-  # Load soil legacy point data and environmental covariates
-  
+  ## Load soil legacy point data and environmental covariates
+
   # Load soil data
-    p.dat <- terra::vect("clhs_data/shapes/legacy_soils.shp")
-  
-  ## Load raster covariate data
+    p.dat <- terra::vect(file.path(paste0(shp.path,"/legacy_soils.shp")))
+  # Load raster covariate data
     # Read Spatial data covariates as rasters with terra
-    rasters <- "clhs_data/rasters"
-    cov.dat <-  list.files(rasters, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
+    cov.dat <-  list.files(raster.path, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
     cov.dat <- terra::rast(cov.dat)
     
-    #  Artificial dissagregate to build layer statistics
-    cov.dat <- disagg(cov.dat, fact=1, method="bilinear")
-    # Simplify data rasters for calculations 
-    cov.dat <- aggregate(cov.dat, fact=5, fun="mean") # Now you can see the statistics
-    #setMinMax(cov.dat, force=TRUE) # Force Spatraster to show min and max values
+   #  Disaggregate to build layer statistics
+    cov.dat <- disagg(cov.dat, fact=disagg.factor, method="bilinear")
+    # Aggregate to simplify data rasters for calculations 
+    cov.dat <- aggregate(cov.dat, fact=agg.factor, fun="mean") # Now you can see the statistics
+
 
 ```
 
 
 ```{r, fig-3, fig.cap = "Covariates", echo = FALSE}
-
- plot(cov.dat)
+  ## Plot covariates
+    plot(cov.dat)
 
 ```
 
@@ -84,28 +104,28 @@ We cross soil and environmental data to create a dataset with the values of the 
 
 ```{r merge_data, eval=T, include=TRUE, echo = FALSE}
 
-# Extract environmental data from rasters at soil locations ----
-  p.dat_I <- terra::extract(cov.dat, p.dat)
-  p.dat_I <- na.omit(p.dat_I) # Remove soil points outside study area
-  #str(p.dat_I)
+  ## Extract environmental data from rasters at soil locations ----
+    p.dat_I <- terra::extract(cov.dat, p.dat)
+    p.dat_I <- na.omit(p.dat_I) # Remove soil points outside study area
+    #str(p.dat_I)
   
 ```
 
 We first calculate a `'n-matrix'` with the values of the covariates dividing their distributions into `'n'` equally-spaced bins. Each bin captures the environmental variability within its interval in the total distribution. In this exercise, `'n'` equals to 25. The result is a  26×4 matrix, where the rows represent the upper and lower limit of the bin and (thus, 26 rows are required to represent 25 bins), and 4 correspond to the number of variables used as environmental proxies.
 
 ```{r P_matrix, eval=T, include=TRUE}
-
-# Define Number of bins
-  nb<- 25
-  #quantile matrix (of the covariate data)
-  q.mat<- matrix(NA, nrow=(nb+1), ncol= nlyr(cov.dat))
-  j=1
-  for (i in 1:nlyr(cov.dat)){ #note the index start here
-  #get a quantile matrix together of the covariates
-    ran1 <- minmax(cov.dat[[i]])[2] - minmax(cov.dat[[i]])[1]
-    step1<- ran1/nb 
-    q.mat[,j]<- seq(minmax(cov.dat[[i]])[1], to = minmax(cov.dat[[i]])[2], by =step1)
-    j<- j+1}
+  ## Variability matrix in the covariates
+    # Define Number of bins
+      nb<- 25
+      #quantile matrix (of the covariate data)
+      q.mat<- matrix(NA, nrow=(nb+1), ncol= nlyr(cov.dat))
+      j=1
+      for (i in 1:nlyr(cov.dat)){ #note the index start here
+      #get a quantile matrix together of the covariates
+        ran1 <- minmax(cov.dat[[i]])[2] - minmax(cov.dat[[i]])[1]
+        step1<- ran1/nb 
+        q.mat[,j]<- seq(minmax(cov.dat[[i]])[1], to = minmax(cov.dat[[i]])[2], by =step1)
+        j<- j+1}
 
 ```
 
@@ -114,24 +134,25 @@ From this matrix, we compute the hypercube matrix of covariates in the whole cov
 
 ```{r P_hypercube_matrix, eval=T, include=TRUE}
 
-# Hypercube of "objective" distribution (P) - covariates
-  cov.dat.df <- as.data.frame(cov.dat) # convert SpatRaster to dataframe
-  cov.mat<- matrix(1, nrow=nb, ncol=ncol(q.mat))
-    for (i in 1:nrow(cov.dat.df)){ # the number of pixels
-      cntj<- 1 
-    for (j in 1:ncol(cov.dat.df)){ #for each column
-      dd<- cov.dat.df[i,j]  
-      for (k in 1:nb){  #for each quantile
-        kl<- q.mat[k, cntj] 
-        ku<- q.mat[k+1, cntj] 
-        if (is.na(dd)) {
-          print('Missing')
+## Hypercube of "objective" distribution (P) - covariates
+  # Convert SpatRaster to dataframe for calculations
+    cov.dat.df <- as.data.frame(cov.dat) 
+    cov.mat<- matrix(1, nrow=nb, ncol=ncol(q.mat))
+      for (i in 1:nrow(cov.dat.df)){ # the number of pixels
+        cntj<- 1 
+      for (j in 1:ncol(cov.dat.df)){ #for each column
+        dd<- cov.dat.df[i,j]  
+        for (k in 1:nb){  #for each quantile
+          kl<- q.mat[k, cntj] 
+          ku<- q.mat[k+1, cntj] 
+          if (is.na(dd)) {
+            print('Missing')
+          }
+          else if (dd >= kl & dd <= ku){cov.mat[k, cntj]<- cov.mat[k, cntj] + 1} 
         }
-        else if (dd >= kl & dd <= ku){cov.mat[k, cntj]<- cov.mat[k, cntj] + 1} 
+        cntj<- cntj+1
       }
-      cntj<- cntj+1
     }
-  }
 
 ```
 
@@ -140,7 +161,7 @@ We then calculate the hypercube matrix of covariates in the sample space.
 
 ```{r Q_hypercube_matrix, eval=T, include=TRUE}
 
-# Sample data hypercube
+## Sample data hypercube
   h.mat<- matrix(1, nrow=nb, ncol=ncol(q.mat))
   
   for (ii in 1:nrow(p.dat_I)){ # the number of observations
@@ -163,15 +184,15 @@ We then calculate the hypercube matrix of covariates in the sample space.
 We calculate the KL-divergence to measure how much the distribution of covariates in tbe sample space (Q) deviates from the distribution of covariates in the complete study area space (P).
   
 ```{r KL_divergence, eval=T, include=TRUE}
-## Compare covariate distributions in P and Q with Kullback-Leibler (KL) divergence
-    kl.index <-c()
-    for(i in 1:ncol(cov.dat.df)){
-      kl <-    KL.empirical(c(cov.mat[,i]), c(h.mat[,i]))
-      kl.index <- c(kl.index,kl)
-      klo <-  mean(kl.index)
-    }
-    #print(kl.index) # KL divergences of each covariate
-    #print(klo) # KL divergence in the existing soil samples
+  ## Compare covariate distributions in P and Q with Kullback-Leibler (KL) divergence
+      kl.index <-c()
+      for(i in 1:ncol(cov.dat.df)){
+        kl <-    KL.empirical(c(cov.mat[,i]), c(h.mat[,i]))
+        kl.index <- c(kl.index,kl)
+        klo <-  mean(kl.index)
+      }
+      #print(kl.index) # KL divergences of each covariate
+      #print(klo) # KL divergence in the existing soil samples
 
 ```
 
@@ -185,7 +206,7 @@ Finally, we can also determine the degree in which our legacy soil dataset is re
 
 
 ```{r, fig-4, fig.cap = "PCA plot of the covariate", echo = FALSE}
-#### Representativeness of the Legacy Dataset: ----
+  ## Representativeness of the Legacy Dataset
   ## Calculate the proportion of "env. variables" in the covariate spectra that fall within the convex hull of variables in the "environmental sample space"
   
   # Principal component of the legacy data sample
@@ -211,10 +232,10 @@ Finally, we can also determine the degree in which our legacy soil dataset is re
   # Plot points outside convex hull  
     points(newScores[which(newScores$pip==0),1:2],pch='X', col='red')
   # Proportion of the conditions in the study area that fall within the convex hull
-    #sum(newScores$pip)/nrow(newScores)*100 
+    #sum(nrow(newScores[newScores$pip>0,]))/nrow(newScores)*100 
 
 ```
 
-This indicates that `r round(sum(newScores$pip)/nrow(newScores)*100,1)`\% of the existing conditions in the study area fall within the convex hull delineated with the data in the  soil samples, showing the level of adequacy of the proposed legacy data for DSM in the area.
+This indicates that `r round(sum(nrow(newScores[newScores$pip>0,]))/nrow(newScores)*100,1)`\% of the existing conditions in the study area fall within the convex hull delineated with the data in the  soil samples, showing the level of adequacy of the proposed legacy data for DSM in the area.
 
 

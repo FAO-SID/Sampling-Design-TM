@@ -33,13 +33,17 @@ The initial section of the script is related to setup options in the methodology
 
 ```{r load_data_03, eval=TRUE, include=TRUE}
 
-  ## Load raster covariate data----
-  # Read Spatial data covariates as rasters with terra
-  rasters <- "clhs_data/rasters"
-  cov.dat <-  list.files(rasters, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
-  cov.dat <- terra::rast(cov.dat)
-  cov.dat <- aggregate(cov.dat, fact=2, fun="mean")
-  #setMinMax(cov.dat, force=TRUE) # Force Spatraster to show min and max values
+  ## Load raster covariate data
+    # Read Spatial data covariates as rasters with terra
+    cov.dat <-  list.files(raster.path, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
+    cov.dat <- terra::rast(cov.dat)
+    
+   #  Disaggregate to build layer statistics
+    cov.dat <- disagg(cov.dat, fact=disagg.factor, method="bilinear")
+    # Aggregate to simplify data rasters for calculations 
+    cov.dat <- aggregate(cov.dat, fact=agg.factor, fun="mean") # Now you can see the statistics
+  
+  # Create a raster stack
   cov.dat.ras <- raster::stack(cov.dat) 
   
 ```

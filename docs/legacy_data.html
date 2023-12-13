@@ -23,7 +23,7 @@
 <meta name="author" content="Rodríguez Lado, L., Angelini, M.E, Naypewe, N., Luotto, I., Yigini, Y." />
 
 
-<meta name="date" content="2023-12-12" />
+<meta name="date" content="2023-12-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -243,24 +243,22 @@ div.csl-indent {
 <h2><span class="header-section-number">2.1</span> Data Preparation<a href="legacy_data.html#data-preparation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We must load the required packages and data for the analyses. We make use of the packages <code>sp</code> and <code>terra</code> to manipulate spatial data, <code>clhs</code> for Conditioned Latin Hypercube Sampling, <code>entropy</code> to compute Kullback-Leibler (KL) divergence indexes, <code>tripack</code> for Delaunay triangulation and <code>manipulate</code> for interactive plotting within RStudio. Ensure that all these packages are installed in your system before the execution of the script.</p>
 <p>We define the working directory to the directory in which the actual file is located and load the soil legacy sampling points and the environmental rasters from the <code>data</code> folder. To avoid the definition of each environmental covariate, we first retrieve all files with the <code>.tif</code> extension and then create a <code>SpatRaster</code> object with all of them in a row.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="legacy_data.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set working directory to source file location</span></span>
-<span id="cb1-2"><a href="legacy_data.html#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#setwd(dirname(rstudioapi::getActiveDocumentContext()$path))</span></span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="legacy_data.html#cb2-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Load soil legacy point data and environmental covariates</span></span>
-<span id="cb2-2"><a href="legacy_data.html#cb2-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="legacy_data.html#cb1-1" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Set working directory to source file location</span></span>
+<span id="cb1-2"><a href="legacy_data.html#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">setwd</span>(<span class="fu">dirname</span>(rstudioapi<span class="sc">::</span><span class="fu">getActiveDocumentContext</span>()<span class="sc">$</span>path))</span></code></pre></div>
+<p>Here we define a number of variables that will be used during the exercises in this manual. They include the path to raster and shp files, aggregation and disagregation factors, and buffer distances to define potential sampling areas from sampling points. These variables are later described at the appropriate section in the manual.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="legacy_data.html#cb2-1" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Load soil legacy point data and environmental covariates</span></span>
+<span id="cb2-2"><a href="legacy_data.html#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="legacy_data.html#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Load soil data</span></span>
-<span id="cb2-4"><a href="legacy_data.html#cb2-4" aria-hidden="true" tabindex="-1"></a>    p.dat <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">vect</span>(<span class="st">&quot;clhs_data/shapes/legacy_soils.shp&quot;</span>)</span>
-<span id="cb2-5"><a href="legacy_data.html#cb2-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-6"><a href="legacy_data.html#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Load raster covariate data</span></span>
-<span id="cb2-7"><a href="legacy_data.html#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Read Spatial data covariates as rasters with terra</span></span>
-<span id="cb2-8"><a href="legacy_data.html#cb2-8" aria-hidden="true" tabindex="-1"></a>    rasters <span class="ot">&lt;-</span> <span class="st">&quot;clhs_data/rasters&quot;</span></span>
-<span id="cb2-9"><a href="legacy_data.html#cb2-9" aria-hidden="true" tabindex="-1"></a>    cov.dat <span class="ot">&lt;-</span>  <span class="fu">list.files</span>(rasters, <span class="at">pattern =</span> <span class="st">&quot;tif$&quot;</span>,  <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-10"><a href="legacy_data.html#cb2-10" aria-hidden="true" tabindex="-1"></a>    cov.dat <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(cov.dat)</span>
-<span id="cb2-11"><a href="legacy_data.html#cb2-11" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb2-12"><a href="legacy_data.html#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">#  Artificial dissagregate to build layer statistics</span></span>
-<span id="cb2-13"><a href="legacy_data.html#cb2-13" aria-hidden="true" tabindex="-1"></a>    cov.dat <span class="ot">&lt;-</span> <span class="fu">disagg</span>(cov.dat, <span class="at">fact=</span><span class="dv">1</span>, <span class="at">method=</span><span class="st">&quot;bilinear&quot;</span>)</span>
-<span id="cb2-14"><a href="legacy_data.html#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Simplify data rasters for calculations </span></span>
-<span id="cb2-15"><a href="legacy_data.html#cb2-15" aria-hidden="true" tabindex="-1"></a>    cov.dat <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(cov.dat, <span class="at">fact=</span><span class="dv">5</span>, <span class="at">fun=</span><span class="st">&quot;mean&quot;</span>) <span class="co"># Now you can see the statistics</span></span>
-<span id="cb2-16"><a href="legacy_data.html#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">#setMinMax(cov.dat, force=TRUE) # Force Spatraster to show min and max values</span></span></code></pre></div>
+<span id="cb2-4"><a href="legacy_data.html#cb2-4" aria-hidden="true" tabindex="-1"></a>    p.dat <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">vect</span>(<span class="fu">file.path</span>(<span class="fu">paste0</span>(shp.path,<span class="st">&quot;/legacy_soils.shp&quot;</span>)))</span>
+<span id="cb2-5"><a href="legacy_data.html#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Load raster covariate data</span></span>
+<span id="cb2-6"><a href="legacy_data.html#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Read Spatial data covariates as rasters with terra</span></span>
+<span id="cb2-7"><a href="legacy_data.html#cb2-7" aria-hidden="true" tabindex="-1"></a>    cov.dat <span class="ot">&lt;-</span>  <span class="fu">list.files</span>(raster.path, <span class="at">pattern =</span> <span class="st">&quot;tif$&quot;</span>,  <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-8"><a href="legacy_data.html#cb2-8" aria-hidden="true" tabindex="-1"></a>    cov.dat <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(cov.dat)</span>
+<span id="cb2-9"><a href="legacy_data.html#cb2-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-10"><a href="legacy_data.html#cb2-10" aria-hidden="true" tabindex="-1"></a>   <span class="co">#  Disaggregate to build layer statistics</span></span>
+<span id="cb2-11"><a href="legacy_data.html#cb2-11" aria-hidden="true" tabindex="-1"></a>    cov.dat <span class="ot">&lt;-</span> <span class="fu">disagg</span>(cov.dat, <span class="at">fact=</span>disagg.factor, <span class="at">method=</span><span class="st">&quot;bilinear&quot;</span>)</span>
+<span id="cb2-12"><a href="legacy_data.html#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Aggregate to simplify data rasters for calculations </span></span>
+<span id="cb2-13"><a href="legacy_data.html#cb2-13" aria-hidden="true" tabindex="-1"></a>    cov.dat <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(cov.dat, <span class="at">fact=</span>agg.factor, <span class="at">fun=</span><span class="st">&quot;mean&quot;</span>) <span class="co"># Now you can see the statistics</span></span></code></pre></div>
 <div class="figure"><span style="display:block;" id="fig:fig-3"></span>
 <img src="Technical-Manual-Soil-Sampling-Design_files/figure-html/fig-3-1.png" alt="Covariates" width="672" />
 <p class="caption">
@@ -275,38 +273,40 @@ Figure 2.1: Covariates
 KL-divergence compares an ‘objective’ or reference probability distribution (here, the distribution of covariates in the complete covariate space - P) with a ‘model’ or approximate probability distribution (the space of covariates in the soil samples - Q). The main idea is to determine how much information is lost when Q is used to approximate P. In other words, KL-divergence measures how much the Q distribution deviates from the P distribution.</p>
 <p>We cross soil and environmental data to create a dataset with the values of the environmental parameters at the locations of the soil samples.</p>
 <p>We first calculate a <code>'n-matrix'</code> with the values of the covariates dividing their distributions into <code>'n'</code> equally-spaced bins. Each bin captures the environmental variability within its interval in the total distribution. In this exercise, <code>'n'</code> equals to 25. The result is a 26×4 matrix, where the rows represent the upper and lower limit of the bin and (thus, 26 rows are required to represent 25 bins), and 4 correspond to the number of variables used as environmental proxies.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="legacy_data.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define Number of bins</span></span>
-<span id="cb3-2"><a href="legacy_data.html#cb3-2" aria-hidden="true" tabindex="-1"></a>  nb<span class="ot">&lt;-</span> <span class="dv">25</span></span>
-<span id="cb3-3"><a href="legacy_data.html#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#quantile matrix (of the covariate data)</span></span>
-<span id="cb3-4"><a href="legacy_data.html#cb3-4" aria-hidden="true" tabindex="-1"></a>  q.mat<span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow=</span>(nb<span class="sc">+</span><span class="dv">1</span>), <span class="at">ncol=</span> <span class="fu">nlyr</span>(cov.dat))</span>
-<span id="cb3-5"><a href="legacy_data.html#cb3-5" aria-hidden="true" tabindex="-1"></a>  j<span class="ot">=</span><span class="dv">1</span></span>
-<span id="cb3-6"><a href="legacy_data.html#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlyr</span>(cov.dat)){ <span class="co">#note the index start here</span></span>
-<span id="cb3-7"><a href="legacy_data.html#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#get a quantile matrix together of the covariates</span></span>
-<span id="cb3-8"><a href="legacy_data.html#cb3-8" aria-hidden="true" tabindex="-1"></a>    ran1 <span class="ot">&lt;-</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">2</span>] <span class="sc">-</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">1</span>]</span>
-<span id="cb3-9"><a href="legacy_data.html#cb3-9" aria-hidden="true" tabindex="-1"></a>    step1<span class="ot">&lt;-</span> ran1<span class="sc">/</span>nb </span>
-<span id="cb3-10"><a href="legacy_data.html#cb3-10" aria-hidden="true" tabindex="-1"></a>    q.mat[,j]<span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">1</span>], <span class="at">to =</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">2</span>], <span class="at">by =</span>step1)</span>
-<span id="cb3-11"><a href="legacy_data.html#cb3-11" aria-hidden="true" tabindex="-1"></a>    j<span class="ot">&lt;-</span> j<span class="sc">+</span><span class="dv">1</span>}</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="legacy_data.html#cb3-1" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Variability matrix in the covariates</span></span>
+<span id="cb3-2"><a href="legacy_data.html#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define Number of bins</span></span>
+<span id="cb3-3"><a href="legacy_data.html#cb3-3" aria-hidden="true" tabindex="-1"></a>      nb<span class="ot">&lt;-</span> <span class="dv">25</span></span>
+<span id="cb3-4"><a href="legacy_data.html#cb3-4" aria-hidden="true" tabindex="-1"></a>      <span class="co">#quantile matrix (of the covariate data)</span></span>
+<span id="cb3-5"><a href="legacy_data.html#cb3-5" aria-hidden="true" tabindex="-1"></a>      q.mat<span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow=</span>(nb<span class="sc">+</span><span class="dv">1</span>), <span class="at">ncol=</span> <span class="fu">nlyr</span>(cov.dat))</span>
+<span id="cb3-6"><a href="legacy_data.html#cb3-6" aria-hidden="true" tabindex="-1"></a>      j<span class="ot">=</span><span class="dv">1</span></span>
+<span id="cb3-7"><a href="legacy_data.html#cb3-7" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlyr</span>(cov.dat)){ <span class="co">#note the index start here</span></span>
+<span id="cb3-8"><a href="legacy_data.html#cb3-8" aria-hidden="true" tabindex="-1"></a>      <span class="co">#get a quantile matrix together of the covariates</span></span>
+<span id="cb3-9"><a href="legacy_data.html#cb3-9" aria-hidden="true" tabindex="-1"></a>        ran1 <span class="ot">&lt;-</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">2</span>] <span class="sc">-</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">1</span>]</span>
+<span id="cb3-10"><a href="legacy_data.html#cb3-10" aria-hidden="true" tabindex="-1"></a>        step1<span class="ot">&lt;-</span> ran1<span class="sc">/</span>nb </span>
+<span id="cb3-11"><a href="legacy_data.html#cb3-11" aria-hidden="true" tabindex="-1"></a>        q.mat[,j]<span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">1</span>], <span class="at">to =</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">2</span>], <span class="at">by =</span>step1)</span>
+<span id="cb3-12"><a href="legacy_data.html#cb3-12" aria-hidden="true" tabindex="-1"></a>        j<span class="ot">&lt;-</span> j<span class="sc">+</span><span class="dv">1</span>}</span></code></pre></div>
 <p>From this matrix, we compute the hypercube matrix of covariates in the whole covariate space.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="legacy_data.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hypercube of &quot;objective&quot; distribution (P) - covariates</span></span>
-<span id="cb4-2"><a href="legacy_data.html#cb4-2" aria-hidden="true" tabindex="-1"></a>  cov.dat.df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(cov.dat) <span class="co"># convert SpatRaster to dataframe</span></span>
-<span id="cb4-3"><a href="legacy_data.html#cb4-3" aria-hidden="true" tabindex="-1"></a>  cov.mat<span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow=</span>nb, <span class="at">ncol=</span><span class="fu">ncol</span>(q.mat))</span>
-<span id="cb4-4"><a href="legacy_data.html#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(cov.dat.df)){ <span class="co"># the number of pixels</span></span>
-<span id="cb4-5"><a href="legacy_data.html#cb4-5" aria-hidden="true" tabindex="-1"></a>      cntj<span class="ot">&lt;-</span> <span class="dv">1</span> </span>
-<span id="cb4-6"><a href="legacy_data.html#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(cov.dat.df)){ <span class="co">#for each column</span></span>
-<span id="cb4-7"><a href="legacy_data.html#cb4-7" aria-hidden="true" tabindex="-1"></a>      dd<span class="ot">&lt;-</span> cov.dat.df[i,j]  </span>
-<span id="cb4-8"><a href="legacy_data.html#cb4-8" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nb){  <span class="co">#for each quantile</span></span>
-<span id="cb4-9"><a href="legacy_data.html#cb4-9" aria-hidden="true" tabindex="-1"></a>        kl<span class="ot">&lt;-</span> q.mat[k, cntj] </span>
-<span id="cb4-10"><a href="legacy_data.html#cb4-10" aria-hidden="true" tabindex="-1"></a>        ku<span class="ot">&lt;-</span> q.mat[k<span class="sc">+</span><span class="dv">1</span>, cntj] </span>
-<span id="cb4-11"><a href="legacy_data.html#cb4-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">is.na</span>(dd)) {</span>
-<span id="cb4-12"><a href="legacy_data.html#cb4-12" aria-hidden="true" tabindex="-1"></a>          <span class="fu">print</span>(<span class="st">&#39;Missing&#39;</span>)</span>
-<span id="cb4-13"><a href="legacy_data.html#cb4-13" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb4-14"><a href="legacy_data.html#cb4-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span> <span class="cf">if</span> (dd <span class="sc">&gt;=</span> kl <span class="sc">&amp;</span> dd <span class="sc">&lt;=</span> ku){cov.mat[k, cntj]<span class="ot">&lt;-</span> cov.mat[k, cntj] <span class="sc">+</span> <span class="dv">1</span>} </span>
-<span id="cb4-15"><a href="legacy_data.html#cb4-15" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb4-16"><a href="legacy_data.html#cb4-16" aria-hidden="true" tabindex="-1"></a>      cntj<span class="ot">&lt;-</span> cntj<span class="sc">+</span><span class="dv">1</span></span>
-<span id="cb4-17"><a href="legacy_data.html#cb4-17" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb4-18"><a href="legacy_data.html#cb4-18" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="legacy_data.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Hypercube of &quot;objective&quot; distribution (P) - covariates</span></span>
+<span id="cb4-2"><a href="legacy_data.html#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert SpatRaster to dataframe for calculations</span></span>
+<span id="cb4-3"><a href="legacy_data.html#cb4-3" aria-hidden="true" tabindex="-1"></a>    cov.dat.df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(cov.dat) </span>
+<span id="cb4-4"><a href="legacy_data.html#cb4-4" aria-hidden="true" tabindex="-1"></a>    cov.mat<span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow=</span>nb, <span class="at">ncol=</span><span class="fu">ncol</span>(q.mat))</span>
+<span id="cb4-5"><a href="legacy_data.html#cb4-5" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(cov.dat.df)){ <span class="co"># the number of pixels</span></span>
+<span id="cb4-6"><a href="legacy_data.html#cb4-6" aria-hidden="true" tabindex="-1"></a>        cntj<span class="ot">&lt;-</span> <span class="dv">1</span> </span>
+<span id="cb4-7"><a href="legacy_data.html#cb4-7" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(cov.dat.df)){ <span class="co">#for each column</span></span>
+<span id="cb4-8"><a href="legacy_data.html#cb4-8" aria-hidden="true" tabindex="-1"></a>        dd<span class="ot">&lt;-</span> cov.dat.df[i,j]  </span>
+<span id="cb4-9"><a href="legacy_data.html#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nb){  <span class="co">#for each quantile</span></span>
+<span id="cb4-10"><a href="legacy_data.html#cb4-10" aria-hidden="true" tabindex="-1"></a>          kl<span class="ot">&lt;-</span> q.mat[k, cntj] </span>
+<span id="cb4-11"><a href="legacy_data.html#cb4-11" aria-hidden="true" tabindex="-1"></a>          ku<span class="ot">&lt;-</span> q.mat[k<span class="sc">+</span><span class="dv">1</span>, cntj] </span>
+<span id="cb4-12"><a href="legacy_data.html#cb4-12" aria-hidden="true" tabindex="-1"></a>          <span class="cf">if</span> (<span class="fu">is.na</span>(dd)) {</span>
+<span id="cb4-13"><a href="legacy_data.html#cb4-13" aria-hidden="true" tabindex="-1"></a>            <span class="fu">print</span>(<span class="st">&#39;Missing&#39;</span>)</span>
+<span id="cb4-14"><a href="legacy_data.html#cb4-14" aria-hidden="true" tabindex="-1"></a>          }</span>
+<span id="cb4-15"><a href="legacy_data.html#cb4-15" aria-hidden="true" tabindex="-1"></a>          <span class="cf">else</span> <span class="cf">if</span> (dd <span class="sc">&gt;=</span> kl <span class="sc">&amp;</span> dd <span class="sc">&lt;=</span> ku){cov.mat[k, cntj]<span class="ot">&lt;-</span> cov.mat[k, cntj] <span class="sc">+</span> <span class="dv">1</span>} </span>
+<span id="cb4-16"><a href="legacy_data.html#cb4-16" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb4-17"><a href="legacy_data.html#cb4-17" aria-hidden="true" tabindex="-1"></a>        cntj<span class="ot">&lt;-</span> cntj<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb4-18"><a href="legacy_data.html#cb4-18" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb4-19"><a href="legacy_data.html#cb4-19" aria-hidden="true" tabindex="-1"></a>    }</span></code></pre></div>
 <p>We then calculate the hypercube matrix of covariates in the sample space.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="legacy_data.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample data hypercube</span></span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="legacy_data.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Sample data hypercube</span></span>
 <span id="cb5-2"><a href="legacy_data.html#cb5-2" aria-hidden="true" tabindex="-1"></a>  h.mat<span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow=</span>nb, <span class="at">ncol=</span><span class="fu">ncol</span>(q.mat))</span>
 <span id="cb5-3"><a href="legacy_data.html#cb5-3" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb5-4"><a href="legacy_data.html#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (ii <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(p.dat_I)){ <span class="co"># the number of observations</span></span>
@@ -325,15 +325,15 @@ KL-divergence compares an ‘objective’ or reference probability distribution 
 <li><strong>KL-divergence</strong></li>
 </ul>
 <p>We calculate the KL-divergence to measure how much the distribution of covariates in tbe sample space (Q) deviates from the distribution of covariates in the complete study area space (P).</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="legacy_data.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Compare covariate distributions in P and Q with Kullback-Leibler (KL) divergence</span></span>
-<span id="cb6-2"><a href="legacy_data.html#cb6-2" aria-hidden="true" tabindex="-1"></a>    kl.index <span class="ot">&lt;-</span><span class="fu">c</span>()</span>
-<span id="cb6-3"><a href="legacy_data.html#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(cov.dat.df)){</span>
-<span id="cb6-4"><a href="legacy_data.html#cb6-4" aria-hidden="true" tabindex="-1"></a>      kl <span class="ot">&lt;-</span>    <span class="fu">KL.empirical</span>(<span class="fu">c</span>(cov.mat[,i]), <span class="fu">c</span>(h.mat[,i]))</span>
-<span id="cb6-5"><a href="legacy_data.html#cb6-5" aria-hidden="true" tabindex="-1"></a>      kl.index <span class="ot">&lt;-</span> <span class="fu">c</span>(kl.index,kl)</span>
-<span id="cb6-6"><a href="legacy_data.html#cb6-6" aria-hidden="true" tabindex="-1"></a>      klo <span class="ot">&lt;-</span>  <span class="fu">mean</span>(kl.index)</span>
-<span id="cb6-7"><a href="legacy_data.html#cb6-7" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb6-8"><a href="legacy_data.html#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print(kl.index) # KL divergences of each covariate</span></span>
-<span id="cb6-9"><a href="legacy_data.html#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print(klo) # KL divergence in the existing soil samples</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="legacy_data.html#cb6-1" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Compare covariate distributions in P and Q with Kullback-Leibler (KL) divergence</span></span>
+<span id="cb6-2"><a href="legacy_data.html#cb6-2" aria-hidden="true" tabindex="-1"></a>      kl.index <span class="ot">&lt;-</span><span class="fu">c</span>()</span>
+<span id="cb6-3"><a href="legacy_data.html#cb6-3" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(cov.dat.df)){</span>
+<span id="cb6-4"><a href="legacy_data.html#cb6-4" aria-hidden="true" tabindex="-1"></a>        kl <span class="ot">&lt;-</span>    <span class="fu">KL.empirical</span>(<span class="fu">c</span>(cov.mat[,i]), <span class="fu">c</span>(h.mat[,i]))</span>
+<span id="cb6-5"><a href="legacy_data.html#cb6-5" aria-hidden="true" tabindex="-1"></a>        kl.index <span class="ot">&lt;-</span> <span class="fu">c</span>(kl.index,kl)</span>
+<span id="cb6-6"><a href="legacy_data.html#cb6-6" aria-hidden="true" tabindex="-1"></a>        klo <span class="ot">&lt;-</span>  <span class="fu">mean</span>(kl.index)</span>
+<span id="cb6-7"><a href="legacy_data.html#cb6-7" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb6-8"><a href="legacy_data.html#cb6-8" aria-hidden="true" tabindex="-1"></a>      <span class="co">#print(kl.index) # KL divergences of each covariate</span></span>
+<span id="cb6-9"><a href="legacy_data.html#cb6-9" aria-hidden="true" tabindex="-1"></a>      <span class="co">#print(klo) # KL divergence in the existing soil samples</span></span></code></pre></div>
 <p>The KL-divergence is always greater than or equal to zero, and reaches its minimum value (zero) only when P and Q are identical. Thus, lower values of KL-divergence are indicative of a good match between both the sample and the study area spaces, indicating that the sample space is a fair representation of the environmental conditions in the study area.</p>
 <p>In this case, the KL-divergence value is 0.257, indicating that the legacy samples capture most of the environmental variability in the study area.</p>
 <ul>
@@ -352,7 +352,7 @@ Figure 2.2: PCA plot of the covariate
 Figure 2.3: PCA plot of the covariate
 </p>
 </div>
-<p>This indicates that 84.7% of the existing conditions in the study area fall within the convex hull delineated with the data in the soil samples, showing the level of adequacy of the proposed legacy data for DSM in the area.</p>
+<p>This indicates that 84.6% of the existing conditions in the study area fall within the convex hull delineated with the data in the soil samples, showing the level of adequacy of the proposed legacy data for DSM in the area.</p>
 
 </div>
 </div>
