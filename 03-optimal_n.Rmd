@@ -63,7 +63,7 @@ We can see the covariates in a plot.
   initial.n <- 10
   final.n <- 250
   by.n <- 10
-  iters <- 3
+  iters <- 10
   
 ```
 
@@ -189,7 +189,7 @@ number_of_samples <- c(number_of_samples,trial)
 ```
 
 
-Figure \@ref(fig:fig-7) shows the distribution of covariates in the sample space.
+Figure \@ref(fig:fig-7) shows the distribution of covariates in the sample space, and Figure \@ref(fig:fig-7a) indicates the variability in the estimations of KL divergence and repressentativeness percent in the `r iters` within each sample size.
 
 
 ```{r  fig-7, eval=TRUE, include=TRUE, fig.cap="Distribution of covariates in the sample space"}
@@ -217,6 +217,23 @@ Figure \@ref(fig:fig-7) shows the distribution of covariates in the sample space
   summarize_all(mean)
   mean_result
 ```  
+
+
+
+```{r fig-7a, fig.cap="Boxplot of the dispersion in KLO and % repressentativeness in the iteration trials for each sample size",fig.width=8, fig.height=5, eval=TRUE, include=TRUE}
+
+  ## Plot dispersion on KL and % by N
+  par(mar=c(5, 4, 1, 6))
+  boxplot(Perc ~ N, data=results, col = rgb(1, 0.1, 0, alpha = 0.5),ylab = "%")
+  mtext("KL divergence",side=4,line=3)
+  # Add new plot
+  par(new = TRUE,mar=c(5, 4, 1, 6))
+  # Box plot
+  boxplot(KL ~ N, data=results, axes = FALSE,outline = FALSE,
+          col = rgb(0, 0.8, 1, alpha = 0.5), ylab = "")
+  axis(4, at=seq(0.02, 0.36, by=.06),  label=seq(0.02, 0.36, by=.06), las=3)
+    
+```
 
 
 ```{r results-table-03, eval=TRUE, include=FALSE}
@@ -310,19 +327,15 @@ Finally, we can determine the optimal distribution of samples over the study are
 
 
 ```{r fig-9, fig.cap="Covariates and optimal number and distribution of samples", eval=TRUE, include=TRUE}
-
+## Determine the optimal iteration according to the optimal N size 
   optimal_iteration <- results[which(abs(results$N - optimal_n) == min(abs(results$N - optimal_n))),] %>%
     mutate(IDX = 1:n()) %>%
     filter(Perc==max(Perc)) 
-  
-  # Show the optimal iteration
-    optimal_iteration
-  
+  # Plor
   plot(cov.dat[[1]])
   N_final <- samples_storage[paste0("N",optimal_iteration$N,"_", optimal_iteration$IDX)][[1]]
   points(N_final)
 
-  
 ```
 
 
