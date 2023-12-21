@@ -7,3 +7,7 @@ _book
 NLSDR_Technical_Manual_files
 03-optimal_n-old.Rmd
 05-clhs_sampling-old.Rmd
+.Rdata
+.httr-oauth
+.DS_Store
+.quarto
