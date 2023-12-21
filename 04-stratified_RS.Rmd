@@ -373,13 +373,10 @@ Results are shown in Figure \@ref(fig:fig-13).
 ```{r fig-13, fig.cap="Plot of strata and random target and replacement points", eval=TRUE, include=TRUE}
 
   map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
-  addTiles()
-  mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") +
-    mapview(z[z$type=="Replacement",], color = "white", cex=3, col.regions = "dodgerblue3",layer.name = "Replacement Points") +
-    mapview(z[z$type=="Target",], color = "white", cex=3, col.regions = "tomato",layer.name = "Target Points", map=map)
+        addTiles()
+  mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") + 
+        mapview(z, zcol = 'type', color = "white", col.regions = c('royalblue', 'tomato'), cex=3, legend = TRUE,layer.name = "Samples")
   mv@map
-  
-  
 
 ```
 

@@ -23,7 +23,7 @@
 <meta name="author" content="Rodríguez Lado, L., Angelini, M.E, Naypewe, N., Luotto, I., Yigini, Y." />
 
 
-<meta name="date" content="2023-12-14" />
+<meta name="date" content="2023-12-21" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -255,10 +255,8 @@ div.csl-indent {
 <span id="cb2-7"><a href="legacy_data.html#cb2-7" aria-hidden="true" tabindex="-1"></a>    cov.dat <span class="ot">&lt;-</span>  <span class="fu">list.files</span>(raster.path, <span class="at">pattern =</span> <span class="st">&quot;tif$&quot;</span>,  <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb2-8"><a href="legacy_data.html#cb2-8" aria-hidden="true" tabindex="-1"></a>    cov.dat <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(cov.dat)</span>
 <span id="cb2-9"><a href="legacy_data.html#cb2-9" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb2-10"><a href="legacy_data.html#cb2-10" aria-hidden="true" tabindex="-1"></a>   <span class="co">#  Disaggregate to build layer statistics</span></span>
-<span id="cb2-11"><a href="legacy_data.html#cb2-11" aria-hidden="true" tabindex="-1"></a>    cov.dat <span class="ot">&lt;-</span> <span class="fu">disagg</span>(cov.dat, <span class="at">fact=</span>disagg.factor, <span class="at">method=</span><span class="st">&quot;bilinear&quot;</span>)</span>
-<span id="cb2-12"><a href="legacy_data.html#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Aggregate to simplify data rasters for calculations </span></span>
-<span id="cb2-13"><a href="legacy_data.html#cb2-13" aria-hidden="true" tabindex="-1"></a>    cov.dat <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(cov.dat, <span class="at">fact=</span>agg.factor, <span class="at">fun=</span><span class="st">&quot;mean&quot;</span>) <span class="co"># Now you can see the statistics</span></span></code></pre></div>
+<span id="cb2-10"><a href="legacy_data.html#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Aggregate to simplify data rasters for calculations (optional)</span></span>
+<span id="cb2-11"><a href="legacy_data.html#cb2-11" aria-hidden="true" tabindex="-1"></a>    cov.dat <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(cov.dat, <span class="at">fact=</span>agg.factor, <span class="at">fun=</span><span class="st">&quot;mean&quot;</span>) <span class="co"># Now you can see the statistics</span></span></code></pre></div>
 <div class="figure"><span style="display:block;" id="fig:fig-3"></span>
 <img src="Technical-Manual-Soil-Sampling-Design_files/figure-html/fig-3-1.png" alt="Covariates" width="672" />
 <p class="caption">
@@ -269,8 +267,8 @@ Figure 2.1: Covariates
 <div id="representativeness-of-the-legacy-soil-data" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> Representativeness of the Legacy Soil Data<a href="legacy_data.html#representativeness-of-the-legacy-soil-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The next step involves the determination of the distributions of environmental values in the soil samples data and its comparison with the existing distributions of each environmental variable to determine the representativeness of the soil points in the environmental space.</p>
-<p>The comparison of distributions is performed through the Kullback-Leibler divergence (KL). It is a measure used to quantify the difference between two probability distributions.
-KL-divergence compares an ‘objective’ or reference probability distribution (here, the distribution of covariates in the complete covariate space - P) with a ‘model’ or approximate probability distribution (the space of covariates in the soil samples - Q). The main idea is to determine how much information is lost when Q is used to approximate P. In other words, KL-divergence measures how much the Q distribution deviates from the P distribution.</p>
+<p>The comparison of distributions is performed through the Kullback-Leibler divergence (KL) distance, a measure used to quantify the difference between two probability distributions.
+KL-divergence compares an ‘objective’ or reference probability distribution (here, the distribution of covariates in the complete covariate space - P) with a ‘model’ or approximate probability distribution (the space of covariates in the soil samples - Q). The main idea is to determine how much information is lost when Q is used to approximate P. In other words, KL-divergence measures how much the Q distribution deviates from the P distribution. KL-divergence equals approaches to 0 as the two distributions have identical quantities of information.</p>
 <p>We cross soil and environmental data to create a dataset with the values of the environmental parameters at the locations of the soil samples.</p>
 <p>We first calculate a <code>'n-matrix'</code> with the values of the covariates dividing their distributions into <code>'n'</code> equally-spaced bins. Each bin captures the environmental variability within its interval in the total distribution. In this exercise, <code>'n'</code> equals to 25. The result is a 26×4 matrix, where the rows represent the upper and lower limit of the bin and (thus, 26 rows are required to represent 25 bins), and 4 correspond to the number of variables used as environmental proxies.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="legacy_data.html#cb3-1" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Variability matrix in the covariates</span></span>
@@ -335,7 +333,7 @@ KL-divergence compares an ‘objective’ or reference probability distribution 
 <span id="cb6-8"><a href="legacy_data.html#cb6-8" aria-hidden="true" tabindex="-1"></a>      <span class="co">#print(kl.index) # KL divergences of each covariate</span></span>
 <span id="cb6-9"><a href="legacy_data.html#cb6-9" aria-hidden="true" tabindex="-1"></a>      <span class="co">#print(klo) # KL divergence in the existing soil samples</span></span></code></pre></div>
 <p>The KL-divergence is always greater than or equal to zero, and reaches its minimum value (zero) only when P and Q are identical. Thus, lower values of KL-divergence are indicative of a good match between both the sample and the study area spaces, indicating that the sample space is a fair representation of the environmental conditions in the study area.</p>
-<p>In this case, the KL-divergence value is 0.257, indicating that the legacy samples capture most of the environmental variability in the study area.</p>
+<p>In this case, the KL-divergence value is 0.273, indicating that the legacy samples capture most of the environmental variability in the study area.</p>
 <ul>
 <li><strong>Percent of representativeness in relation to the overall environmental conditions</strong></li>
 </ul>
@@ -352,7 +350,7 @@ Figure 2.2: PCA plot of the covariate
 Figure 2.3: PCA plot of the covariate
 </p>
 </div>
-<p>This indicates that 84.6% of the existing conditions in the study area fall within the convex hull delineated with the data in the soil samples, showing the level of adequacy of the proposed legacy data for DSM in the area.</p>
+<p>This indicates that 83.8% of the existing conditions in the study area fall within the convex hull delineated with the data in the soil samples, showing the level of adequacy of the proposed legacy data for DSM in the area.</p>
 
 </div>
 </div>
