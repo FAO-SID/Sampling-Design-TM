@@ -3,7 +3,7 @@
 
 Conditioned Latin Hypercube Sampling (cLHS) is an advanced statistical method used for sampling multidimensional data developed within the context of digital Soil Mapping. It's an extension of the basic Latin Hypercube Sampling (LHS) technique, a statistical method for generating a distribution of samples of a random variable. The main advantage of LHS over simple random sampling is its ability to ensure that the entire range of the auxiliary variables are explored. It divides the range of each variable into intervals of equal probability and samples each interval.
 
-The term 'conditioned' refers to the way the sampling is adapted or conditioned based on specific requirements or constraints. It often involves conditioning the sampling process on one or more additional variables or criteria. This helps in generating samples that are not just representative in terms of the range of values, but also in terms of their relationships or distributions. cLHS is particularly useful for sampling from multivariate data, where there are multiple interrelated variables as it occurs in soil surveys. The main advantage of cLHS is its efficiency in sampling and its ability to better capture the structure and relationships within the data, compared to simpler sampling methods, and ensures that the samples are representative not just of the range of each variable, but also of their interrelations. Detailed information on cLHS can be found in [@minasny2006].
+The term 'conditioned' refers to the way the sampling is adapted or conditioned based on specific requirements or constraints. It often involves conditioning the sampling process on one or more additional variables or criteria. This helps in generating samples that are not just representative in terms of the range of values, but also in terms of their relationships or distributions. cLHS is particularly useful for sampling from multivariate data, where there are multiple interrelated variables as it occurs in soil surveys. The main advantage of cLHS is its efficiency in sampling and its ability to better capture the structure and relationships within the data, compared to simpler sampling methods and ensures that the samples are representative not just of the range of each variable, but also of their interrelations. Detailed information on cLHS can be found in [@minasny2006].
 
 In this manual, we use the R implementation of cLHS by [@Roudier2011] and available as an [R package](https://cran.r-project.org/web/packages/clhs/). Additionally, we also included the CLHS analyses using the package `'sgsR'`(https://cran.r-project.org/web/packages/sgsR/) from [@sgsR], since it provides options to include buffering distance constraints within the cLHS approach.
 
@@ -22,7 +22,7 @@ We use the rasters of `r paste(shQuote(names(cov.dat)), collapse = ", ")` as cov
   # Read Spatial data covariates as rasters with terra
   cov.dat <-  list.files(raster.path, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
   cov.dat <- terra::rast(cov.dat) # SpatRaster from terra
-  # Isolate factor raster, in this case layer 3 - geology
+  # Isolate factor raster, in this case layer 3 – geology
   r.factor <- cov.dat[[3]]  
   # Aggregate stack to simplify data rasters for calculations 
   # 1st aggregate quantitative layers
@@ -43,7 +43,7 @@ We use the rasters of `r paste(shQuote(names(cov.dat)), collapse = ", ")` as cov
 ```
 
 
-The distribution of the sampling points is obtained using the `'cLHS'`function together with the stack of raster covariates and the minimum number of samples calculated in the previous Section. The function uses a number of iterations for the Metropolis-Hastings annealing process, with a default of 10000, to determine the optimal location of samples that account for a maximum of information on the raster covariates (Fig. \@ref(fig:fig-16). . 
+The distribution of the sampling points is obtained using the `'cLHS'`function together with the stack of raster covariates and the minimum number of samples calculated in the previous Section. The function uses a number of iterations for the Metropolis–Hastings annealing process, with a default of 10000, to determine the optimal location of samples that account for a maximum of information on the raster covariates (Fig. \@ref(fig:fig-16). . 
 
 
 ```{r fig-16, fig.cap="Evolution of the objective function", eval=TRUE, include=TRUE}
@@ -111,7 +111,7 @@ Figure \@ref(fig:fig-18) shows the distribution of the created cLHS samples, whi
 
 The cLHS function samples the covariates in the raster stack in order to determine the optimal location of samples that best represent the environmental conditions in the area. In the case of working with large raster sets, the process can be highly computing demanding since all pixels in the raster stack are used in the process. There are two simple methods to avoid this constraint:
 
- * **Aggregation of covariates:**  The quickest solution is to aggregate the covariates in the raster stack to a lower pixel resolution. This is directly performed using the `'aggregate'` function from the `'terra'`package. In case that the raster stack has discrete layers (factor data), the corresponding layers has to be aggregated separately using either the 'min' or 'max' functions to avoid corruption of the data and the results added later to the data of continuous raster layers. 
+ * **Aggregation of covariates:** The quickest solution is to aggregate the covariates in the raster stack to a lower pixel resolution. This is directly performed using the `'aggregate'` function from the `'terra'`package. In case that the raster stack has discrete layers (factor data), the corresponding layers has to be aggregated separately using either the 'min' or 'max' functions to avoid corruption of the data and the results added later to the data of continuous raster layers. 
 
 ```{r aggregation-05, eval=FALSE, include=TRUE}
 
@@ -122,7 +122,7 @@ The cLHS function samples the covariates in the raster stack in order to determi
 ```
 
 
- * **Sampling covariate data:** Other method that can be used is to sample the stack (extract the covariates information at point scale)  on a regular grid at a lower resolution than the raster grid and use this information as input within the cLHS function. The creation of a regular point grid on the raster stack is straightforward through the function `spatSample` from the `'terra'` package. In this case we create a regular grid of 1000 points.
+ * **Sampling covariate data:** Other method that can be used is to sample the stack (extract the covariates information at point scale) on a regular grid at a lower resolution than the raster grid and use this information as input within the cLHS function. The creation of a regular point grid on the raster stack is straightforward through the function `spatSample` from the `'terra'` package. In this case we create a regular grid of 1000 points.
 
 ```{r fig-19, fig.cap="Low resolution points of covariate data", eval=TRUE, include=TRUE}
 
@@ -152,7 +152,7 @@ This `dataframe` can be directly used as input in the cLHS function to get locat
 Note that the sampling design follows the regular pattern of the regular grid extracted from the raster covariates 
 
 
-## Implemenentation of cost-constrained sampling
+## Implemenentation of cost–constrained sampling
 
 There are situation in which the accessibility to some locations is totally or partially restricted such as areas with steep slopes, remote areas, or areas with forbidden access, which highly compromises the sampling process. For these cases, the sampling design can constrain the points to particular locations by defining environmental layers that cause an increment in the cost efficiency of the sampling. This is done with the `cost` attribute in the main `'clhs'` function. The following example uses the raster layer "distance to roads" as a cost layer to avoid low accessible points located at large distance from roads while optimizing the representativeness of the remaining environmental covariates.
 
@@ -177,7 +177,7 @@ Figure \@ref(fig:fig-22) shows the distribution of the cost constrained `'clhs'`
 ```
 
 
-Cost surfaces can be defined by other parameters than distances to roads. They can represent private property boundaries, slopes, presence of wetlands, etc. The  package `'sgsR'` implements functions to define both cost surfaces and distances to roads simultaneously. In this case, it is possible to define an inner buffer distance (i.e. the distance from the roads that should be avoided for sampling) and an outer buffer - i.e. the maximum sampling distance) from roads to maximise the variability of the sampling point while considering these limits. The `'sample_clhs'` function in this package also includes options to include existing legacy data in the process of clhs sampling. 
+Cost surfaces can be defined by other parameters than distances to roads. They can represent private property boundaries, slopes, presence of wetlands, etc. The package `'sgsR'` implements functions to define both cost surfaces and distances to roads simultaneously. In this case, it is possible to define an inner buffer distance – i.e. the distance from the roads that should be avoided for sampling and an outer buffer – i.e. the maximum sampling distance) from roads to maximize the variability of the sampling point while considering these limits. The `'sample_clhs'` function in this package also includes options to include existing legacy data in the process of clhs sampling. 
 
 
 ```{r sample_clhs, eval=TRUE, include=TRUE,warning=FALSE, message=FALSE}
@@ -210,7 +210,7 @@ Cost surfaces can be defined by other parameters than distances to roads. They c
 ```
 
 
-Legacy data is represented as blue dots while new samples from cLHS analyses are in red color (Fig.\@ref(fig:fig-22)). Note that the new sampling points are located within a distance buffer of `r buff_inner`-`r buff_outer` meters from roads. In addition, a cost surface has also been included in the analyses.
+Legacy data is represented as blue dots while new samples from cLHS analyses are in red colour (Fig.\@ref(fig:fig-22)). Note that the new sampling points are located within a distance buffer of `r buff_inner`-`r buff_outer` meters from roads. In addition, a cost surface has also been included in the analyses.
 
 
 ## Replacement areas in cLHS design

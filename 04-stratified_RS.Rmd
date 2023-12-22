@@ -1,13 +1,13 @@
 
 # Stratified Sampling Design
 
-Stratified random sampling is a technique where the study area is divided into different `groups` or `strata` based on certain environmental traits, and a number of random samples are taken from within each group. One of the primary advantages of stratified sampling is its ability to capture the diversity within a population by making sure each group is represented. It can provide a more accurate reflection of the entire population compared to random sampling, especially when the groups are distinct and have unique qualities. This approach is particularly beneficial when certain subgroups within the population are specifically noteworthy. It also allows for more precise estimates with a smaller total sample size compared to simple random choice. Stratified sampling presents some disadvantages. Achieving effective categories requires a proper definition and delineation of the initial information to create the `strata`. The classification of the environmental information into categories and ensuring fair portrayal of each can be intricate and time-taking, and mislabeling elements into an improper group can lead to skewed outcomes.
+Stratified random sampling is a technique where the study area is divided into different `groups` or `strata` based on certain environmental traits and a number of random samples are taken from within each group. One of the primary advantages of stratified sampling is its ability to capture the diversity within a population by making sure each group is represented. It can provide a more accurate reflection of the entire population compared to random sampling, especially when the groups are distinct and have unique qualities. This approach is particularly beneficial when certain subgroups within the population are specifically noteworthy. It also allows for more precise estimates with a smaller total sample size compared to simple random choice. Stratified sampling presents some disadvantages. Achieving effective categories requires a proper definition and delineation of the initial information to create the `strata`. The classification of the environmental information into categories and ensuring fair portrayal of each can be intricate and time–taking and mislabeling elements into an improper group can lead to skewed outcomes.
 
 ## General Procedure
 
-The creation of a  stratified random sampling design involves the identification of relevant features describing the environmental diversity in the area (soil and land use are the environmental variables generally used to define strata), delineation of the strata, determination of the number of samples to distribute to each stratum, followed by random sampling within it. By identifying relevant classes, combining them to define strata, and allocating an appropriate number of samples to each stratum, a representative sample can be obtained. Random sampling within each stratum helps to ensure that the sample is unbiased and provides a fair representation of the overall conditions in the area.
+The creation of a  stratified random sampling design involves the identification of relevant features describing the environmental diversity in the area (soil and land use are the environmental variables generally used to define strata), delineation of the strata, determination of the number of samples to distribute to each stratum, followed by random sampling within it. By identifying relevant classes, combining them to define strata and allocating an appropriate number of samples to each stratum, a representative sample can be obtained. Random sampling within each stratum helps to ensure that the sample is unbiased and provides a fair representation of the overall conditions in the area.
 
-The first question is about how many samples must be retrieved from each strata. The sampling scheme starts with the definition of the total number of samples to collect. In this case, the determination of the sample size is a complex and highly variable process based, among others, on the specific goals of the study, the variability of environmental proxies, the statistical requirements for accuracy and confidence, as well as additional considerations such as accessibility, costs and available resources. The optimal number of samples can be determined following the method proposed in Chapter 2 of this manual. The number of samples within each stratum is calculated using an area-weighted approach taking into account the relative area of each stratum. The sampling design in this section must also comply with the following requirements:
+The first question is about how many samples must be retrieved from each strata. The sampling scheme starts with the definition of the total number of samples to collect. In this case, the determination of the sample size is a complex and highly variable process based, among others, on the specific goals of the study, the variability of environmental proxies, the statistical requirements for accuracy and confidence, as well as additional considerations such as accessibility, costs and available resources. The optimal number of samples can be determined following the method proposed in Chapter 2 of this manual. The number of samples within each stratum is calculated using an area–weighted approach taking into account the relative area of each stratum. The sampling design in this section must also comply with the following requirements:
 
    *  All sampling strata must have a minimum size of 100 hectares.
    *  All sampling strata must be represented by at least 2 samples.
@@ -18,10 +18,10 @@ This sampling process ensures the representativeness of the environmental combin
 
 We must determine the kind of information that will be used to construct the `strata`. In this manual, we present a simple procedure to build strata based on data from two environmental layers: soil groups and land use classification data. The information should be provided in the form of vector shapefiles with associated information databases. The data on both sets often comprises a large number of categories, that would lead to a very large number of `strata`. Thus, it is desirable to make an effort of aggregating similar categories within each input data set, to reduce, as much as possible, the number of categories while still capturing the most of the valuable variability in the area.
 
-The fist step is to set-up the RStudio environment and load the required packages:
+The fist step is to set–up the RStudio environment and load the required packages:
 
 
-```{r strata-setup, eval=TRUE, include=FALSE, warning=FALSE}
+```{r strata–setup, eval=TRUE, include=FALSE, warning=FALSE}
 
 # Load packages as a vector objects
   packages <- c("sf", "terra", "tidyverse", "rmapshaper", "units","plyr", "mapview", "leaflet")
@@ -42,10 +42,10 @@ The fist step is to set-up the RStudio environment and load the required package
 ```
 
 
-We must define the number of samples to distribute in the sampling design, and the soil and land use information layers to build the strata. We also define a REPLACEMENT parameter to account for a reduction of the sampling area according to a certain area using predefined bounding-box, that can be also here defined.
+We must define the number of samples to distribute in the sampling design and the soil and land use information layers to build the strata. We also define a REPLACEMENT parameter to account for a reduction of the sampling area according to a certain area using predefined bounding–box, that can be also here defined.
 
 
-```{r strata-parameters, eval=TRUE, include=FALSE, echo=FALSE}
+```{r strata–parameters, eval=TRUE, include=FALSE, echo=FALSE}
 
   # Define number of samples
     n <- 242
@@ -57,7 +57,7 @@ We must define the number of samples to distribute in the sampling design, and t
     #lc <- st_read("../soil_sampling/JAM/Land_use.shp")
     lc <- st_read("../soil_sampling/JAM/landuses.shp")
     
-    # Define a bounding box (optional). If REPLACEMENT = TRUE, then the bounding-box shapefile (bb), must be specified and the uncomment the line in the code below
+    # Define a bounding box (optional). If REPLACEMENT = TRUE, then the bounding–box shapefile (bb), must be specified and the uncomment the line in the code below
     REPLACEMENT = FALSE
     # bb <- st_read("your_bounding_box.shp")
     
@@ -67,7 +67,7 @@ We must define the number of samples to distribute in the sampling design, and t
 We proceed with the calculation of soil groups. In this example, soil information is stored in the field `TYPES`. We have analysed the extent to which the information in this field can be synthesized to eliminate redundancy when creating the `strata`. ^[This exploratory work is a prerequisite and must be adapted specifically to each soil and land use dataset].
 The results are shown in \@ref(fig:fig-10)
 
-```{r soil-aggregation, eval=TRUE, include=FALSE, warning=FALSE}
+```{r soil–aggregation, eval=TRUE, include=FALSE, warning=FALSE}
   
   # Determine Soil Groups
   unique(soil$USDA_CLASS)
@@ -111,7 +111,7 @@ The results are shown in \@ref(fig:fig-10)
 A similar procedure is performed on the land use dataset.
 
 
-```{r landuse-aggregation, eval=TRUE, include=FALSE, warning=FALSE}
+```{r landuse–aggregation, eval=TRUE, include=FALSE, warning=FALSE}
   # Calculate Land use Groups
 
   # Clip land use data  by bounding area if exist
@@ -157,10 +157,10 @@ Figure \@ref(fig:fig-11) shows the landuse classes to build the strata.
 
 ```
 
-To create the soil-land use `strata` we must combine both classified datasets.
+To create the soil–land use `strata` we must combine both classified datasets.
 
 
-```{r combine-data, eval=TRUE, include=TRUE, warning=FALSE} 
+```{r combine–data, eval=TRUE, include=TRUE, warning=FALSE} 
   # Combine soil and land use layers
   soil_lc <- st_intersection(soil, lc)  
   soil_lc$soil_lc <- paste0(soil_lc$USDA_CLASS, "_", soil_lc$LU)
@@ -169,7 +169,7 @@ To create the soil-land use `strata` we must combine both classified datasets.
 
 Finally, to comply with the initial requirements of the sampling design, we calculate the areas of each polygon, delete all features with extent lesser than 100 has.  
 
-```{r select-area, eval=TRUE, include=FALSE} 
+```{r select–area, eval=TRUE, include=FALSE} 
   
   # Select by Area. Convert to area to ha and select polygons with more than 100 has
   soil_lc$area <- st_area(soil_lc)/10000 
@@ -214,10 +214,10 @@ The final strata map is shown in Figure  \@ref(fig:fig-12).
 
 ## Stratified random sampling
 
-This example demonstrates how to establish a stratified random sampling approach within the previously defined strata polygons. The allocation of sample points is proportionate to the stratum areas, with the condition that each stratum must contain a minimum of 2 samples. The determination of sampling points, referred to as `'target points'`, is made during the initial phase of the sampling design and takes into consideration factors such as the area to be sampled, budget constraints, and available personnel. Additionally, a set number of `'replacement points'` must be designated to act as substitutes for 'target points' in cases where some of the original target points cannot be accessed or sampled. These 'replacement points' are systematically indexed, with each index indicating which 'target point' it serves as a substitute for.
+This example demonstrates how to establish a stratified random sampling approach within the previously defined strata polygons. The allocation of sample points is proportionate to the stratum areas, with the condition that each stratum must contain a minimum of 2 samples. The determination of sampling points, referred to as `'target points'`, is made during the initial phase of the sampling design and takes into consideration factors such as the area to be sampled, budget constraints and available personnel. Additionally, a set number of `'replacement points'` must be designated to act as substitutes for 'target points' in cases where some of the original target points cannot be accessed or sampled. These 'replacement points' are systematically indexed, with each index indicating which 'target point' it serves as a substitute for.
 
 
-```{r random-sampling, eval=TRUE, include=FALSE}
+```{r random–sampling, eval=TRUE, include=FALSE}
   ## Stratified Simple Random Sampling over Soil/Land use Strata
   
   # Read strata shapefile
@@ -375,7 +375,7 @@ Results are shown in Figure \@ref(fig:fig-13).
   map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
         addTiles()
   mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") + 
-        mapview(z, zcol = 'type', color = "white", col.regions = c('royalblue', 'tomato'), cex=3, legend = TRUE,layer.name = "Samples")
+        mapview(sf::st_as_sf(z), zcol = 'type', color = "white", col.regions = c('royalblue', 'tomato'), cex=3, legend = TRUE,layer.name = "Samples")
   mv@map
 
 ```
@@ -389,16 +389,16 @@ The implementation of a stratified random sampling, along with target and replac
 
 This modification can streamline fieldwork operations and establish a feasible sampling method while still retaining the essence of the stratified random sampling framework. By excluding areas with limited accessibility, the sampling design can be adjusted to ensure a more practical and effective approach to data collection.
 
- * **Delineation of sampling accessibility:** The sampling area can be further limited based on accessibility considerations. Areas with very limited accessibility, defined as regions located more than 1 kilometre away from a main road or access path, may be excluded from sampling areas. To accomplish this, a map of main roads and paths can be used to establish a sampling buffer that includes areas within a 1-kilometre buffer around the road infrastructures. This exclusion helps to eliminate the most remote and challenging-to-access areas. An additional layer of accessibility information can be incorporated based on population distribution in the country, considering that, if population is present, there is a high change that points in the surroundings can be accessible for sampling. In this case, populated nuclei are vectorized into points, and a 250-meter buffer is then generated around each point. These resulting areas can be then added to the 1-kilometre buffer around the roads, which collectively defined the final sampling area.
+ * **Delineation of sampling accessibility:** The sampling area can be further limited based on accessibility considerations. Areas with very limited accessibility, defined as regions located more than 1 kilometre away from a main road or access path, may be excluded from sampling areas. To accomplish this, a map of main roads and paths can be used to establish a sampling buffer that includes areas within a 1–kilometre buffer around the road infrastructures. This exclusion helps to eliminate the most remote and challenging–to–access areas. An additional layer of accessibility information can be incorporated based on population distribution in the country, considering that, if population is present, there is a high change that points in the surroundings can be accessible for sampling. In this case, populated nuclei are vectorized into points and a 250–meter buffer is then generated around each point. These resulting areas can be then added to the 1–kilometre buffer around the roads, which collectively defined the final sampling area.
  
- * **Substitution of replacement points with replacement areas in close proximity to the target points:** The sampling design presented before included designated replacement points to serve as substitutes for each target point in the case that it would be inaccessible during fieldwork. However, this approach presented challenges, particularly for large areas, as the replacement point could be located far from the target point, resulting in significant logistical efforts. This limitation posed a risk of delays in completing the sampling campaign within the allocated time frame. To address this challenge, an alternative strategy is to replace the idea of replacement points with replacement areas situated in the immediate vicinity of the target point. The replacement area for each target point is now confined within a 500-meter buffer surrounding the target and falls within the same sampling stratum. This approach concentrates sampling and replacement activities within a specific geographic area, streamlining the overall process. By reducing the need for extensive travel, this method enhances efficiency and facilitates sample collection. Figure 2 illustrates the distribution of sampling points and replacement areas for visualization.
+ * **Substitution of replacement points with replacement areas in close proximity to the target points:** The sampling design presented before included designated replacement points to serve as substitutes for each target point in the case that it would be inaccessible during fieldwork. However, this approach presented challenges, particularly for large areas, as the replacement point could be located far from the target point, resulting in significant logistical efforts. This limitation posed a risk of delays in completing the sampling campaign within the allocated time frame. To address this challenge, an alternative strategy is to replace the idea of replacement points with replacement areas situated in the immediate vicinity of the target point. The replacement area for each target point is now confined within a 500–meter buffer surrounding the target and falls within the same sampling stratum. This approach concentrates sampling and replacement activities within a specific geographic area, streamlining the overall process. By reducing the need for extensive travel, this method enhances efficiency and facilitates sample collection. Figure 2 illustrates the distribution of sampling points and replacement areas for visualization.
  
   * **Additional area exclusion:** Some areas can be identified as not suitable for sampling purposes. This is the case of certain natural protected areas, conflict regions presenting risks for field operators, etc. These areas must be identified masked at an initial stage of the design to exclude them from the sampling strata.
  
- The procedure is the same as that previously presented, with the difference that buffers and exclusion areas must be masked-out from the strata map before performing the random-sampling.
+ The procedure is the same as that previously presented, with the difference that buffers and exclusion areas must be masked–out from the strata map before performing the random sampling.
  
  
-```{r replacement-areas, eval=FALSE, include=TRUE} 
+```{r replacement–areas, eval=FALSE, include=TRUE} 
 
  # Compute sampling areas WITH REPLACEMENT -----
   if(REPLACEMENT){
@@ -432,9 +432,9 @@ This modification can streamline fieldwork operations and establish a feasible s
 The procedure for creating a stratified regular sampling design is identical to that presented for stratified random sampling, with the only distinction that the locations of the sampling points are distributed in a regular spatial grid. This transformation is achieved by changing the method from 'random' to 'regular' in the spatSample functions within the script above. 
 
 
-```{r regular-sampling, eval=TRUE, include=FALSE}
+```{r regular–sampling, eval=TRUE, include=FALSE}
 
-# Stratified Simple regular Sampling over Soil/Land use Strata -------------------------------------------
+# Stratified Simple regular Sampling over Soil/Land use Strata ----
   # Read strata shapefile
   polygons <- st_read("../soil_sampling/JAM/strata.shp")
   if(REPLACEMENT){
@@ -587,13 +587,11 @@ z <- x %>%
 ```{r fig-14, fig.cap="Plot of strata and regular sampling points", eval=TRUE, include=TRUE}
 
 
-  map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
-  addTiles()
-  mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") +
-    mapview(z[z$type=="Replacement",], color = "white", cex=3, col.regions = "dodgerblue3",layer.name = "Replacement Points") +
-    mapview(z[z$type=="Target",], color = "white", cex=3, col.regions = "tomato",layer.name = "Target Points", map=map)
+   map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
+        addTiles()
+  mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") + 
+        mapview(sf::st_as_sf(z), zcol = 'type', color = "white", col.regions = c('royalblue', 'tomato'), cex=3, legend = TRUE,layer.name = "Samples")
   mv@map
-  
   
   
 ```

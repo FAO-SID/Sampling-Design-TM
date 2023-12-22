@@ -23,6 +23,7 @@ fig:fig-22b
 fig:fig-23
 fig:fig-24
 introduction
+training-material
 legacy_data
 data-preparation
 representativeness-of-the-legacy-soil-data
@@ -37,5 +38,5 @@ conditioned-latin-hypercube-sampling
 clhs-design
 including-existing-legacy-data-in-a-chls-sampling-design
 working-with-large-raster-data
-implemenentation-of-cost-constrained-sampling
+implemenentation-of-costconstrained-sampling
 replacement-areas-in-clhs-design

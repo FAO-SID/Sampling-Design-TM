@@ -1,4 +1,4 @@
-#  (PART\*) Part one - Soil Legacy Data  {-}
+#  (PART\*) Part one – Soil Legacy Data  {-}
 
 #  Evaluating Soil Legacy Data Sampling for DSM {#legacy_data} 
 
@@ -13,7 +13,7 @@ We adapted the original scripts to make use of  vector `'.shp'` and raster `'.ti
 
 ##  Data Preparation
 
-We must load the required packages and data for the analyses. We make use of the packages `sp` and `terra` to manipulate spatial data, `clhs` for Conditioned Latin Hypercube Sampling, `entropy` to compute Kullback-Leibler (KL) divergence indexes, `tripack` for Delaunay triangulation and `manipulate` for interactive plotting within RStudio. Ensure that all these packages are installed in your system before the execution of the script.
+We must load the required packages and data for the analyses. We make use of the packages `sp` and `terra` to manipulate spatial data, `clhs` for Conditioned Latin Hypercube Sampling, `entropy` to compute Kullback–Leibler (KL) divergence indexes, `tripack` for Delaunay triangulation and `manipulate` for interactive plotting within RStudio. Ensure that all these packages are installed in your system before the execution of the script.
 
 ```{r load_packages, eval=TRUE, include=F}
 
@@ -45,7 +45,7 @@ We define the working directory to the directory in which the actual file is loc
 
 Here we define a number of variables that will be used during the exercises in this manual. They include the path to raster and shp files, aggregation and disagregation factors, and buffer distances to define potential sampling areas from sampling points. These variables are later described at the appropriate section in the manual.
 
-```{r global-variables, eval=TRUE, include=FALSE, warning=FALSE}
+```{r global–variables, eval=TRUE, include=FALSE, warning=FALSE}
   ## Definition of some global variables
 
   # Path to rasters
@@ -94,8 +94,8 @@ Here we define a number of variables that will be used during the exercises in t
 
 The next step involves the determination of the distributions of environmental values in the soil samples data and its comparison with the existing distributions of each environmental variable to determine the representativeness of the soil points in the environmental space.
 
-The comparison of distributions is performed through the Kullback-Leibler divergence (KL) distance, a measure used to quantify the difference between two probability distributions.
-KL-divergence compares an 'objective' or reference probability distribution (here, the distribution of covariates in the complete covariate space - P) with a 'model' or approximate probability distribution (the space of covariates in the soil samples - Q). The main idea is to determine how much information is lost when Q is used to approximate P. In other words, KL-divergence measures how much the Q distribution deviates from the P distribution. KL-divergence equals approaches to 0 as the two distributions have identical quantities of information. 
+The comparison of distributions is performed through the Kullback–Leibler divergence (KL) distance, a measure used to quantify the difference between two probability distributions.
+KL–divergence compares an 'objective' or reference probability distribution (here, the distribution of covariates in the complete covariate space – P) with a 'model' or approximate probability distribution (the space of covariates in the soil samples – Q). The main idea is to determine how much information is lost when Q is used to approximate P. In other words, KL–divergence measures how much the Q distribution deviates from the P distribution. KL–divergence equals approaches to 0 as the two distributions have identical quantities of information. 
 
 We cross soil and environmental data to create a dataset with the values of the environmental parameters at the locations of the soil samples. 
 
@@ -108,20 +108,20 @@ We cross soil and environmental data to create a dataset with the values of the 
   
 ```
 
-We first calculate a `'n-matrix'` with the values of the covariates dividing their distributions into `'n'` equally-spaced bins. Each bin captures the environmental variability within its interval in the total distribution. In this exercise, `'n'` equals to 25. The result is a  26×4 matrix, where the rows represent the upper and lower limit of the bin and (thus, 26 rows are required to represent 25 bins), and 4 correspond to the number of variables used as environmental proxies.
+We first calculate a `'n–matrix'` with the values of the covariates dividing their distributions into `'n'` equally–spaced bins. Each bin captures the environmental variability within its interval in the total distribution. In this exercise, `'n'` equals to 25. The result is a  26×4 matrix, where the rows represent the upper and lower limit of the bin and (thus, 26 rows are required to represent 25 bins), and 4 correspond to the number of variables used as environmental proxies.
 
 ```{r P_matrix, eval=T, include=TRUE}
   ## Variability matrix in the covariates
     # Define Number of bins
-      nb<- 25
+      nb <- 25
       #quantile matrix (of the covariate data)
-      q.mat<- matrix(NA, nrow=(nb+1), ncol= nlyr(cov.dat))
+      q.mat <- matrix(NA, nrow=(nb+1), ncol= nlyr(cov.dat))
       j=1
       for (i in 1:nlyr(cov.dat)){ #note the index start here
       #get a quantile matrix together of the covariates
         ran1 <- minmax(cov.dat[[i]])[2] - minmax(cov.dat[[i]])[1]
-        step1<- ran1/nb 
-        q.mat[,j]<- seq(minmax(cov.dat[[i]])[1], to = minmax(cov.dat[[i]])[2], by =step1)
+        step1 <- ran1/nb 
+        q.mat[,j] <- seq(minmax(cov.dat[[i]])[1], to = minmax(cov.dat[[i]])[2], by =step1)
         j<- j+1}
 
 ```
@@ -131,23 +131,23 @@ From this matrix, we compute the hypercube matrix of covariates in the whole cov
 
 ```{r P_hypercube_matrix, eval=T, include=TRUE}
 
-## Hypercube of "objective" distribution (P) - covariates
+## Hypercube of "objective" distribution (P) – covariates
   # Convert SpatRaster to dataframe for calculations
     cov.dat.df <- as.data.frame(cov.dat) 
-    cov.mat<- matrix(1, nrow=nb, ncol=ncol(q.mat))
+    cov.mat <- matrix(1, nrow=nb, ncol=ncol(q.mat))
       for (i in 1:nrow(cov.dat.df)){ # the number of pixels
-        cntj<- 1 
+        cntj <- 1 
       for (j in 1:ncol(cov.dat.df)){ #for each column
         dd<- cov.dat.df[i,j]  
         for (k in 1:nb){  #for each quantile
-          kl<- q.mat[k, cntj] 
-          ku<- q.mat[k+1, cntj] 
+          kl <- q.mat[k, cntj] 
+          ku <- q.mat[k+1, cntj] 
           if (is.na(dd)) {
             print('Missing')
           }
           else if (dd >= kl & dd <= ku){cov.mat[k, cntj]<- cov.mat[k, cntj] + 1} 
         }
-        cntj<- cntj+1
+        cntj <- cntj+1
       }
     }
 
@@ -159,10 +159,10 @@ We then calculate the hypercube matrix of covariates in the sample space.
 ```{r Q_hypercube_matrix, eval=T, include=TRUE}
 
 ## Sample data hypercube
-  h.mat<- matrix(1, nrow=nb, ncol=ncol(q.mat))
+  h.mat <- matrix(1, nrow=nb, ncol=ncol(q.mat))
   
   for (ii in 1:nrow(p.dat_I)){ # the number of observations
-    cntj<- 1 
+    cntj <- 1 
     for (jj in 2:ncol(p.dat_I)){ #for each column
       dd <- p.dat_I[ii,jj]  
       for (kk in 1:nb){  #for each bin
@@ -170,18 +170,18 @@ We then calculate the hypercube matrix of covariates in the sample space.
         ku <- q.mat[kk+1, cntj] 
         if (dd >= kl & dd <= ku){h.mat[kk, cntj] <- h.mat[kk, cntj] + 1}
       }
-      cntj<- cntj+1
+      cntj <- cntj+1
     }
   }
 
 ```
 
-* **KL-divergence**
+* **KL–divergence**
 
-We calculate the KL-divergence to measure how much the distribution of covariates in tbe sample space (Q) deviates from the distribution of covariates in the complete study area space (P).
+We calculate the KL–divergence to measure how much the distribution of covariates in tbe sample space (Q) deviates from the distribution of covariates in the complete study area space (P).
   
 ```{r KL_divergence, eval=T, include=TRUE}
-  ## Compare covariate distributions in P and Q with Kullback-Leibler (KL) divergence
+  ## Compare covariate distributions in P and Q with Kullback–Leibler (KL) divergence
       kl.index <-c()
       for(i in 1:ncol(cov.dat.df)){
         kl <-    KL.empirical(c(cov.mat[,i]), c(h.mat[,i]))
@@ -193,9 +193,9 @@ We calculate the KL-divergence to measure how much the distribution of covariate
 
 ```
 
-The KL-divergence is always greater than or equal to zero, and reaches its minimum value (zero) only when P and Q are identical. Thus, lower values of KL-divergence are indicative of a good match between both the sample and the study area spaces, indicating that the sample space is a fair representation of the environmental conditions in the study area.
+The KL–divergence is always greater than or equal to zero, and reaches its minimum value (zero) only when P and Q are identical. Thus, lower values of KL–divergence are indicative of a good match between both the sample and the study area spaces, indicating that the sample space is a fair representation of the environmental conditions in the study area.
 
-In this case, the KL-divergence value is `r round(klo,3)`, indicating that the legacy samples capture most of the environmental variability in the study area.
+In this case, the KL–divergence value is `r round(klo,3)`, indicating that the legacy samples capture most of the environmental variability in the study area.
 
 * **Percent of representativeness in relation to the overall environmental conditions**
 
@@ -211,13 +211,13 @@ Finally, we can also determine the degree in which our legacy soil dataset is re
     scores_pca1 = as.data.frame(pca.s$x)
   # Plot the first 2 principal components and convex hull
     rand.tr <- tri.mesh(scores_pca1[,1],scores_pca1[,2],"remove") # Delaunay triangulation 
-    rand.ch<-convex.hull(rand.tr, plot.it=F) # convex hull
+    rand.ch <- convex.hull(rand.tr, plot.it=F) # convex hull
     pr_poly = cbind(x=c(rand.ch$x),y=c(rand.ch$y)) # save the convex hull vertices
     plot(scores_pca1[,1], scores_pca1[,2], xlab="PCA 1", ylab="PCA 2", xlim=c(min(scores_pca1[,1:2]), max(scores_pca1[,1:2])),ylim=c(min(scores_pca1[,1:2]), max(scores_pca1[,1:2])), main='Convex hull of soil legacy data')
     lines(c(rand.ch$x,rand.ch$x[1]), c(rand.ch$y,rand.ch$y[1]),col="red",lwd=1) # draw the convex hull (domain of legacy data)
 
   # PCA projection of study area population onto the principal components
-    PCA_projection<- predict(pca.s, cov.dat.df) # Project study area population onto sample PC
+    PCA_projection <- predict(pca.s, cov.dat.df) # Project study area population onto sample PC
     newScores = cbind(x=PCA_projection[,1],y=PCA_projection[,2]) # PC scores of projected population
   
   # Plot the polygon and all points to be checked

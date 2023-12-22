@@ -1,15 +1,14 @@
-# (PART) Part two - Soil Sampling Design {-} 
-
+# (PART) Part two – Soil Sampling Design {-} 
 
 # Determining the optimal sampling size
 
-Several strategies exist for designing soil sampling, including regular, random, and stratified sampling. Each strategy comes with its own set of advantages and limitations, which must be carefully considered before commencing a soil sampling campaign. Regular sampling, also called grid sampling, is straightforward and ensures uniform coverage, making it suitable for spatial analysis and detecting trends. However, it may introduce bias and miss small-scale variability. Generally, random sampling may require a larger number of samples to accurately capture soil variability compared to stratified sampling, which is more targeted. Nonetheless, from a statistical standpoint, random sampling is often preferred. It effectively minimizes selection bias by giving every part of the study area an equal chance of being selected. This approach yields a sample that is truly representative of the entire population, leading to more accurate, broadly applicable conclusions. Random sampling also supports valid statistical inferences, ensures reliability of results, and simplifies the estimation of errors, thereby facilitating a broad spectrum of statistical analyses.
+Several strategies exist for designing soil sampling, including regular, random, and stratified sampling. Each strategy comes with its own set of advantages and limitations, which must be carefully considered before commencing a soil sampling campaign. Regular sampling, also called grid sampling, is straightforward and ensures uniform coverage, making it suitable for spatial analysis and detecting trends. However, it may introduce bias and miss small–scale variability. Generally, random sampling may require a larger number of samples to accurately capture soil variability compared to stratified sampling, which is more targeted. Nonetheless, from a statistical standpoint, random sampling is often preferred. It effectively minimizes selection bias by giving every part of the study area an equal chance of being selected. This approach yields a sample that is truly representative of the entire population, leading to more accurate, broadly applicable conclusions. Random sampling also supports valid statistical inferences, ensures reliability of results, and simplifies the estimation of errors, thereby facilitating a broad spectrum of statistical analyses.
 
 The determination of both the number and locations of soil samples is an important element in the success of any sampling campaign. The chosen strategy directly influences the representativeness and accuracy of the soil data collected, which in turn impacts the quality of the conclusions drawn from the study.
 
-In this exercise, we make use of the data provided by [@Malone] with 4 raster covariates in a 100 has area. We want to determine the minimal number of soil samples that must be collated to capture at least the 95% of variability within the environmental covariates. The procedure start with random distribution of a low number of samples in the area, determine the values of the spatial covariates, and compare them with those representing the whole diversity in the area at pixel scale. The comparisons are made using the `'Kullback-Leibler divergence (KL)'` - a measure of how the probability distribution of the information in the samples is different from that of the Population, i.e. the covariate space. We also calculate the `'% of representativeness'` as the percent of variability in the covariate information for the complete area related to the variability of covariate information in the sample dataset. Further information can be found in the original work from [@Malone]. 
+In this exercise, we make use of the data provided by [@Malone] with 4 raster covariates in a 100 has area. We want to determine the minimal number of soil samples that must be collated to capture at least the 95% of variability within the environmental covariates. The procedure start with random distribution of a low number of samples in the area, determine the values of the spatial covariates, and compare them with those representing the whole diversity in the area at pixel scale. The comparisons are made using the `'Kullback–Leibler divergence (KL)'` – a measure of how the probability distribution of the information in the samples is different from that of the Population, i.e. the covariate space. We also calculate the `'% of representativeness'` as the percent of variability in the covariate information for the complete area related to the variability of covariate information in the sample dataset. Further information can be found in the original work from [@Malone]. 
 
-The initial section of the script is related to set-up options in the methodology. We load of R packages, define the working directory, load covariate data, and store it as `SpatRaster` object. Variables related to several aspects of the analyses, such as the aggregation factor of covariates (optional), the creation of a raster stack object(required in the `clhs` function), the initial and final number of samples in the trials, the increment step between trials, and the number of iterations within each trial, are also defined.
+The initial section of the script is related to set–up options in the methodology. We load of R packages, define the working directory, load covariate data, and store it as `SpatRaster` object. Variables related to several aspects of the analyses, such as the aggregation factor of covariates (optional), the creation of a raster stack object(required in the `clhs` function), the initial and final number of samples in the trials, the increment step between trials, and the number of iterations within each trial, are also defined.
 
 ```{r setup_wd_03, eval=FALSE, include=FALSE, echo=FALSE}
 
@@ -59,15 +58,15 @@ We can see the covariates in a plot.
 
   ## Define the number of samples to be tested in a loop (from initial to final) and the step of the sequence
   initial.n <- 10
-  final.n <- 250
-  by.n <- 10
-  iters <- 10
+  final.n <- 150
+  by.n <- 20
+  iters <- 2
   
 ```
 
 The second section is where the analyses of divergence and representativeness of the sampling scheme are calculated. 
 
-The analyses are performed in a loop using growing numbers of samples at each trial. Some empty vectors are defined to store the output results at each loop. At each trial of sample size `'N'`, soil samples are located at locations where the amount of information in the covariates is maximized according to the conditioned Latin Hypercube sampling method in the `'clhs'` package [@Roudier2011]. A number of `r iters`  replicates are calculated to determine the amount inter-variability in KL divergence and representativeness in the trial. The final results for each sample size correspond to the mean results obtained from each iteration at the corresponding sample size. The optimal sample size selected correspond to the minimum sample size that accounts for at least 95% of the variability of information in the covariates within the area. The optimal sampling schema proposed correspond to the random scheme at the optimal sample size with higher value of representativeness. 
+The analyses are performed in a loop using growing numbers of samples at each trial. Some empty vectors are defined to store the output results at each loop. At each trial of sample size `'N'`, soil samples are located at locations where the amount of information in the covariates is maximized according to the conditioned Latin Hypercube sampling method in the `'clhs'` package [@Roudier2011]. A number of `r iters`  replicates are calculated to determine the amount inter–variability in KL divergence and representativeness in the trial. The final results for each sample size correspond to the mean results obtained from each iteration at the corresponding sample size. The optimal sample size selected correspond to the minimum sample size that accounts for at least 95% of the variability of information in the covariates within the area. The optimal sampling schema proposed correspond to the random scheme at the optimal sample size with higher value of representativeness. 
 
 
 ```{r, fig-6, fig.cap = "Distribution of covariates in the sample space", include = TRUE}
@@ -88,7 +87,7 @@ for (trial in seq(initial.n, final.n, by=by.n)){
   # Store samples in list
   samples_storage[[paste0("N", trial,"_",iteration)]] <- p.dat_I
 
-  ## Comparison of population and sample distributions - Kullback-Leibler (KL) divergence
+  ## Comparison of population and sample distributions – Kullback–Leibler (KL) divergence
     
     # Quantiles of the study area: Number of bins
     nb<- 25
@@ -98,59 +97,59 @@ for (trial in seq(initial.n, final.n, by=by.n)){
     for (i in 1:nlyr(cov.dat)){ #note the index start here
       #get a quantile matrix together of the covariates
       ran1 <- minmax(cov.dat[[i]])[2] - minmax(cov.dat[[i]])[1]
-      step1<- ran1/nb 
-      q.mat[,j]<- seq(minmax(cov.dat[[i]])[1], to = minmax(cov.dat[[i]])[2], by =step1)
-      j<- j+1}
+      step1 <- ran1/nb 
+      q.mat[,j] <- seq(minmax(cov.dat[[i]])[1], to = minmax(cov.dat[[i]])[2], by =step1)
+      j <- j+1}
     q.mat
     
     # Hypercube of covariates in study area
     cov.dat.df <- as.data.frame(cov.dat) # convert SpatRaster to dataframe
-    cov.mat<- matrix(1, nrow=nb, ncol=ncol(q.mat))
+    cov.mat <- matrix(1, nrow=nb, ncol=ncol(q.mat))
     for (i in 1:nrow(cov.dat.df)){ # the number of pixels
-      cntj<- 1 
+      cntj <- 1 
       for (j in 1:ncol(cov.dat.df)){ #for each column
-        dd<- cov.dat.df[i,j]  
+        dd <- cov.dat.df[i,j]  
         for (k in 1:nb){  #for each quantile
-          kl<- q.mat[k, cntj] 
-          ku<- q.mat[k+1, cntj] 
+          kl <- q.mat[k, cntj] 
+          ku <- q.mat[k+1, cntj] 
           if (is.na(dd)) {
             print(paste('N_',trial,'_',iteration,'Missing'))
           }
           else if (dd >= kl & dd <= ku){cov.mat[k, cntj]<- cov.mat[k, cntj] + 1} 
         }
-        cntj<- cntj+1
+        cntj <- cntj+1
       }
     }
     cov.mat
 
     # Compare whole study area covariate space with the selected sample
     # Sample data hypercube (essentially the same script as for the grid data but just doing it on the sample data)
-    h.mat<- matrix(1, nrow=nb, ncol=ncol(q.mat))
+    h.mat <- matrix(1, nrow=nb, ncol=ncol(q.mat))
     
     for (ii in 1:nrow(p.dat_I)){ # the number of observations
-      cntj<- 1 
+      cntj <- 1 
       for (jj in 1:ncol(p.dat_I)){ #for each column
         dd <- as.data.frame(p.dat_I)[ii,jj]  
         for (kk in 1:nb){  #for each quantile
-          kl<- q.mat[kk, cntj] 
-          ku<- q.mat[kk+1, cntj] 
+          kl <- q.mat[kk, cntj] 
+          ku <- q.mat[kk+1, cntj] 
           if (dd >= kl & dd <= ku){h.mat[kk, cntj]<- h.mat[kk, cntj] + 1}
         }
-        cntj<- cntj+1
+        cntj <- cntj+1
       }
     }
     h.mat 
     
     
     ## Compute Kullback-Leibler (KL) divergence
-    kl.index <-c()
+    kl.index <- c()
     for(i in 1:ncol(cov.dat.df)){
-      kl <-    KL.empirical(c(cov.mat[,i]), c(h.mat[,i]))
+      kl <- KL.empirical(c(cov.mat[,i]), c(h.mat[,i]))
       kl.index <- c(kl.index,kl)
       klo <-  mean(kl.index)
     }
   
-    ## Representativeness of the Legacy Dataset: ----
+    ## Similarity of the Legacy Dataset: ----
     ## Calculate the proportion of "env. variables" in the covariate spectra that fall within the convex hull of variables in the "environmental sample space"
     # Principal component of the legacy data sample
     pca.s = prcomp(data.frame(p.dat_I@data),scale=TRUE, center=TRUE)
@@ -163,7 +162,7 @@ for (trial in seq(initial.n, final.n, by=by.n)){
     # lines(c(rand.ch$x,rand.ch$x[1]), c(rand.ch$y,rand.ch$y[1]),col="red",lwd=1) # draw the convex hull (domain of legacy data)
     
     # PCA projection of study area population onto the principal components
-    PCA_projection<- predict(pca.s, cov.dat.df) # Project study area population onto sample PC
+    PCA_projection <- predict(pca.s, cov.dat.df) # Project study area population onto sample PC
     newScores = cbind(x=PCA_projection[,1],y=PCA_projection[,2]) # PC scores of projected population
     # Check which points fall within the polygon
     pip <- point.in.polygon(newScores[,2], newScores[,1], pr_poly[,2],pr_poly[,1],mode.checked=FALSE)
@@ -234,7 +233,7 @@ Figure \@ref(fig:fig-7) shows the distribution of covariates in the sample space
 ```
 
 
-```{r results-table-03, eval=TRUE, include=FALSE}
+```{r results–table–03, eval=TRUE, include=FALSE}
 # knitr::kable(
 #   mean_result, booktabs = TRUE,
 #   caption = 'Mean results for each trial of sample size at increasing steps of 10 samples.')
@@ -248,7 +247,7 @@ We determine the optimal sample size and plot the evaluation results.
       x <- mean_result$N
       y = (mean_result$KL-min(mean_result$KL))/(max(mean_result$KL)-min(mean_result$KL)) #KL
       
-    # Parameterise Exponential decay function
+    # Parameterize Exponential decay function
       start <- list()     # Initialize an empty list for the starting values
       
     #fit function
@@ -260,12 +259,12 @@ We determine the optimal sample size and plot the evaluation results.
       summary(fit1)
       
     # Plot fit
-      xx<- seq(1, final.n,1)
+      xx <- seq(1, final.n,1)
       plot(x, y)
       lines(xx, predict(fit1,list(x=xx)))
     # Predict with vfit function
       jj <- predict(fit1,list(x=xx))
-      normalized = 1- (jj-min(jj))/(max(jj)-min(jj))
+      normalized = 1 - (jj - min(jj)) / (max(jj) - min(jj))
       
     # Determine the minimum sample size to account for 95% of cumulative probability of the covariate diversity
       minimum_n <- length(which(normalized <0.95))+1
@@ -290,7 +289,7 @@ The following figure shows the cumulative distribution function (cdf) of the KL 
           y = ~normalized,
           mode = "lines+markers",
           type = "scatter",
-          name = "CDF (1-KL divergence)") %>%
+          name = "CDF (1–KL divergence)") %>%
     add_trace(x = ~x,
               y = ~jj,
               mode = "lines+markers",
@@ -308,7 +307,7 @@ The following figure shows the cumulative distribution function (cdf) of the KL 
                         dtick = 50, 
                         tickfont = list(size = 11)),
            yaxis = list(title = "KL divergence", showgrid = F ),
-           yaxis2 = list(title = "1-KL divergence (% CDF)",
+           yaxis2 = list(title = "1–KL divergence (% CDF)",
                          overlaying = "y", side = "right"),
            legend = list(orientation = "h", y = 1.2, x = 0.1,
                          traceorder = "normal"),
@@ -340,5 +339,5 @@ Finally, we can determine the optimal distribution of samples over the study are
 ```
 
 
-In summary, we utilize the variability within the covariate data to ascertain the minimum number of samples required to capture a minimum of 95% of this variability. Our approach involves assessing the similarities in variability between the sample space and the population space (study area) through calculations of the Kullback-Leibler (KL) divergence and the percentage of representativeness at various stages of increasing sample sizes. These results are then utilized to fit a model representing the expected distribution of representativeness as a function of sample size. This model guides us in determining the minimum sample size necessary to achieve a representation of at least 95% of the environmental diversity within the area
+In summary, we utilize the variability within the covariate data to ascertain the minimum number of samples required to capture a minimum of 95% of this variability. Our approach involves assessing the similarities in variability between the sample space and the population space (study area) through calculations of the Kullback–Leibler (KL) divergence and the percentage of similarity at various stages of increasing sample sizes. These results are then utilized to fit a model representing the expected distribution of representativeness as a function of sample size. This model guides us in determining the minimum sample size necessary to achieve a representation of at least 95% of the environmental diversity within the area
 

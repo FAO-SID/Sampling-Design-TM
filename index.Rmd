@@ -1,6 +1,7 @@
 ---
-title:  
-  Soil Sampling Design
+title: |
+  <img src="images/frontcover.jpg" style="top:0px;height:100px;" align="right" />
+    Soil Sampling Design
 subtitle: "Technical Manual"
 author: "Rodríguez Lado, L., Angelini,  M.E, Naypewe, N., Luotto, I., Yigini, Y."
 date: "`r Sys.Date()`"
@@ -14,8 +15,13 @@ description: "Soil Sampling Design - SoilFer Project"
 csl: food-and-agriculture-organization-of-the-united-nations.csl
 ---
 
+
+```{r, echo = F, eval = T, fig.cap = ""}
+knitr::include_graphics("images/frontcover.jpg")
+```
+
 # Licence {-}
 
-The Guideline Manual is made available under the Creative Commons Attribution-NonCommercial-ShareAlike 3.0 IGO licence
+The Guideline Manual is made available under the Creative Commons Attribution–NonCommercial–ShareAlike 3.0 IGO licence
 
 [CC BY-NC-SA 3.0 IGO](https://creativecommons.org/licenses/by-nc-sa/3.0/igo/legalcode).
