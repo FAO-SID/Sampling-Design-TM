@@ -290,13 +290,13 @@ The following figure shows the cumulative distribution function (cdf) of the KL 
           y = ~normalized,
           mode = "lines+markers",
           type = "scatter",
-          name = "KL divergence") %>%
+          name = "CDF (1-KL divergence)") %>%
     add_trace(x = ~x,
               y = ~jj,
               mode = "lines+markers",
               type = "scatter",
               yaxis = "y2",
-              name = "CDF (1-KL divergence)")  %>%
+              name = "KL divergence")  %>%
     add_trace(x = ~opti$x,
               y = ~opti$y,
               yaxis = "y",

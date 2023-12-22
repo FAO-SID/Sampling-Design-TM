@@ -180,19 +180,21 @@ Figure \@ref(fig:fig-22) shows the distribution of the cost constrained `'clhs'`
 Cost surfaces can be defined by other parameters than distances to roads. They can represent private property boundaries, slopes, presence of wetlands, etc. The  package `'sgsR'` implements functions to define both cost surfaces and distances to roads simultaneously. In this case, it is possible to define an inner buffer distance (i.e. the distance from the roads that should be avoided for sampling) and an outer buffer - i.e. the maximum sampling distance) from roads to maximise the variability of the sampling point while considering these limits. The `'sample_clhs'` function in this package also includes options to include existing legacy data in the process of clhs sampling. 
 
 
-```{r sample_clhs, eval=TRUE, include=TRUE, warning=FALSE, message=FALSE}
+```{r sample_clhs, eval=TRUE, include=TRUE,warning=FALSE, message=FALSE}
 
 # Load, roads and legacy data 
   roads <- sf::st_read(file.path(paste0(shp.path,"/road.shp")),quiet=TRUE)
   legacy <- sf::st_read(file.path(paste0(shp.path,"/legacy_soils.shp")),quiet=TRUE)
-# Calculate distance to roads 
-  cost <- calculate_distance(raster = cov.dat, access = roads)
-# Eliminate the data from common NA values in the area
-  cost$dist2access<-cost$dist2access*cost$claymin/cost$claymin
+
+  # Calculate distance to roads and delete NA in outputs
+  cost <- cov.dat 
+  dist2access <- terra::distance(cov.dat[[1]], roads, progress=F)
+  cost$dist2access<- dist2access*cost$claymin/cost$claymin
+
 # Calculate clhs points with legacy, cost and buffer to roads
   buff_inner=20;
   buff_outer=300
-  aa <- sample_clhs( mraster = cost, nSamp = 300, existing = legacy, iter = 250, details = TRUE, cost="cost", access=roads, buff_inner=buff_inner, buff_outer=buff_outer)
+  aa <- sample_clhs(mraster = cost, nSamp = 300, existing = legacy, iter = 250, details = TRUE, cost="cost", access=roads, buff_inner=buff_inner, buff_outer=buff_outer)
 
 ```
 
@@ -295,7 +297,6 @@ The layer of replacement areas can finally be exported to a `'shapefile'` to be 
   # Write cLHS sampling points to shapefile
     out.pts <- st_as_sf(pts$sampled_data)
     st_write(out.pts, paste0(results.path,'target_clhs.shp'), delete_dsn = TRUE)
-    
 
 ```
 
