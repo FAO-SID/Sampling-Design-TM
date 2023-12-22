@@ -29,8 +29,8 @@ We use the rasters of `r paste(shQuote(names(cov.dat)), collapse = ", ")` as cov
     cov.dat <- aggregate(cov.dat[[-3]], fact=agg.factor, fun="mean")
   # 2nd aggregate factor layers and add to stack  
     cov.dat$geology <- aggregate(r.factor, fact=agg.factor, fun="max") 
-  # Create a raster::raster stack
-  cov.dat.ras <- raster::stack(cov.dat) 
+  # Create a raster::raster stack to be used in the 
+    cov.dat.ras <- raster::stack(cov.dat) 
 
   
 
@@ -70,7 +70,7 @@ The distribution of points is shown in Figure \@ref(fig:fig-17).
 
 ## Including existing legacy data in a cHLS sampling design
 
-In situations where there are legacy soil data samples available, it would be interesting to include them in the cLHS design to increase the diversity of covriates and avoid oversampling for some conditions. In this cases, the ancillary data can be included in the design as additional points to the clhs fuction.
+In situations where there are legacy soil data samples available, it would be interesting to include them in the cLHS design to increase the diversity of covariates and avoid oversampling for some conditions. In this cases, the ancillary data can be included in the design as additional points to the `'clhs'` function.
 
 
 ```{r clhs-legacy-05, eval=TRUE, include=TRUE}
@@ -157,7 +157,7 @@ Note that the sampling design follows the regular pattern of the regular grid ex
 
 There are situation in which the accessibility to some locations is totally or partially restricted such as areas with steep slopes, remote areas, or areas with forbidden access, which highly compromises the sampling process. For these cases, the sampling design can constrain the points to particular locations by defining environmental layers that cause an increment in the cost efficiency of the sampling. This is done with the `cost` attribute in the main `'clhs'` function. The following example uses the raster layer "distance to roads" as a cost layer to avoid low accessible points located at large distance from roads while optimizing the representativeness of the remaining environmental covariates.
 
-```{r fig-21, fig.cap="Objective and cost funtions", eval=TRUE, include=TRUE}
+```{r fig-21, fig.cap="Objective and cost funtions", eval=TRUE, include=TRUE, warning=FALSE}
   # Create a cLHS sampling point set with 
   cost.clhs <- clhs(cov.dat.ras, size = minimum_n, iter = 5000, progress = FALSE, simple = FALSE, cost = 'cost',  use.cpp = T)
   # Plot objective function
@@ -169,7 +169,7 @@ There are situation in which the accessibility to some locations is totally or p
 Figure \@ref(fig:fig-22) shows the distribution of the cost constrained `'clhs'` sampling over the `'cost'` surface. The sampling procedure concentrates, as much as possible, sampling sites in locations with lower costs.
 
 
-```{r fig-22, fig.cap="cLHS sampling with cost layers", eval=TRUE, include=TRUE}
+```{r fig-22, fig.cap="cLHS sampling with cost layers", eval=TRUE, include=TRUE, warning=F}
   # Get and plot the point of samples
   points <- cost.clhs$sampled_data  # Get point coordinates of clhs sampling
   plot(cov.dat[[2]], main="cLHS samples with 'cost' constraints")
@@ -178,23 +178,26 @@ Figure \@ref(fig:fig-22) shows the distribution of the cost constrained `'clhs'`
 ```
 
 
-
 Cost surfaces can be defined by other parameters than distances to roads. They can represent private property boundaries, slopes, presence of wetlands, etc. The  package `'sgsR'` implements functions to define both cost surfaces and distances to roads simultaneously. In this case, it is possible to define an inner buffer distance (i.e. the distance from the roads that should be avoided for sampling) and an outer buffer - i.e. the maximum sampling distance) from roads to maximise the variability of the sampling point while considering these limits. The `'sample_clhs'` function in this package also includes options to include existing legacy data in the process of clhs sampling. 
 
-```{r fig-22b, fig.cap="cLHS sampling with legacy data, cost surface and distance buffers around roads", eval=TRUE, include=TRUE, warning=FALSE}
 
-  roads <- sf::st_read(file.path(paste0(shp.path,"/road.shp")))
-  legacy <- sf::st_read(file.path(paste0(shp.path,"/legacy_soils.shp")))
+```{r fig-22b, fig.cap="cLHS sampling with legacy data, cost surface and distance buffers around roads", eval=TRUE, include=TRUE, message = FALSE, warning = FALSE}
+
+# Load, roads and legacy data 
+  roads <- sf::st_read(file.path(paste0(shp.path,"/road.shp")),quiet=TRUE)
+  legacy <- sf::st_read(file.path(paste0(shp.path,"/legacy_soils.shp")),quiet=TRUE)
+# Calculate distance to roads 
   cost <- calculate_distance(raster = cov.dat, access = roads)
-  cost$geology<-cost$geology*cost$claymin/cost$claymin
+# Eliminate the data from common NA values in the area
   cost$dist2access<-cost$dist2access*cost$claymin/cost$claymin
-  plot(cost$dist2access)
-  plot(roads,add=T)
+# Calculate clhs points with legacy, cost and buffer to roads
   aa <- sample_clhs( mraster = cost, nSamp = 300, existing = legacy, iter = 250, details = TRUE, cost="cost", access=roads, buff_inner=20, buff_outer=300)
+ 
+## Plot distances, roads, clhs points and legacy data 
   plot(cost$dist2access)
+  plot(roads,add=TRUE)
   plot(aa$samples[aa$samples$type=="new",], col= "tomato",add=TRUE)
   plot(aa$samples[aa$samples$type=="existing",], col= "navy",add=TRUE)
-
 
 ```
 
@@ -243,12 +246,6 @@ The probabilities can then be reclassified using a threshold value to delineate 
     breaks <- matrix(breaks, ncol=3, byrow=TRUE)
     # Reclassify the data in the layers from probabilities to (NA,)
     s = stack(lapply(1:raster::nlayers(gw), function(i){raster::reclassify(gw[[i]], breaks, right=FALSE)}))
-    #s
-  # Plot points over reclassified rasters 
-    #plot(s, addfun = fun)
-        
-  ## Remove temporary objects
-    #rm(gw,breaks,cov.dat.ras)
 
 ```
 
@@ -286,13 +283,12 @@ The layer of replacement areas can finally be exported to a `'shapefile'` to be 
 
 ```{r cLHS_export_05, eval=FALSE, include=TRUE, warning=FALSE}
     
-   ## Write replacement areas to polygon shape 
+   # Write replacement areas to polygon shape 
     s <- st_as_sf(s)
-    st_write(s, paste0('replacement_areas_', D, '.shp'), delete_dsn = TRUE)
-   
-    ## Write cLHS sampling points to shapefile
+    st_write(s, file.path(paste0(results.path,'replacement_areas_', D, '.shp')), delete_dsn = TRUE)
+  # Write cLHS sampling points to shapefile
     pts <- st_as_sf(pts$sampled_data)
-    st_write(pts, 'target_clhs.shp', delete_dsn = TRUE)
+    st_write(pts, paste0(results.path,'target_clhs.shp'), delete_dsn = TRUE)
     
 
 ```

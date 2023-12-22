@@ -19,8 +19,7 @@ fig:fig-19
 fig:fig-20
 fig:fig-21
 fig:fig-22
-fig:fig-22b-1
-fig:fig-22b-2
+fig:fig-22b
 fig:fig-23
 fig:fig-24
 introduction

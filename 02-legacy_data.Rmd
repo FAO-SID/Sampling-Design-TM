@@ -18,9 +18,10 @@ We must load the required packages and data for the analyses. We make use of the
 ```{r load_packages, eval=TRUE, include=F}
 
 # Load packages as a vector objects
-  packages <- c("sp", "terra", "raster","clhs", "entropy", "tripack","manipulate","dplyr","plotly", "sgsR") # Create a vector of packages to use
-  lapply(packages, require, character.only = TRUE) # Load packages
-  rm(packages) # Remove object to save memory space 
+ # Create a vector of packages to use
+ packages <- c("sp", "terra", "raster","sf", "clhs", "entropy", "tripack","manipulate","dplyr","plotly", "sgsR")
+ lapply(packages, require, character.only = TRUE) # Load packages
+ rm(packages) # Remove object to save memory space 
   
 ```
 
@@ -51,6 +52,8 @@ Here we define a number of variables that will be used during the exercises in t
     raster.path <- "clhs_data/rasters"
   # Path to shapes
     shp.path <- "clhs_data/shapes"
+  # Path to results
+    results.path <- "clhs_data/results/"
   # Aggregation factor (optional)
     agg.factor = 5
   # Buffer distance for replacement areas in clhs
