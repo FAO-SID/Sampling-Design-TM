@@ -108,7 +108,7 @@ We cross soil and environmental data to create a dataset with the values of the 
   
 ```
 
-We first calculate a `'n–matrix'` with the values of the covariates dividing their distributions into `'n'` equally–spaced bins. Each bin captures the environmental variability within its interval in the total distribution. In this exercise, `'n'` equals to 25. The result is a  26×4 matrix, where the rows represent the upper and lower limit of the bin and (thus, 26 rows are required to represent 25 bins), and 4 correspond to the number of variables used as environmental proxies.
+We first calculate a 'n–matrix' with the values of the covariates dividing their values into 'n' bins according to an equal–probability distribution. Each bin captures the environmental variability within its interval in the total distribution. In this exercise, 'n' equals to 25. The result is a  26×4 matrix, where the rows represent the upper and lower limit of the bin (26 thresholds are required to represent 25 bins), and the columns correspond to the number of variables used as environmental proxies.
 
 ```{r P_matrix, eval=T, include=TRUE}
   ## Variability matrix in the covariates

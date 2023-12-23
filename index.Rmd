@@ -1,6 +1,6 @@
 ---
 title: |
-  <img src="images/frontcover.jpg" style="top:0px;height:100px;" align="right" />
+  <img src="images/frontcover.jpg" style="top:0px;height:150px;" align="right" />
     Soil Sampling Design
 subtitle: "Technical Manual"
 author: "Rodríguez Lado, L., Angelini,  M.E, Naypewe, N., Luotto, I., Yigini, Y."
