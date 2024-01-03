@@ -4,11 +4,13 @@ language:
     chapter_name: "Chapter "
 rmd_files: [
   "index.Rmd",
-  "01-intro.Rmd",
-  "02-legacy_data.Rmd",
-  "03-optimal_n.Rmd",
-  "04-stratified_RS.Rmd",
-  "05-clhs_sampling.Rmd",
+  "01-Presentation.Rmd",
+  "02-Software-environment.Rmd",
+  "03-Legacy-data.Rmd",
+  "04-Sample-size.Rmd",
+  "05-Stratified-sampling.Rmd",
+  "06-CLHS_sampling.Rmd",
+  "11-Compendium-of-code.Rmd",
   "references.Rmd"]
 delete_merged_file: true 
 output_dir: "docs"

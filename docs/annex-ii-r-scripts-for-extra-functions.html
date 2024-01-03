@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Annex II: R scripts for extra functions |  Soil Sampling Design</title>
+  <meta name="description" content="Soil Sampling Design - SoilFer Project" />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Annex II: R scripts for extra functions |  Soil Sampling Design" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="/images/frontcover.png" />
+  <meta property="og:description" content="Soil Sampling Design - SoilFer Project" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Annex II: R scripts for extra functions |  Soil Sampling Design" />
+  
+  <meta name="twitter:description" content="Soil Sampling Design - SoilFer Project" />
+  <meta name="twitter:image" content="/images/frontcover.png" />
+
+<meta name="author" content="Rodríguez Lado, L., Angelini, M.E, Naypewe, N., Luotto, I., Yigini, Y." />
+
+
+<meta name="date" content="2024-01-02" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="annex-i-compendium-of-r-scripts.html"/>
+<link rel="next" href="references.html"/>
+<script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="assets/plotly-binding-4.10.0/plotly.js"></script>
+<script src="assets/typedarray-0.1/typedarray.min.js"></script>
+<link href="assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<link href="assets/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="assets/leaflet-1.3.1/leaflet.js"></script>
+<link href="assets/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="assets/proj4-2.6.2/proj4.min.js"></script>
+<script src="assets/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="assets/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="assets/leaflet-binding-2.1.1/leaflet.js"></script>
+<link href="assets/HomeButton-0.0.1/home-button.css" rel="stylesheet" />
+<script src="assets/HomeButton-0.0.1/home-button.js"></script>
+<script src="assets/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<script src="assets/clipboard-0.0.1/setClipboardText.js"></script>
+<link href="assets/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
+<link href="assets/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
+<script src="assets/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="assets/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Soil Samping Design</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Licence</a></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#training-material"><i class="fa fa-check"></i><b>1.1</b> Training material</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html"><i class="fa fa-check"></i><b>2</b> Setting-up the software environment</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#use-of-r-rstudio-and-r-packages"><i class="fa fa-check"></i><b>2.1</b> Use of R, RStudio and R Packages</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#obtaining-and-installing-r"><i class="fa fa-check"></i><b>2.1.1</b> Obtaining and installing R</a></li>
+<li class="chapter" data-level="2.1.2" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#obtaining-and-installing-rstudio"><i class="fa fa-check"></i><b>2.1.2</b> Obtaining and installing RStudio</a></li>
+<li class="chapter" data-level="2.1.3" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#getting-started-with-r"><i class="fa fa-check"></i><b>2.1.3</b> Getting started with R</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#r-packages"><i class="fa fa-check"></i><b>2.2</b> R packages</a></li>
+<li class="chapter" data-level="2.3" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#gee---google-earth-engine"><i class="fa fa-check"></i><b>2.3</b> GEE - google earth engine</a></li>
+</ul></li>
+<li class="part"><span><b>Part one – Soil Legacy Data</b></span></li>
+<li class="chapter" data-level="3" data-path="legacy_data.html"><a href="legacy_data.html"><i class="fa fa-check"></i><b>3</b> Evaluating Soil Legacy Data Sampling for DSM</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="legacy_data.html"><a href="legacy_data.html#data-preparation"><i class="fa fa-check"></i><b>3.1</b> Data Preparation</a></li>
+<li class="chapter" data-level="3.2" data-path="legacy_data.html"><a href="legacy_data.html#representativeness-of-the-legacy-soil-data"><i class="fa fa-check"></i><b>3.2</b> Representativeness of the Legacy Soil Data</a></li>
+</ul></li>
+<li class="part"><span><b>I Part two – Soil Sampling Design</b></span></li>
+<li class="chapter" data-level="4" data-path="determining-the-minimum-sampling-size.html"><a href="determining-the-minimum-sampling-size.html"><i class="fa fa-check"></i><b>4</b> Determining the minimum sampling size</a></li>
+<li class="chapter" data-level="5" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html"><i class="fa fa-check"></i><b>5</b> Stratified Sampling Design</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#general-procedure"><i class="fa fa-check"></i><b>5.1</b> General Procedure</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#strata-creation"><i class="fa fa-check"></i><b>5.1.1</b> Strata creation</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-random-sampling"><i class="fa fa-check"></i><b>5.2</b> Stratified random sampling</a></li>
+<li class="chapter" data-level="5.3" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-random-sampling-for-large-areas"><i class="fa fa-check"></i><b>5.3</b> Stratified random sampling for large areas</a></li>
+<li class="chapter" data-level="5.4" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-regular-sampling"><i class="fa fa-check"></i><b>5.4</b> Stratified regular sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html"><i class="fa fa-check"></i><b>6</b> Conditioned Latin Hypercube Sampling</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#clhs-design"><i class="fa fa-check"></i><b>6.1</b> cLHS Design</a></li>
+<li class="chapter" data-level="6.2" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#including-existing-legacy-data-in-a-clhs-sampling-design"><i class="fa fa-check"></i><b>6.2</b> Including existing legacy data in a cLHS sampling design</a></li>
+<li class="chapter" data-level="6.3" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#working-with-large-raster-data"><i class="fa fa-check"></i><b>6.3</b> Working with large raster data</a></li>
+<li class="chapter" data-level="6.4" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#implementation-of-costconstrained-clhs-sampling"><i class="fa fa-check"></i><b>6.4</b> Implementation of cost–constrained cLHS sampling</a></li>
+<li class="chapter" data-level="6.5" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#replacement-areas-in-clhs-design"><i class="fa fa-check"></i><b>6.5</b> Replacement areas in cLHS design</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html"><i class="fa fa-check"></i>Annex I: Compendium of R scripts</a>
+<ul>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-0-introduction-to-r"><i class="fa fa-check"></i>Script 0: Introduction to R</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-1-download-environmental-covariates"><i class="fa fa-check"></i>Script 1: Download environmental covariates</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-2-evaluate-legacy-data"><i class="fa fa-check"></i>Script 2: Evaluate Legacy Data</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-3-calculate-minimum-sample-size"><i class="fa fa-check"></i>Script 3: Calculate Minimum Sample Size</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-4-stratified-sampling-on-vector-data"><i class="fa fa-check"></i>Script 4: Stratified sampling on vector data</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-5-conditional-latin-hypercube-sampling"><i class="fa fa-check"></i>Script 5: Conditional Latin Hypercube Sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="annex-ii-r-scripts-for-extra-functions.html"><a href="annex-ii-r-scripts-for-extra-functions.html"><i class="fa fa-check"></i>Annex II: R scripts for extra functions</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://www.fao.org/global-soil-partnership/" target="blank">Global Soil Partnership</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"><p><img src="images/frontcover.jpg" style="top:0px;height:150px;" align="right" />
+Soil Sampling Design</p></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="annex-ii-r-scripts-for-extra-functions" class="section level1 unnumbered hasAnchor">
+<h1>Annex II: R scripts for extra functions<a href="annex-ii-r-scripts-for-extra-functions.html#annex-ii-r-scripts-for-extra-functions" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Script to mosaic tiles from covariates downloaded from GEE</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="annex-ii-r-scripts-for-extra-functions.html#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb53-2"><a href="annex-ii-r-scripts-for-extra-functions.html#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="fu">dirname</span>(rstudioapi<span class="sc">::</span><span class="fu">getActiveDocumentContext</span>()<span class="sc">$</span>path))</span>
+<span id="cb53-3"><a href="annex-ii-r-scripts-for-extra-functions.html#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">&quot;..&quot;</span>)</span>
+<span id="cb53-4"><a href="annex-ii-r-scripts-for-extra-functions.html#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="co"># read the tiles</span></span>
+<span id="cb53-5"><a href="annex-ii-r-scripts-for-extra-functions.html#cb53-5" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> <span class="st">&quot;01-Data/covs/&quot;</span>, <span class="at">pattern =</span> <span class="st">&quot;.tif$&quot;</span>, </span>
+<span id="cb53-6"><a href="annex-ii-r-scripts-for-extra-functions.html#cb53-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb53-7"><a href="annex-ii-r-scripts-for-extra-functions.html#cb53-7" aria-hidden="true" tabindex="-1"></a><span class="co"># put the tiles in a list</span></span>
+<span id="cb53-8"><a href="annex-ii-r-scripts-for-extra-functions.html#cb53-8" aria-hidden="true" tabindex="-1"></a>r_l <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb53-9"><a href="annex-ii-r-scripts-for-extra-functions.html#cb53-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(f)){</span>
+<span id="cb53-10"><a href="annex-ii-r-scripts-for-extra-functions.html#cb53-10" aria-hidden="true" tabindex="-1"></a>  r_l[i] <span class="ot">&lt;-</span> <span class="fu">rast</span>(f[i])</span>
+<span id="cb53-11"><a href="annex-ii-r-scripts-for-extra-functions.html#cb53-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb53-12"><a href="annex-ii-r-scripts-for-extra-functions.html#cb53-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the list in a spatial raster collection</span></span>
+<span id="cb53-13"><a href="annex-ii-r-scripts-for-extra-functions.html#cb53-13" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">sprc</span>(r_l)</span>
+<span id="cb53-14"><a href="annex-ii-r-scripts-for-extra-functions.html#cb53-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Mosaic the tiles</span></span>
+<span id="cb53-15"><a href="annex-ii-r-scripts-for-extra-functions.html#cb53-15" aria-hidden="true" tabindex="-1"></a>covs <span class="ot">&lt;-</span> <span class="fu">mosaic</span>(r)</span>
+<span id="cb53-16"><a href="annex-ii-r-scripts-for-extra-functions.html#cb53-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename the layers in case the names were lost</span></span>
+<span id="cb53-17"><a href="annex-ii-r-scripts-for-extra-functions.html#cb53-17" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rast</span>(f[<span class="dv">1</span>])</span>
+<span id="cb53-18"><a href="annex-ii-r-scripts-for-extra-functions.html#cb53-18" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(covs) <span class="ot">&lt;-</span> <span class="fu">names</span>(x)</span></code></pre></div>
+<p>Script for large countries that cannot mosaic covariates downloaded from GEE</p>
+<p>Part I:</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 1.1 - Load covariates files(list of GEE tiles of covariates)--</span></span>
+<span id="cb54-2"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-2" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">&quot;01-Data/covs&quot;</span>, <span class="st">&quot;.tif$&quot;</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb54-3"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-3" aria-hidden="true" tabindex="-1"></a>covs <span class="ot">&lt;-</span> <span class="fu">rast</span>(f[<span class="dv">1</span>])</span>
+<span id="cb54-4"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-4" aria-hidden="true" tabindex="-1"></a>ncovs <span class="ot">&lt;-</span> <span class="fu">names</span>(covs)</span>
+<span id="cb54-5"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-6"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.2 - Load the soil data (Script 2) ---------------------------</span></span>
+<span id="cb54-7"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-7" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;02-Outputs/harmonized_AFACI_soil_data.csv&quot;</span>)</span>
+<span id="cb54-8"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-8" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> dat</span>
+<span id="cb54-9"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert soil data into a spatial object </span></span>
+<span id="cb54-10"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-10" aria-hidden="true" tabindex="-1"></a><span class="co">#(check https://epsg.io/6204)</span></span>
+<span id="cb54-11"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-11" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">vect</span>(dat, <span class="at">geom=</span><span class="fu">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>), <span class="at">crs =</span> <span class="fu">crs</span>(covs))</span>
+<span id="cb54-12"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-13"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-13" aria-hidden="true" tabindex="-1"></a><span class="do">## 1.3 - Extract values from covariates to the soil points ------</span></span>
+<span id="cb54-14"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-14" aria-hidden="true" tabindex="-1"></a>X<span class="sc">$</span>ID <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(X)</span>
+<span id="cb54-15"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-16"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(f)) {</span>
+<span id="cb54-17"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-17" aria-hidden="true" tabindex="-1"></a>  covs <span class="ot">&lt;-</span> <span class="fu">rast</span>(f[i])</span>
+<span id="cb54-18"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-18" aria-hidden="true" tabindex="-1"></a>  pv <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(<span class="at">x =</span> covs, <span class="at">y =</span> dat, <span class="at">xy=</span><span class="cn">FALSE</span>, <span class="at">ID=</span><span class="cn">TRUE</span>)</span>
+<span id="cb54-19"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-19" aria-hidden="true" tabindex="-1"></a>  ids <span class="ot">&lt;-</span> pv<span class="sc">$</span>ID[<span class="fu">complete.cases</span>(pv)]</span>
+<span id="cb54-20"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (i<span class="sc">==</span><span class="dv">1</span>) {</span>
+<span id="cb54-21"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-21" aria-hidden="true" tabindex="-1"></a>    X <span class="ot">&lt;-</span> <span class="fu">left_join</span>(X,pv, <span class="at">by =</span> <span class="st">&quot;ID&quot;</span>)</span>
+<span id="cb54-22"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-22" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb54-23"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(ids)<span class="sc">&gt;</span><span class="dv">0</span>) {</span>
+<span id="cb54-24"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-24" aria-hidden="true" tabindex="-1"></a>      ID.idx <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">names</span>(X)<span class="sc">==</span><span class="st">&quot;ID&quot;</span>)</span>
+<span id="cb54-25"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-25" aria-hidden="true" tabindex="-1"></a>      X.ncol <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb54-26"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-26" aria-hidden="true" tabindex="-1"></a>      X[,ID.idx<span class="sc">:</span>X.ncol] <span class="ot">&lt;-</span></span>
+<span id="cb54-27"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-27" aria-hidden="true" tabindex="-1"></a>        <span class="fu">map2_df</span>(X[,ID.idx<span class="sc">:</span>X.ncol], pv, <span class="sc">~</span> <span class="fu">coalesce</span>(.x, .y))</span>
+<span id="cb54-28"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-28" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb54-29"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-29" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb54-30"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(i)</span>
+<span id="cb54-31"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb54-32"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-33"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-33" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(X)</span>
+<span id="cb54-34"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-35"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-35" aria-hidden="true" tabindex="-1"></a>X<span class="sc">%&gt;%</span></span>
+<span id="cb54-36"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-36" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>), <span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb54-37"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-37" aria-hidden="true" tabindex="-1"></a>  <span class="co"># convert to spatial object</span></span>
+<span id="cb54-38"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-38" aria-hidden="true" tabindex="-1"></a>  mapview<span class="sc">::</span><span class="fu">mapview</span>(<span class="at">zcol =</span> <span class="st">&quot;dtm_twi_500m&quot;</span>, <span class="at">cex =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="fl">0.1</span>)</span>
+<span id="cb54-39"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-40"><a href="annex-ii-r-scripts-for-extra-functions.html#cb54-40" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(X, <span class="st">&quot;02-Outputs/regression_matrix.csv&quot;</span>)</span></code></pre></div>
+<p>Part II:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Load covariates ----------------------------------------------</span></span>
+<span id="cb55-2"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-2" aria-hidden="true" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">terraOptions</span>(<span class="at">memfrac =</span> <span class="fl">0.9</span>)</span>
+<span id="cb55-3"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-3" aria-hidden="true" tabindex="-1"></a>covs <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb55-4"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-4" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">&quot;01-Data/covs&quot;</span>, <span class="st">&quot;.tif$&quot;</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb55-5"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(f)) {</span>
+<span id="cb55-6"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-6" aria-hidden="true" tabindex="-1"></a>  covs[[i]] <span class="ot">&lt;-</span> <span class="fu">rast</span>(f[i])</span>
+<span id="cb55-7"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb55-8"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-8" aria-hidden="true" tabindex="-1"></a>ncovs <span class="ot">&lt;-</span> <span class="fu">names</span>(covs[[i]])</span>
+<span id="cb55-9"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-10"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-10" aria-hidden="true" tabindex="-1"></a><span class="do">## 5.2 - Predict soil attributes per tiles ----------------------</span></span>
+<span id="cb55-11"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-11" aria-hidden="true" tabindex="-1"></a><span class="co"># country borders</span></span>
+<span id="cb55-12"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-12" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">vect</span>(shp)</span>
+<span id="cb55-13"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-14"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(target_properties)) {</span>
+<span id="cb55-15"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-15" aria-hidden="true" tabindex="-1"></a>  (soilatt <span class="ot">&lt;-</span> target_properties[i])</span>
+<span id="cb55-16"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-16" aria-hidden="true" tabindex="-1"></a>  <span class="co">#load model</span></span>
+<span id="cb55-17"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-17" aria-hidden="true" tabindex="-1"></a>  model_rn <span class="ot">&lt;-</span> </span>
+<span id="cb55-18"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">read_rds</span>(</span>
+<span id="cb55-19"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">paste0</span>(<span class="st">&quot;02-Outputs/models/ranger_model_&quot;</span>,soilatt,<span class="st">&quot;.rds&quot;</span>))</span>
+<span id="cb55-20"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-21"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="fu">seq_along</span>(covs)) {</span>
+<span id="cb55-22"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb55-23"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gc</span>()</span>
+<span id="cb55-24"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb55-25"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># select covariates with the tile j</span></span>
+<span id="cb55-26"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-26" aria-hidden="true" tabindex="-1"></a>    r <span class="ot">&lt;-</span> covs[[j]][[<span class="dv">1</span>]]</span>
+<span id="cb55-27"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Split GEE tiles into 4 smaller tiles</span></span>
+<span id="cb55-28"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-28" aria-hidden="true" tabindex="-1"></a>    t <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="at">nrows =</span> <span class="dv">4</span>, <span class="at">ncols =</span> <span class="dv">1</span>, <span class="at">extent =</span> <span class="fu">ext</span>(r), <span class="at">crs =</span> <span class="fu">crs</span>(r))</span>
+<span id="cb55-29"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-29" aria-hidden="true" tabindex="-1"></a>    tile <span class="ot">&lt;-</span> <span class="fu">makeTiles</span>(r, t,<span class="at">overwrite=</span><span class="cn">TRUE</span>, <span class="at">filename=</span> </span>
+<span id="cb55-30"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-30" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;02-Outputs/tiles/tiles.tif&quot;</span>)</span>
+<span id="cb55-31"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb55-32"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (n <span class="cf">in</span> <span class="fu">seq_along</span>(tile)) {</span>
+<span id="cb55-33"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-33" aria-hidden="true" tabindex="-1"></a>      t <span class="ot">&lt;-</span> <span class="fu">rast</span>(tile[n])</span>
+<span id="cb55-34"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-34" aria-hidden="true" tabindex="-1"></a>      covst <span class="ot">&lt;-</span> <span class="fu">crop</span>(covs[[j]], t)</span>
+<span id="cb55-35"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-35" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb55-36"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-36" aria-hidden="true" tabindex="-1"></a>      <span class="co"># create a function to extract the predited </span></span>
+<span id="cb55-37"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-37" aria-hidden="true" tabindex="-1"></a>      <span class="co"># values from ranger::predict.ranger()</span></span>
+<span id="cb55-38"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-38" aria-hidden="true" tabindex="-1"></a>      pfun <span class="ot">&lt;-</span> \(...) { <span class="fu">predict</span>(...)<span class="sc">$</span>predictions <span class="sc">|&gt;</span> <span class="fu">t</span>() }</span>
+<span id="cb55-39"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-39" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb55-40"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-40" aria-hidden="true" tabindex="-1"></a>      <span class="co"># predict conditional standard deviation</span></span>
+<span id="cb55-41"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-41" aria-hidden="true" tabindex="-1"></a>      terra<span class="sc">::</span><span class="fu">interpolate</span>(covst, </span>
+<span id="cb55-42"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-42" aria-hidden="true" tabindex="-1"></a>                         <span class="at">model =</span> model_rn<span class="sc">$</span>finalModel, </span>
+<span id="cb55-43"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-43" aria-hidden="true" tabindex="-1"></a>                         <span class="at">fun=</span>pfun, </span>
+<span id="cb55-44"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-44" aria-hidden="true" tabindex="-1"></a>                         <span class="at">na.rm=</span><span class="cn">TRUE</span>, </span>
+<span id="cb55-45"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-45" aria-hidden="true" tabindex="-1"></a>                         <span class="at">type =</span> <span class="st">&quot;quantiles&quot;</span>, </span>
+<span id="cb55-46"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-46" aria-hidden="true" tabindex="-1"></a>                         <span class="at">what=</span>sd,</span>
+<span id="cb55-47"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-47" aria-hidden="true" tabindex="-1"></a>                         <span class="at">filename =</span> </span>
+<span id="cb55-48"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-48" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">paste0</span>(<span class="st">&quot;02-Outputs/tiles/soilatt_tiles/sd_&quot;</span>,</span>
+<span id="cb55-49"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-49" aria-hidden="true" tabindex="-1"></a>                      soilatt,<span class="st">&quot;_tile_&quot;</span>, j,<span class="st">&quot;_&quot;</span>,n, <span class="st">&quot;.tif&quot;</span>), </span>
+<span id="cb55-50"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-50" aria-hidden="true" tabindex="-1"></a>                   <span class="at">overwrite =</span> <span class="cn">TRUE</span>, <span class="at">gdal=</span><span class="fu">c</span>(<span class="st">&quot;COMPRESS=DEFLATE&quot;</span>))</span>
+<span id="cb55-51"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-51" aria-hidden="true" tabindex="-1"></a>      <span class="fu">gc</span>()</span>
+<span id="cb55-52"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-52" aria-hidden="true" tabindex="-1"></a>      <span class="co"># predict conditional mean</span></span>
+<span id="cb55-53"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-53" aria-hidden="true" tabindex="-1"></a>      terra<span class="sc">::</span><span class="fu">interpolate</span>(covst, </span>
+<span id="cb55-54"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-54" aria-hidden="true" tabindex="-1"></a>                         <span class="at">model =</span> model_rn<span class="sc">$</span>finalModel, </span>
+<span id="cb55-55"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-55" aria-hidden="true" tabindex="-1"></a>                         <span class="at">fun=</span>pfun, </span>
+<span id="cb55-56"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-56" aria-hidden="true" tabindex="-1"></a>                         <span class="at">na.rm=</span><span class="cn">TRUE</span>, </span>
+<span id="cb55-57"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-57" aria-hidden="true" tabindex="-1"></a>                         <span class="at">type =</span> <span class="st">&quot;quantiles&quot;</span>, </span>
+<span id="cb55-58"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-58" aria-hidden="true" tabindex="-1"></a>                         <span class="at">what=</span>mean,</span>
+<span id="cb55-59"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-59" aria-hidden="true" tabindex="-1"></a>       <span class="at">filename =</span> <span class="fu">paste0</span>(<span class="st">&quot;02-Outputs/tiles/soilatt_tiles/mean_&quot;</span>,</span>
+<span id="cb55-60"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-60" aria-hidden="true" tabindex="-1"></a>                     soilatt,<span class="st">&quot;_tile_&quot;</span>, j,<span class="st">&quot;_&quot;</span>,n, <span class="st">&quot;.tif&quot;</span>), </span>
+<span id="cb55-61"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-61" aria-hidden="true" tabindex="-1"></a>                 <span class="at">overwrite =</span> <span class="cn">TRUE</span>, <span class="at">gdal=</span><span class="fu">c</span>(<span class="st">&quot;COMPRESS=DEFLATE&quot;</span>))</span>
+<span id="cb55-62"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-62" aria-hidden="true" tabindex="-1"></a>      <span class="fu">gc</span>()</span>
+<span id="cb55-63"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-63" aria-hidden="true" tabindex="-1"></a>      <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;tile&quot;</span>, j,<span class="st">&quot;_&quot;</span>, n, <span class="st">&quot;of&quot;</span>, <span class="fu">length</span>(covs)))</span>
+<span id="cb55-64"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-64" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb55-65"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-65" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb55-66"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-66" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb55-67"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-67" aria-hidden="true" tabindex="-1"></a>  <span class="do">## 5.3 - Merge tiles both prediction and st -------------------</span></span>
+<span id="cb55-68"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-68" aria-hidden="true" tabindex="-1"></a>  f_mean <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> <span class="st">&quot;02-Outputs/tiles/soilatt_tiles/&quot;</span>, </span>
+<span id="cb55-69"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-69" aria-hidden="true" tabindex="-1"></a>                     <span class="at">pattern =</span> <span class="fu">paste0</span>(<span class="st">&quot;mean_&quot;</span>, soilatt), </span>
+<span id="cb55-70"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-70" aria-hidden="true" tabindex="-1"></a>                     <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb55-71"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-71" aria-hidden="true" tabindex="-1"></a>  f_sd <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> <span class="st">&quot;02-Outputs/tiles/soilatt_tiles/&quot;</span>, </span>
+<span id="cb55-72"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-72" aria-hidden="true" tabindex="-1"></a>                     <span class="at">pattern =</span>  <span class="fu">paste0</span>(<span class="st">&quot;sd_&quot;</span>, soilatt), </span>
+<span id="cb55-73"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-73" aria-hidden="true" tabindex="-1"></a>                     <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb55-74"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-74" aria-hidden="true" tabindex="-1"></a>  r_mean_l <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb55-75"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-75" aria-hidden="true" tabindex="-1"></a>  r_sd_l <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb55-76"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-76" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb55-77"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-77" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (g <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(f_mean)){</span>
+<span id="cb55-78"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-78" aria-hidden="true" tabindex="-1"></a>    r <span class="ot">&lt;-</span> <span class="fu">rast</span>(f_mean[g])</span>
+<span id="cb55-79"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-79" aria-hidden="true" tabindex="-1"></a>    r_mean_l[[g]] <span class="ot">&lt;-</span>r</span>
+<span id="cb55-80"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-80" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rm</span>(r)</span>
+<span id="cb55-81"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-81" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb55-82"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-83"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-83" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (g <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(f_sd)){</span>
+<span id="cb55-84"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-84" aria-hidden="true" tabindex="-1"></a>    r <span class="ot">&lt;-</span> <span class="fu">rast</span>(f_sd[g])</span>
+<span id="cb55-85"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-85" aria-hidden="true" tabindex="-1"></a>    r_sd_l[[g]] <span class="ot">&lt;-</span>r</span>
+<span id="cb55-86"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-86" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rm</span>(r)</span>
+<span id="cb55-87"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-87" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb55-88"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-88" aria-hidden="true" tabindex="-1"></a>  r_mean <span class="ot">&lt;-</span><span class="fu">sprc</span>(r_mean_l)</span>
+<span id="cb55-89"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-89" aria-hidden="true" tabindex="-1"></a>  r_sd <span class="ot">&lt;-</span><span class="fu">sprc</span>(r_sd_l)</span>
+<span id="cb55-90"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-90" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb55-91"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-91" aria-hidden="true" tabindex="-1"></a>  pred_mean <span class="ot">&lt;-</span> <span class="fu">mosaic</span>(r_mean)</span>
+<span id="cb55-92"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-92" aria-hidden="true" tabindex="-1"></a>  pred_sd <span class="ot">&lt;-</span> <span class="fu">mosaic</span>(r_sd)</span>
+<span id="cb55-93"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-93" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb55-94"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-94" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Crop and mask the maps for each country</span></span>
+<span id="cb55-95"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-95" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (h <span class="cf">in</span> <span class="fu">seq_along</span>(cty)) {</span>
+<span id="cb55-96"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-96" aria-hidden="true" tabindex="-1"></a>    pred_mean <span class="sc">%&gt;%</span> </span>
+<span id="cb55-97"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-97" aria-hidden="true" tabindex="-1"></a>      <span class="fu">crop</span>(v[v<span class="sc">$</span>ISO3CD<span class="sc">==</span>cty[h]]) <span class="sc">%&gt;%</span> </span>
+<span id="cb55-98"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-98" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mask</span>(v[v<span class="sc">$</span>ISO3CD<span class="sc">==</span>cty[h]]) <span class="sc">%&gt;%</span> </span>
+<span id="cb55-99"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-99" aria-hidden="true" tabindex="-1"></a>      <span class="fu">writeRaster</span>(<span class="fu">paste0</span>(<span class="st">&quot;02-Outputs/maps/&quot;</span>, </span>
+<span id="cb55-100"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-100" aria-hidden="true" tabindex="-1"></a>                         cty[h],</span>
+<span id="cb55-101"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-101" aria-hidden="true" tabindex="-1"></a>                         <span class="st">&quot;/&quot;</span>,</span>
+<span id="cb55-102"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-102" aria-hidden="true" tabindex="-1"></a>                         cty[h],</span>
+<span id="cb55-103"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-103" aria-hidden="true" tabindex="-1"></a>                         <span class="st">&quot;_mean_&quot;</span>,</span>
+<span id="cb55-104"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-104" aria-hidden="true" tabindex="-1"></a>                         soilatt,</span>
+<span id="cb55-105"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-105" aria-hidden="true" tabindex="-1"></a>                         <span class="st">&quot;.tif&quot;</span>),</span>
+<span id="cb55-106"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-106" aria-hidden="true" tabindex="-1"></a>                  <span class="at">gdal=</span><span class="fu">c</span>(<span class="st">&quot;COMPRESS=DEFLATE&quot;</span>))</span>
+<span id="cb55-107"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-107" aria-hidden="true" tabindex="-1"></a>    pred_sd <span class="sc">%&gt;%</span> </span>
+<span id="cb55-108"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-108" aria-hidden="true" tabindex="-1"></a>      <span class="fu">crop</span>(v[v<span class="sc">$</span>ISO3CD<span class="sc">==</span>cty[h]]) <span class="sc">%&gt;%</span> </span>
+<span id="cb55-109"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-109" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mask</span>(v[v<span class="sc">$</span>ISO3CD<span class="sc">==</span>cty[h]]) <span class="sc">%&gt;%</span> </span>
+<span id="cb55-110"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-110" aria-hidden="true" tabindex="-1"></a>      <span class="fu">writeRaster</span>(<span class="fu">paste0</span>(<span class="st">&quot;02-Outputs/maps/&quot;</span>, </span>
+<span id="cb55-111"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-111" aria-hidden="true" tabindex="-1"></a>                         cty[h],</span>
+<span id="cb55-112"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-112" aria-hidden="true" tabindex="-1"></a>                         <span class="st">&quot;/&quot;</span>,</span>
+<span id="cb55-113"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-113" aria-hidden="true" tabindex="-1"></a>                         cty[h],</span>
+<span id="cb55-114"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-114" aria-hidden="true" tabindex="-1"></a>                         <span class="st">&quot;_sd_&quot;</span>,</span>
+<span id="cb55-115"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-115" aria-hidden="true" tabindex="-1"></a>                         soilatt,</span>
+<span id="cb55-116"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-116" aria-hidden="true" tabindex="-1"></a>                         <span class="st">&quot;.tif&quot;</span>),</span>
+<span id="cb55-117"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-117" aria-hidden="true" tabindex="-1"></a>                  <span class="at">gdal=</span><span class="fu">c</span>(<span class="st">&quot;COMPRESS=DEFLATE&quot;</span>))</span>
+<span id="cb55-118"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-118" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(cty[h])</span>
+<span id="cb55-119"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-119" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb55-120"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-120" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rm</span>(pred_sd)</span>
+<span id="cb55-121"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-121" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rm</span>(pred_mean)</span>
+<span id="cb55-122"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-122" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unlink</span>(f_mean)</span>
+<span id="cb55-123"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-123" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unlink</span>(f_sd)</span>
+<span id="cb55-124"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-124" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gc</span>()</span>
+<span id="cb55-125"><a href="annex-ii-r-scripts-for-extra-functions.html#cb55-125" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="annex-i-compendium-of-r-scripts.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/luislado/Sampling_Design_GSP/edit/master/11-Compendium-of-code.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Technical Manual Soil Sampling Design.pdf", "Technical Manual Soil Sampling Design.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection",
+"scroll_highlight": true
+},
+"toolbar": {
+"position": "static"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
