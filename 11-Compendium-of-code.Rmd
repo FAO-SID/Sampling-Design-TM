@@ -550,11 +550,11 @@ start_time <- Sys.time()
   
 ## 1 - User-defined variables ==================================================
   # Path to rasters
-  raster.path <- "data/vnm/rasters"
+  raster.path <- "data/rasters"
   # Path to shapes
-  shp.path <- "data/vnm/shapes"
+  shp.path <- "data/shapes"
   # Path to results
-  results.path <- "data/vnm/results/"
+  results.path <- "data/results/"
   # Aggregation factor for up-scaling raster covariates (optional)
   agg.factor = 10
   
@@ -744,11 +744,11 @@ start_time <- Sys.time()
 
 ## 1 - User-defined variables ==================================================
 # Path to rasters
-  raster.path <- "data/vnm/rasters/"
+  raster.path <- "data/rasters/"
   # Path to shapes
-  shp.path <- "data/vnm/shapes/"
+  shp.path <- "data/shapes/"
   # Path to results
-  results.path <- "data/vnm/results/"
+  results.path <- "data/results/"
 # Aggregation factor for up-scaling raster covariates (optional)
   agg.factor = 10
 
@@ -1157,11 +1157,11 @@ This script uses soil and land use classes to define polygon 'strata' for an are
 
 ## 1 - User-defined variables ==================================================
   # Path to rasters
-  raster.path <- "data/vnm/rasters/"
+  raster.path <- "data/rasters/"
   # Path to shapes
-  shp.path <- "data/vnm/shapes/"
+  shp.path <- "data/shapes/"
   # Path to results
-  results.path <- "data/vnm/results/"
+  results.path <- "data/results/"
   # Define the number of samples to allocate
     n <- 242
 
@@ -1744,11 +1744,11 @@ start_time <- Sys.time()
 
 ## 1 - User-defined variables ==================================================
   # Path to rasters
-  raster.path <- "data/vnm/rasters/"
+  raster.path <- "data/rasters/"
   # Path to shapes
-  shp.path <- "data/vnm/shapes/"
+  shp.path <- "data/shapes/"
   # Path to results
-  results.path <- "data/vnm/results/"
+  results.path <- "data/results/"
   # Buffer distance for replacement areas (clhs)
   D <- 1000 # Buffer distance to calculate replacement areas 
   # Define the minimum sample size. By default it uses the value calculated previously

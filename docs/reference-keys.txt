@@ -1,5 +1,5 @@
 fig:Rstudio
-fig:GEE2
+fig:GEE
 fig:fig-3
 fig:fig-4-1
 fig:fig-4-2

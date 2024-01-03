@@ -49,11 +49,11 @@ Here we define a number of variables that will be used during the exercises in t
 ```{r global–variables, eval=TRUE, include=FALSE, warning=FALSE}
   ## Definition of some global variables
   # Path to rasters
-    raster.path <- "data/vnm/rasters"
+    raster.path <- "data/rasters"
   # Path to shapes
-    shp.path <- "data/vnm/shapes"
+    shp.path <- "data/shapes"
   # Path to results
-    results.path <- "data/vnm/results/"
+    results.path <- "data/results/"
   # Aggregation factor for up-scaling raster covariates (optional)
     agg.factor = 10
 

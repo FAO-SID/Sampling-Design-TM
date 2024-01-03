@@ -48,11 +48,11 @@
 
 ## 1 - User-defined variables ==================================================
 # Path to rasters
-  raster.path <- "data/vnm/rasters"
+  raster.path <- "data/rasters"
 # Path to shapes
-  shp.path <- "data/vnm/shapes"
+  shp.path <- "data/shapes"
 # Path to results
-  results.path <- "data/vnm/results/"
+  results.path <- "data/results/"
 # Aggregation factor for up-scaling raster covariates (optional)
   agg.factor = 10
 

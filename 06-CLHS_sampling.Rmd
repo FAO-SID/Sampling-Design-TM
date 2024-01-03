@@ -18,11 +18,11 @@ With the minimum sampling size of `r minimum_n` calculated before, we can conduc
 ```{r user-variables-6, eval=TRUE, include=TRUE}
 
   # Path to rasters
-  raster.path <- "data/vnm/rasters/"
+  raster.path <- "data/rasters/"
   # Path to shapes
-  shp.path <- "data/vnm/shapes/"
+  shp.path <- "data/shapes/"
   # Path to results
-  results.path <- "data/vnm/results/"
+  results.path <- "data/results/"
   # Aggregation factor for up-scaling raster covariates (optional)
   agg.factor = 10
   # Buffer distance for replacement areas (clhs)
