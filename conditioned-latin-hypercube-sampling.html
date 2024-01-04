@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 6 Conditioned Latin Hypercube Sampling |  Soil Sampling Design</title>
+  <meta name="description" content="Soil Sampling Design - SoilFer Project" />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 6 Conditioned Latin Hypercube Sampling |  Soil Sampling Design" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="/images/frontcover.png" />
+  <meta property="og:description" content="Soil Sampling Design - SoilFer Project" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 6 Conditioned Latin Hypercube Sampling |  Soil Sampling Design" />
+  
+  <meta name="twitter:description" content="Soil Sampling Design - SoilFer Project" />
+  <meta name="twitter:image" content="/images/frontcover.png" />
+
+<meta name="author" content="Rodríguez Lado, L., Angelini, M.E, Naypewe, N., Luotto, I., Yigini, Y." />
+
+
+<meta name="date" content="2024-01-04" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="stratified-sampling-design.html"/>
+<link rel="next" href="annex-i-compendium-of-r-scripts.html"/>
+<script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="assets/plotly-binding-4.10.0/plotly.js"></script>
+<script src="assets/typedarray-0.1/typedarray.min.js"></script>
+<link href="assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<link href="assets/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="assets/leaflet-1.3.1/leaflet.js"></script>
+<link href="assets/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="assets/proj4-2.6.2/proj4.min.js"></script>
+<script src="assets/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="assets/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="assets/leaflet-binding-2.1.1/leaflet.js"></script>
+<link href="assets/HomeButton-0.0.1/home-button.css" rel="stylesheet" />
+<script src="assets/HomeButton-0.0.1/home-button.js"></script>
+<script src="assets/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<script src="assets/clipboard-0.0.1/setClipboardText.js"></script>
+<link href="assets/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
+<link href="assets/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
+<script src="assets/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="assets/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Soil Samping Design</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Licence</a></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#training-material"><i class="fa fa-check"></i><b>1.1</b> Training material</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html"><i class="fa fa-check"></i><b>2</b> Setting-up the software environment</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#use-of-r-rstudio-and-r-packages"><i class="fa fa-check"></i><b>2.1</b> Use of R, RStudio and R Packages</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#obtaining-and-installing-r"><i class="fa fa-check"></i><b>2.1.1</b> Obtaining and installing R</a></li>
+<li class="chapter" data-level="2.1.2" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#obtaining-and-installing-rstudio"><i class="fa fa-check"></i><b>2.1.2</b> Obtaining and installing RStudio</a></li>
+<li class="chapter" data-level="2.1.3" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#getting-started-with-r"><i class="fa fa-check"></i><b>2.1.3</b> Getting started with R</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#r-packages"><i class="fa fa-check"></i><b>2.2</b> R packages</a></li>
+<li class="chapter" data-level="2.3" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#gee---google-earth-engine"><i class="fa fa-check"></i><b>2.3</b> GEE - google earth engine</a></li>
+</ul></li>
+<li class="part"><span><b>Part one – Soil Legacy Data</b></span></li>
+<li class="chapter" data-level="3" data-path="legacy_data.html"><a href="legacy_data.html"><i class="fa fa-check"></i><b>3</b> Evaluating Soil Legacy Data Sampling for DSM</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="legacy_data.html"><a href="legacy_data.html#data-preparation"><i class="fa fa-check"></i><b>3.1</b> Data Preparation</a></li>
+<li class="chapter" data-level="3.2" data-path="legacy_data.html"><a href="legacy_data.html#representativeness-of-the-legacy-soil-data"><i class="fa fa-check"></i><b>3.2</b> Representativeness of the Legacy Soil Data</a></li>
+</ul></li>
+<li class="part"><span><b>I Part two – Soil Sampling Design</b></span></li>
+<li class="chapter" data-level="4" data-path="determining-the-minimum-sampling-size.html"><a href="determining-the-minimum-sampling-size.html"><i class="fa fa-check"></i><b>4</b> Determining the minimum sampling size</a></li>
+<li class="chapter" data-level="5" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html"><i class="fa fa-check"></i><b>5</b> Stratified Sampling Design</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#general-procedure"><i class="fa fa-check"></i><b>5.1</b> General Procedure</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#strata-creation"><i class="fa fa-check"></i><b>5.1.1</b> Strata creation</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-random-sampling"><i class="fa fa-check"></i><b>5.2</b> Stratified random sampling</a></li>
+<li class="chapter" data-level="5.3" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-random-sampling-for-large-areas"><i class="fa fa-check"></i><b>5.3</b> Stratified random sampling for large areas</a></li>
+<li class="chapter" data-level="5.4" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-regular-sampling"><i class="fa fa-check"></i><b>5.4</b> Stratified regular sampling</a></li>
+<li class="chapter" data-level="5.5" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#random-sampling-based-on-a-stratified-raster"><i class="fa fa-check"></i><b>5.5</b> Random Sampling based on a stratified raster</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html"><i class="fa fa-check"></i><b>6</b> Conditioned Latin Hypercube Sampling</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#clhs-design"><i class="fa fa-check"></i><b>6.1</b> cLHS Design</a></li>
+<li class="chapter" data-level="6.2" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#including-existing-legacy-data-in-a-clhs-sampling-design"><i class="fa fa-check"></i><b>6.2</b> Including existing legacy data in a cLHS sampling design</a></li>
+<li class="chapter" data-level="6.3" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#working-with-large-raster-data"><i class="fa fa-check"></i><b>6.3</b> Working with large raster data</a></li>
+<li class="chapter" data-level="6.4" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#implementation-of-costconstrained-clhs-sampling"><i class="fa fa-check"></i><b>6.4</b> Implementation of cost–constrained cLHS sampling</a></li>
+<li class="chapter" data-level="6.5" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#replacement-areas-in-clhs-design"><i class="fa fa-check"></i><b>6.5</b> Replacement areas in cLHS design</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html"><i class="fa fa-check"></i>Annex I: Compendium of R scripts</a>
+<ul>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-1-introduction-to-r"><i class="fa fa-check"></i>Script 1: Introduction to R</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-2-download-environmental-covariates"><i class="fa fa-check"></i>Script 2: Download environmental covariates</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-3-evaluate-legacy-data"><i class="fa fa-check"></i>Script 3: Evaluate Legacy Data</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-4-calculate-minimum-sample-size"><i class="fa fa-check"></i>Script 4: Calculate Minimum Sample Size</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-5-stratified-sampling-on-vector-and-raster-data"><i class="fa fa-check"></i>Script 5: Stratified sampling on vector and raster data</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-6-conditional-latin-hypercube-sampling"><i class="fa fa-check"></i>Script 6: Conditional Latin Hypercube Sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://www.fao.org/global-soil-partnership/" target="blank">Global Soil Partnership</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"><p><img src="images/frontcover.jpg" style="top:0px;height:150px;" align="right" />
+Soil Sampling Design</p></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="conditioned-latin-hypercube-sampling" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Conditioned Latin Hypercube Sampling<a href="conditioned-latin-hypercube-sampling.html#conditioned-latin-hypercube-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Conditioned Latin Hypercube Sampling (cLHS) is an advanced statistical method used for sampling multidimensional data developed within the context of digital Soil Mapping. It’s an extension of the basic Latin Hypercube Sampling (LHS) technique, a statistical method for generating a distribution of samples of a random variable. The main advantage of LHS over simple random sampling is its ability to ensure that the entire range of the auxiliary variables are explored. It divides the range of each variable into intervals of equal probability and samples each interval.</p>
+<p>The term ‘conditioned’ refers to the way the sampling is adapted or conditioned based on specific requirements or constraints. It often involves conditioning the sampling process on one or more additional variables or criteria. This helps in generating samples that are not just representative in terms of the range of values, but also in terms of their relationships or distributions. cLHS is particularly useful for sampling from multivariate data, where there are multiple interrelated variables as it occurs in soil surveys. The main advantage of cLHS is its efficiency in sampling and its ability to better capture the structure and relationships within the data, compared to simpler sampling methods and ensures that the samples are representative not just of the range of each variable, but also of their interrelations. Detailed information on cLHS can be found in <span class="citation">(<a href="#ref-minasny2006" role="doc-biblioref">Minasny and McBratney, 2006</a>)</span>.</p>
+<p>In this manual, we use the R implementation of cLHS by <span class="citation">(<a href="#ref-Roudier2011" role="doc-biblioref">Roudier <em>et al.</em>, 2011</a>)</span> and available as an <a href="https://cran.r-project.org/web/packages/clhs/">R package</a>. Additionally, we also included the CLHS analyses using the package <code>'sgsR'</code>(<a href="https://cran.r-project.org/web/packages/sgsR/" class="uri">https://cran.r-project.org/web/packages/sgsR/</a>) from <span class="citation">(<a href="#ref-sgsR" role="doc-biblioref">Goodbody <em>et al.</em>, 2023</a>)</span>, since it provides options to include buffering distance constraints within the cLHS approach.</p>
+<div id="clhs-design" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> cLHS Design<a href="conditioned-latin-hypercube-sampling.html#clhs-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>As for stratified sampling, the creation target points from a conditioned Latin Hypercube Sampling design involves the identification of the relevant features describing the environmental diversity in the area. In this case, the environmental parameters are incorporated in the form of raster covariates. The determination of the number of samples in the design is also required. This step can be calculated following the information already provided in this manual.</p>
+<p>With the minimum sampling size of 165 calculated before, we can conduct conditioned Latin Hypercube Sampling design for the area in the example using the R package <code>'cLHS'</code> available at CRAN.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="conditioned-latin-hypercube-sampling.html#cb39-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Path to rasters</span></span>
+<span id="cb39-2"><a href="conditioned-latin-hypercube-sampling.html#cb39-2" aria-hidden="true" tabindex="-1"></a>  raster.path <span class="ot">&lt;-</span> <span class="st">&quot;data/rasters/&quot;</span></span>
+<span id="cb39-3"><a href="conditioned-latin-hypercube-sampling.html#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Path to shapes</span></span>
+<span id="cb39-4"><a href="conditioned-latin-hypercube-sampling.html#cb39-4" aria-hidden="true" tabindex="-1"></a>  shp.path <span class="ot">&lt;-</span> <span class="st">&quot;data/shapes/&quot;</span></span>
+<span id="cb39-5"><a href="conditioned-latin-hypercube-sampling.html#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Path to results</span></span>
+<span id="cb39-6"><a href="conditioned-latin-hypercube-sampling.html#cb39-6" aria-hidden="true" tabindex="-1"></a>  results.path <span class="ot">&lt;-</span> <span class="st">&quot;data/results/&quot;</span></span>
+<span id="cb39-7"><a href="conditioned-latin-hypercube-sampling.html#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Aggregation factor for up-scaling raster covariates (optional)</span></span>
+<span id="cb39-8"><a href="conditioned-latin-hypercube-sampling.html#cb39-8" aria-hidden="true" tabindex="-1"></a>  agg.factor <span class="ot">=</span> <span class="dv">10</span></span>
+<span id="cb39-9"><a href="conditioned-latin-hypercube-sampling.html#cb39-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Buffer distance for replacement areas (clhs)</span></span>
+<span id="cb39-10"><a href="conditioned-latin-hypercube-sampling.html#cb39-10" aria-hidden="true" tabindex="-1"></a>  D <span class="ot">&lt;-</span> <span class="dv">1000</span> <span class="co"># Buffer distance to calculate replacement areas</span></span>
+<span id="cb39-11"><a href="conditioned-latin-hypercube-sampling.html#cb39-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define the minimum sample size. By default it uses the value calculated previously</span></span>
+<span id="cb39-12"><a href="conditioned-latin-hypercube-sampling.html#cb39-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#minimum_n &lt;- minimum_n</span></span></code></pre></div>
+<p>We use the rasters of ‘PC1’, ‘PC2’, ‘PC3’, ‘PC4’, ‘PC5’, ‘PC6’, ‘PC7’, ‘PC8’, ‘PC9’, ‘PC10’ as covariates, which we trim by the administrative boundary of the ‘Nghe An’ province as an example to speed up the calculations in the exercise. The rasters are loaded as a raster stack, masked, and subjected to PCA transformation to reduce collinearity in the dataset. The PCA components that capture 99% of the variability in the data are retained as representatives of the environmental diversity in the area. Rasters of elevation and slope are kept separately for further analyses. A shapefile of roads is also loaded to account for the sampling cost associated with walking distances from roads.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="conditioned-latin-hypercube-sampling.html#cb40-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Read Spatial data covariates as rasters with terra</span></span>
+<span id="cb40-2"><a href="conditioned-latin-hypercube-sampling.html#cb40-2" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span>  <span class="fu">list.files</span>(raster.path, <span class="at">pattern =</span> <span class="st">&quot;tif$&quot;</span>,  <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb40-3"><a href="conditioned-latin-hypercube-sampling.html#cb40-3" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(cov.dat) <span class="co"># SpatRaster from terra</span></span>
+<span id="cb40-4"><a href="conditioned-latin-hypercube-sampling.html#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Load shape of district</span></span>
+<span id="cb40-5"><a href="conditioned-latin-hypercube-sampling.html#cb40-5" aria-hidden="true" tabindex="-1"></a>  nghe <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_read</span>(<span class="fu">file.path</span>(<span class="fu">paste0</span>(shp.path,<span class="st">&quot;/Nghe_An.shp&quot;</span>)),<span class="at">quiet=</span><span class="cn">TRUE</span>)</span>
+<span id="cb40-6"><a href="conditioned-latin-hypercube-sampling.html#cb40-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-7"><a href="conditioned-latin-hypercube-sampling.html#cb40-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Crop covariates on administrative boundary</span></span>
+<span id="cb40-8"><a href="conditioned-latin-hypercube-sampling.html#cb40-8" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span> <span class="fu">crop</span>(cov.dat, nghe, <span class="at">mask=</span><span class="cn">TRUE</span>)</span>
+<span id="cb40-9"><a href="conditioned-latin-hypercube-sampling.html#cb40-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Store elevation and slope separately</span></span>
+<span id="cb40-10"><a href="conditioned-latin-hypercube-sampling.html#cb40-10" aria-hidden="true" tabindex="-1"></a>  elevation <span class="ot">&lt;-</span> cov.dat<span class="sc">$</span>dtm_elevation_250m</span>
+<span id="cb40-11"><a href="conditioned-latin-hypercube-sampling.html#cb40-11" aria-hidden="true" tabindex="-1"></a>  slope <span class="ot">&lt;-</span> cov.dat<span class="sc">$</span>dtm_slope_250m</span>
+<span id="cb40-12"><a href="conditioned-latin-hypercube-sampling.html#cb40-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb40-13"><a href="conditioned-latin-hypercube-sampling.html#cb40-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Load roads</span></span>
+<span id="cb40-14"><a href="conditioned-latin-hypercube-sampling.html#cb40-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">#roads &lt;-  vect(file.path(paste0(shp.path,&quot;/roads.shp&quot;)))</span></span>
+<span id="cb40-15"><a href="conditioned-latin-hypercube-sampling.html#cb40-15" aria-hidden="true" tabindex="-1"></a>  <span class="co">#roads &lt;- crop(roads, nghe) </span></span>
+<span id="cb40-16"><a href="conditioned-latin-hypercube-sampling.html#cb40-16" aria-hidden="true" tabindex="-1"></a>  roads <span class="ot">&lt;-</span>  sf<span class="sc">::</span><span class="fu">st_read</span>(<span class="fu">file.path</span>(<span class="fu">paste0</span>(shp.path,<span class="st">&quot;/roads.shp&quot;</span>)),<span class="at">quiet=</span><span class="cn">TRUE</span>)</span>
+<span id="cb40-17"><a href="conditioned-latin-hypercube-sampling.html#cb40-17" aria-hidden="true" tabindex="-1"></a>  roads <span class="ot">&lt;-</span>  <span class="fu">st_intersection</span>(roads, nghe)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="conditioned-latin-hypercube-sampling.html#cb41-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Simplify raster information with PCA</span></span>
+<span id="cb41-2"><a href="conditioned-latin-hypercube-sampling.html#cb41-2" aria-hidden="true" tabindex="-1"></a>  pca <span class="ot">&lt;-</span> <span class="fu">raster_pca</span>(cov.dat)</span>
+<span id="cb41-3"><a href="conditioned-latin-hypercube-sampling.html#cb41-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb41-4"><a href="conditioned-latin-hypercube-sampling.html#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get SpatRaster layers</span></span>
+<span id="cb41-5"><a href="conditioned-latin-hypercube-sampling.html#cb41-5" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span> pca<span class="sc">$</span>PCA</span>
+<span id="cb41-6"><a href="conditioned-latin-hypercube-sampling.html#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create a raster stack to be used as input in the clhs::clhs function </span></span>
+<span id="cb41-7"><a href="conditioned-latin-hypercube-sampling.html#cb41-7" aria-hidden="true" tabindex="-1"></a>  cov.dat.ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(cov.dat) </span>
+<span id="cb41-8"><a href="conditioned-latin-hypercube-sampling.html#cb41-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Subset rasters</span></span>
+<span id="cb41-9"><a href="conditioned-latin-hypercube-sampling.html#cb41-9" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span> pca<span class="sc">$</span>PCA[[<span class="dv">1</span><span class="sc">:</span><span class="fu">first</span>(<span class="fu">which</span>(pca<span class="sc">$</span>summaryPCA[<span class="dv">3</span>,]<span class="sc">&gt;</span><span class="fl">0.99</span>))]]</span>
+<span id="cb41-10"><a href="conditioned-latin-hypercube-sampling.html#cb41-10" aria-hidden="true" tabindex="-1"></a>  cov.dat.ras <span class="ot">&lt;-</span>  cov.dat.ras[[<span class="dv">1</span><span class="sc">:</span><span class="fu">first</span>(<span class="fu">which</span>(pca<span class="sc">$</span>summaryPCA[<span class="dv">3</span>,]<span class="sc">&gt;</span><span class="fl">0.99</span>))]]</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="conditioned-latin-hypercube-sampling.html#cb42-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Simplify raster information with PCA</span></span>
+<span id="cb42-2"><a href="conditioned-latin-hypercube-sampling.html#cb42-2" aria-hidden="true" tabindex="-1"></a>  pca <span class="ot">&lt;-</span> <span class="fu">raster_pca</span>(cov.dat)</span>
+<span id="cb42-3"><a href="conditioned-latin-hypercube-sampling.html#cb42-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb42-4"><a href="conditioned-latin-hypercube-sampling.html#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get SpatRaster layers</span></span>
+<span id="cb42-5"><a href="conditioned-latin-hypercube-sampling.html#cb42-5" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span> pca<span class="sc">$</span>PCA</span>
+<span id="cb42-6"><a href="conditioned-latin-hypercube-sampling.html#cb42-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create a raster stack to be used as input in the clhs::clhs function </span></span>
+<span id="cb42-7"><a href="conditioned-latin-hypercube-sampling.html#cb42-7" aria-hidden="true" tabindex="-1"></a>  cov.dat.ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(cov.dat) </span>
+<span id="cb42-8"><a href="conditioned-latin-hypercube-sampling.html#cb42-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Subset rasters</span></span>
+<span id="cb42-9"><a href="conditioned-latin-hypercube-sampling.html#cb42-9" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span> pca<span class="sc">$</span>PCA[[<span class="dv">1</span><span class="sc">:</span><span class="fu">first</span>(<span class="fu">which</span>(pca<span class="sc">$</span>summaryPCA[<span class="dv">3</span>,]<span class="sc">&gt;</span><span class="fl">0.99</span>))]]</span>
+<span id="cb42-10"><a href="conditioned-latin-hypercube-sampling.html#cb42-10" aria-hidden="true" tabindex="-1"></a>  cov.dat.ras <span class="ot">&lt;-</span>  cov.dat.ras[[<span class="dv">1</span><span class="sc">:</span><span class="fu">first</span>(<span class="fu">which</span>(pca<span class="sc">$</span>summaryPCA[<span class="dv">3</span>,]<span class="sc">&gt;</span><span class="fl">0.99</span>))]]</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="conditioned-latin-hypercube-sampling.html#cb43-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot of covariates</span></span>
+<span id="cb43-2"><a href="conditioned-latin-hypercube-sampling.html#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(cov.dat)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:fig-15"></span>
+<img src="Technical-Manual-Soil-Sampling-Design_files/figure-html/fig-15-1.png" alt="Covariates" width="672" />
+<p class="caption">
+Figure 6.1: Covariates
+</p>
+</div>
+<p>The distribution of the sampling points is obtained using the <code>'cLHS'</code>function together with the stack of raster covariates and the minimum number of samples calculated in the previous Section. The function uses a number of iterations for the Metropolis–Hastings annealing process, with a default of 10000, to determine the optimal location of samples that account for a maximum of information on the raster covariates (Fig. <a href="conditioned-latin-hypercube-sampling.html#fig:fig-16">6.2</a>. .</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="conditioned-latin-hypercube-sampling.html#cb44-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Distribute sampling points with clhs</span></span>
+<span id="cb44-2"><a href="conditioned-latin-hypercube-sampling.html#cb44-2" aria-hidden="true" tabindex="-1"></a>  pts <span class="ot">&lt;-</span> <span class="fu">clhs</span>(cov.dat.ras, <span class="at">size =</span> minimum_n, <span class="at">iter =</span> <span class="dv">10000</span>, <span class="at">progress =</span> <span class="cn">FALSE</span>, <span class="at">simple =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb44-3"><a href="conditioned-latin-hypercube-sampling.html#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot of objective function</span></span>
+<span id="cb44-4"><a href="conditioned-latin-hypercube-sampling.html#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(pts, <span class="fu">c</span>(<span class="st">&#39;obj&#39;</span>))</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:fig-16"></span>
+<img src="Technical-Manual-Soil-Sampling-Design_files/figure-html/fig-16-1.png" alt="Evolution of the objective function" width="672" />
+<p class="caption">
+Figure 6.2: Evolution of the objective function
+</p>
+</div>
+<p>The distribution of points is shown in Figure <a href="conditioned-latin-hypercube-sampling.html#fig:fig-17">6.3</a>.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="conditioned-latin-hypercube-sampling.html#cb45-1" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Create a cLHS sampling point set----</span></span>
+<span id="cb45-2"><a href="conditioned-latin-hypercube-sampling.html#cb45-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(cov.dat[[<span class="dv">1</span>]], <span class="at">main=</span><span class="st">&quot;cLHS samples&quot;</span>)</span>
+<span id="cb45-3"><a href="conditioned-latin-hypercube-sampling.html#cb45-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">points</span>(pts<span class="sc">$</span>sampled_data, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">pch =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:fig-17"></span>
+<img src="Technical-Manual-Soil-Sampling-Design_files/figure-html/fig-17-1.png" alt="Distribution of cLHS sampling points in the study area" width="672" />
+<p class="caption">
+Figure 6.3: Distribution of cLHS sampling points in the study area
+</p>
+</div>
+</div>
+<div id="including-existing-legacy-data-in-a-clhs-sampling-design" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Including existing legacy data in a cLHS sampling design<a href="conditioned-latin-hypercube-sampling.html#including-existing-legacy-data-in-a-clhs-sampling-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In situations where there are legacy soil data samples available, it would be interesting to include them in the cLHS design to increase the diversity of covariates and avoid oversampling for some conditions. In this cases, the ancillary data can be included in the design as additional points to the <code>'clhs'</code> function.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="conditioned-latin-hypercube-sampling.html#cb46-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create an artificial legacy dataset of 50 samples over the study area as an example</span></span>
+<span id="cb46-2"><a href="conditioned-latin-hypercube-sampling.html#cb46-2" aria-hidden="true" tabindex="-1"></a>  legacy.data <span class="ot">&lt;-</span> <span class="fu">spatSample</span>(cov.dat, <span class="dv">50</span>, <span class="at">na.rm=</span><span class="cn">TRUE</span>,<span class="at">xy=</span><span class="cn">TRUE</span>,<span class="at">method=</span><span class="st">&quot;random&quot;</span>, <span class="at">as.points=</span>T) <span class="co"># works with SpatRaster </span></span>
+<span id="cb46-3"><a href="conditioned-latin-hypercube-sampling.html#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="conditioned-latin-hypercube-sampling.html#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get covariates data as a points</span></span>
+<span id="cb46-5"><a href="conditioned-latin-hypercube-sampling.html#cb46-5" aria-hidden="true" tabindex="-1"></a>  cov.df<span class="ot">&lt;-</span> <span class="fu">as.points</span>(cov.dat)</span>
+<span id="cb46-6"><a href="conditioned-latin-hypercube-sampling.html#cb46-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb46-7"><a href="conditioned-latin-hypercube-sampling.html#cb46-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Merge legacy and covariate information</span></span>
+<span id="cb46-8"><a href="conditioned-latin-hypercube-sampling.html#cb46-8" aria-hidden="true" tabindex="-1"></a>  leg.new <span class="ot">&lt;-</span>   <span class="fu">rbind</span>(legacy.data, cov.df)</span>
+<span id="cb46-9"><a href="conditioned-latin-hypercube-sampling.html#cb46-9" aria-hidden="true" tabindex="-1"></a>  leg.new <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(leg.new,<span class="at">geom=</span><span class="st">&#39;XY&#39;</span>)</span>
+<span id="cb46-10"><a href="conditioned-latin-hypercube-sampling.html#cb46-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Delete data from pixels outside the study area</span></span>
+<span id="cb46-11"><a href="conditioned-latin-hypercube-sampling.html#cb46-11" aria-hidden="true" tabindex="-1"></a>  leg.new <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(leg.new)</span>
+<span id="cb46-12"><a href="conditioned-latin-hypercube-sampling.html#cb46-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb46-13"><a href="conditioned-latin-hypercube-sampling.html#cb46-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate clhs 100 points plus locations of legacy data</span></span>
+<span id="cb46-14"><a href="conditioned-latin-hypercube-sampling.html#cb46-14" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">&lt;-</span> <span class="fu">clhs</span>(<span class="at">x =</span> leg.new, <span class="at">size =</span> <span class="dv">100</span> <span class="sc">+</span> <span class="fu">length</span>(legacy.data),  <span class="at">iter =</span> <span class="dv">10000</span>,<span class="at">simple =</span> <span class="cn">FALSE</span>, <span class="at">progress =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb46-15"><a href="conditioned-latin-hypercube-sampling.html#cb46-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">must.include =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(legacy.data)))</span>
+<span id="cb46-16"><a href="conditioned-latin-hypercube-sampling.html#cb46-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-17"><a href="conditioned-latin-hypercube-sampling.html#cb46-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get sampling points</span></span>
+<span id="cb46-18"><a href="conditioned-latin-hypercube-sampling.html#cb46-18" aria-hidden="true" tabindex="-1"></a>  points <span class="ot">&lt;-</span> res<span class="sc">$</span>sampled_data</span></code></pre></div>
+<p>Figure <a href="conditioned-latin-hypercube-sampling.html#fig:fig-18">6.4</a> shows the distribution of the created cLHS samples, which also include the position of the original legacy soil data points.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="conditioned-latin-hypercube-sampling.html#cb47-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot points</span></span>
+<span id="cb47-2"><a href="conditioned-latin-hypercube-sampling.html#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(cov.dat[[<span class="dv">1</span>]], <span class="at">main=</span><span class="st">&quot;cLHS samples (blue circles) and legacy samples (red diamonds)&quot;</span>)</span>
+<span id="cb47-3"><a href="conditioned-latin-hypercube-sampling.html#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">points</span>(points[,<span class="fu">c</span>(<span class="st">&quot;x&quot;</span>,<span class="st">&quot;y&quot;</span>)], <span class="at">col=</span><span class="st">&quot;navy&quot;</span>, <span class="at">pch =</span> <span class="dv">1</span>)</span>
+<span id="cb47-4"><a href="conditioned-latin-hypercube-sampling.html#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">points</span>(legacy.data, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">pch =</span> <span class="dv">5</span>, <span class="at">cex=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:fig-18"></span>
+<img src="Technical-Manual-Soil-Sampling-Design_files/figure-html/fig-18-1.png" alt="cLHS sampling points with legacy data" width="672" />
+<p class="caption">
+Figure 6.4: cLHS sampling points with legacy data
+</p>
+</div>
+</div>
+<div id="working-with-large-raster-data" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> Working with large raster data<a href="conditioned-latin-hypercube-sampling.html#working-with-large-raster-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The cLHS function samples the covariates in the raster stack in order to determine the optimal location of samples that best represent the environmental conditions in the area. In the case of working with large raster sets, the process can be highly computing demanding since all pixels in the raster stack are used in the process. There are two simple methods to avoid this constraint:</p>
+<ul>
+<li><strong>Aggregation of covariates:</strong> The quickest solution is to aggregate the covariates in the raster stack to a lower pixel resolution. This is directly performed using the <code>'aggregate'</code> function from the <code>'terra'</code>package. In case that the raster stack has discrete layers (factor data), the corresponding layers has to be aggregated separately using either the ‘min’ or ‘max’ functions to avoid corruption of the data and the results added later to the data of continuous raster layers.</li>
+</ul>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="conditioned-latin-hypercube-sampling.html#cb48-1" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Aggregation of raster stack by a factor of 2. </span></span>
+<span id="cb48-2"><a href="conditioned-latin-hypercube-sampling.html#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="do">## The original grid resolution is resampled using the mean value of the pixels in the grid</span></span>
+<span id="cb48-3"><a href="conditioned-latin-hypercube-sampling.html#cb48-3" aria-hidden="true" tabindex="-1"></a>    cov.dat2 <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(cov.dat, <span class="at">fact=</span><span class="dv">10</span>, <span class="at">fun=</span><span class="st">&quot;mean&quot;</span>)</span>
+<span id="cb48-4"><a href="conditioned-latin-hypercube-sampling.html#cb48-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create clhs samples upon the resampled rasters  </span></span>
+<span id="cb48-5"><a href="conditioned-latin-hypercube-sampling.html#cb48-5" aria-hidden="true" tabindex="-1"></a>    resampled.clhs <span class="ot">&lt;-</span> <span class="fu">clhs</span>(raster<span class="sc">::</span><span class="fu">stack</span>(cov.dat2), <span class="at">size =</span> <span class="dv">100</span>, <span class="at">progress =</span> <span class="cn">FALSE</span>, <span class="at">iter =</span> <span class="dv">10000</span>, <span class="at">simple =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb48-6"><a href="conditioned-latin-hypercube-sampling.html#cb48-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot the points over the 1st raster</span></span>
+<span id="cb48-7"><a href="conditioned-latin-hypercube-sampling.html#cb48-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(cov.dat2[[<span class="dv">1</span>]], <span class="at">main=</span><span class="st">&quot;Regular resampled data&quot;</span>)</span>
+<span id="cb48-8"><a href="conditioned-latin-hypercube-sampling.html#cb48-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">points</span>(resampled.clhs<span class="sc">$</span>sampled_data , <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">pch =</span> <span class="dv">1</span>)</span></code></pre></div>
+<ul>
+<li><strong>Sampling covariate data:</strong> Other method that can be used is to sample the stack (extract the covariates information at point scale) on a regular grid at a lower resolution than the raster grid and use this information as input within the cLHS function. The creation of a regular point grid on the raster stack is straightforward through the function <code>spatSample</code> from the <code>'terra'</code> package. In this case we create a regular grid of 1000 points.</li>
+</ul>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="conditioned-latin-hypercube-sampling.html#cb49-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create a regular grid of 1000 points on the covariate space</span></span>
+<span id="cb49-2"><a href="conditioned-latin-hypercube-sampling.html#cb49-2" aria-hidden="true" tabindex="-1"></a>    regular.sample <span class="ot">&lt;-</span> <span class="fu">spatSample</span>(cov.dat, <span class="at">size =</span> <span class="dv">1000</span>, <span class="at">xy=</span><span class="cn">TRUE</span>, <span class="at">method=</span><span class="st">&quot;regular&quot;</span>, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb49-3"><a href="conditioned-latin-hypercube-sampling.html#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># plot the points over the 1st raster</span></span>
+<span id="cb49-4"><a href="conditioned-latin-hypercube-sampling.html#cb49-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(cov.dat[[<span class="dv">1</span>]], <span class="at">main=</span><span class="st">&quot;Regular resampled data&quot;</span>)</span>
+<span id="cb49-5"><a href="conditioned-latin-hypercube-sampling.html#cb49-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">points</span>(regular.sample, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">pch =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:fig-19"></span>
+<img src="Technical-Manual-Soil-Sampling-Design_files/figure-html/fig-19-1.png" alt="Low resolution points of covariate data" width="672" />
+<p class="caption">
+Figure 6.5: Low resolution points of covariate data
+</p>
+</div>
+<p>This <code>dataframe</code> can be directly used as input in the cLHS function to get locations that best represent the covariate space in the area.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="conditioned-latin-hypercube-sampling.html#cb50-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create clhs samples upon the regular grid  </span></span>
+<span id="cb50-2"><a href="conditioned-latin-hypercube-sampling.html#cb50-2" aria-hidden="true" tabindex="-1"></a>   regular.sample.clhs <span class="ot">&lt;-</span> <span class="fu">clhs</span>(regular.sample, <span class="at">size =</span> <span class="dv">100</span>, <span class="at">progress =</span> <span class="cn">FALSE</span>, <span class="at">iter =</span> <span class="dv">10000</span>, <span class="at">simple =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb50-3"><a href="conditioned-latin-hypercube-sampling.html#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot points of clhs samples</span></span>
+<span id="cb50-4"><a href="conditioned-latin-hypercube-sampling.html#cb50-4" aria-hidden="true" tabindex="-1"></a>    points <span class="ot">&lt;-</span> regular.sample.clhs<span class="sc">$</span>sampled_data <span class="co"># Get point coordinates of clhs sampling</span></span>
+<span id="cb50-5"><a href="conditioned-latin-hypercube-sampling.html#cb50-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(cov.dat[[<span class="dv">1</span>]], <span class="at">main=</span><span class="st">&quot;cLHS samples (red) and covariate resampled points (blue)&quot;</span>)</span>
+<span id="cb50-6"><a href="conditioned-latin-hypercube-sampling.html#cb50-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">points</span>(regular.sample, <span class="at">col=</span><span class="st">&quot;dodgerblue&quot;</span>, <span class="at">pch =</span> <span class="dv">1</span>)</span>
+<span id="cb50-7"><a href="conditioned-latin-hypercube-sampling.html#cb50-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">points</span>(points, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">cex=</span><span class="dv">1</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:fig-20"></span>
+<img src="Technical-Manual-Soil-Sampling-Design_files/figure-html/fig-20-1.png" alt="cLHS sampling points on point-grid transformed raster covariate data" width="672" />
+<p class="caption">
+Figure 6.6: cLHS sampling points on point-grid transformed raster covariate data
+</p>
+</div>
+<p>Note that the sampling design follows the regular pattern of the regular grid extracted from the raster covariates</p>
+</div>
+<div id="implementation-of-costconstrained-clhs-sampling" class="section level2 hasAnchor" number="6.4">
+<h2><span class="header-section-number">6.4</span> Implementation of cost–constrained cLHS sampling<a href="conditioned-latin-hypercube-sampling.html#implementation-of-costconstrained-clhs-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>There are situation in which the accessibility to some locations is totally or partially restricted such as areas with steep slopes, remote areas, or areas with forbidden access, which highly compromises the sampling process. For these cases, the sampling design can constrain the points to particular locations by defining environmental layers that cause an increment in the cost efficiency of the sampling. This is done with the <code>cost</code> attribute in the main <code>'clhs'</code> function. The following example uses the raster layer “distance to roads” as a cost layer to avoid low accessible points located at large distance from roads while optimizing the representativeness of the remaining environmental covariates.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="conditioned-latin-hypercube-sampling.html#cb51-1" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Load pre-calculated distance–to–roads surface</span></span>
+<span id="cb51-2"><a href="conditioned-latin-hypercube-sampling.html#cb51-2" aria-hidden="true" tabindex="-1"></a>    dist2access <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="fu">paste0</span>(results.path,<span class="st">&quot;nghe_d2roads.tif&quot;</span>))</span>
+<span id="cb51-3"><a href="conditioned-latin-hypercube-sampling.html#cb51-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot(dist2access)</span></span>
+<span id="cb51-4"><a href="conditioned-latin-hypercube-sampling.html#cb51-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot(nghe, col=&quot;transparent&quot;, add=TRUE)</span></span>
+<span id="cb51-5"><a href="conditioned-latin-hypercube-sampling.html#cb51-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb51-6"><a href="conditioned-latin-hypercube-sampling.html#cb51-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add cost surface as raster layer</span></span>
+<span id="cb51-7"><a href="conditioned-latin-hypercube-sampling.html#cb51-7" aria-hidden="true" tabindex="-1"></a>    cov.dat.ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">addLayer</span>(cov.dat.ras,raster<span class="sc">::</span><span class="fu">raster</span>(dist2access))</span>
+<span id="cb51-8"><a href="conditioned-latin-hypercube-sampling.html#cb51-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-9"><a href="conditioned-latin-hypercube-sampling.html#cb51-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Harmonize NAs in rasters</span></span>
+<span id="cb51-10"><a href="conditioned-latin-hypercube-sampling.html#cb51-10" aria-hidden="true" tabindex="-1"></a>    cov.dat.ras<span class="sc">$</span>dist2access <span class="ot">&lt;-</span> cov.dat.ras<span class="sc">$</span>dist2access <span class="sc">*</span> cov.dat.ras[[<span class="dv">1</span>]]<span class="sc">/</span>cov.dat.ras[[<span class="dv">1</span>]]</span>
+<span id="cb51-11"><a href="conditioned-latin-hypercube-sampling.html#cb51-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot(cov.dat.ras$dist2access)</span></span>
+<span id="cb51-12"><a href="conditioned-latin-hypercube-sampling.html#cb51-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot(nghe, col=&quot;transparent&quot;,add=TRUE)</span></span></code></pre></div>
+<p>The sampling set is calculated using distance to roads as a cost surface.</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="conditioned-latin-hypercube-sampling.html#cb52-1" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create a cLHS sampling point set with </span></span>
+<span id="cb52-2"><a href="conditioned-latin-hypercube-sampling.html#cb52-2" aria-hidden="true" tabindex="-1"></a>    cost.clhs <span class="ot">&lt;-</span> <span class="fu">clhs</span>(cov.dat.ras, <span class="at">size =</span> minimum_n, <span class="at">iter =</span> <span class="dv">10000</span>, <span class="at">progress =</span> <span class="cn">FALSE</span>, <span class="at">simple =</span> <span class="cn">FALSE</span>, <span class="at">cost =</span> <span class="st">&#39;dist2access&#39;</span>,  <span class="at">use.cpp =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>Figure <a href="conditioned-latin-hypercube-sampling.html#fig:fig-22">6.7</a> shows the distribution of the cost constrained <code>'clhs'</code> sampling over the <code>'cost'</code> surface. The sampling procedure concentrates, as much as possible, sampling sites in locations with lower costs.</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="conditioned-latin-hypercube-sampling.html#cb53-1" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get and plot the point of samples</span></span>
+<span id="cb53-2"><a href="conditioned-latin-hypercube-sampling.html#cb53-2" aria-hidden="true" tabindex="-1"></a>    points <span class="ot">&lt;-</span> cost.clhs<span class="sc">$</span>sampled_data  <span class="co"># Get point coordinates of clhs sampling</span></span>
+<span id="cb53-3"><a href="conditioned-latin-hypercube-sampling.html#cb53-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(cov.dat.ras[[<span class="st">&#39;dist2access&#39;</span>]], <span class="at">main=</span><span class="st">&quot;cLHS samples with &#39;cost&#39; constraints&quot;</span>)</span>
+<span id="cb53-4"><a href="conditioned-latin-hypercube-sampling.html#cb53-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">points</span>(points, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">cex=</span><span class="dv">1</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:fig-22"></span>
+<img src="Technical-Manual-Soil-Sampling-Design_files/figure-html/fig-22-1.png" alt="cLHS sampling with cost layers" width="672" />
+<p class="caption">
+Figure 6.7: cLHS sampling with cost layers
+</p>
+</div>
+<p>Cost surfaces can be defined by other parameters than distances to roads. They can represent private property boundaries, slopes, presence of wetlands, etc. The package <code>'sgsR'</code> implements functions to define both cost surfaces and distances to roads simultaneously. In this case, it is possible to define an inner buffer distance – i.e. the distance from the roads that should be avoided for sampling and an outer buffer – i.e. the maximum sampling distance) from roads to maximize the variability of the sampling point while considering these limits. The <code>'sample_clhs'</code> function in this package also includes options to include existing legacy data in the process of clhs sampling.</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="conditioned-latin-hypercube-sampling.html#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load legacy data </span></span>
+<span id="cb54-2"><a href="conditioned-latin-hypercube-sampling.html#cb54-2" aria-hidden="true" tabindex="-1"></a>  legacy <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_read</span>(<span class="fu">file.path</span>(<span class="fu">paste0</span>(shp.path,<span class="st">&quot;/legacy_soils.shp&quot;</span>)),<span class="at">quiet=</span><span class="cn">TRUE</span>)</span>
+<span id="cb54-3"><a href="conditioned-latin-hypercube-sampling.html#cb54-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-4"><a href="conditioned-latin-hypercube-sampling.html#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add distance to roads co the stack</span></span>
+<span id="cb54-5"><a href="conditioned-latin-hypercube-sampling.html#cb54-5" aria-hidden="true" tabindex="-1"></a>  cost <span class="ot">&lt;-</span> cov.dat </span>
+<span id="cb54-6"><a href="conditioned-latin-hypercube-sampling.html#cb54-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add distance to roads co the stack</span></span>
+<span id="cb54-7"><a href="conditioned-latin-hypercube-sampling.html#cb54-7" aria-hidden="true" tabindex="-1"></a>  cost <span class="ot">&lt;-</span> <span class="fu">c</span>(cost, <span class="fu">rast</span>(cov.dat.ras<span class="sc">$</span>dist2access))</span>
+<span id="cb54-8"><a href="conditioned-latin-hypercube-sampling.html#cb54-8" aria-hidden="true" tabindex="-1"></a>  cost<span class="sc">$</span>slope <span class="ot">&lt;-</span> slope <span class="co"># Define slope cost layer</span></span>
+<span id="cb54-9"><a href="conditioned-latin-hypercube-sampling.html#cb54-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate clhs points with legacy, cost and buffer to roads</span></span>
+<span id="cb54-10"><a href="conditioned-latin-hypercube-sampling.html#cb54-10" aria-hidden="true" tabindex="-1"></a>  buff_inner<span class="ot">=</span><span class="dv">20</span>;</span>
+<span id="cb54-11"><a href="conditioned-latin-hypercube-sampling.html#cb54-11" aria-hidden="true" tabindex="-1"></a>  buff_outer<span class="ot">=</span><span class="dv">3000</span></span>
+<span id="cb54-12"><a href="conditioned-latin-hypercube-sampling.html#cb54-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert roads to sf object and cast to multilinestring</span></span>
+<span id="cb54-13"><a href="conditioned-latin-hypercube-sampling.html#cb54-13" aria-hidden="true" tabindex="-1"></a>  roads2 <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(roads) <span class="sc">%&gt;%</span></span>
+<span id="cb54-14"><a href="conditioned-latin-hypercube-sampling.html#cb54-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_cast</span>(<span class="st">&quot;MULTILINESTRING&quot;</span>) </span>
+<span id="cb54-15"><a href="conditioned-latin-hypercube-sampling.html#cb54-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-16"><a href="conditioned-latin-hypercube-sampling.html#cb54-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate clhs samples using slope as cost surface, distance to roads as</span></span>
+<span id="cb54-17"><a href="conditioned-latin-hypercube-sampling.html#cb54-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># access limitations, and including existing legacy data</span></span>
+<span id="cb54-18"><a href="conditioned-latin-hypercube-sampling.html#cb54-18" aria-hidden="true" tabindex="-1"></a>  aa <span class="ot">&lt;-</span> sgsR<span class="sc">::</span><span class="fu">sample_clhs</span>(<span class="at">mraster =</span> cost, <span class="at">nSamp =</span> minimum_n, <span class="at">existing =</span> legacy,</span>
+<span id="cb54-19"><a href="conditioned-latin-hypercube-sampling.html#cb54-19" aria-hidden="true" tabindex="-1"></a>                          <span class="at">iter =</span> <span class="dv">10000</span>, <span class="at">details =</span> <span class="cn">TRUE</span>, <span class="at">cost=</span><span class="st">&quot;slope&quot;</span>, <span class="at">access=</span>roads2,</span>
+<span id="cb54-20"><a href="conditioned-latin-hypercube-sampling.html#cb54-20" aria-hidden="true" tabindex="-1"></a>                          <span class="at">buff_inner=</span>buff_inner, <span class="at">buff_outer=</span>buff_outer)</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="conditioned-latin-hypercube-sampling.html#cb55-1" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Plot distances, roads, clhs points and legacy data </span></span>
+<span id="cb55-2"><a href="conditioned-latin-hypercube-sampling.html#cb55-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(cost<span class="sc">$</span>dist2access)</span>
+<span id="cb55-3"><a href="conditioned-latin-hypercube-sampling.html#cb55-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(roads,<span class="at">add=</span><span class="cn">TRUE</span>, <span class="at">col=</span><span class="st">&quot;black&quot;</span>)</span>
+<span id="cb55-4"><a href="conditioned-latin-hypercube-sampling.html#cb55-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(aa<span class="sc">$</span>samples[aa<span class="sc">$</span>samples<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;new&quot;</span>,], <span class="at">col=</span> <span class="st">&quot;tomato&quot;</span>,<span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb55-5"><a href="conditioned-latin-hypercube-sampling.html#cb55-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(aa<span class="sc">$</span>samples[aa<span class="sc">$</span>samples<span class="sc">$</span>type<span class="sc">==</span><span class="st">&quot;existing&quot;</span>,], <span class="at">col=</span> <span class="st">&quot;gray40&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>, <span class="at">pch =</span> <span class="dv">5</span>, <span class="at">cex=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:fig-22b"></span>
+<img src="Technical-Manual-Soil-Sampling-Design_files/figure-html/fig-22b-1.png" alt="cLHS sampling with legacy data, cost surface and distance buffers around roads" width="672" />
+<p class="caption">
+Figure 6.8: cLHS sampling with legacy data, cost surface and distance buffers around roads
+</p>
+</div>
+<p>Legacy data is represented as blue dots while new samples from cLHS analyses are in red colour (Fig.<a href="conditioned-latin-hypercube-sampling.html#fig:fig-22">6.7</a>). Note that the new sampling points are located within a distance buffer of 20-3000 meters from roads. In addition, a cost surface has also been included in the analyses.</p>
+</div>
+<div id="replacement-areas-in-clhs-design" class="section level2 hasAnchor" number="6.5">
+<h2><span class="header-section-number">6.5</span> Replacement areas in cLHS design<a href="conditioned-latin-hypercube-sampling.html#replacement-areas-in-clhs-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <code>'cLHS'</code> package incorporates methods for the delineation of replacement locations that could be utilized in the case any sampling point is unreachable. In this case, the function determines the probability of similarity to each point in an area determined by a buffer distance around the points.</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="conditioned-latin-hypercube-sampling.html#cb56-1" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Determine the similarity to points in a buffer of distance D</span></span>
+<span id="cb56-2"><a href="conditioned-latin-hypercube-sampling.html#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compute the buffers around points  </span></span>
+<span id="cb56-3"><a href="conditioned-latin-hypercube-sampling.html#cb56-3" aria-hidden="true" tabindex="-1"></a>    gw <span class="ot">&lt;-</span> <span class="fu">similarity_buffer</span>(cov.dat.ras, cost.clhs<span class="sc">$</span>sampled_data, <span class="at">buffer =</span> D)</span></code></pre></div>
+<p>The similarity probabilities for the first cLHS point is presented on Figure <a href="conditioned-latin-hypercube-sampling.html#fig:fig-23">6.9</a> over the elevation layer.</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="conditioned-latin-hypercube-sampling.html#cb57-1" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot results</span></span>
+<span id="cb57-2"><a href="conditioned-latin-hypercube-sampling.html#cb57-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(elevation, <span class="at">legend=</span><span class="cn">TRUE</span>,<span class="at">main=</span><span class="fu">paste</span>(<span class="st">&quot;Similarity probability over elevation&quot;</span>))</span>
+<span id="cb57-3"><a href="conditioned-latin-hypercube-sampling.html#cb57-3" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Overlay points</span></span>
+<span id="cb57-4"><a href="conditioned-latin-hypercube-sampling.html#cb57-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">points</span>(cost.clhs<span class="sc">$</span>sampled_data[<span class="dv">1</span>], <span class="at">col =</span> <span class="st">&quot;dodgerblue&quot;</span>, <span class="at">pch =</span> <span class="dv">3</span>)</span>
+<span id="cb57-5"><a href="conditioned-latin-hypercube-sampling.html#cb57-5" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Overlay probability stack for point 1</span></span>
+<span id="cb57-6"><a href="conditioned-latin-hypercube-sampling.html#cb57-6" aria-hidden="true" tabindex="-1"></a>    colors <span class="ot">&lt;-</span> <span class="fu">c</span>((RColorBrewer<span class="sc">::</span><span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;YlOrRd&quot;</span>)))</span>
+<span id="cb57-7"><a href="conditioned-latin-hypercube-sampling.html#cb57-7" aria-hidden="true" tabindex="-1"></a>    terra<span class="sc">::</span><span class="fu">plot</span>(gw[[<span class="dv">1</span>]], <span class="at">add=</span><span class="cn">TRUE</span> ,  <span class="at">legend=</span><span class="cn">FALSE</span>, <span class="at">col=</span>colors)</span>
+<span id="cb57-8"><a href="conditioned-latin-hypercube-sampling.html#cb57-8" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Overlay 1st cLHS point</span></span>
+<span id="cb57-9"><a href="conditioned-latin-hypercube-sampling.html#cb57-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">points</span>(cost.clhs<span class="sc">$</span>sampled_data[<span class="dv">1</span>,<span class="dv">1</span>], <span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">pch =</span> <span class="dv">3</span>,<span class="at">cex=</span><span class="dv">1</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:fig-23"></span>
+<img src="Technical-Manual-Soil-Sampling-Design_files/figure-html/fig-23-1.png" alt="Probability of similarity in the buffer for the first cLHS point (in black) over elevation. The blue crosses represent the location of the remaining cLHS points from the analysis." width="672" />
+<p class="caption">
+Figure 6.9: Probability of similarity in the buffer for the first cLHS point (in black) over elevation. The blue crosses represent the location of the remaining cLHS points from the analysis.
+</p>
+</div>
+<p>The probabilities can then be reclassified using a threshold value to delineate the areas with higher similarity to each central target point.</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="conditioned-latin-hypercube-sampling.html#cb58-1" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Determine a threshold break to delineate replacement areas</span></span>
+<span id="cb58-2"><a href="conditioned-latin-hypercube-sampling.html#cb58-2" aria-hidden="true" tabindex="-1"></a>    similarity_threshold <span class="ot">&lt;-</span> <span class="fl">0.90</span></span>
+<span id="cb58-3"><a href="conditioned-latin-hypercube-sampling.html#cb58-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reclassify buffer raster data according to the threshold break of probability</span></span>
+<span id="cb58-4"><a href="conditioned-latin-hypercube-sampling.html#cb58-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 1 = similarity &gt;= similarity_break; NA =  similarity &lt;  similarity_break</span></span>
+<span id="cb58-5"><a href="conditioned-latin-hypercube-sampling.html#cb58-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define a vector with the break intervals and the output values (NA,1) </span></span>
+<span id="cb58-6"><a href="conditioned-latin-hypercube-sampling.html#cb58-6" aria-hidden="true" tabindex="-1"></a>    breaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, similarity_threshold, <span class="cn">NA</span>, similarity_threshold, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb58-7"><a href="conditioned-latin-hypercube-sampling.html#cb58-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert to a matrix</span></span>
+<span id="cb58-8"><a href="conditioned-latin-hypercube-sampling.html#cb58-8" aria-hidden="true" tabindex="-1"></a>    breaks <span class="ot">&lt;-</span> <span class="fu">matrix</span>(breaks, <span class="at">ncol=</span><span class="dv">3</span>, <span class="at">byrow=</span><span class="cn">TRUE</span>)</span>
+<span id="cb58-9"><a href="conditioned-latin-hypercube-sampling.html#cb58-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reclassify the data in the layers from probabilities to (NA,)</span></span>
+<span id="cb58-10"><a href="conditioned-latin-hypercube-sampling.html#cb58-10" aria-hidden="true" tabindex="-1"></a>    s <span class="ot">=</span> <span class="fu">stack</span>(<span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span>raster<span class="sc">::</span><span class="fu">nlayers</span>(gw), <span class="cf">function</span>(i){raster<span class="sc">::</span><span class="fu">reclassify</span>(gw[[i]], breaks, <span class="at">right=</span><span class="cn">FALSE</span>)}))</span></code></pre></div>
+<p>The reclassified raster stack is then converted to an object of <code>'SpatialPolygonsDataFrame'</code> class.</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="conditioned-latin-hypercube-sampling.html#cb59-1" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Polygonize replacement areas </span></span>
+<span id="cb59-2"><a href="conditioned-latin-hypercube-sampling.html#cb59-2" aria-hidden="true" tabindex="-1"></a>    s <span class="ot">=</span> <span class="fu">lapply</span>(<span class="fu">as.list</span>(s), rasterToPolygons, <span class="at">dissolve=</span><span class="cn">TRUE</span>)</span>
+<span id="cb59-3"><a href="conditioned-latin-hypercube-sampling.html#cb59-3" aria-hidden="true" tabindex="-1"></a>    s <span class="ot">&lt;-</span> <span class="fu">bind</span>(s,<span class="at">keepnames=</span><span class="cn">TRUE</span>)</span>
+<span id="cb59-4"><a href="conditioned-latin-hypercube-sampling.html#cb59-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add the identifier of the corresponding target point</span></span>
+<span id="cb59-5"><a href="conditioned-latin-hypercube-sampling.html#cb59-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span> <span class="fu">length</span>(s)){</span>
+<span id="cb59-6"><a href="conditioned-latin-hypercube-sampling.html#cb59-6" aria-hidden="true" tabindex="-1"></a>      s<span class="sc">@</span>data<span class="sc">$</span>ID[i] <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(stringr<span class="sc">::</span><span class="fu">str_replace</span>(s<span class="sc">@</span>polygons[[i]]<span class="sc">@</span>ID,<span class="st">&quot;1.&quot;</span>,<span class="st">&quot;&quot;</span>))</span>
+<span id="cb59-7"><a href="conditioned-latin-hypercube-sampling.html#cb59-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb59-8"><a href="conditioned-latin-hypercube-sampling.html#cb59-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Clean the data by storing target ID data only</span></span>
+<span id="cb59-9"><a href="conditioned-latin-hypercube-sampling.html#cb59-9" aria-hidden="true" tabindex="-1"></a>    s<span class="sc">@</span>data <span class="ot">&lt;-</span> s<span class="sc">@</span>data[<span class="st">&quot;ID&quot;</span>]</span></code></pre></div>
+<p>The results are shown in Figure <a href="conditioned-latin-hypercube-sampling.html#fig:fig-24">6.10</a>.</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="conditioned-latin-hypercube-sampling.html#cb60-1" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot results</span></span>
+<span id="cb60-2"><a href="conditioned-latin-hypercube-sampling.html#cb60-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(cov.dat[[<span class="dv">1</span>]], <span class="at">main=</span><span class="fu">paste</span>(<span class="st">&quot;cLHS samples and replacement areas for threshold = &quot;</span>, similarity_threshold))</span>
+<span id="cb60-3"><a href="conditioned-latin-hypercube-sampling.html#cb60-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(s,<span class="at">add=</span><span class="cn">TRUE</span>, <span class="at">col=</span><span class="cn">NA</span>, <span class="at">border=</span><span class="st">&quot;gray40&quot;</span>)</span>
+<span id="cb60-4"><a href="conditioned-latin-hypercube-sampling.html#cb60-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">points</span>(cost.clhs<span class="sc">$</span>sampled_data, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">pch =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:fig-24"></span>
+<img src="Technical-Manual-Soil-Sampling-Design_files/figure-html/fig-24-1.png" alt="Distribution of cLHS sampling points in the study area" width="672" />
+<p class="caption">
+Figure 6.10: Distribution of cLHS sampling points in the study area
+</p>
+</div>
+<p>Replacement areas and sampling points can finally be stored as <code>'shapefiles'</code>.</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="conditioned-latin-hypercube-sampling.html#cb61-1" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Export replacement areas to shapefile </span></span>
+<span id="cb61-2"><a href="conditioned-latin-hypercube-sampling.html#cb61-2" aria-hidden="true" tabindex="-1"></a>    s <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(s)</span>
+<span id="cb61-3"><a href="conditioned-latin-hypercube-sampling.html#cb61-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_write</span>(s, <span class="fu">file.path</span>(<span class="fu">paste0</span>(results.path,<span class="st">&#39;replacement_areas_&#39;</span>, D, <span class="st">&#39;.shp&#39;</span>)), <span class="at">delete_dsn =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb61-4"><a href="conditioned-latin-hypercube-sampling.html#cb61-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb61-5"><a href="conditioned-latin-hypercube-sampling.html#cb61-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Export cLHS sampling points to shapefile</span></span>
+<span id="cb61-6"><a href="conditioned-latin-hypercube-sampling.html#cb61-6" aria-hidden="true" tabindex="-1"></a>    cost.clhs<span class="sc">$</span>sampled_data<span class="sc">$</span>ID <span class="ot">&lt;-</span> <span class="fu">row</span>(cost.clhs<span class="sc">$</span>sampled_data)[,<span class="dv">1</span>] <span class="co"># Add identifier</span></span>
+<span id="cb61-7"><a href="conditioned-latin-hypercube-sampling.html#cb61-7" aria-hidden="true" tabindex="-1"></a>    out.pts <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(cost.clhs<span class="sc">$</span>sampled_data)</span>
+<span id="cb61-8"><a href="conditioned-latin-hypercube-sampling.html#cb61-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_write</span>(out.pts, <span class="fu">paste0</span>(results.path,<span class="st">&#39;target_clhs.shp&#39;</span>), <span class="at">delete_dsn =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body">
+<div id="ref-sgsR" class="csl-entry">
+<strong>Goodbody, T.R.H., Coops, N.C., Queinnec, M., White, J.C., Tompalski, P., Hudak, A.T., Auty, D., Valbuena, R., LeBoeuf, A., Sinclair, I., McCartney, G., Prieur, J.-F. &amp; Woods, M.E.</strong> 2023. <em><a href="https://doi.org/10.1093/forestry/cpac055">sgsR: A structurally guided sampling toolbox for LiDAR-based forest inventories.</a></em>
+</div>
+<div id="ref-minasny2006" class="csl-entry">
+<strong>Minasny, B. &amp; McBratney, A.</strong> 2006. A conditioned latin hypercube method for sampling in the presence of ancillary information. <em>Computers &amp; Geosciences</em>, 32: 1378–1388. <a href="https://doi.org/10.1016/j.cageo.2005.12.009">https://doi.org/10.1016/j.cageo.2005.12.009</a>
+</div>
+<div id="ref-Roudier2011" class="csl-entry">
+<strong>Roudier, P., Brugnard, C., Beaudette, D., Louis, B., Daust, K. &amp; Clifford, D.</strong> 2011. <em>Clhs: A r package for conditioned latin hypercube sampling</em>. (also available at <a href="https://cran.r-project.org/web/packages/clhs/">https://cran.r-project.org/web/packages/clhs/</a>).
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="stratified-sampling-design.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="annex-i-compendium-of-r-scripts.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/luislado/Sampling_Design_GSP/edit/master/06-CLHS_sampling.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Technical Manual Soil Sampling Design.pdf", "Technical Manual Soil Sampling Design.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection",
+"scroll_highlight": true
+},
+"toolbar": {
+"position": "static"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
