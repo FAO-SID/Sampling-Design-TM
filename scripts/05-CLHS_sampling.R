@@ -56,6 +56,8 @@ start_time <- Sys.time()
   shp.path <- "data/shapes/"
   # Path to results
   results.path <- "data/results/"
+  # Path to additional data
+  other.path <- "data/other/"
   # Buffer distance for replacement areas (clhs)
   D <- 1000 # Buffer distance to calculate replacement areas 
   # Define the minimum sample size. By default it uses the value calculated previously
@@ -176,10 +178,10 @@ start_time <- Sys.time()
       # dist2access <- terra::distance(cov.dat[[1]], roads, progress=TRUE)
       # names(dist2access) <- "dist2access"
       # Save cost surface to disk
-      # writeRaster(dist2access, paste0(results.path,"nghe_d2roads.tif"), overwrite=TRUE)
+      # writeRaster(dist2access, paste0(other.path,"nghe_d2roads.tif"), overwrite=TRUE)
       
     # Load pre-calculated distance–to–roads surface
-    dist2access <- terra::rast(paste0(results.path,"nghe_d2roads.tif"))
+    dist2access <- terra::rast(paste0(other.path,"nghe_d2roads.tif"))
     # Aggregate to the same soatial definition
      # dist2access <- aggregate(dist2access, fact=10, fun="mean")
     plot(dist2access)

@@ -48,7 +48,7 @@
   
   # Set working directory to source file location
     setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-
+    setwd("../") # Move wd down to main folder
 
 ## 1 - User-defined variables ==================================================
     # Path to rasters
@@ -145,7 +145,7 @@
 # 5 - Create sampling strata ===================================================
     
       # Combine soil and landcover layers
-      # sf_use_s2(FALSE) # use in case st_intersection cannot be run
+      sf_use_s2(FALSE) # use in case st_intersection cannot be run
       soil_lc <- st_intersection(st_make_valid(soil), st_make_valid(lc))  
       soil_lc$soil_lc <- paste0(soil_lc$RSG, "_", soil_lc$landcover)
       soil_lc <- soil_lc %>% dplyr::select(soil_lc, geometry)
