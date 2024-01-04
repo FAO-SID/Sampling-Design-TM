@@ -10,3 +10,4 @@ NLSDR_Technical_Manual_files
 .DS_Store
 .quarto
 Sampling_Design.Rproj
+data/.DS_Store
