@@ -57,6 +57,8 @@
     shp.path <- "data/shapes"
     # Path to results
     results.path <- "data/results/"
+    # Path to additional data
+    other.path <- "data/other/"
     n <- 242
 
     
@@ -130,20 +132,20 @@
     lc <- lc %>% group_by(landcover) %>% dplyr::summarize() 
     
     # Write landcover strata as shapefile
-      st_write(lc, paste0(results.path,"lc_classes.shp"), delete_dsn = TRUE)
+    st_write(lc, paste0(results.path,"lc_classes.shp"), delete_dsn = TRUE)
     
-      # Plot map with the land cover information
-      map = leaflet() %>%
-        addTiles()
-      mv <- mapview(lc["landcover"], alpha=0, homebutton=T, layer.name = "Landcover", map=map)
-      mv@map
-      #ggplot() + geom_sf(data=lc, aes(fill = factor(landcover)))
+    # Plot map with the land cover information
+    map = leaflet() %>%
+      addTiles()
+    mv <- mapview(lc["landcover"], alpha=0, homebutton=T, layer.name = "Landcover", map=map)
+    mv@map
+    #ggplot() + geom_sf(data=lc, aes(fill = factor(landcover)))
     
 
 # 5 - Create sampling strata ===================================================
     
       # Combine soil and landcover layers
-      sf_use_s2(FALSE)
+      # sf_use_s2(FALSE) # use in case st_intersection cannot be run
       soil_lc <- st_intersection(st_make_valid(soil), st_make_valid(lc))  
       soil_lc$soil_lc <- paste0(soil_lc$RSG, "_", soil_lc$landcover)
       soil_lc <- soil_lc %>% dplyr::select(soil_lc, geometry)

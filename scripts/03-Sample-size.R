@@ -53,6 +53,8 @@
   shp.path <- "data/shapes"
 # Path to results
   results.path <- "data/results/"
+# Path to additional data
+other.path <- "data/other/"
 # Aggregation factor for up-scaling raster covariates (optional)
   agg.factor = 10
 

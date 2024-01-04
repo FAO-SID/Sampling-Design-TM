@@ -23,6 +23,9 @@ With the minimum sampling size of `r minimum_n` calculated before, we can conduc
   shp.path <- "data/shapes/"
   # Path to results
   results.path <- "data/results/"
+  # Path to additional data
+  other.path <- "data/other/"
+  
   # Aggregation factor for up-scaling raster covariates (optional)
   agg.factor = 10
   # Buffer distance for replacement areas (clhs)
@@ -229,7 +232,7 @@ There are situation in which the accessibility to some locations is totally or p
 
 ```{r roads-06, eval=TRUE, include=TRUE}
     # Load pre-calculated distance–to–roads surface
-    dist2access <- terra::rast(paste0(results.path,"nghe_d2roads.tif"))
+    dist2access <- terra::rast(paste0(other.path,"nghe_d2roads.tif"))
     # plot(dist2access)
     # plot(nghe, col="transparent", add=TRUE)
     
