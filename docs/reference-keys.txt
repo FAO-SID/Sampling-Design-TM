@@ -1,8 +1,7 @@
 fig:Rstudio
 fig:GEE
 fig:fig-3
-fig:fig-4-1
-fig:fig-4-2
+fig:fig-4
 fig:fig-5
 fig:fig-7
 fig:fig-7a
@@ -15,6 +14,7 @@ fig:fig-13
 fig:fig-14
 fig:fig-14b
 fig:fig-14c
+fig:fig-14d
 fig:fig-15
 fig:fig-16
 fig:fig-17

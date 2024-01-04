@@ -6,7 +6,7 @@ Several strategies exist for designing soil sampling, including regular, random,
 
 The determination of both the number and locations of soil samples is an important element in the success of any sampling campaign. The chosen strategy directly influences the representativeness and accuracy of the soil data collected, which in turn impacts the quality of the conclusions drawn from the study.
 
-In this exercise, we make use of the data provided by [@Malone] with 4 raster covariates in a 100 has area. We want to determine the minimal number of soil samples that must be collated to capture at least the 95% of variability within the environmental covariates. The procedure start with random distribution of a low number of samples in the area, determine the values of the spatial covariates, and compare them with those representing the whole diversity in the area at pixel scale. The comparisons are made using the `'Kullback–Leibler divergence (KL)'` – a measure of how the probability distribution of the information in the samples is different from that of the Population, i.e. the covariate space. We also calculate the `'% of representativeness'` as the percent of variability in the covariate information for the complete area related to the variability of covariate information in the sample dataset. Further information can be found in the original work from [@Malone]. 
+In this manual, we make use of the data from Vietnam as stored in the Google Earth repository of FAO-GPS (digital-soil-mapping-gsp-fao) for the Nghe An province. We want to determine the minimal number of soil samples that must be collated to capture at least the 95% of variability within the environmental covariates. The procedure start with random distribution of a low number of samples in the area, determine the values of the spatial covariates, and compare them with those representing the whole diversity in the area at pixel scale. The comparisons are made using the `'Kullback–Leibler divergence (KL)'` – a measure of how the probability distribution of the information in the samples is different from that of the Population, i.e. the covariate space. We also calculate the `'% of representativeness'` as the percent of variability in the covariate information for the complete area related to the variability of covariate information in the sample dataset. 
 
 The initial section of the script is related to set–up options in the methodology. We load of R packages, define the working directory, load covariate data, and store it as `SpatRaster` object. Variables related to several aspects of the analyses, such as the aggregation factor of covariates (optional), the creation of a raster stack object(required in the `clhs` function), the initial and final number of samples in the trials, the increment step between trials, and the number of iterations within each trial, are also defined.
 
@@ -45,6 +45,7 @@ The initial section of the script is related to set–up options in the methodol
 
 ```
 
+As in the previous section, covariates are PCA-transformed to avoid collinearity in the data and Principal Component rasters representing 99% of the information are retained for the analyses.
 
 ```{r load_data_03, eval=TRUE, include=TRUE, warning=FALSE}
 
@@ -77,7 +78,7 @@ The initial section of the script is related to set–up options in the methodol
   
 ```
 
-We can see the covariates in a plot.
+Fig. \@ref(fig:fig-10) shows the covariates retained for the analyses.
 
 ```{r fig-5, eval=TRUE, include=TRUE, fig.cap="Plot of the covariates"}
 
@@ -271,7 +272,7 @@ Figure \@ref(fig:fig-7) shows the distribution of covariates in the sample space
 
 
 
-```{r fig-7a, fig.cap="Boxplot of the dispersion in KLO and % repressentativeness in the iteration trials for each sample size",fig.width=8, fig.height=5, eval=TRUE, include=TRUE}
+```{r fig-7a, fig.cap="Boxplot of the dispersion in KL and % repressentativeness in the iteration trials for each sample size",fig.width=8, fig.height=5, eval=TRUE, include=TRUE}
 
   ## Plot dispersion on KL and % by N
   par(mar=c(5, 4, 1, 6))

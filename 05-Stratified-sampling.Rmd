@@ -24,7 +24,7 @@ The fist step is to set–up the RStudio environment and load the required packa
 ```{r strata–setup, eval=TRUE, include=FALSE, warning=FALSE}
 
 # Load packages as a vector objects
-  packages <- c("sf", "terra", "tidyverse", "rmapshaper", "units","plyr", "mapview", "leaflet","stars")
+  packages <- c("sf", "terra", "tidyverse", "rmapshaper", "units","plyr", "mapview", "leaflet","stars","sgsR")
   lapply(packages, require, character.only = TRUE) # Load packages
   rm(packages) # Remove object to save memory space 
 
@@ -50,23 +50,20 @@ We must define the number of samples to distribute in the sampling design and th
   # Define number of samples
     n <- 242
 
-  # Define soil map data
-    #soil <- st_read("../soil_sampling/JAM/soilph.shp")
-    soil <- st_read("../soil_sampling/JAM/soils.shp")
-  # Define Land use  data
-    #lc <- st_read("../soil_sampling/JAM/Land_use.shp")
-    lc <- st_read("../soil_sampling/JAM/landuses.shp")
+  # Load soil data
+    soil <- st_read(paste0(shp.path,"/soils.shp"),promote_to_multi = FALSE)  
+  # Load Landcover data
+    lc <- st_read(paste0(shp.path,"/landcover.shp"))
     
     # Define a bounding box (optional). If REPLACEMENT = TRUE, then the bounding–box shapefile (bb), must be specified and the uncomment the line in the code below
     BOUNDING = FALSE
     # bb <- st_read("your_bounding_box.shp")
     REPLACEMENT = FALSE
-    distance.buffer = 500 # Distance must be adjusted to the coordinate system
-
+    distance.buffer = 500 # Buffer distance for samples
 
 ```
 
-We proceed with the calculation of soil groups. In this example, soil information is stored in the field `TYPES`. We have analysed the extent to which the information in this field can be synthesized to eliminate redundancy when creating the `strata`. ^[This exploratory work is a prerequisite and must be adapted specifically to each soil and land use dataset].
+We proceed with the calculation of soil groups. In this example, soil information is stored in the field `SRG`. We have analysed the extent to which the information in this field can be synthesized to eliminate redundancy when creating the `strata`. ^[This exploratory work is a prerequisite and must be adapted specifically to each soil and land use dataset].
 The results are shown in \@ref(fig:fig-10)
 
 ```{r soil–aggregation, eval=TRUE, include=FALSE, warning=FALSE}
@@ -77,30 +74,17 @@ The results are shown in \@ref(fig:fig-10)
   } else {
     soil <- soil
   }
-
-  # Determine Soil Groups
-  unique(soil$USDA_CLASS)
-
-  soil$USDA_CLASS[soil$USDA_CLASS=="molisol"] <- "mollisol"
-  soil$USDA_CLASS[soil$USDA_CLASS=="mollisols"] <- "mollisol"
-  soil$USDA_CLASS[soil$USDA_CLASS=="ultisols"] <- "ultisol"
-  soil$USDA_CLASS[soil$USDA_CLASS=="histisol"] <- "histosol"
-  soil$USDA_CLASS[soil$SOIL_PH=="River Wash"] <- "riverwash"
-  soil$USDA_CLASS[is.na(soil$USDA_CLASS)] <- "undetermined"
-  #unique(soil$USDA_CLASS)
-  
-  # Select classes to use (NA and water are deleted)
-  selected.classes <- c("inceptisol","vertisol","entisol","oxisol","mollisol","alfisol",  
-  "ultisol","histosol","undetermined")
-  soil <- soil[which(soil$USDA_CLASS %in% selected.classes),]
-  
-  # Check geometry
-  soil <- st_make_valid(soil)
-  # Explode polygons
-  soil <- ms_explode(soil )
-  soil <- st_cast(soil, 'POLYGON')
-  #st_write(soil, "../soil_sampling/JAM/soil_classes.shp", delete_dsn = TRUE)
-
+    # Check geometry
+    soil <- st_make_valid(soil)
+    soil <- st_cast(soil, "MULTIPOLYGON")
+    #Aggregate information by reference soil group (SRG)
+      #unique(soil$RSG)
+    # Remove NAs (water bodies are deleted)
+    soil <- soil[!is.na(soil$RSG),]
+      #unique(soil$RSG)
+    # Dissolve polygons by reference soil group
+    soil <- soil %>% group_by(RSG) %>% dplyr::summarize() 
+ 
 ```
 
 
@@ -108,11 +92,11 @@ The results are shown in \@ref(fig:fig-10)
 ```{r fig-10, fig.cap="Plot of the soil classes", eval=TRUE, include=TRUE}
   
   ## Plot aggregated soil classes
-
-    map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
+    map = leaflet(leafletOptions(minZoom = 8)) %>%
       addTiles()
-    mv <- mapview(soil["USDA_CLASS"], alpha=0, homebutton=T, layer.name = "Soils", map=map)
+    mv <- mapview(soil["RSG"], alpha=0, homebutton=T, layer.name = "soils", map=map)
     mv@map
+    #ggplot() + geom_sf(data=soil, aes(fill = factor(RSG)))
 
 ```
 
@@ -129,41 +113,32 @@ A similar procedure is performed on the land use dataset.
   } else {
     lc <- lc
   }
-
- unique(lc$DESCRIPTIO)
- lu <- read_csv("../soil_sampling/JAM/lu_classes.csv",show_col_types = FALSE)
-  
-  lc <- left_join(lc,lu)
-  unique(lc$LU)
-  # Combine classes and delete classes # DELETE MANGROVES
-  selected.classes <- c("Agriculture","Savanna","Forest","Grassland")
-
-  lc <- lc[which(lc$LU %in% selected.classes),]
-  unique(lc$LU)
-  
-  # Check and simplify geometry
+  # Check geometry
   lc <- st_make_valid(lc)
-
-  # Convert to polygons
-  lc <- st_cast(lc, 'POLYGON')
-  lc <- na.omit(lc)
-  # Write land use strata as shapefile
-  #st_write(lc, "../soil_sampling/JAM/lc_aggregated.shp", delete_dsn = TRUE)
+  # Agregate units
+  #unique(lc$landcover)
+  lc$landcover[lc$landcover=="Broadleaf forest"]<- "Forest"
+  lc$landcover[lc$landcover=="Needleleaf forest"]<- "Forest"
+  lc$landcover[lc$landcover=="Mixed forest"]<- "Forest"
+  lc <- lc[lc$landcover!="Water body",]
+  #unique(lc$landcover)
   
-
+  # Dissolve polygons by reference soil group
+  lc <- lc %>% group_by(landcover) %>% dplyr::summarize() 
+    
+ 
 ```
 
-Figure \@ref(fig:fig-11) shows the landuse classes to build the strata.
+Figure \@ref(fig:fig-11) shows the landcover classes to build the strata.
 
 ```{r fig-11, fig.cap="Plot of the land use classes", eval=TRUE, include=TRUE}
 
-# Plot map with the aggregated land use information
-  
-  map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
-  addTiles()
-  mv <- mapview(lc["LU"], alpha=0, homebutton=T, layer.name = "Landuse", map=map)
-  mv@map
-
+# Plot map with the land cover information
+    map = leaflet() %>%
+      addTiles()
+    mv <- mapview(lc["landcover"], alpha=0, homebutton=T, layer.name = "Landcover", map=map)
+    mv@map
+    #ggplot() + geom_sf(data=lc, aes(fill = factor(landcover)))
 ```
 
 To create the soil–land use `strata` we must combine both classified datasets.
@@ -171,9 +146,11 @@ To create the soil–land use `strata` we must combine both classified datasets.
 
 ```{r combine–data, eval=TRUE, include=TRUE, warning=FALSE} 
   # Combine soil and land use layers
-  soil_lc <- st_intersection(soil, lc)  
-  soil_lc$soil_lc <- paste0(soil_lc$USDA_CLASS, "_", soil_lc$LU)
+  sf_use_s2(FALSE)
+  soil_lc <- st_intersection(st_make_valid(soil), st_make_valid(lc))  
+  soil_lc$soil_lc <- paste0(soil_lc$RSG, "_", soil_lc$landcover)
   soil_lc <- soil_lc %>% dplyr::select(soil_lc, geometry)
+  
 ```
 
 Finally, to comply with the initial requirements of the sampling design, we calculate the areas of each polygon, delete all features with extent lesser than 100 has.  
@@ -192,19 +169,14 @@ Finally, to comply with the initial requirements of the sampling design, we calc
   # Replace blank spaces with underscore symbol to keep names uniform
   soil_lc$soil_lc <- str_replace_all(soil_lc$soil_lc, " ", "_")
   
-  # List final strata
-  unique(soil_lc$soil_lc)
-  
   # Create a column of strata numeric codes
   soil_lc$code <- as.character(as.numeric(as.factor(soil_lc$soil_lc)))
   
   # List final strata
   unique(soil_lc$soil_lc)
-  
-  # Create a column of strata numeric codes
-  soil_lc$code <- as.character(as.numeric(as.factor(soil_lc$soil_lc)))
-   # Write final sampling strata map
-  #st_write(soil_lc, "../soil_sampling/JAM/strata.shp", delete_dsn = TRUE)
+
+  # Write final sampling strata map
+  #st_write(soil_lc, paste0(results.path,"strata.shp"), delete_dsn = TRUE)
 
 ```
 
@@ -213,7 +185,7 @@ The final strata map is shown in Figure  \@ref(fig:fig-12).
 ```{r fig-12, eval=TRUE, include=TRUE, fig.cap="Plot of strata"}
 
    # Plot final map of stratum
-  map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
+  map = leaflet(options = leafletOptions(minZoom = 8.3)) %>%
   addTiles()
   mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata", map=map)
   mv@map
@@ -230,7 +202,7 @@ This example demonstrates how to establish a stratified random sampling approach
   ## Stratified Simple Random Sampling over Soil/Land use Strata
   
   # Read strata shapefile
-  polygons <- st_read("../soil_sampling/JAM/strata.shp")
+  polygons <- st_read(paste0(results.path,"strata.shp"))
   if(REPLACEMENT){
     polygons = st_intersection(polygons,distance.buffer)
   }
@@ -369,7 +341,7 @@ This example demonstrates how to establish a stratified random sampling approach
     # Export data to Shapefile ----
       
       # Write sampling points to shp
-      #writeVector(z, "strat_randm_samples.shp", overwrite=TRUE)
+      #writeVector(z, paste0(results.path,"strat_randm_samples.shp"), overwrite=TRUE)
     
       # Check whether the number of initial target points equals the final target points 
       #n;nrow(z[z$type=="Target",])
@@ -381,7 +353,7 @@ Results are shown in Figure \@ref(fig:fig-13).
 
 ```{r fig-13, fig.cap="Plot of strata and random target and replacement points", eval=TRUE, include=TRUE}
 
-  map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
+  map = leaflet(options = leafletOptions(minZoom = 8.3)) %>%
         addTiles()
   mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") + 
         mapview(sf::st_as_sf(z), zcol = 'type', color = "white", col.regions = c('royalblue', 'tomato'), cex=3, legend = TRUE,layer.name = "Samples")
@@ -412,10 +384,10 @@ This modification can streamline fieldwork operations and establish a feasible s
  # Compute sampling areas WITH REPLACEMENT -----
   if(REPLACEMENT){
       # Load strata
-      soil_lc <- st_read("../soil_sampling/JAM/strata.shp")
-    
+      soil_lc <- st_read(paste0(results.path,"strata.shp"))
+
       # Read sampling. points from previous step
-      z <- st_read("../soil_sampling/JAM/sampling_points.shp")
+      z <- st_read(paste0(results.path,"sampling_points.shp"))
       
       # Define buffer of 500 meters (coordinate system must be in metric base)
       buf.samples <- st_buffer(z, dist=distance.buffer)
@@ -444,7 +416,7 @@ The procedure for creating a stratified regular sampling design is identical to 
 
 # Stratified Regular Sampling over Soil/Land use Strata ----
   # Read strata shapefile
-  polygons <- st_read("../soil_sampling/JAM/strata.shp")
+  polygons <- st_read(paste0(results.path,"strata.shp"))
   if(REPLACEMENT){
     polygons = st_intersection(polygons,distance.buffer)
   }
@@ -584,7 +556,7 @@ z <- x %>%
 # Export data to Shapefile ----
   
   # Write sampling points to shp
-  #writeVector(z, "../soil_sampling/JAM/grid_sampling_points.shp", overwrite=TRUE)
+  #writeVector(z, paste0(results.path,"sampling_points.shp"), overwrite=TRUE)
 
   # Check whether the number of initial target points equals the final target points 
   n;nrow(z[z$type=="Target",])
@@ -611,36 +583,108 @@ Finally, it is also possible to create a stratified area weighted random samplin
 
 ```{r sgsR-random,eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
 
- strata <- st_read("../soil_sampling/JAM/strata.shp", quiet = TRUE)
+ strata <- st_read(paste0(results.path,"strata.shp"),quiet = TRUE)
  strata$code <- as.integer(strata$code)
  
  # Create stratification raster 
- strata <- rast(st_rasterize(strata["code"],st_as_stars(st_bbox(strata), nx = 250, ny = 250)))
- names(strata) <- "strata"
-
+  strata <- rast(st_rasterize(strata["code"],st_as_stars(st_bbox(strata), nx = 250, ny = 250)))
+  names(strata) <- "strata"
+  strata <- crop(strata, nghe, mask=TRUE)
+  
   # Create stratified random sampling
-  srs <- sample_strat(
+  target <- sample_strat(
     sraster = strata,
     nSamp = 200
     )
+  target$type <- "target"
+  
 
 ```
 
-Figures  \@ref(fig:fig-14b)  and \@ref(fig:fig-14c) show the distribution of samples and the frequencies of samples over the strata categories respectively.
-
-```{r fig-14b, fig.cap="Plot of raster strata and random sampling points", eval=TRUE, include=TRUE}
-  # Plot samples over strata
-  plot(strata, main="Strata and random samples")
-  points(srs,col="red")
-```
+Figure  \@ref(fig:fig-14b)  show the histogram of frequencies of samples over the strata categories respectively.
 
 
-
-```{r fig-14c, fig.cap="Frequencies of strata and random samples", eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
+```{r fig-14b, fig.cap="Frequencies of strata and random target samples", eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
   # Histogram of frequencies
   calculate_representation(
     sraster = strata,
-    existing = srs,
+    existing = target,
+    drop=0,
     plot = TRUE 
   )
+
+  # Add index by strata
+  target <- target %>% 
+    st_as_sf() %>% 
+    dplyr::group_by(strata) %>% 
+    dplyr::mutate(sample_count = sum(n),
+                  order = seq_along(strata),
+                  ID = paste0(strata, ".", order)) %>% 
+    vect()
+  
+
 ```
+
+
+The construction of replacement points is straightforward by creating a new stratified set of samples on the same strata. In this case, the sample size has been incremented 3 times to create 3 replacement points for each target point. 
+
+```{r replacements-raster, eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
+   replacement <- sample_strat(
+    sraster = strata,
+    nSamp = 200*3
+    )
+   replacement$type <- "replacement"
+
+
+```
+
+
+```{r fig-14c, fig.cap="Frequencies of strata and random replacement samples", eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
+  # Histogram of frequencies
+  calculate_representation(
+    sraster = strata,
+    existing = replacement,
+    drop=0,
+    plot = TRUE 
+  )
+
+     # Add index by strata
+  replacement <- replacement %>% 
+    st_as_sf() %>% 
+    dplyr::group_by(strata) %>% 
+    dplyr::mutate(sample_count = sum(n),
+                  order = seq_along(strata),
+                  ID = paste0(strata, ".", order)) %>% 
+    vect()
+
+```
+
+Figures  \@ref(fig:fig-14c)  and \@ref(fig:fig-14d) show the frequencies of replacement samples over the strata categories and the distribution of target and replacement samples respectively.
+
+```{r fig-14d, fig.cap="Plot of raster strata and sampling points", eval=TRUE, include=TRUE}
+  # Plot samples over strata
+  # plot(strata, main="Strata and random samples")
+  # plot(nghe[1], col="transparent", add=TRUE)
+  # points(target,col="red")
+  # points(replacement,col="royalblue")
+  # legend("topleft", legend = c("target","replacement"), pch = 20, xpd=NA, bg="white", col=c("red","royalblue"))
+  
+  map = leaflet(options = leafletOptions(minZoom = 8.3)) %>%
+        addTiles()
+  mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") + 
+        mapview(target, zcol = 'type', color = "white", col.regions = c('tomato'), cex=3, legend = TRUE,layer.name = "Target") + 
+        mapview(replacement, zcol = 'type', color = "white", col.regions = c('royalblue'), cex=3, legend = TRUE,layer.name = "Replacement")
+  mv@map
+  
+```
+
+The resulting target and replacement points can finally be stored as shapefiles.
+
+```{r write-raster-pts, eval=FALSE, include=TRUE}
+  ## Export to shapefile
+   writeVector(target,
+                paste0(results.path,"target_pts_raster.shp"), overwrite=TRUE)
+   writeVector(replacement,
+                paste0(results.path,"replacement_pts_raster.shp"), overwrite=TRUE)
+
+```   

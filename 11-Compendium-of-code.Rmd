@@ -1095,7 +1095,7 @@ start_time <- Sys.time()
 ```
 
 
-## Script 5: Stratified sampling on vector data {-}
+## Script 5: Stratified sampling on vector and raster data {-}
 
 This script uses soil and land use classes to define polygon 'strata' for an area weighted  stratified sampling design.
 
@@ -1115,7 +1115,7 @@ This script uses soil and land use classes to define polygon 'strata' for an are
 
 # Content of this script =======================================================
 # The goal of this script is to perform random and regular stratified
-# soil sampling designs using soil/land-use classes as 'strata'
+# soil sampling designs using soil/landcover classes as 'strata'
 # The distribution of samples on the strata is based on a
 # weighted area distribution with the requirement of at least 2 sampling points
 # by strata. Small polygons (< 100 has) are eliminated from calculations.
@@ -1136,44 +1136,36 @@ This script uses soil and land use classes to define polygon 'strata' for an are
 # 9 - Plot points over strata
 # 10 - Calculate replacement areas for points
 # 11 - Stratified regular sampling
-# 12 - Random Sampling based on a stratified raster
 #________________________________________________________________
 
-  start_time <- Sys.time()
 
 ## 0 - Set working directory and load packages =================================
-  # Set working directory to source file location
-    setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-    setwd("../") # Move wd down to main folder
-  
-  # Define packages as a vector objects
+
+  # Load packages as a vector objects
     packages <- c("sf", "terra", "tidyverse", "rmapshaper",
                   "units","plyr", "mapview", "leaflet")
-    # Load packages
-    lapply(packages, require, character.only = TRUE) 
-    # Remove object to save memory space 
-    rm(packages) 
+    lapply(packages, require, character.only = TRUE) # Load packages
+    rm(packages) # Remove object to save memory space 
   
+  # Set working directory to source file location
+    setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
 
 ## 1 - User-defined variables ==================================================
-  # Path to rasters
-  raster.path <- "data/rasters/"
-  # Path to shapes
-  shp.path <- "data/shapes/"
-  # Path to results
-  results.path <- "data/results/"
-  # Define the number of samples to allocate
+    # Path to rasters
+    raster.path <- "data/rasters"
+    # Path to shapes
+    shp.path <- "data/shapes"
+    # Path to results
+    results.path <- "data/results/"
     n <- 242
 
     
 ## 2 - Import data ====================================================
-  # List existing shapefiles
-    list.files(shp.path, pattern = "shp$",recursive = TRUE, full.names = TRUE)
-  
-  # Load soil map data
-    soil <- st_read(paste0(shp.path,"/soils.shp"))
-  # Load land-use data
-    lc <- st_read(paste0(shp.path,"/landuses.shp"))
+    # Load soil data
+    soil <- st_read(paste0(shp.path,"/soils.shp"),promote_to_multi = FALSE)  
+    # Load Landcover data
+    lc <- st_read(paste0(shp.path,"/landcover.shp"))
   
   # Define a bounding area (optional).
   # If BOUNDING = TRUE, then a bounding–area shapefile (bb) must be specified
@@ -1190,127 +1182,104 @@ This script uses soil and land use classes to define polygon 'strata' for an are
     
 
 # 3 - Delineate soil strata =====================================================
-  
-    # Clip soil data  by bounding area if REPLACEMENT = TRUE
+
+    # Clip soil data  by bounding area if defined
     if (BOUNDING) {
       soil <- st_intersection(soil, bb)
     } else {
       soil <- soil
     }
-  
-  # Identify existing soil groups
-    unique(soil$USDA_CLASS)
-  # Make corrections on data
-    soil$USDA_CLASS[soil$USDA_CLASS=="molisol"] <- "mollisol"
-    soil$USDA_CLASS[soil$USDA_CLASS=="mollisols"] <- "mollisol"
-    soil$USDA_CLASS[soil$USDA_CLASS=="ultisols"] <- "ultisol"
-    soil$USDA_CLASS[soil$USDA_CLASS=="histisol"] <- "histosol"
-    soil$USDA_CLASS[soil$SOIL_PH=="River Wash"] <- "riverwash"
-    soil$USDA_CLASS[is.na(soil$USDA_CLASS)] <- "undetermined"
-    unique(soil$USDA_CLASS)
-    
-  # Select classes to use (NA and water are not used)
-    selected.classes <- c("inceptisol","vertisol","entisol","oxisol",
-                          "mollisol","alfisol", "ultisol","histosol",
-                          "undetermined")
-    soil <- soil[which(soil$USDA_CLASS %in% selected.classes),]
-    
-  # Check polygon geometry
+    # Check geometry
     soil <- st_make_valid(soil)
-  # Explode polygons
-    soil <- ms_explode(soil )
-    # Cast geometry to polygon
-    soil <- st_cast(soil, 'POLYGON')
+    soil <- st_cast(soil, "MULTIPOLYGON")
+    #Aggregate information by reference soil group (SRG)
+    #unique(soil$RSG)
+    # Remove NAs (water bodies are deleted)
+    soil <- soil[!is.na(soil$RSG),]
+    #unique(soil$RSG)
+    # Dissolve polygons by reference soil group
+    soil <- soil %>% group_by(RSG) %>% dplyr::summarize() 
   # Write soil strata to disk
     st_write(soil, paste0(results.path,"soil_classes.shp"), delete_dsn = TRUE)
     
-  # Plot aggregated soil classes
-    map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
+    ## Plot aggregated soil classes
+    map = leaflet(leafletOptions(minZoom = 8)) %>%
       addTiles()
-    mv <- mapview(soil["USDA_CLASS"], alpha=0, homebutton=T,
-                  layer.name = "Soils", map=map)
+    mv <- mapview(soil["RSG"], alpha=0, homebutton=T, layer.name = "soils", map=map)
     mv@map
-    
+    #ggplot() + geom_sf(data=soil, aes(fill = factor(RSG)))
     
 # 4 - Delineate land-use strata =================================================
     
-  # Clip land-use data  by bounding area if REPLACEMENT = TRUE
+    # Clip land use data  by bounding area if exist
     if (BOUNDING) {
       lc <- st_intersection(lc, bb)
     } else {
       lc <- lc
     }
-  # Identify existing land-use groups 
-    unique(lc$DESCRIPTIO)
-    # Load look-up table to reclassify land-use classes
-    lu <- read_csv("../soil_sampling/JAM/lu_classes.csv",show_col_types = FALSE)
-    # Join shapefile and look-up table
-    lc <- left_join(lc,lu)
-    unique(lc$LU)
-    
-  # Combine classes and delete classes # DELETE MANGROVES
-    selected.classes <- c("Agriculture","Savanna","Forest","Grassland")
-    lc <- lc[which(lc$LU %in% selected.classes),]
-    unique(lc$LU)
-    
-  # Check and simplify geometry
+    # Check geometry
     lc <- st_make_valid(lc)
-  # Cast to polygons
-    lc <- st_cast(lc, 'POLYGON')
-  # Omit empty polygons
-    lc <- na.omit(lc)
+    # Agregate units
+    unique(lc$landcover)
+    lc$landcover[lc$landcover=="Broadleaf forest"]<- "Forest"
+    lc$landcover[lc$landcover=="Needleleaf forest"]<- "Forest"
+    lc$landcover[lc$landcover=="Mixed forest"]<- "Forest"
+    lc <- lc[lc$landcover!="Water body",]
+    unique(lc$landcover)
     
-  # Write land use strata as shapefile
-    st_write(lc, paste0(results.path,"lc_classes.shp"), delete_dsn = TRUE)
-  
-  # Plot aggregated land-use classes   
-    map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
-      addTiles()
-    mv <- mapview(lc["LU"], alpha=0, homebutton=T,
-                  layer.name = "Landuse", map=map)
-    mv@map
+    # Dissolve polygons by reference soil group
+    lc <- lc %>% group_by(landcover) %>% dplyr::summarize() 
+    
+    # Write land use strata as shapefile
+      st_write(lc, paste0(results.path,"lc_classes.shp"), delete_dsn = TRUE)
+    
+      # Plot map with the land cover information
+      map = leaflet() %>%
+        addTiles()
+      mv <- mapview(lc["landcover"], alpha=0, homebutton=T, layer.name = "Landcover", map=map)
+      mv@map
+      #ggplot() + geom_sf(data=lc, aes(fill = factor(landcover)))
     
 
 # 5 - Create sampling strata ===================================================
     
-  # Combine soil and land use layers
-    soil_lc <- st_intersection(soil, lc)  
-    soil_lc$soil_lc <- paste0(soil_lc$USDA_CLASS, "_", soil_lc$LU)
-    soil_lc <- soil_lc %>% dplyr::select(soil_lc, geometry)
+      # Combine soil and land use layers
+      sf_use_s2(FALSE)
+      soil_lc <- st_intersection(st_make_valid(soil), st_make_valid(lc))  
+      soil_lc$soil_lc <- paste0(soil_lc$RSG, "_", soil_lc$landcover)
+      soil_lc <- soil_lc %>% dplyr::select(soil_lc, geometry)
     
 
 # 6 - Accommodate strata to requirements =======================================
 
-  # Select by Area. Convert to area to ha and select polygons > 100 has
-    soil_lc$area <- st_area(soil_lc)/10000 
-    soil_lc$area <- as.vector(soil_lc$area)
-    soil_lc <- soil_lc %>% 
-      group_by(soil_lc) %>% 
-      mutate(area = sum(area))
-    soil_lc <- soil_lc[soil_lc$area > 100,]
-    plot(soil_lc[1])
-    
-  # Replace blank spaces with underscore symbol to keep names uniform
-    soil_lc$soil_lc <- str_replace_all(soil_lc$soil_lc, " ", "_")
-    
-  # Create a column of strata numeric codes
-    soil_lc$code <- as.character(as.numeric(as.factor(soil_lc$soil_lc)))
-    
-  # List final strata
-    unique(soil_lc$soil_lc)
-
-  # Write final sampling strata map
-    st_write(soil_lc, paste0(results.path,"strata.shp"), delete_dsn = TRUE)
-
+      # Select by Area. Convert to area to ha and select polygons with more than 100 has
+      soil_lc$area <- st_area(soil_lc)/10000 
+      soil_lc$area <- as.vector(soil_lc$area)
+      soil_lc <- soil_lc %>% 
+        group_by(soil_lc) %>% 
+        mutate(area = sum(area))
+      soil_lc <- soil_lc[soil_lc$area > 100,]
+      plot(soil_lc[1])
+      
+      # Replace blank spaces with underscore symbol to keep names uniform
+      soil_lc$soil_lc <- str_replace_all(soil_lc$soil_lc, " ", "_")
+      
+      # Create a column of strata numeric codes
+      soil_lc$code <- as.character(as.numeric(as.factor(soil_lc$soil_lc)))
+      
+      # List final strata
+      unique(soil_lc$soil_lc)
+      
+      # Write final sampling strata map
+      st_write(soil_lc, paste0(results.path,"strata.shp"), delete_dsn = TRUE)
+      
 # 7 - Plot strata ==============================================================
   
-    # Plot strata map
-    map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
-      addTiles()
-    mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T,
-                  layer.name = "Strata", map=map)
-    mv@map
-    
+      # Plot final map of stratum
+      map = leaflet(options = leafletOptions(minZoom = 8.3)) %>%
+        addTiles()
+      mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata", map=map)
+      mv@map
 
 # 8 - Stratified random sampling ===============================================
 
@@ -1654,38 +1623,77 @@ This script uses soil and land use classes to define polygon 'strata' for an are
     mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") + 
       mapview(sf::st_as_sf(z), zcol = 'type', color = "white", col.regions = c('royalblue', 'tomato'), cex=3, legend = TRUE,layer.name = "Samples")
     mv@map
-
     
     
-# 12 - Random Sampling based on a stratified raster ================================== 
- # Load vector strata
-    strata <- st_read("../soil_sampling/JAM/strata.shp", quiet = TRUE)
+  ## Random Sampling based on a stratified raster
+    strata <- st_read(paste0(results.path,"strata.shp"),quiet = TRUE)
     strata$code <- as.integer(strata$code)
     
-    # Transform Vector to stratified raster 
+    # Create stratification raster 
     strata <- rast(st_rasterize(strata["code"],st_as_stars(st_bbox(strata), nx = 250, ny = 250)))
     names(strata) <- "strata"
+    strata <- crop(strata, nghe, mask=TRUE)
     
     # Create stratified random sampling
-    srs <- sample_strat(
+    target <- sample_strat(
       sraster = strata,
       nSamp = 200
     )
+    target$type <- "target"
     
-    # Plot samples over strata
-    plot(strata, main="Strata and random samples")
-    points(srs,col="red")
-    
-    # Histogram of frequencies stratum vs samples
+    # Histogram of frequencies for targets
     calculate_representation(
       sraster = strata,
-      existing = srs,
+      existing = target,
+      drop=0,
       plot = TRUE 
     )
     
-####  Time required to compute the script
-Sys.time() - start_time 
-
+    # Add index by strata
+    target <- target %>% 
+      st_as_sf() %>% 
+      dplyr::group_by(strata) %>% 
+      dplyr::mutate(sample_count = sum(n),
+                    order = seq_along(strata),
+                    ID = paste0(strata, ".", order)) %>% 
+      vect()
+    
+    # Histogram of frequencies for replacements
+    calculate_representation(
+      sraster = strata,
+      existing = replacement,
+      drop=0,
+      plot = TRUE 
+    )
+    
+    # Add index by strata
+    replacement <- replacement %>% 
+      st_as_sf() %>% 
+      dplyr::group_by(strata) %>% 
+      dplyr::mutate(sample_count = sum(n),
+                    order = seq_along(strata),
+                    ID = paste0(strata, ".", order)) %>% 
+      vect()
+    
+    replacement <- sample_strat(
+      sraster = strata,
+      nSamp = 200*3
+    )
+    replacement$type <- "replacement"
+    
+    # Plot samples over strata
+      # plot(strata, main="Strata and random samples")
+      # plot(nghe[1], col="transparent", add=TRUE)
+      # points(target,col="red")
+      # points(replacement,col="dodgerblue")
+      # legend("topleft", legend = c("target","replacement"), pch = 20, xpd=NA, bg="white", col=c("red","dodgerblue"))
+    
+    map = leaflet(options = leafletOptions(minZoom = 8.3)) %>%
+      addTiles()
+    mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") + 
+      mapview(target, zcol = 'type', color = "white", col.regions = c('tomato'), cex=3, legend = TRUE,layer.name = "Target") + 
+      mapview(replacement, zcol = 'type', color = "white", col.regions = c('royalblue'), cex=3, legend = TRUE,layer.name = "Replacement")
+    mv@map
 ```
 
 ## Script 6: Conditional Latin Hypercube Sampling {-}

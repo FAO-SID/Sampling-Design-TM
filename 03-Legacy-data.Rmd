@@ -59,7 +59,7 @@ Here we define a number of variables that will be used during the exercises in t
 
 ```
 
-
+The original covariates are cropped to match the extent of a smaller area, the Nghe An province in this exercise, to simplify the computation time. Then, covariates are transformed by Principal Component Analysis to uncorrelated Principal Component scores. This ensures the use of a lower amount of raster data avoiding multicollinearity in the original covariates. We select the Principal Component rasters that capture 99% of the variability in the dataset.
 
 
 ```{r load_covariates, eval=TRUE, include=TRUE, warning=FALSE}
@@ -94,6 +94,7 @@ Here we define a number of variables that will be used during the exercises in t
   
 ```
 
+Figure \@ref(fig-3) shows the PCA-transformed raster layers used in the analyses.
 
 ```{r, fig-3, fig.cap = "Covariates", echo = FALSE}
   ## Plot covariates
@@ -105,12 +106,12 @@ Here we define a number of variables that will be used during the exercises in t
 
 ## Representativeness of the Legacy Soil Data
 
-The next step involves the determination of the distributions of environmental values in the soil samples data and its comparison with the existing distributions of each environmental variable to determine the representativeness of the soil points in the environmental space.
+The next step involves determining the distributions of environmental values in the soil samples data and comparing them with the existing distributions of each environmental variable to assess the representativeness of the existing soil samples in the environmental space.
 
-The comparison of distributions is performed through the Kullback–Leibler divergence (KL) distance, a measure used to quantify the difference between two probability distributions.
-KL–divergence compares an 'objective' or reference probability distribution (here, the distribution of covariates in the complete covariate space – P) with a 'model' or approximate probability distribution (the space of covariates in the soil samples – Q). The main idea is to determine how much information is lost when Q is used to approximate P. In other words, KL–divergence measures how much the Q distribution deviates from the P distribution. KL–divergence equals approaches to 0 as the two distributions have identical quantities of information. 
+The comparison of distributions is performed using the Kullback–Leibler divergence (KL) distance, a measure used to quantify the difference between two probability distributions.
+KL–divergence compares an 'objective' or reference probability distribution (in this case, the distribution of covariates in the complete covariate space – P) with a 'model' or approximate probability distribution (the values of covariates in the soil samples – Q). The main idea is to determine how much information is lost when Q is used to approximate P. In other words, KL–divergence measures how much the Q distribution deviates from the P distribution. KL–divergence approaches 0 as the two distributions have identical quantities of information. 
 
-We cross soil and environmental data to create a dataset with the values of the environmental parameters at the locations of the soil samples. 
+To create a dataset with the values of the environmental parameters at the locations of the soil samples, we cross-reference soil and environmental data.
 
 ```{r merge_data, eval=T, include=TRUE, echo = FALSE}
 
@@ -122,7 +123,7 @@ We cross soil and environmental data to create a dataset with the values of the 
   
 ```
 
-We first calculate a 'n–matrix' with the values of the covariates dividing their values into 'n' bins according to an equal–probability distribution. Each bin captures the environmental variability within its interval in the total distribution. In this exercise, 'n' equals to 25. The result is a  26×4 matrix, where the rows represent the upper and lower limit of the bin (26 thresholds are required to represent 25 bins), and the columns correspond to the number of variables used as environmental proxies.
+First, we calculate a 'n–matrix' with the values of the covariates, dividing their values into 'n' bins according to an equal–probability distribution. Each bin captures the environmental variability within its interval in the total distribution. In this exercise, 'n' equals to 25. The result is a  26×4 matrix, where the rows represent the upper and lower limit of the bin (26 thresholds are required to represent 25 bins), and the columns correspond to the number of variables used as environmental proxies.
 
 ```{r P_matrix, eval=T, include=TRUE}
   ## Variability matrix in the covariates
@@ -169,7 +170,7 @@ From this matrix, we compute the hypercube matrix of covariates in the whole cov
 
 ```
 
-We then calculate the hypercube matrix of covariates in the sample space.
+Te, we calculate the hypercube matrix of covariates in the sample space.
 
 
 ```{r Q_hypercube_matrix, eval=T, include=TRUE}
@@ -212,13 +213,13 @@ We calculate the KL–divergence to measure how much the distribution of covaria
 
 ```
 
-The KL–divergence is always greater than or equal to zero, and reaches its minimum value (zero) only when P and Q are identical. Thus, lower values of KL–divergence are indicative of a good match between both the sample and the study area spaces, indicating that the sample space is a fair representation of the environmental conditions in the study area.
+The KL–divergence is always greater than or equal to zero, and reaches its minimum value (zero) only when P and Q are identical. Thus, lower values of KL–divergence indicate a better match between both the sample and the study area spaces, suggesting that the sample space provides a fair representation of the environmental conditions in the study area.
 
-In this case, the KL–divergence value is `r round(klo,3)`, indicating that the legacy samples capture most of the environmental variability in the study area.
+In this case, the KL–divergence value is `r round(klo,3)`, which quantifies the amount of environmental variability in the study area captured by the legacy samples.
 
 * **Percent of representativeness in relation to the overall environmental conditions**
 
-Finally, we can also determine the degree in which our legacy soil dataset is representative of the existing environmental conditions in the study area. For that, we calculate the proportion of pixels in the study area that would fall within the convex hull polygon delineated upon the environmental conditions found at the soil legacy data locations only. The convex hull polygon is created upon a Principal Component transformation of the covariate data in the soil legacy data and using the outter limits of the scores of the points projected on the two main Components.
+Finally, we can assess the extent to which our legacy soil dataset represents the existing environmental conditions in the study area. We calculate the proportion of pixels in the study area that would fall within the convex hull polygon delineated based on the environmental conditions found only at the locations of the soil legacy data. The convex hull polygon is created using a Principal Component transformation of the data in the soil legacy dataset, utilizing the outer limits of the scores of the points projected onto the two main components (Fig. \@ref(fig-4)).
 
 
 ```{r, fig-4, fig.cap = "PCA plot of the covariate", echo = FALSE}
@@ -232,8 +233,8 @@ Finally, we can also determine the degree in which our legacy soil dataset is re
     rand.tr <- tri.mesh(scores_pca1[,1],scores_pca1[,2],"remove") # Delaunay triangulation 
     rand.ch <- convex.hull(rand.tr, plot.it=F) # convex hull
     pr_poly = cbind(x=c(rand.ch$x),y=c(rand.ch$y)) # save the convex hull vertices
-    plot(scores_pca1[,1], scores_pca1[,2], xlab="PCA 1", ylab="PCA 2", xlim=c(min(scores_pca1[,1:2]), max(scores_pca1[,1:2])),ylim=c(min(scores_pca1[,1:2]), max(scores_pca1[,1:2])), main='Convex hull of soil legacy data')
-    lines(c(rand.ch$x,rand.ch$x[1]), c(rand.ch$y,rand.ch$y[1]),col="red",lwd=1) # draw the convex hull (domain of legacy data)
+    #plot(scores_pca1[,1], scores_pca1[,2], xlab="PCA 1", ylab="PCA 2", xlim=c(min(scores_pca1[,1:2]), max(scores_pca1[,1:2])),ylim=c(min(scores_pca1[,1:2]), max(scores_pca1[,1:2])), main='Convex hull of soil legacy data')
+    #lines(c(rand.ch$x,rand.ch$x[1]), c(rand.ch$y,rand.ch$y[1]),col="red",lwd=1) # draw the convex hull (domain of legacy data)
 
   # PCA projection of study area population onto the principal components
     PCA_projection <- predict(pca.s, cov.dat.df) # Project study area population onto sample PC
@@ -252,6 +253,6 @@ Finally, we can also determine the degree in which our legacy soil dataset is re
 
 ```
 
-This indicates that `r round(sum(nrow(newScores[newScores$pip>0,]))/nrow(newScores)*100,1)`\% of the existing conditions in the study area fall within the convex hull delineated with the data in the  soil samples, showing the level of adequacy of the proposed legacy data for DSM in the area.
+This indicates that `r round(sum(nrow(newScores[newScores$pip>0,]))/nrow(newScores)*100,1)`\% of the existing conditions in the study area are encompassed within the convex hull delineated using the data from the soil samples. This percentage shows the level of adequacy of the legacy data for DSM in the area.
 
 
