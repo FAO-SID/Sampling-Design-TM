@@ -1337,7 +1337,7 @@ Soil Sampling Design</p></a>
 </div>
 <div id="script-5-stratified-sampling-on-vector-and-raster-data" class="section level2 unnumbered hasAnchor">
 <h2>Script 5: Stratified sampling on vector and raster data<a href="annex-i-compendium-of-r-scripts.html#script-5-stratified-sampling-on-vector-and-raster-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This script uses soil and land use classes to define polygon ‘strata’ for an area weighted stratified sampling design.</p>
+<p>This script uses soil and landcover classes to define polygon ‘strata’ for an area weighted stratified sampling design.</p>
 <div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="annex-i-compendium-of-r-scripts.html#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
 <span id="cb66-2"><a href="annex-i-compendium-of-r-scripts.html#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Digital Soil Mapping</span></span>
 <span id="cb66-3"><a href="annex-i-compendium-of-r-scripts.html#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Soil Sampling Design</span></span>
@@ -1353,7 +1353,7 @@ Soil Sampling Design</p></a>
 <span id="cb66-13"><a href="annex-i-compendium-of-r-scripts.html#cb66-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb66-14"><a href="annex-i-compendium-of-r-scripts.html#cb66-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Content of this script =======================================================</span></span>
 <span id="cb66-15"><a href="annex-i-compendium-of-r-scripts.html#cb66-15" aria-hidden="true" tabindex="-1"></a><span class="co"># The goal of this script is to perform random and regular stratified</span></span>
-<span id="cb66-16"><a href="annex-i-compendium-of-r-scripts.html#cb66-16" aria-hidden="true" tabindex="-1"></a><span class="co"># soil sampling designs using soil/land-use classes as &#39;strata&#39;</span></span>
+<span id="cb66-16"><a href="annex-i-compendium-of-r-scripts.html#cb66-16" aria-hidden="true" tabindex="-1"></a><span class="co"># soil sampling designs using soil/landcover classes as &#39;strata&#39;</span></span>
 <span id="cb66-17"><a href="annex-i-compendium-of-r-scripts.html#cb66-17" aria-hidden="true" tabindex="-1"></a><span class="co"># The distribution of samples on the strata is based on a</span></span>
 <span id="cb66-18"><a href="annex-i-compendium-of-r-scripts.html#cb66-18" aria-hidden="true" tabindex="-1"></a><span class="co"># weighted area distribution with the requirement of at least 2 sampling points</span></span>
 <span id="cb66-19"><a href="annex-i-compendium-of-r-scripts.html#cb66-19" aria-hidden="true" tabindex="-1"></a><span class="co"># by strata. Small polygons (&lt; 100 has) are eliminated from calculations.</span></span>
@@ -1449,7 +1449,7 @@ Soil Sampling Design</p></a>
 <span id="cb66-109"><a href="annex-i-compendium-of-r-scripts.html#cb66-109" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb66-110"><a href="annex-i-compendium-of-r-scripts.html#cb66-110" aria-hidden="true" tabindex="-1"></a><span class="co"># 4 - Delineate land-use strata =================================================</span></span>
 <span id="cb66-111"><a href="annex-i-compendium-of-r-scripts.html#cb66-111" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb66-112"><a href="annex-i-compendium-of-r-scripts.html#cb66-112" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Clip land use data  by bounding area if exist</span></span>
+<span id="cb66-112"><a href="annex-i-compendium-of-r-scripts.html#cb66-112" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Clip landcover data  by bounding area if exist</span></span>
 <span id="cb66-113"><a href="annex-i-compendium-of-r-scripts.html#cb66-113" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (BOUNDING) {</span>
 <span id="cb66-114"><a href="annex-i-compendium-of-r-scripts.html#cb66-114" aria-hidden="true" tabindex="-1"></a>      lc <span class="ot">&lt;-</span> <span class="fu">st_intersection</span>(lc, bb)</span>
 <span id="cb66-115"><a href="annex-i-compendium-of-r-scripts.html#cb66-115" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
@@ -1468,7 +1468,7 @@ Soil Sampling Design</p></a>
 <span id="cb66-128"><a href="annex-i-compendium-of-r-scripts.html#cb66-128" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Dissolve polygons by reference soil group</span></span>
 <span id="cb66-129"><a href="annex-i-compendium-of-r-scripts.html#cb66-129" aria-hidden="true" tabindex="-1"></a>    lc <span class="ot">&lt;-</span> lc <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(landcover) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">summarize</span>() </span>
 <span id="cb66-130"><a href="annex-i-compendium-of-r-scripts.html#cb66-130" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb66-131"><a href="annex-i-compendium-of-r-scripts.html#cb66-131" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Write land use strata as shapefile</span></span>
+<span id="cb66-131"><a href="annex-i-compendium-of-r-scripts.html#cb66-131" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Write landcover strata as shapefile</span></span>
 <span id="cb66-132"><a href="annex-i-compendium-of-r-scripts.html#cb66-132" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_write</span>(lc, <span class="fu">paste0</span>(results.path,<span class="st">&quot;lc_classes.shp&quot;</span>), <span class="at">delete_dsn =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb66-133"><a href="annex-i-compendium-of-r-scripts.html#cb66-133" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb66-134"><a href="annex-i-compendium-of-r-scripts.html#cb66-134" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Plot map with the land cover information</span></span>
@@ -1481,7 +1481,7 @@ Soil Sampling Design</p></a>
 <span id="cb66-141"><a href="annex-i-compendium-of-r-scripts.html#cb66-141" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb66-142"><a href="annex-i-compendium-of-r-scripts.html#cb66-142" aria-hidden="true" tabindex="-1"></a><span class="co"># 5 - Create sampling strata ===================================================</span></span>
 <span id="cb66-143"><a href="annex-i-compendium-of-r-scripts.html#cb66-143" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb66-144"><a href="annex-i-compendium-of-r-scripts.html#cb66-144" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Combine soil and land use layers</span></span>
+<span id="cb66-144"><a href="annex-i-compendium-of-r-scripts.html#cb66-144" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Combine soil and landcover layers</span></span>
 <span id="cb66-145"><a href="annex-i-compendium-of-r-scripts.html#cb66-145" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sf_use_s2</span>(<span class="cn">FALSE</span>)</span>
 <span id="cb66-146"><a href="annex-i-compendium-of-r-scripts.html#cb66-146" aria-hidden="true" tabindex="-1"></a>      soil_lc <span class="ot">&lt;-</span> <span class="fu">st_intersection</span>(<span class="fu">st_make_valid</span>(soil), <span class="fu">st_make_valid</span>(lc))  </span>
 <span id="cb66-147"><a href="annex-i-compendium-of-r-scripts.html#cb66-147" aria-hidden="true" tabindex="-1"></a>      soil_lc<span class="sc">$</span>soil_lc <span class="ot">&lt;-</span> <span class="fu">paste0</span>(soil_lc<span class="sc">$</span>RSG, <span class="st">&quot;_&quot;</span>, soil_lc<span class="sc">$</span>landcover)</span>
