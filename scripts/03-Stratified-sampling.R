@@ -1,7 +1,7 @@
 #
 # Digital Soil Mapping
 # Soil Sampling Design
-# Stratified Sampling on 'soil-landuse' strata
+# Stratified Sampling on 'soil-landcover' strata
 #
 # Contact: Luis.RodriguezLado@fao.org
 #          Marcos.Angelini@fao.org
@@ -110,7 +110,7 @@
     
 # 4 - Delineate land-use strata =================================================
     
-    # Clip land use data  by bounding area if exist
+    # Clip landcover data  by bounding area if exist
     if (BOUNDING) {
       lc <- st_intersection(lc, bb)
     } else {
@@ -129,7 +129,7 @@
     # Dissolve polygons by reference soil group
     lc <- lc %>% group_by(landcover) %>% dplyr::summarize() 
     
-    # Write land use strata as shapefile
+    # Write landcover strata as shapefile
       st_write(lc, paste0(results.path,"lc_classes.shp"), delete_dsn = TRUE)
     
       # Plot map with the land cover information
@@ -142,7 +142,7 @@
 
 # 5 - Create sampling strata ===================================================
     
-      # Combine soil and land use layers
+      # Combine soil and landcover layers
       sf_use_s2(FALSE)
       soil_lc <- st_intersection(st_make_valid(soil), st_make_valid(lc))  
       soil_lc$soil_lc <- paste0(soil_lc$RSG, "_", soil_lc$landcover)

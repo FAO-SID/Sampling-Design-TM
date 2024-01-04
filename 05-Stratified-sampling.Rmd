@@ -5,7 +5,7 @@ Stratified random sampling is a technique where the study area is divided into d
 
 ## General Procedure
 
-The creation of a  stratified random sampling design involves the identification of relevant features describing the environmental diversity in the area (soil and land use are the environmental variables generally used to define strata), delineation of the strata, determination of the number of samples to distribute to each stratum, followed by random sampling within it. By identifying relevant classes, combining them to define strata and allocating an appropriate number of samples to each stratum, a representative sample can be obtained. Random sampling within each stratum helps to ensure that the sample is unbiased and provides a fair representation of the overall conditions in the area.
+The creation of a  stratified random sampling design involves the identification of relevant features describing the environmental diversity in the area (soil and landcover are the environmental variables generally used to define strata), delineation of the strata, determination of the number of samples to distribute to each stratum, followed by random sampling within it. By identifying relevant classes, combining them to define strata and allocating an appropriate number of samples to each stratum, a representative sample can be obtained. Random sampling within each stratum helps to ensure that the sample is unbiased and provides a fair representation of the overall conditions in the area.
 
 The first question is about how many samples must be retrieved from each strata. The sampling scheme starts with the definition of the total number of samples to collect. In this case, the determination of the sample size is a complex and highly variable process based, among others, on the specific goals of the study, the variability of environmental proxies, the statistical requirements for accuracy and confidence, as well as additional considerations such as accessibility, costs and available resources. The optimal number of samples can be determined following the method proposed in Chapter 2 of this manual. The number of samples within each stratum is calculated using an area–weighted approach taking into account the relative area of each stratum. The sampling design in this section must also comply with the following requirements:
 
@@ -16,7 +16,7 @@ This sampling process ensures the representativeness of the environmental combin
 
 ### Strata creation
 
-We must determine the kind of information that will be used to construct the `strata`. In this manual, we present a simple procedure to build strata based on data from two environmental layers: soil groups and land use classification data. The information should be provided in the form of vector shapefiles with associated information databases. The data on both sets often comprises a large number of categories, that would lead to a very large number of `strata`. Thus, it is desirable to make an effort of aggregating similar categories within each input data set, to reduce, as much as possible, the number of categories while still capturing the most of the valuable variability in the area.
+We must determine the kind of information that will be used to construct the `strata`. In this manual, we present a simple procedure to build strata based on data from two environmental layers: soil groups and landcover classification data. The information should be provided in the form of vector shapefiles with associated information databases. The data on both sets often comprises a large number of categories, that would lead to a very large number of `strata`. Thus, it is desirable to make an effort of aggregating similar categories within each input data set, to reduce, as much as possible, the number of categories while still capturing the most of the valuable variability in the area.
 
 The fist step is to set–up the RStudio environment and load the required packages:
 
@@ -42,7 +42,7 @@ The fist step is to set–up the RStudio environment and load the required packa
 ```
 
 
-We must define the number of samples to distribute in the sampling design and the soil and land use information layers to build the strata. We also define a REPLACEMENT parameter to account for a reduction of the sampling area according to a certain area using predefined bounding–box, that can be also here defined.
+We must define the number of samples to distribute in the sampling design and the soil and landcover information layers to build the strata. We also define a REPLACEMENT parameter to account for a reduction of the sampling area according to a certain area using predefined bounding–box, that can be also here defined.
 
 
 ```{r strata–parameters, eval=TRUE, include=FALSE, echo=FALSE}
@@ -63,7 +63,7 @@ We must define the number of samples to distribute in the sampling design and th
 
 ```
 
-We proceed with the calculation of soil groups. In this example, soil information is stored in the field `SRG`. We have analysed the extent to which the information in this field can be synthesized to eliminate redundancy when creating the `strata`. ^[This exploratory work is a prerequisite and must be adapted specifically to each soil and land use dataset].
+We proceed with the calculation of soil groups. In this example, soil information is stored in the field `SRG`. We have analysed the extent to which the information in this field can be synthesized to eliminate redundancy when creating the `strata`. ^[This exploratory work is a prerequisite and must be adapted specifically to each soil and landcover dataset].
 The results are shown in \@ref(fig:fig-10)
 
 ```{r soil–aggregation, eval=TRUE, include=FALSE, warning=FALSE}
@@ -101,13 +101,13 @@ The results are shown in \@ref(fig:fig-10)
 ```
 
 
-A similar procedure is performed on the land use dataset.
+A similar procedure is performed on the landcover dataset.
 
 
-```{r landuse–aggregation, eval=TRUE, include=FALSE, warning=FALSE}
-  # Calculate Land use Groups
+```{r landcover–aggregation, eval=TRUE, include=FALSE, warning=FALSE}
+  # Calculate Landcover Groups
 
-  # Clip land use data  by bounding area if exist
+  # Clip land landcover  by bounding area if exist
   if (BOUNDING) {
     lc <- st_intersection(lc, bb)
   } else {
@@ -131,7 +131,7 @@ A similar procedure is performed on the land use dataset.
 
 Figure \@ref(fig:fig-11) shows the landcover classes to build the strata.
 
-```{r fig-11, fig.cap="Plot of the land use classes", eval=TRUE, include=TRUE}
+```{r fig-11, fig.cap="Plot of the landcover classes", eval=TRUE, include=TRUE}
 
 # Plot map with the land cover information
     map = leaflet() %>%
@@ -141,11 +141,11 @@ Figure \@ref(fig:fig-11) shows the landcover classes to build the strata.
     #ggplot() + geom_sf(data=lc, aes(fill = factor(landcover)))
 ```
 
-To create the soil–land use `strata` we must combine both classified datasets.
+To create the soil–landcover `strata` we must combine both classified datasets.
 
 
 ```{r combine–data, eval=TRUE, include=TRUE, warning=FALSE} 
-  # Combine soil and land use layers
+  # Combine soil and landcover layers
   sf_use_s2(FALSE)
   soil_lc <- st_intersection(st_make_valid(soil), st_make_valid(lc))  
   soil_lc$soil_lc <- paste0(soil_lc$RSG, "_", soil_lc$landcover)
@@ -199,7 +199,7 @@ This example demonstrates how to establish a stratified random sampling approach
 
 
 ```{r random–sampling, eval=TRUE, include=FALSE}
-  ## Stratified Simple Random Sampling over Soil/Land use Strata
+  ## Stratified Simple Random Sampling over Soil/Landcover Strata
   
   # Read strata shapefile
   polygons <- st_read(paste0(results.path,"strata.shp"))
@@ -414,7 +414,7 @@ The procedure for creating a stratified regular sampling design is identical to 
 
 ```{r regular–sampling, eval=TRUE, include=FALSE}
 
-# Stratified Regular Sampling over Soil/Land use Strata ----
+# Stratified Regular Sampling over Soil/landcover Strata ----
   # Read strata shapefile
   polygons <- st_read(paste0(results.path,"strata.shp"))
   if(REPLACEMENT){

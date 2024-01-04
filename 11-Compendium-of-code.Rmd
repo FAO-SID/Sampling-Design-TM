@@ -1097,7 +1097,7 @@ start_time <- Sys.time()
 
 ## Script 5: Stratified sampling on vector and raster data {-}
 
-This script uses soil and land use classes to define polygon 'strata' for an area weighted  stratified sampling design.
+This script uses soil and landcover classes to define polygon 'strata' for an area weighted  stratified sampling design.
 
 ```{r stratified sampling, echo=TRUE, eval=FALSE}
 #
@@ -1211,7 +1211,7 @@ This script uses soil and land use classes to define polygon 'strata' for an are
     
 # 4 - Delineate land-use strata =================================================
     
-    # Clip land use data  by bounding area if exist
+    # Clip landcover data  by bounding area if exist
     if (BOUNDING) {
       lc <- st_intersection(lc, bb)
     } else {
@@ -1230,7 +1230,7 @@ This script uses soil and land use classes to define polygon 'strata' for an are
     # Dissolve polygons by reference soil group
     lc <- lc %>% group_by(landcover) %>% dplyr::summarize() 
     
-    # Write land use strata as shapefile
+    # Write landcover strata as shapefile
       st_write(lc, paste0(results.path,"lc_classes.shp"), delete_dsn = TRUE)
     
       # Plot map with the land cover information
@@ -1243,7 +1243,7 @@ This script uses soil and land use classes to define polygon 'strata' for an are
 
 # 5 - Create sampling strata ===================================================
     
-      # Combine soil and land use layers
+      # Combine soil and landcover layers
       sf_use_s2(FALSE)
       soil_lc <- st_intersection(st_make_valid(soil), st_make_valid(lc))  
       soil_lc$soil_lc <- paste0(soil_lc$RSG, "_", soil_lc$landcover)
