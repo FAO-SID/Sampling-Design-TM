@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Setting-up the software environment |  Soil Sampling Design</title>
+  <meta name="description" content="Soil Sampling Design - SoilFer Project" />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Setting-up the software environment |  Soil Sampling Design" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="/images/frontcover.png" />
+  <meta property="og:description" content="Soil Sampling Design - SoilFer Project" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Setting-up the software environment |  Soil Sampling Design" />
+  
+  <meta name="twitter:description" content="Soil Sampling Design - SoilFer Project" />
+  <meta name="twitter:image" content="/images/frontcover.png" />
+
+<meta name="author" content="Rodríguez Lado, L., Angelini, M.E, Naypewe, N., Luotto, I., Yigini, Y." />
+
+
+<meta name="date" content="2024-01-04" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="introduction.html"/>
+<link rel="next" href="legacy_data.html"/>
+<script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="assets/plotly-binding-4.10.0/plotly.js"></script>
+<script src="assets/typedarray-0.1/typedarray.min.js"></script>
+<link href="assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<link href="assets/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="assets/leaflet-1.3.1/leaflet.js"></script>
+<link href="assets/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="assets/proj4-2.6.2/proj4.min.js"></script>
+<script src="assets/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="assets/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="assets/leaflet-binding-2.1.1/leaflet.js"></script>
+<link href="assets/HomeButton-0.0.1/home-button.css" rel="stylesheet" />
+<script src="assets/HomeButton-0.0.1/home-button.js"></script>
+<script src="assets/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<script src="assets/clipboard-0.0.1/setClipboardText.js"></script>
+<link href="assets/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
+<link href="assets/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
+<script src="assets/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="assets/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Soil Samping Design</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Licence</a></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#training-material"><i class="fa fa-check"></i><b>1.1</b> Training material</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html"><i class="fa fa-check"></i><b>2</b> Setting-up the software environment</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#use-of-r-rstudio-and-r-packages"><i class="fa fa-check"></i><b>2.1</b> Use of R, RStudio and R Packages</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#obtaining-and-installing-r"><i class="fa fa-check"></i><b>2.1.1</b> Obtaining and installing R</a></li>
+<li class="chapter" data-level="2.1.2" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#obtaining-and-installing-rstudio"><i class="fa fa-check"></i><b>2.1.2</b> Obtaining and installing RStudio</a></li>
+<li class="chapter" data-level="2.1.3" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#getting-started-with-r"><i class="fa fa-check"></i><b>2.1.3</b> Getting started with R</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#r-packages"><i class="fa fa-check"></i><b>2.2</b> R packages</a></li>
+<li class="chapter" data-level="2.3" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#gee---google-earth-engine"><i class="fa fa-check"></i><b>2.3</b> GEE - google earth engine</a></li>
+</ul></li>
+<li class="part"><span><b>Part one – Soil Legacy Data</b></span></li>
+<li class="chapter" data-level="3" data-path="legacy_data.html"><a href="legacy_data.html"><i class="fa fa-check"></i><b>3</b> Evaluating Soil Legacy Data Sampling for DSM</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="legacy_data.html"><a href="legacy_data.html#data-preparation"><i class="fa fa-check"></i><b>3.1</b> Data Preparation</a></li>
+<li class="chapter" data-level="3.2" data-path="legacy_data.html"><a href="legacy_data.html#representativeness-of-the-legacy-soil-data"><i class="fa fa-check"></i><b>3.2</b> Representativeness of the Legacy Soil Data</a></li>
+</ul></li>
+<li class="part"><span><b>I Part two – Soil Sampling Design</b></span></li>
+<li class="chapter" data-level="4" data-path="determining-the-minimum-sampling-size.html"><a href="determining-the-minimum-sampling-size.html"><i class="fa fa-check"></i><b>4</b> Determining the minimum sampling size</a></li>
+<li class="chapter" data-level="5" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html"><i class="fa fa-check"></i><b>5</b> Stratified Sampling Design</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#general-procedure"><i class="fa fa-check"></i><b>5.1</b> General Procedure</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#strata-creation"><i class="fa fa-check"></i><b>5.1.1</b> Strata creation</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-random-sampling"><i class="fa fa-check"></i><b>5.2</b> Stratified random sampling</a></li>
+<li class="chapter" data-level="5.3" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-random-sampling-for-large-areas"><i class="fa fa-check"></i><b>5.3</b> Stratified random sampling for large areas</a></li>
+<li class="chapter" data-level="5.4" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-regular-sampling"><i class="fa fa-check"></i><b>5.4</b> Stratified regular sampling</a></li>
+<li class="chapter" data-level="5.5" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#random-sampling-based-on-a-stratified-raster"><i class="fa fa-check"></i><b>5.5</b> Random Sampling based on a stratified raster</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html"><i class="fa fa-check"></i><b>6</b> Conditioned Latin Hypercube Sampling</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#clhs-design"><i class="fa fa-check"></i><b>6.1</b> cLHS Design</a></li>
+<li class="chapter" data-level="6.2" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#including-existing-legacy-data-in-a-clhs-sampling-design"><i class="fa fa-check"></i><b>6.2</b> Including existing legacy data in a cLHS sampling design</a></li>
+<li class="chapter" data-level="6.3" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#working-with-large-raster-data"><i class="fa fa-check"></i><b>6.3</b> Working with large raster data</a></li>
+<li class="chapter" data-level="6.4" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#implementation-of-costconstrained-clhs-sampling"><i class="fa fa-check"></i><b>6.4</b> Implementation of cost–constrained cLHS sampling</a></li>
+<li class="chapter" data-level="6.5" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#replacement-areas-in-clhs-design"><i class="fa fa-check"></i><b>6.5</b> Replacement areas in cLHS design</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html"><i class="fa fa-check"></i>Annex I: Compendium of R scripts</a>
+<ul>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-1-introduction-to-r"><i class="fa fa-check"></i>Script 1: Introduction to R</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-2-download-environmental-covariates"><i class="fa fa-check"></i>Script 2: Download environmental covariates</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-3-evaluate-legacy-data"><i class="fa fa-check"></i>Script 3: Evaluate Legacy Data</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-4-calculate-minimum-sample-size"><i class="fa fa-check"></i>Script 4: Calculate Minimum Sample Size</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-5-stratified-sampling-on-vector-and-raster-data"><i class="fa fa-check"></i>Script 5: Stratified sampling on vector and raster data</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-6-conditional-latin-hypercube-sampling"><i class="fa fa-check"></i>Script 6: Conditional Latin Hypercube Sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://www.fao.org/global-soil-partnership/" target="blank">Global Soil Partnership</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"><p><img src="images/frontcover.jpg" style="top:0px;height:150px;" align="right" />
+Soil Sampling Design</p></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="setting-up-the-software-environment" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Setting-up the software environment<a href="setting-up-the-software-environment.html#setting-up-the-software-environment" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>This chapter provides an overview on the software required to set-up a soil sampling design. The tools are open source and can be downloaded and installed by users following the steps that are described here.</p>
+<div id="use-of-r-rstudio-and-r-packages" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Use of R, RStudio and R Packages<a href="setting-up-the-software-environment.html#use-of-r-rstudio-and-r-packages" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>R</strong> is a language and environment for statistical computing created in 1992. It provides a wide variety of statistical (e.g. linear modelling, statistical tests, time-series, classification, clustering, etc.) and graphical methods, and has been constantly extended by an exceptionally active user community.</p>
+<div id="obtaining-and-installing-r" class="section level3 hasAnchor" number="2.1.1">
+<h3><span class="header-section-number">2.1.1</span> Obtaining and installing R<a href="setting-up-the-software-environment.html#obtaining-and-installing-r" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Installation files and instructions can be downloaded from the Comprehensive R Archive Network (CRAN).</p>
+<ol style="list-style-type: decimal">
+<li>Go to the following link <a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a> to download and install <strong>R</strong>.</li>
+<li>Pick an installation file for your operational system.</li>
+<li>Choose the “<em>base</em>” distribution of R (particularly if it is the first time you install <strong>R</strong>).</li>
+<li>Download the R installation file and open the file on your device.</li>
+<li>Follow the installation instructions.</li>
+</ol>
+</div>
+<div id="obtaining-and-installing-rstudio" class="section level3 hasAnchor" number="2.1.2">
+<h3><span class="header-section-number">2.1.2</span> Obtaining and installing RStudio<a href="setting-up-the-software-environment.html#obtaining-and-installing-rstudio" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Beginners will find it very hard to start using <strong>R</strong> because it has no Graphical User Interface (GUI). There are some GUIs which offer some of the functionality of <strong>R</strong>. <strong>RStudio</strong> makes <strong>R</strong> easier to use. It includes a code editor, debugging and visualization tools. Similar steps need to be followed to install <strong>RStudio</strong>.</p>
+<ol style="list-style-type: decimal">
+<li>Go to <a href="https://www.rstudio.com/products/rstudio/download/" class="uri">https://www.rstudio.com/products/rstudio/download/</a> to download and install <strong>RStudio</strong>’s open source edition.</li>
+<li>On the download page, <em>RStudio Desktop, Open Source License</em> option should be selected.</li>
+<li>Pick an installation file for your platform.</li>
+<li>Follow the installation instruction on your local device.</li>
+</ol>
+<div class="figure"><span style="display:block;" id="fig:Rstudio"></span>
+<img src="images/2_RStudio-interface.PNG" alt="R Studio interface." width="100%" />
+<p class="caption">
+Figure 2.1: R Studio interface.
+</p>
+</div>
+<p>The <strong>RStudio</strong> interface is structured by four compartments (see Fig. <a href="setting-up-the-software-environment.html#fig:Rstudio">2.1</a>). The code editor is located in the upper left. Scripts that contain codes are displayed here. New scripts can be opened by clicking on the left most <em>New</em> button in the quick access tool bar (highlighted in green). Lines of code can be executed by clicking on <em>Run</em> (highlighted in blue) or by pressing <em>ctrl + enter</em> on your keyboard.
+The output of scripts or lines of code that are executed is displayed in the window below the code editor: the console (bottom left). This part of the interface corresponds to the <strong>R</strong> software that were installed previously.
+When working in <strong>R</strong>, it is central to work with so-called objects (for instance vectors, dataframes or matrices). These objects are saved in the global environment that is displayed in the top right panel.
+Finally, the <strong>R</strong> software offers a broad range of powerful tools for visualisation purposes. Graphs or maps that are generated by scripts/codes, are displayed in the bottom right panel.</p>
+</div>
+<div id="getting-started-with-r" class="section level3 hasAnchor" number="2.1.3">
+<h3><span class="header-section-number">2.1.3</span> Getting started with R<a href="setting-up-the-software-environment.html#getting-started-with-r" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>R</strong> manuals: <a href="http://cran.r-project.org/manuals.html" class="uri">http://cran.r-project.org/manuals.html</a></li>
+<li>Contributed documentation: <a href="http://cran.r-project.org/other-docs.html" class="uri">http://cran.r-project.org/other-docs.html</a></li>
+<li>Quick-<strong>R</strong>: <a href="http://www.statmethods.net/index.html" class="uri">http://www.statmethods.net/index.html</a></li>
+<li>Stackoverflow <strong>R</strong> community: <a href="https://stackoverflow.com/questions/tagged/r" class="uri">https://stackoverflow.com/questions/tagged/r</a></li>
+</ul>
+</div>
+</div>
+<div id="r-packages" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> R packages<a href="setting-up-the-software-environment.html#r-packages" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When you download <strong>R</strong>, you get the basic <strong>R</strong> system which implements the <strong>R</strong> language. <strong>R</strong> becomes more useful with the large collection of packages that extend the basic functionality of it. <strong>R</strong> packages are developed by the <strong>R</strong> community.</p>
+<p>refer to:
+* <em>tidyverse</em> book (R for data science)
+* <em>caret</em> (broad range of statistical learning functions)
+* <em>R spatial</em>: <a href="https://rspatial.org/" class="uri">https://rspatial.org/</a> (R packages for spatial data operations)</p>
+<p>The primary source for <strong>R</strong> packages is <a href="https://cran.r-project.org/">CRAN’s</a> official website, where currently about 20,250 available packages are listed. For spatial applications, various packages are available. You can obtain information about the available packages directly on CRAN with the ‘available.packages()’ function. The function returns a matrix of details corresponding to packages currently available at one or more repositories. An easier way to browse the list of packages is using the <a href="https://cran.r-project.org/web/views/"><em>Task Views</em></a> link, which groups together packages related to a given topic.</p>
+<p>Packages come along with extensive documentation that is very helpful to understand and solve error messages. To access information on functions or packages, type “?[Package or Function name]” or “??[Package or Function name]” in the console. The information on the package and/or function can then be accessed in the bottom right panel under “Help” (see Fig. <a href="setting-up-the-software-environment.html#fig:Rstudio">2.1</a>). In addition to that, the <em>R documentation</em> website (<a href="https://www.rdocumentation.org/" class="uri">https://www.rdocumentation.org/</a>) provides more extensive help and gives clear overviews on all functions comprised in a certain package.</p>
+</div>
+<div id="gee---google-earth-engine" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> GEE - google earth engine<a href="setting-up-the-software-environment.html#gee---google-earth-engine" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Google earth engine (GEE) provides a large range of remote sensing datasets for users. It allows to use the GEE code editor to run computations using the Google servers. The high computational power of these servers enables users with limited computational capacities to run complex calculations.
+A user account must be created to use the code editor. This step can take some time. Once the account is validated, scripts can be written in the code editor using the Javascript language. An extensive array of instructions and guides are available on the platform. Alternatively, the Python language can be used to interact with the data.</p>
+<p>The code editor interface is structured by three panels and a map viewer (see Fig. <a href="setting-up-the-software-environment.html#fig:GEE">2.2</a>). The left panel is structured in “Scripts”, “Docs”, and “Assets”. Under “Scripts” users can organize and save the scripts they wrote for specific purposes. “Docs” provides further information on so-called “server-side” functions that can be used to manipulate the data. Finally, in “Assets” users can upload own spatial data in common formats such as shapefiles (.shp) or raster files (.tif).
+The middle panel contains the scripts that can be run by clicking on the “Run” button.
+The right panel is composed of three functionalities. The “Inspector” provides basic information on a pixel of a layer displayed in the map below. The information consists of longitude, latitude, and - if layers are loaded - values of the pixel. The “Console” is the place where certain commands expressed in the code are shown. The most common expressions shown here are print() commands or figures derived from the loaded data. Finally, the “Tasks” button shows all tasks that were formulated in the code/script and are to be submitted to the server for computation. Once a task is submitted, the user has to click on the “Run” button appearing in the “Tasks” section to submit the task to the server.
+In addition to that, the data catalogue can be accessed via the search bar on the top of the page. Here, key information on the available datasets, origin, resolution and related publications can be found.</p>
+<div class="figure"><span style="display:block;" id="fig:GEE"></span>
+<img src="images/2.1_GEE_codeeditor.png" alt="Google Earth Engine code editor." width="100%" />
+<p class="caption">
+Figure 2.2: Google Earth Engine code editor.
+</p>
+</div>
+
+</div>
+</div>
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="legacy_data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/luislado/Sampling_Design_GSP/edit/master/02-Software-environment.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Technical Manual Soil Sampling Design.pdf", "Technical Manual Soil Sampling Design.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection",
+"scroll_highlight": true
+},
+"toolbar": {
+"position": "static"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

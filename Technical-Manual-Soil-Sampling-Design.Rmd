@@ -1,0 +1,3875 @@
+---
+title: |
+  <img src="images/frontcover.jpg" style="top:0px;height:150px;" align="right" />
+    Soil Sampling Design
+subtitle: "Technical Manual"
+author: "Rodríguez Lado, L., Angelini,  M.E, Naypewe, N., Luotto, I., Yigini, Y."
+date: "`r Sys.Date()`"
+cover-image: images/frontcover.png
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [references.bib]
+biblio-style: apalike
+link-citations: yes
+description: "Soil Sampling Design - SoilFer Project"
+csl: food-and-agriculture-organization-of-the-united-nations.csl
+---
+
+
+```{r, echo = F, eval = T, fig.cap = ""}
+knitr::include_graphics("images/frontcover.jpg")
+```
+
+# Licence {-}
+
+The Guideline Manual is made available under the Creative Commons Attribution–NonCommercial–ShareAlike 3.0 IGO licence
+
+[CC BY-NC-SA 3.0 IGO](https://creativecommons.org/licenses/by-nc-sa/3.0/igo/legalcode).
+
+<!--chapter:end:index.Rmd-->
+
+# Introduction 
+
+The success of soil mapping activities relies on the existence of proper data collated through detailed soil sampling protocols ensuring representative and reliable soil data collection. This publication does not intend to be an intensive compilation which cover all the intricate possibilities in soil sampling design. In turn, we show a number of different soil sampling protocols through examples, covering both the most common approaches that can be used for the design of field soil sampling and present methodologies to evaluate their accuracy and effectiveness. The last part of the manual is particularly focused in the use of conditional Latin Hypercube Sampling (cLHS), a statistical methodology developed specifically for soil sampling from a Digital Soil Mapping perspective [@minasny2006].
+
+The manual is structured in two parts. `'Part One'` presents a methodology to evaluate the capacity of an existing soil legacy data to represent the potential soil diversity within a certain study area and determine whether it is a valid set for Digital Soil Mapping purposes.  We use the *Kullback-Leibler divergence* (KL) measurement to quantify the difference between the probability distributions of covariate values in the legacy samples set and in the whole area and determine how much information is lost when the sample set is used to approximate the diversity in the existing environmental conditions in the whole area.
+
+In `'Part Two'` we present several methods for creating soil sampling designs. We start with the determination of the minimum sample size required for describing most of the environmental diversity in the area, to the creation of sampling designs. We present examples of various sampling methods, ranging from traditional grid-based approaches to advanced statistical sampling strategies. We include methods for systematic, random and stratified sampling, evaluating their strengths and weaknesses in the context of DSM.
+
+
+## Training material
+
+The manual exercises are written in the statistical environment **R** and run in the integrated development environment (IDE) **RStudio** for simplicity. Some scripts include modifications of the work from [@Malone](https://bitbucket.org/brendo1001/clhc_sampling/src/master/), and [@Brus2022](https://dickbrus.github.io/SpatialSamplingwithR/), which can be found at their respective repositories.
+
+The training material for this book is located in the [Sampling-Design-TM GitHub repository](https://github.com/FAO-GSP/Sampling-Design-TM). To download the input files and R scripts, clone the repository or click on [this link](https://github.com/FAO-GSP/Sampling-Design-TM/archive/refs/heads/main.zip), save the ZIP file, and extract its content in a folder, preferable located close to the root of your system, such as ```"C:/GIT/"```.  Raster data can be also downloaded from the Google Earth repository of FAO-GPS (digital-soil-mapping-gsp-fao). Script 2 in the Annexes can be used in the code editor at Google Earth Engine to download the necessary environmental covariates.
+
+We have used a common structure for file paths in the exercises. By default, the **RStudio** console points to the folder where the active file is located (defined by  `setwd(dirname(rstudioapi::getActiveDocumentContext()$path))` in the code). With this structure, R scripts appear in the root of the working directory and data files are in a `'data/'` directory within the root, with **.shp** and **.tif** files located within the sub-folders `'data/shapes'` and `'data/rasters'` respectively. Following this recommendation simplifies the definition of paths and execution of the scripts. If users desire to change their storage paths, they have to properly adjust data paths in the R scripts.
+
+
+<!--chapter:end:01-Presentation.Rmd-->
+
+# Setting-up the software environment
+
+This chapter provides an overview on the software required to set-up a soil sampling design. The tools are open source and can be downloaded and installed by users following the steps that are described here. 
+
+## Use of R, RStudio and R Packages
+
+**R** is a language and environment for statistical computing created in 1992. It provides a wide variety of statistical (e.g. linear modelling, statistical tests, time-series, classification, clustering, etc.) and graphical methods, and has been constantly extended by an exceptionally active user community. 
+
+### Obtaining and installing R
+
+Installation files and instructions can be downloaded from the Comprehensive R Archive Network (CRAN).
+
+1. Go to the following link https://cran.r-project.org/ to download and install **R**. 
+2. Pick an installation file for your operational system.
+3. Choose the "*base*" distribution of R (particularly if it is the first time you install **R**).
+4. Download the R installation file and open the file on your device.
+5. Follow the installation instructions.
+
+### Obtaining and installing RStudio
+
+Beginners will find it very hard to start using **R** because it has no Graphical User Interface (GUI). There are some GUIs which offer some of the functionality of **R**. **RStudio** makes **R** easier to use. It includes a code editor, debugging and visualization tools. Similar steps need to be followed to install **RStudio**.
+
+1. Go to https://www.rstudio.com/products/rstudio/download/ to download and install **RStudio**'s open source edition.
+2. On the download page, *RStudio Desktop, Open Source License* option should be selected.
+3. Pick an installation file for your platform.
+4. Follow the installation instruction on your local device.
+
+```{r Rstudio, echo = FALSE, fig.cap = "R Studio interface.",out.width='100%'}
+#settings needed for pdf-document: fig.width = 7, out.width = "12cm"
+knitr::include_graphics("images/2_RStudio-interface.png")
+```
+
+
+The **RStudio** interface is structured by four compartments (see Fig. \@ref(fig:Rstudio)). The code editor is located in the upper left. Scripts that contain codes are displayed here. New scripts can be opened by clicking on the left most *New* button in the quick access tool bar (highlighted in green). Lines of code can be executed by clicking on *Run* (highlighted in blue) or by pressing *ctrl + enter* on your keyboard.
+The output of scripts or lines of code that are executed is displayed in the window below the code editor: the console (bottom left). This part of the interface corresponds to the **R** software that were installed previously. 
+When working in **R**, it is central to work with so-called objects (for instance vectors, dataframes or matrices). These objects are saved in the global environment that is displayed in the top right panel.
+Finally, the **R** software offers a broad range of powerful tools for visualisation purposes. Graphs or maps that are generated by scripts/codes, are displayed in the bottom right panel.
+
+### Getting started with R	
+
+* **R** manuals:                  http://cran.r-project.org/manuals.html
+* Contributed documentation:      http://cran.r-project.org/other-docs.html
+* Quick-**R**:                    http://www.statmethods.net/index.html
+* Stackoverflow **R** community:  https://stackoverflow.com/questions/tagged/r 
+
+## R packages
+
+When you download **R**, you get the basic **R** system which implements the **R** language. **R** becomes more useful with the large collection of packages that extend the basic functionality of it. **R** packages are developed by the **R** community.
+
+refer to: 
+* *tidyverse* book (R for data science)
+* *caret* (broad range of statistical learning functions)
+* *R spatial*: https://rspatial.org/ (R packages for spatial data operations)
+
+The primary source for **R** packages is [CRAN’s](https://cran.r-project.org/) official website, where currently about 20,250 available packages are listed. For spatial applications, various packages are available. You can obtain information about the available packages directly on CRAN with the 'available.packages()' function. The function returns a matrix of details corresponding to packages currently available at one or more repositories. An easier way to browse the list of packages is using the [*Task Views*](https://cran.r-project.org/web/views/) link, which groups together packages related to a given topic. 
+
+Packages come along with extensive documentation that is very helpful to understand and solve error messages. To access information on functions or packages, type "?[Package or Function name]" or "??[Package or Function name]" in the console. The information on the package and/or function can then be accessed in the bottom right panel under "Help" (see Fig. \@ref(fig:Rstudio)). In addition to that, the *R documentation* website (https://www.rdocumentation.org/) provides more extensive help and gives clear overviews on all functions comprised in a certain package.
+
+## GEE - google earth engine
+
+Google earth engine (GEE) provides a large range of remote sensing datasets for users. It allows to use the GEE code editor to run computations using the Google servers. The high computational power of these servers enables users with limited computational capacities to run complex calculations.
+A user account must be created to use the code editor. This step can take some time. Once the account is validated, scripts can be written in the code editor using the Javascript language. An extensive array of instructions and guides are available on the platform. Alternatively, the Python language can be used to interact with the data.
+
+The code editor interface is structured by three panels and a map viewer (see Fig. \@ref(fig:GEE)). The left panel is structured in "Scripts", "Docs", and "Assets". Under "Scripts" users can organize and save the scripts they wrote for specific purposes. "Docs" provides further information on so-called "server-side" functions that can be used to manipulate the data. Finally, in "Assets" users can upload own spatial data in common formats such as shapefiles (.shp) or raster files (.tif).
+The middle panel contains the scripts that can be run by clicking on the "Run" button.
+The right panel is composed of three functionalities. The "Inspector" provides basic information on a pixel of a layer displayed in the map below. The information consists of longitude, latitude, and - if layers are loaded - values of the pixel. The "Console" is the place where certain commands expressed in the code are shown. The most common expressions shown here are print() commands or figures derived from the loaded data. Finally, the "Tasks" button shows all tasks that were formulated in the code/script and are to be submitted to the server for computation. Once a task is submitted, the user has to click on the "Run" button appearing in the "Tasks" section to submit the task to the server.
+In addition to that, the data catalogue can be accessed via the search bar on the top of the page. Here, key information on the available datasets, origin, resolution and related publications can be found. 
+
+```{r GEE, echo = FALSE, fig.cap = "Google Earth Engine code editor.",out.width='100%'}
+#settings needed for pdf-document: fig.width = 7, out.width = "12cm"
+knitr::include_graphics("images/2.1_GEE_codeeditor.png")
+```
+
+<!--chapter:end:02-Software-environment.Rmd-->
+
+#  (PART\*) Part one – Soil Legacy Data  {-}
+
+#  Evaluating Soil Legacy Data Sampling for DSM {#legacy_data} 
+
+Modelling techniques in Digital Soil Mapping involve the use of sampling point soil data, with its associated soil properties database, and a number of environmental covariates that will be used to ascertain the relationships of soil properties and the environment to then generalize the findings to locations where no samples have been compiled.
+
+In soil sampling design, a crucial issue is to determine both the locations and the number of the samples to be compiled. In an optimal situation, soil sample database should adequately cover all the environmental diversity space in the study area with a frequency relative to the extent of the diversity in the environmental covariates.
+
+When dealing with legacy soil data, a question that arises is if the data is representative of the environmental diversity within the study area. In this Chapter we present a method to answer this question and to build an alternative how many samples can be retrieved to cover the same environmental space as the existing soil data. The method follows the main findings in [@Malone] and developed as {R} scripts. 
+
+We adapted the original scripts to make use of  vector `'.shp'` and raster `'.tif'` files, as these are data formats commonly used by GIS analysts and in which both soil and environmental data is often stored. We also made some changes in order to simplify the number of R packages and to avoid the use of deprecated packages as it appears in the original code.
+
+
+##  Data Preparation
+
+We must load the required packages and data for the analyses. We make use of the packages `sp` and `terra` to manipulate spatial data, `clhs` for Conditioned Latin Hypercube Sampling, `entropy` to compute Kullback–Leibler (KL) divergence indexes, `tripack` for Delaunay triangulation and `manipulate` for interactive plotting within RStudio. Ensure that all these packages are installed in your system before the execution of the script.
+
+```{r load_packages, eval=TRUE, include=F}
+
+# Load packages as a vector objects
+ # Create a vector of packages to use
+  packages <- c("sp","terra","raster","sf","clhs", "sgsR","entropy", "tripack",
+              "manipulate","dplyr","plotly","synoptReg")
+ lapply(packages, require, character.only = TRUE) # Load packages
+ rm(packages) # Remove object to save memory space 
+  
+```
+
+
+We define the working directory to the directory in which the actual file is located and load the soil legacy sampling points and the environmental rasters from the `data` folder. To avoid the definition of each environmental covariate, we first retrieve all files with the `.tif` extension and then create a `SpatRaster` object with all of them in a row.
+
+
+```{r setup_wd, eval=FALSE, include=TRUE}
+
+  ## Set working directory to source file location
+    setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
+```
+
+```{r load_wd, eval=TRUE, include=FALSE}
+
+# Set working directory to source file location
+  setwd("/Users/luislado/Dropbox/Github/Sampling_Design")
+
+```
+
+Here we define a number of variables that will be used during the exercises in this manual. They include the path to raster and shp files, aggregation and disaggregation factors, and buffer distances to define potential sampling areas from sampling points. These variables are later described at the appropriate section in the manual.
+
+```{r global–variables, eval=TRUE, include=FALSE, warning=FALSE}
+  ## Definition of some global variables
+  # Path to rasters
+    raster.path <- "data/rasters"
+  # Path to shapes
+    shp.path <- "data/shapes"
+  # Path to results
+    results.path <- "data/results/"
+  # Aggregation factor for up-scaling raster covariates (optional)
+    agg.factor = 10
+
+```
+
+The original covariates are cropped to match the extent of a smaller area, the Nghe An province in this exercise, to simplify the computation time. Then, covariates are transformed by Principal Component Analysis to uncorrelated Principal Component scores. This ensures the use of a lower amount of raster data avoiding multicollinearity in the original covariates. We select the Principal Component rasters that capture 99% of the variability in the dataset.
+
+
+```{r load_covariates, eval=TRUE, include=TRUE, warning=FALSE}
+  ## Load soil legacy point data and environmental covariates
+  # Read Spatial data covariates as rasters with terra
+  cov.dat <-  list.files(raster.path, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
+  cov.dat <- terra::rast(cov.dat) # SpatRaster from terra
+  # Aggregate stack to simplify data rasters for calculations 
+  cov.dat <- aggregate(cov.dat, fact=agg.factor, fun="mean")
+  
+  # Load shape of district
+  nghe <- sf::st_read(file.path(paste0(shp.path,"/Nghe_An.shp")),quiet=TRUE)
+  
+  # Crop covariates on administrative boundary
+  cov.dat <- crop(cov.dat, nghe, mask=TRUE)
+  
+  # Transform raster information with PCA
+  pca <- raster_pca(cov.dat)
+  
+  # Get SpatRaster layers
+  cov.dat <- pca$PCA
+  # Create a raster stack to be used as input in the clhs::clhs function 
+  cov.dat.ras <- raster::stack(cov.dat) 
+  # Subset rasters
+  cov.dat <- pca$PCA[[1:first(which(pca$summaryPCA[3,]>0.99))]]
+  cov.dat.ras <-  cov.dat.ras[[1:first(which(pca$summaryPCA[3,]>0.99))]]
+  # convert to dataframe
+  cov.dat.df <- as.data.frame(cov.dat)
+  
+  # Load legacy soil data
+  p.dat <- terra::vect(file.path(paste0(shp.path,"/legacy_soils.shp")))
+  
+```
+
+Figure \@ref(fig-3) shows the PCA-transformed raster layers used in the analyses.
+
+```{r, fig-3, fig.cap = "Covariates", echo = FALSE}
+  ## Plot covariates
+    plot(cov.dat)
+
+```
+
+
+
+## Representativeness of the Legacy Soil Data
+
+The next step involves determining the distributions of environmental values in the soil samples data and comparing them with the existing distributions of each environmental variable to assess the representativeness of the existing soil samples in the environmental space.
+
+The comparison of distributions is performed using the Kullback–Leibler divergence (KL) distance, a measure used to quantify the difference between two probability distributions.
+KL–divergence compares an 'objective' or reference probability distribution (in this case, the distribution of covariates in the complete covariate space – P) with a 'model' or approximate probability distribution (the values of covariates in the soil samples – Q). The main idea is to determine how much information is lost when Q is used to approximate P. In other words, KL–divergence measures how much the Q distribution deviates from the P distribution. KL–divergence approaches 0 as the two distributions have identical quantities of information. 
+
+To create a dataset with the values of the environmental parameters at the locations of the soil samples, we cross-reference soil and environmental data.
+
+```{r merge_data, eval=T, include=TRUE, echo = FALSE}
+
+  ## Extract environmental data from rasters at soil locations ----
+    p.dat_I <- terra::extract(cov.dat, p.dat)
+    p.dat_I <- na.omit(p.dat_I) # Remove soil points outside study area
+    p.dat_I.df <- p.dat_I[,-1] # Remove ID variable
+    #str(p.dat_I)
+  
+```
+
+First, we calculate a 'n–matrix' with the values of the covariates, dividing their values into 'n' bins according to an equal–probability distribution. Each bin captures the environmental variability within its interval in the total distribution. In this exercise, 'n' equals to 25. The result is a  26×4 matrix, where the rows represent the upper and lower limit of the bin (26 thresholds are required to represent 25 bins), and the columns correspond to the number of variables used as environmental proxies.
+
+```{r P_matrix, eval=T, include=TRUE}
+  ## Variability matrix in the covariates
+    # Define Number of bins
+      nb <- 25
+      #quantile matrix (of the covariate data)
+      q.mat <- matrix(NA, nrow=(nb+1), ncol= nlyr(cov.dat))
+      j=1
+      for (i in 1:nlyr(cov.dat)){ #note the index start here
+      #get a quantile matrix together of the covariates
+        ran1 <- minmax(cov.dat[[i]])[2] - minmax(cov.dat[[i]])[1]
+        step1 <- ran1/nb 
+        q.mat[,j] <- seq(minmax(cov.dat[[i]])[1], to = minmax(cov.dat[[i]])[2], by =step1)
+        j<- j+1}
+
+```
+
+From this matrix, we compute the hypercube matrix of covariates in the whole covariate space.
+
+
+```{r P_hypercube_matrix, eval=T, include=TRUE}
+
+## Hypercube of "objective" distribution (P) – covariates
+  # Convert SpatRaster to dataframe for calculations
+      cov.mat <- matrix(1, nrow = nb, ncol = ncol(q.mat))
+      cov.dat.mx <- as.matrix(cov.dat.df)
+      for (i in 1:nrow(cov.dat.mx)) {
+        for (j in 1:ncol(cov.dat.mx)) {
+          dd <- cov.dat.mx[[i, j]]
+      
+          if (!is.na(dd)) {
+            for (k in 1:nb) {
+              kl <- q.mat[k, j]
+              ku <- q.mat[k + 1, j]
+              
+              if (dd >= kl && dd <= ku) {
+                cov.mat[k, j] <- cov.mat[k, j] + 1
+              }
+            }
+          }
+        }
+      }
+
+
+```
+
+Te, we calculate the hypercube matrix of covariates in the sample space.
+
+
+```{r Q_hypercube_matrix, eval=T, include=TRUE}
+
+## Sample data hypercube
+      h.mat <- matrix(1, nrow = nb, ncol = ncol(q.mat))
+      for (i in 1:nrow(p.dat_I.df)) {
+        for (j in 1:ncol(p.dat_I.df)) {
+          dd <- p.dat_I.df[i, j]
+          
+          if (!is.na(dd)) {
+            for (k in 1:nb) {
+              kl <- q.mat[k, j]
+              ku <- q.mat[k + 1, j]
+              
+              if (dd >= kl && dd <= ku) {
+                h.mat[k, j] <- h.mat[k, j] + 1
+              }
+            }
+          }
+        }
+      }
+
+```
+
+* **KL–divergence**
+
+We calculate the KL–divergence to measure how much the distribution of covariates in the sample space (Q) deviates from the distribution of covariates in the complete study area space (P).
+  
+```{r KL_divergence, eval=T, include=TRUE}
+  ## Compare covariate distributions in P and Q with Kullback–Leibler (KL) divergence
+      kl.index <-c()
+      for(i in 1:ncol(cov.dat.df)){
+        kl <-    KL.empirical(c(cov.mat[,i]), c(h.mat[,i]))
+        kl.index <- c(kl.index,kl)
+        klo <-  mean(kl.index)
+      }
+      #print(kl.index) # KL divergences of each covariate
+      #print(klo) # KL divergence in the existing soil samples
+
+```
+
+The KL–divergence is always greater than or equal to zero, and reaches its minimum value (zero) only when P and Q are identical. Thus, lower values of KL–divergence indicate a better match between both the sample and the study area spaces, suggesting that the sample space provides a fair representation of the environmental conditions in the study area.
+
+In this case, the KL–divergence value is `r round(klo,3)`, which quantifies the amount of environmental variability in the study area captured by the legacy samples.
+
+* **Percent of representativeness in relation to the overall environmental conditions**
+
+Finally, we can assess the extent to which our legacy soil dataset represents the existing environmental conditions in the study area. We calculate the proportion of pixels in the study area that would fall within the convex hull polygon delineated based on the environmental conditions found only at the locations of the soil legacy data. The convex hull polygon is created using a Principal Component transformation of the data in the soil legacy dataset, utilizing the outer limits of the scores of the points projected onto the two main components (Fig. \@ref(fig-4)).
+
+
+```{r, fig-4, fig.cap = "PCA plot of the covariate", echo = FALSE}
+  ## Representativeness of the Legacy Dataset
+  ## Calculate the proportion of "env. variables" in the covariate spectra that fall within the convex hull of variables in the "environmental sample space"
+  
+  # Principal component of the legacy data sample
+    pca.s = prcomp(p.dat_I[,2:(ncol(cov.dat.df)+1)],scale=TRUE, center=TRUE)
+    scores_pca1 = as.data.frame(pca.s$x)
+  # Plot the first 2 principal components and convex hull
+    rand.tr <- tri.mesh(scores_pca1[,1],scores_pca1[,2],"remove") # Delaunay triangulation 
+    rand.ch <- convex.hull(rand.tr, plot.it=F) # convex hull
+    pr_poly = cbind(x=c(rand.ch$x),y=c(rand.ch$y)) # save the convex hull vertices
+    #plot(scores_pca1[,1], scores_pca1[,2], xlab="PCA 1", ylab="PCA 2", xlim=c(min(scores_pca1[,1:2]), max(scores_pca1[,1:2])),ylim=c(min(scores_pca1[,1:2]), max(scores_pca1[,1:2])), main='Convex hull of soil legacy data')
+    #lines(c(rand.ch$x,rand.ch$x[1]), c(rand.ch$y,rand.ch$y[1]),col="red",lwd=1) # draw the convex hull (domain of legacy data)
+
+  # PCA projection of study area population onto the principal components
+    PCA_projection <- predict(pca.s, cov.dat.df) # Project study area population onto sample PC
+    newScores = cbind(x=PCA_projection[,1],y=PCA_projection[,2]) # PC scores of projected population
+  
+  # Plot the polygon and all points to be checked
+    plot(newScores, xlab="PCA 1", ylab="PCA 2", xlim=c(min(newScores[,1:2]), max(newScores[,1:2])), ylim=c(min(newScores[,1:2]), max(newScores[,1:2])), col='black', main='Environmental space plots over the convex hull of soil legacy data')
+    polygon(pr_poly,col='#99999990')
+  # Check which points fall within the polygon
+    pip <- point.in.polygon(newScores[,2], newScores[,1], pr_poly[,2],pr_poly[,1],mode.checked=FALSE)
+    newScores <- data.frame(cbind(newScores, pip))
+  # Plot points outside convex hull  
+    points(newScores[which(newScores$pip==0),1:2],pch='X', col='red')
+  # Proportion of the conditions in the study area that fall within the convex hull
+    #sum(nrow(newScores[newScores$pip>0,]))/nrow(newScores)*100 
+
+```
+
+This indicates that `r round(sum(nrow(newScores[newScores$pip>0,]))/nrow(newScores)*100,1)`\% of the existing conditions in the study area are encompassed within the convex hull delineated using the data from the soil samples. This percentage shows the level of adequacy of the legacy data for DSM in the area.
+
+
+
+<!--chapter:end:03-Legacy-data.Rmd-->
+
+# (PART) Part two – Soil Sampling Design {-} 
+
+# Determining the minimum sampling size
+
+Several strategies exist for designing soil sampling, including regular, random, and stratified sampling. Each strategy comes with its own set of advantages and limitations, which must be carefully considered before commencing a soil sampling campaign. Regular sampling, also called grid sampling, is straightforward and ensures uniform coverage, making it suitable for spatial analysis and detecting trends. However, it may introduce bias and miss small–scale variability. Generally, random sampling may require a larger number of samples to accurately capture soil variability compared to stratified sampling, which is more targeted. Nonetheless, from a statistical standpoint, random sampling is often preferred. It effectively minimizes selection bias by giving every part of the study area an equal chance of being selected. This approach yields a sample that is truly representative of the entire population, leading to more accurate, broadly applicable conclusions. Random sampling also supports valid statistical inferences, ensures reliability of results, and simplifies the estimation of errors, thereby facilitating a broad spectrum of statistical analyses.
+
+The determination of both the number and locations of soil samples is an important element in the success of any sampling campaign. The chosen strategy directly influences the representativeness and accuracy of the soil data collected, which in turn impacts the quality of the conclusions drawn from the study.
+
+In this manual, we make use of the data from Vietnam as stored in the Google Earth repository of FAO-GPS (digital-soil-mapping-gsp-fao) for the Nghe An province. We want to determine the minimal number of soil samples that must be collated to capture at least the 95% of variability within the environmental covariates. The procedure start with random distribution of a low number of samples in the area, determine the values of the spatial covariates, and compare them with those representing the whole diversity in the area at pixel scale. The comparisons are made using the `'Kullback–Leibler divergence (KL)'` – a measure of how the probability distribution of the information in the samples is different from that of the Population, i.e. the covariate space. We also calculate the `'% of representativeness'` as the percent of variability in the covariate information for the complete area related to the variability of covariate information in the sample dataset. 
+
+The initial section of the script is related to set–up options in the methodology. We load of R packages, define the working directory, load covariate data, and store it as `SpatRaster` object. Variables related to several aspects of the analyses, such as the aggregation factor of covariates (optional), the creation of a raster stack object(required in the `clhs` function), the initial and final number of samples in the trials, the increment step between trials, and the number of iterations within each trial, are also defined.
+
+```{r setup_wd_03, eval=FALSE, include=FALSE, echo=FALSE}
+
+  # Load packages as a vector objects
+  # List of packages
+  packages <- c("sp","terra","raster","sf","clhs", "sgsR","entropy", "tripack",
+              "manipulate","dplyr","plotly","synoptReg")
+  lapply(packages, require, character.only = TRUE) # Load packages
+  rm(packages) # Remove object to save memory space 
+
+  # Set working directory to source file location
+  setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+  #setwd("../") # Move wd down to main folder
+
+```
+
+```{r load_wd_03, eval=TRUE, include=FALSE}
+
+  # Set working directory to source file location
+  #setwd("/Users/luislado/Dropbox/Github/Sampling_Design_GSP")
+
+```
+
+```{r user-variables-04, eval=TRUE, include=TRUE}
+
+# Path to rasters
+  raster.path <- "data/rasters"
+# Path to shapes
+  shp.path <- "data/shapes"
+# Path to results
+  results.path <- "data/results/"
+# Aggregation factor for up-scaling raster covariates (optional)
+  agg.factor = 5
+
+```
+
+As in the previous section, covariates are PCA-transformed to avoid collinearity in the data and Principal Component rasters representing 99% of the information are retained for the analyses.
+
+```{r load_data_03, eval=TRUE, include=TRUE, warning=FALSE}
+
+  ## Load raster covariate data
+  # Read Spatial data covariates as rasters with terra
+  cov.dat <-  list.files(raster.path, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
+  cov.dat <- terra::rast(cov.dat) # SpatRaster from terra
+  # Aggregate stack to simplify data rasters for calculations 
+  cov.dat <- aggregate(cov.dat, fact=agg.factor, fun="mean")
+  
+  # Load shape of district
+  nghe <- sf::st_read(file.path(paste0(shp.path,"/Nghe_An.shp")),quiet=TRUE)
+
+  # Crop covariates on administrative boundary
+  cov.dat <- crop(cov.dat, nghe, mask=TRUE)
+
+  # Simplify raster information with PCA
+  pca <- raster_pca(cov.dat)
+  
+  # Get SpatRaster layers
+  cov.dat <- pca$PCA
+  # Create a raster stack to be used as input in the clhs::clhs function 
+  cov.dat.ras <- raster::stack(cov.dat) 
+  # Subset rasters
+  cov.dat <- pca$PCA[[1:first(which(pca$summaryPCA[3,]>0.99))]]
+  cov.dat.ras <-  cov.dat.ras[[1:first(which(pca$summaryPCA[3,]>0.99))]]
+  # convert to dataframe
+  cov.dat.df <- as.data.frame(cov.dat)
+        
+  
+```
+
+Fig. \@ref(fig:fig-10) shows the covariates retained for the analyses.
+
+```{r fig-5, eval=TRUE, include=TRUE, fig.cap="Plot of the covariates"}
+
+   plot(cov.dat)
+  
+```
+
+
+```{r variable_inicialization_03, eval=TRUE, include=TRUE}
+
+  ## Define the number of samples to be tested in a loop (from initial to final) and the step of the sequence
+  initial.n <- 50 # Initial sampling size to test
+  final.n <- 250 # Final sampling size to test
+  by.n <- 10 # Increment size
+  iters <- 10 # Number of trials on each size
+
+```
+
+The second section is where the analyses of divergence and representativeness of the sampling scheme are calculated. 
+
+The analyses are performed in a loop using growing numbers of samples at each trial. Some empty vectors are defined to store the output results at each loop. At each trial of sample size `'N'`, soil samples are located at locations where the amount of information in the covariates is maximized according to the conditioned Latin Hypercube sampling method in the `'clhs'` package [@Roudier2011]. A number of `r iters`  replicates are calculated to determine the amount inter–variability in KL divergence and representativeness in the trial. The final results for each sample size correspond to the mean results obtained from each iteration at the corresponding sample size. The minimum sample size selected correspond to the size that accounts for at least 95% of the variability of information in the covariates within the area. The optimal sampling schema proposed correspond to the random scheme at the minimum sample size with higher value of representativeness. 
+
+
+```{r, fig-6, fig.cap = "Distribution of covariates in the sample space", include = TRUE}
+
+  # Define empty vectors to store results
+  number_of_samples <- c()
+  prop_explained <- c()
+  klo_samples <-c()
+  samples_storage <- list()
+
+  for (trial in seq(initial.n, final.n, by = by.n)) {
+    for (iteration in 1:iters) {
+      # Generate stratified clhs samples
+      p.dat_I <-  clhs(cov.dat.ras,
+          size = trial, iter = 10000,
+          progress = FALSE, simple = FALSE)
+      
+      # Get covariate values for each point
+      p.dat_I <- p.dat_I$sampled_data
+      # Get the covariate values at points as dataframe and delete NAs
+      p.dat_I.df <- as.data.frame(p.dat_I@data) %>%
+        na.omit()
+      
+      # Store samples as list with point coordinates
+      samples_storage[[paste0("N", trial, "_", iteration)]] <- p.dat_I
+      
+      ## Comparison of population and sample distributions - Kullback-Leibler (KL) divergence
+      # Define quantiles of the study area (number of bins)
+      nb <- 25
+      # Quantile matrix of the covariate data
+      q.mat <- matrix(NA, nrow = (nb + 1), ncol = nlyr(cov.dat))
+      j = 1
+      for (i in 1:nlyr(cov.dat)) {
+        ran1 <- minmax(cov.dat[[i]])[2] - minmax(cov.dat[[i]])[1]
+        step1 <- ran1 / nb
+        q.mat[, j] <-
+          seq(minmax(cov.dat[[i]])[1],
+              to = minmax(cov.dat[[i]])[2],
+              by = step1)
+        j <- j + 1
+      }
+      # q.mat
+      
+      # Hypercube of covariates in study area
+      # Initialize the covariate matrix
+      cov.mat <- matrix(1, nrow = nb, ncol = ncol(q.mat))
+      cov.dat.mx <- as.matrix(cov.dat.df)
+      for (i in 1:nrow(cov.dat.mx)) {
+        for (j in 1:ncol(cov.dat.mx)) {
+          dd <- cov.dat.mx[[i, j]]
+      
+          if (!is.na(dd)) {
+            for (k in 1:nb) {
+              kl <- q.mat[k, j]
+              ku <- q.mat[k + 1, j]
+              
+              if (dd >= kl && dd <= ku) {
+                cov.mat[k, j] <- cov.mat[k, j] + 1
+              }
+            }
+          }
+        }
+      }
+
+      # Compare whole study area covariate space with the selected sample
+      # Sample data hypercube (the same as for the raster data but on the sample data)
+      h.mat <- matrix(1, nrow = nb, ncol = ncol(q.mat))
+      for (i in 1:nrow(p.dat_I.df)) {
+        for (j in 1:ncol(p.dat_I.df)) {
+          dd <- p.dat_I.df[i, j]
+          
+          if (!is.na(dd)) {
+            for (k in 1:nb) {
+              kl <- q.mat[k, j]
+              ku <- q.mat[k + 1, j]
+              
+              if (dd >= kl && dd <= ku) {
+                h.mat[k, j] <- h.mat[k, j] + 1
+              }
+            }
+          }
+        }
+      }
+
+      ## Compute Kullback-Leibler (KL) divergence
+      kl.index <- c()
+      for (i in 1:ncol(cov.dat.df)) {
+        kl <-    KL.empirical(c(cov.mat[, i]), c(h.mat[, i]))
+        kl.index <- c(kl.index, kl)
+        klo <-  mean(kl.index)
+      }
+      
+      ## Calculate the proportion of "env. variables" in the covariate spectra that fall within the convex hull of variables in the "environmental sample space"
+      # Principal component of the data sample
+      pca.s = prcomp(p.dat_I.df, scale = TRUE, center = TRUE)
+      scores_pca1 = as.data.frame(pca.s$x)
+      # Plot the first 2 principal components and convex hull
+      rand.tr <-
+        tri.mesh(scores_pca1[, 1], scores_pca1[, 2], "remove") # Delaunay triangulation
+      rand.ch <- convex.hull(rand.tr, plot.it = F) # convex hull
+      pr_poly <-
+        cbind(x = c(rand.ch$x), y = c(rand.ch$y)) # save the convex hull vertices
+      # PCA projection of study area population onto the principal components
+      PCA_projection <-
+        predict(pca.s, cov.dat.df) # Project study area population onto sample PC
+      newScores = cbind(x = PCA_projection[, 1], y = PCA_projection[, 2]) # PC scores of projected population
+      # Check which points fall within the polygon
+      pip <-
+        point.in.polygon(newScores[, 2], newScores[, 1], pr_poly[, 2], pr_poly[, 1], mode.checked =
+                           FALSE)
+      newScores <- data.frame(cbind(newScores, pip))
+      klo_samples <- c(klo_samples, klo)
+      prop_explained <-
+        c(prop_explained, sum(newScores$pip) / nrow(newScores) * 100)
+      number_of_samples <- c(number_of_samples, trial)
+      # print(
+      #   paste(
+      #     "N samples = ",
+      #     trial,
+      #     " out of ",
+      #     final.n,
+      #     "; iteration = ",
+      #     iteration,
+      #     "; KL = ",
+      #     klo,
+      #     "; Proportion = ",
+      #     sum(newScores$pip) / nrow(newScores) * 100
+      #   )
+      # )
+    }
+  }
+
+
+```
+
+
+Figure \@ref(fig:fig-7) shows the distribution of covariates in the sample space, and Figure \@ref(fig:fig-7a) indicates the variability in the estimations of KL divergence and repressentativeness percent in the `r iters` within each sample size.
+
+
+```{r  fig-7, eval=TRUE, include=TRUE, fig.cap="Distribution of covariates in the sample space"}
+    
+  # Plot the polygon and all points to be checked
+     plot(newScores[,1:2], xlab="PCA 1", ylab="PCA 2",
+          xlim=c(min(newScores[,1:2], na.rm = T), max(newScores[,1:2], na.rm = T)),
+          ylim=c(min(newScores[,1:2], na.rm = T), max(newScores[,1:2], na.rm = T)),
+          col='black',
+          main='Environmental space plots over the convex hull of soil legacy data')
+
+     polygon(pr_poly,col='#99999990')
+     
+  # # Plot points outside convex hull  
+     points(newScores[which(newScores$pip==0),1:2], col='red', pch=12, cex =1)
+
+```
+
+
+
+```{r results_03, eval=TRUE, include=FALSE}
+
+  ## Merge data from number of samples, KL divergence and % representativeness 
+  results <- data.frame(number_of_samples,klo_samples,prop_explained)
+  names(results)<-c("N","KL","Perc")
+  
+  # Calculate mean results by N size
+  mean_result <- results %>%
+  group_by(N) %>%
+  summarize_all(mean)
+  mean_result
+```  
+
+
+
+```{r fig-7a, fig.cap="Boxplot of the dispersion in KL and % repressentativeness in the iteration trials for each sample size",fig.width=8, fig.height=5, eval=TRUE, include=TRUE}
+
+  ## Plot dispersion on KL and % by N
+  par(mar=c(5, 4, 1, 6))
+  boxplot(Perc ~ N, data=results, col = rgb(1, 0.1, 0, alpha = 0.5),ylab = "%")
+  mtext("KL divergence",side=4,line=3)
+  # Add new plot
+  par(new = TRUE,mar=c(5, 4, 1, 6))
+  # Box plot
+  boxplot(KL ~ N, data=results, axes = FALSE,outline = FALSE,
+          col = rgb(0, 0.8, 1, alpha = 0.5), ylab = "")
+  axis(4, at=seq(0.02, 0.36, by=.06),  label=seq(0.02, 0.36, by=.06), las=3)
+    
+```
+
+
+```{r results–table–03, eval=TRUE, include=FALSE}
+# knitr::kable(
+#   mean_result, booktabs = TRUE,
+#   caption = 'Mean results for each trial of sample size at increasing steps of 10 samples.')
+```
+
+We determine the minimum sample size and plot the evaluation results.
+
+```{r minimum_03, eval=TRUE, include=FALSE}
+
+    # Create an exponential decay function (of the KL divergence)
+      x <- mean_result$N
+      y = (mean_result$KL-min(mean_result$KL))/(max(mean_result$KL)-min(mean_result$KL)) #KL
+      
+    # Parameterize Exponential decay function
+      start <- list()     # Initialize an empty list for the starting values
+      
+    #fit function
+      k=2;
+      b0=0.01
+      b1 = 0.01
+      
+      fit1 <- nls(y ~ k * exp(-b1 * x) + b0, start = list(k=k, b0=b0, b1=b1), control = list(maxiter = 500),trace=T)
+      summary(fit1)
+      
+    # Plot fit
+      xx <- seq(1, final.n,1)
+      plot(x, y)
+      lines(xx, predict(fit1,list(x=xx)))
+    # Predict with vfit function
+      jj <- predict(fit1,list(x=xx))
+      normalized = 1 - (jj - min(jj)) / (max(jj) - min(jj))
+      
+    # Determine the minimum sample size to account for 95% of cumulative probability of the covariate diversity
+      minimum_n <- length(which(normalized <0.95))+1
+
+```
+
+
+The following figure shows the cumulative distribution function (cdf) of the KL divergence and the % of representativeness with growing sample sizes. Representativeness increases with the increasing sample size, while KL divergence decreases as expected. The red dot identifies the trial with the minimum sample size for the area in relation to the covariates analysed.
+
+```{r fig-8, fig.cap="KL Divergence and Proportion of Representativeness as function of sample size",fig.width=8, fig.height=5, eval=TRUE, include=TRUE}
+
+  ## Plot cdf and minimum sampling point
+  x <- xx
+  y <- normalized
+  
+  mydata <- data.frame(x,y)
+  opti <- mydata[mydata$x==minimum_n,]
+  
+  plot_ly(mydata,
+          x = ~x,
+          y = ~normalized,
+          mode = "lines+markers",
+          type = "scatter",
+          name = "CDF (1–KL divergence)") %>%
+    add_trace(x = ~x,
+              y = ~jj,
+              mode = "lines+markers",
+              type = "scatter",
+              yaxis = "y2",
+              name = "KL divergence")  %>%
+    add_trace(x = ~opti$x,
+              y = ~opti$y,
+              yaxis = "y",
+              mode = "markers",
+              name = "Minimum N",
+              marker = list(size = 8, color = '#d62728',line = list(color = 'black', width = 1))) %>%
+    layout(xaxis = list(title = "N", 
+                        showgrid = T, 
+                        dtick = 50, 
+                        tickfont = list(size = 11)),
+           yaxis = list(title = "1–KL divergence (% CDF)", showgrid = F ),
+           yaxis2 = list(title = "KL divergence",
+                         overlaying = "y", side = "right"),
+           legend = list(orientation = "h", y = 1.2, x = 0.1,
+                         traceorder = "normal"),
+           margin = list(t = 50, b = 50, r = 100, l = 80),
+           hovermode = 'x')  %>% 
+    config(displayModeBar = FALSE) 
+
+```
+
+
+According to Figure \@ref(fig:fig-8), the minimum sampling size for the area, which captures at least 95% of the environmental variability of covariates is N = `r minimum_n`.
+
+Finally, we can determine the optimal distribution of samples over the study area according to these specific results, taking into account the minimum sampling size and the increasing interval in the sample size. The results are shown in Figure \@ref(fig:fig-9).
+
+
+```{r fig-9, fig.cap="Covariates and optimal distribution of samples", eval=TRUE, include=TRUE}
+
+## Determine the optimal iteration according to the minimum N size 
+  optimal_iteration <- results[which(abs(results$N - minimum_n) == min(abs(results$N - minimum_n))),] %>%
+    mutate(IDX = 1:n()) %>%
+    filter(Perc==max(Perc)) 
+  
+  # Plot best iteration points
+  N_final <- samples_storage[paste0("N",optimal_iteration$N,"_", optimal_iteration$IDX)][[1]]
+  plot(cov.dat[[1]])
+  points(N_final)
+
+```
+
+
+In summary, we utilize the variability within the covariate data to ascertain the minimum number of samples required to capture a minimum of 95% of this variability. Our approach involves assessing the similarities in variability between the sample space and the population space (study area) through calculations of the Kullback–Leibler (KL) divergence and the percentage of similarity at various stages of increasing sample sizes. These results are then utilized to fit a model representing the expected distribution of representativeness as a function of sample size. This model guides us in determining the minimum sample size necessary to achieve a representation of at least 95% of the environmental diversity within the area
+
+
+<!--chapter:end:04-Sample-size.Rmd-->
+
+
+# Stratified Sampling Design
+
+Stratified random sampling is a technique where the study area is divided into different `groups` or `strata` based on certain environmental traits and a number of random samples are taken from within each group. One of the primary advantages of stratified sampling is its ability to capture the diversity within a population by making sure each group is represented. It can provide a more accurate reflection of the entire population compared to random sampling, especially when the groups are distinct and have unique qualities. This approach is particularly beneficial when certain subgroups within the population are specifically noteworthy. It also allows for more precise estimates with a smaller total sample size compared to simple random choice. Stratified sampling presents some disadvantages. Achieving effective categories requires a proper definition and delineation of the initial information to create the `strata`. The classification of the environmental information into categories and ensuring fair portrayal of each can be intricate and time–taking and mislabeling elements into an improper group can lead to skewed outcomes.
+
+## General Procedure
+
+The creation of a  stratified random sampling design involves the identification of relevant features describing the environmental diversity in the area (soil and landcover are the environmental variables generally used to define strata), delineation of the strata, determination of the number of samples to distribute to each stratum, followed by random sampling within it. By identifying relevant classes, combining them to define strata and allocating an appropriate number of samples to each stratum, a representative sample can be obtained. Random sampling within each stratum helps to ensure that the sample is unbiased and provides a fair representation of the overall conditions in the area.
+
+The first question is about how many samples must be retrieved from each strata. The sampling scheme starts with the definition of the total number of samples to collect. In this case, the determination of the sample size is a complex and highly variable process based, among others, on the specific goals of the study, the variability of environmental proxies, the statistical requirements for accuracy and confidence, as well as additional considerations such as accessibility, costs and available resources. The optimal number of samples can be determined following the method proposed in Chapter 2 of this manual. The number of samples within each stratum is calculated using an area–weighted approach taking into account the relative area of each stratum. The sampling design in this section must also comply with the following requirements:
+
+   *  All sampling strata must have a minimum size of 100 hectares.
+   *  All sampling strata must be represented by at least 2 samples.
+
+This sampling process ensures the representativeness of the environmental combinations present across the area while maintaining an efficient and feasible field sampling campaign.
+
+### Strata creation
+
+We must determine the kind of information that will be used to construct the `strata`. In this manual, we present a simple procedure to build strata based on data from two environmental layers: soil groups and landcover classification data. The information should be provided in the form of vector shapefiles with associated information databases. The data on both sets often comprises a large number of categories, that would lead to a very large number of `strata`. Thus, it is desirable to make an effort of aggregating similar categories within each input data set, to reduce, as much as possible, the number of categories while still capturing the most of the valuable variability in the area.
+
+The fist step is to set–up the RStudio environment and load the required packages:
+
+
+```{r strata–setup, eval=TRUE, include=FALSE, warning=FALSE}
+
+# Load packages as a vector objects
+  packages <- c("sf", "terra", "tidyverse", "rmapshaper", "units","plyr", "mapview", "leaflet","stars","sgsR")
+  lapply(packages, require, character.only = TRUE) # Load packages
+  rm(packages) # Remove object to save memory space 
+
+  # Set working directory to source file location
+  #setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
+```
+
+
+```{r load_wd_strata, eval=TRUE, include=FALSE, warning=FALSE}
+
+  ## Set working directory to source file location
+  #setwd("/Users/luislado/Dropbox/Github/Sampling_Design_GSP")
+
+```
+
+
+We must define the number of samples to distribute in the sampling design and the soil and landcover information layers to build the strata. We also define a REPLACEMENT parameter to account for a reduction of the sampling area according to a certain area using predefined bounding–box, that can be also here defined.
+
+
+```{r strata–parameters, eval=TRUE, include=FALSE, echo=FALSE}
+
+  # Define number of samples
+    n <- 242
+
+  # Load soil data
+    soil <- st_read(paste0(shp.path,"/soils.shp"),promote_to_multi = FALSE)  
+  # Load Landcover data
+    lc <- st_read(paste0(shp.path,"/landcover.shp"))
+    
+    # Define a bounding box (optional). If REPLACEMENT = TRUE, then the bounding–box shapefile (bb), must be specified and the uncomment the line in the code below
+    BOUNDING = FALSE
+    # bb <- st_read("your_bounding_box.shp")
+    REPLACEMENT = FALSE
+    distance.buffer = 500 # Buffer distance for samples
+
+```
+
+We proceed with the calculation of soil groups. In this example, soil information is stored in the field `SRG`. We have analysed the extent to which the information in this field can be synthesized to eliminate redundancy when creating the `strata`. ^[This exploratory work is a prerequisite and must be adapted specifically to each soil and landcover dataset].
+The results are shown in \@ref(fig:fig-10)
+
+```{r soil–aggregation, eval=TRUE, include=FALSE, warning=FALSE}
+  
+  # Clip soil data  by bounding area if defined
+  if (BOUNDING) {
+    soil <- st_intersection(soil, bb)
+  } else {
+    soil <- soil
+  }
+    # Check geometry
+    soil <- st_make_valid(soil)
+    soil <- st_cast(soil, "MULTIPOLYGON")
+    #Aggregate information by reference soil group (SRG)
+      #unique(soil$RSG)
+    # Remove NAs (water bodies are deleted)
+    soil <- soil[!is.na(soil$RSG),]
+      #unique(soil$RSG)
+    # Dissolve polygons by reference soil group
+    soil <- soil %>% group_by(RSG) %>% dplyr::summarize() 
+ 
+```
+
+
+
+```{r fig-10, fig.cap="Plot of the soil classes", eval=TRUE, include=TRUE}
+  
+  ## Plot aggregated soil classes
+    map = leaflet(leafletOptions(minZoom = 8)) %>%
+      addTiles()
+    mv <- mapview(soil["RSG"], alpha=0, homebutton=T, layer.name = "soils", map=map)
+    mv@map
+    #ggplot() + geom_sf(data=soil, aes(fill = factor(RSG)))
+
+```
+
+
+A similar procedure is performed on the landcover dataset.
+
+
+```{r landcover–aggregation, eval=TRUE, include=FALSE, warning=FALSE}
+  # Calculate Landcover Groups
+
+  # Clip land landcover  by bounding area if exist
+  if (BOUNDING) {
+    lc <- st_intersection(lc, bb)
+  } else {
+    lc <- lc
+  }
+  # Check geometry
+  lc <- st_make_valid(lc)
+  # Agregate units
+  #unique(lc$landcover)
+  lc$landcover[lc$landcover=="Broadleaf forest"]<- "Forest"
+  lc$landcover[lc$landcover=="Needleleaf forest"]<- "Forest"
+  lc$landcover[lc$landcover=="Mixed forest"]<- "Forest"
+  lc <- lc[lc$landcover!="Water body",]
+  #unique(lc$landcover)
+  
+  # Dissolve polygons by reference soil group
+  lc <- lc %>% group_by(landcover) %>% dplyr::summarize() 
+    
+ 
+```
+
+Figure \@ref(fig:fig-11) shows the landcover classes to build the strata.
+
+```{r fig-11, fig.cap="Plot of the landcover classes", eval=TRUE, include=TRUE}
+
+# Plot map with the land cover information
+    map = leaflet() %>%
+      addTiles()
+    mv <- mapview(lc["landcover"], alpha=0, homebutton=T, layer.name = "Landcover", map=map)
+    mv@map
+    #ggplot() + geom_sf(data=lc, aes(fill = factor(landcover)))
+```
+
+To create the soil–landcover `strata` we must combine both classified datasets.
+
+
+```{r combine–data, eval=TRUE, include=TRUE, warning=FALSE} 
+  # Combine soil and landcover layers
+  sf_use_s2(FALSE)
+  soil_lc <- st_intersection(st_make_valid(soil), st_make_valid(lc))  
+  soil_lc$soil_lc <- paste0(soil_lc$RSG, "_", soil_lc$landcover)
+  soil_lc <- soil_lc %>% dplyr::select(soil_lc, geometry)
+  
+```
+
+Finally, to comply with the initial requirements of the sampling design, we calculate the areas of each polygon, delete all features with extent lesser than 100 has.  
+
+```{r select–area, eval=TRUE, include=FALSE} 
+  
+  # Select by Area. Convert to area to ha and select polygons with more than 100 has
+  soil_lc$area <- st_area(soil_lc)/10000 
+  soil_lc$area <- as.vector(soil_lc$area)
+  soil_lc <- soil_lc %>% 
+    group_by(soil_lc) %>% 
+    mutate(area = sum(area))
+  soil_lc <- soil_lc[soil_lc$area > 100,]
+  plot(soil_lc[1])
+  
+  # Replace blank spaces with underscore symbol to keep names uniform
+  soil_lc$soil_lc <- str_replace_all(soil_lc$soil_lc, " ", "_")
+  
+  # Create a column of strata numeric codes
+  soil_lc$code <- as.character(as.numeric(as.factor(soil_lc$soil_lc)))
+  
+  # List final strata
+  unique(soil_lc$soil_lc)
+
+  # Write final sampling strata map
+  #st_write(soil_lc, paste0(results.path,"strata.shp"), delete_dsn = TRUE)
+
+```
+
+The final strata map is shown in Figure  \@ref(fig:fig-12).
+
+```{r fig-12, eval=TRUE, include=TRUE, fig.cap="Plot of strata"}
+
+   # Plot final map of stratum
+  map = leaflet(options = leafletOptions(minZoom = 8.3)) %>%
+  addTiles()
+  mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata", map=map)
+  mv@map
+  
+```
+
+
+## Stratified random sampling
+
+This example demonstrates how to establish a stratified random sampling approach within the previously defined strata polygons. The allocation of sample points is proportionate to the stratum areas, with the condition that each stratum must contain a minimum of 2 samples. The determination of sampling points, referred to as `'target points'`, is made during the initial phase of the sampling design and takes into consideration factors such as the area to be sampled, budget constraints and available personnel. Additionally, a set number of `'replacement points'` must be designated to act as substitutes for 'target points' in cases where some of the original target points cannot be accessed or sampled. These 'replacement points' are systematically indexed, with each index indicating which 'target point' it serves as a substitute for.
+
+
+```{r random–sampling, eval=TRUE, include=FALSE}
+  ## Stratified Simple Random Sampling over Soil/Landcover Strata
+  
+  # Read strata shapefile
+  polygons <- st_read(paste0(results.path,"strata.shp"))
+  if(REPLACEMENT){
+    polygons = st_intersection(polygons,distance.buffer)
+  }
+  
+
+    polygons$area <- st_area(polygons) # calculate the area of each polygon
+    
+    # Create a new column to group polygons by a common attribute
+    polygons$group <- polygons$soil_lc
+    # Drop units to allow computations
+    polygons <- drop_units(polygons)
+    
+    # Calculate the total area of all polygons in each group
+    group_areas <- polygons %>%
+      dplyr::group_by(group)  %>% 
+      dplyr::summarize(total_area = sum(area))
+    # Add a code to each group
+    group_codes <- polygons %>% group_by(group) %>%
+      dplyr::summarize(code = first(code)) 
+    
+    group_areas <- left_join(group_areas,st_drop_geometry(group_codes), by = "group")
+    
+    # Ensure minimum of 2 samples at each polygon in each group
+    group_areas$sample_count <- 2
+    
+    # Calculate the number of samples per group based on relative area
+    group_areas$sample_count <- group_areas$sample_count+round(group_areas$total_area/sum(group_areas$total_area) * 
+                                                                 (n-sum(group_areas$sample_count)))
+    
+    while (sum(group_areas$sample_count) != n) {
+      if (sum(group_areas$sample_count) > n) {
+        # Reduce sample count for the largest polygon until total count is n
+        max_index <- which.max(group_areas$sample_count)
+        group_areas$sample_count[max_index] <- group_areas$sample_count[max_index] - 1
+      } else {
+        # Increase sample count for the smallest polygon until total count is n
+        min_index <- which.min(group_areas$sample_count)
+        group_areas$sample_count[min_index] <- group_areas$sample_count[min_index] + 1
+      }
+    }
+    #sum(group_areas$sample_count) 
+    
+    polygons <- left_join(polygons, st_drop_geometry(group_areas), by = c("soil_lc"="group"))
+    polygons <- dplyr::select(polygons, soil_lc, code.x, sample_count, geometry)
+    
+    # Generate random points within each strata of size 3 times the required samples for each strata ----
+    x <- spatSample(x = vect(group_areas), size = group_areas$sample_count * 3, method = "random")
+    
+    # Compute sampling points for strata
+    z <- x %>% 
+      st_as_sf() %>% 
+      dplyr::group_by(code) %>% 
+      dplyr::mutate(sample_count = as.numeric(sample_count),
+             order = seq_along(code),
+             ID = paste0(code, ".", order),
+             type = ifelse(sample_count >= order, "Target", "Replacement")) %>% 
+      vect()
+    
+    # Find missing samples
+    missing.data <- left_join(group_areas,data.frame(z) %>%
+                                dplyr::filter(type=="Target") %>%
+                                dplyr::group_by(code) %>%
+                                tally()) %>%
+      dplyr::mutate(diff=sample_count-n)
+    
+    # Determine missing sampled strata
+    missing.strata <- which(is.na(missing.data$diff))
+    
+    # Determine missing sampling point in strata (undersampled strata)
+    missing.sample = which(missing.data$diff != 0)
+    missing.number <- as.numeric(unlist(st_drop_geometry(missing.data[(missing.sample <- which(missing.data$diff != 0)),7])))
+    
+    # Compute sampling points for missing sampled strata
+    x.missing.strata <- x[1]
+    x.missing.strata$sample_count<- 0
+    
+    for(i in missing.strata){
+      xx.missing.strata <- x[1]
+      xx.missing.strata$sample_count<- 0
+      nn=0
+      while (sum(xx.missing.strata$sample_count) < 
+             group_areas[group_areas$code==i,][["sample_count"]]*5) {
+        
+        while(nn < group_areas[group_areas$code==i,][["sample_count"]]*3){
+          my.missing.strata <- spatSample(x = vect(group_areas[group_areas$code %in% i,]),
+                                          size =  group_areas[group_areas$code==i,][["sample_count"]]*5,
+                                          method = "random")
+          nn <- nn + nrow(data.frame(my.missing.strata))
+        }
+        xx.missing.strata <- rbind(xx.missing.strata,my.missing.strata)
+        print(sum(xx.missing.strata$sample_count))
+      }
+      print(i)
+      print(xx.missing.strata)
+      x.missing.strata <- rbind(x.missing.strata,xx.missing.strata)
+    }
+    
+    # Join initial sampling with missing sampling strata data
+    x <- rbind(x, x.missing.strata)
+    
+    # Compute sampling points for missing samples (random sampling)
+    x.missing.sample <- x[1]
+    
+    for(i in missing.sample){
+      xx.missing.sample <- x[1]
+      xx.missing.sample$sample_count<- 0
+      while (sum(xx.missing.sample$sample_count) < (group_areas[group_areas$code==i,][["sample_count"]]*3)) {
+        my.missing.sample <- spatSample(x = vect(group_areas[group_areas$code %in% i,]),
+                                        size = as.numeric(vect(group_areas[group_areas$code %in% i,])[[4]])+
+                                          (group_areas[group_areas$code==i,][["sample_count"]]*3), method = "random")
+        
+        xx.missing.sample <- rbind(xx.missing.sample,my.missing.sample)
+        print(sum(xx.missing.sample$sample_count))
+      }
+      print(i)
+      print(xx.missing.sample)
+      x.missing.sample <- rbind(x.missing.sample,xx.missing.sample)
+    }
+    
+    # Join initial sampling with missing sampling strata data and with missing samples 
+    x <- rbind(x, x.missing.sample)
+    
+    # Remove extra artificial replacements 
+    x <- x[x$sample_count > 0,]
+    
+    # Convert to Shapefile
+    z <- x %>% 
+      st_as_sf() %>% 
+      dplyr::group_by(code) %>% 
+      dplyr::mutate(sample_count = as.numeric(sample_count),
+             order = seq_along(code),
+             ID = paste0(code, ".", order),
+             type = ifelse(sample_count >= order, "Target", "Replacement")) %>% 
+      vect()
+    
+    # Export data to Shapefile ----
+      
+      # Write sampling points to shp
+      #writeVector(z, paste0(results.path,"strat_randm_samples.shp"), overwrite=TRUE)
+    
+      # Check whether the number of initial target points equals the final target points 
+      #n;nrow(z[z$type=="Target",])
+
+```
+
+
+Results are shown in Figure \@ref(fig:fig-13).
+
+```{r fig-13, fig.cap="Plot of strata and random target and replacement points", eval=TRUE, include=TRUE}
+
+  map = leaflet(options = leafletOptions(minZoom = 8.3)) %>%
+        addTiles()
+  mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") + 
+        mapview(sf::st_as_sf(z), zcol = 'type', color = "white", col.regions = c('royalblue', 'tomato'), cex=3, legend = TRUE,layer.name = "Samples")
+  mv@map
+
+```
+
+
+
+
+## Stratified random sampling for large areas
+
+The implementation of a stratified random sampling, along with target and replacement points, can present operating difficulties when dealing with areas of significant size and with locations that are hard to reach. To address this issue, the sampling approach can be modified by excluding areas with limited accessibility.
+
+This modification can streamline fieldwork operations and establish a feasible sampling method while still retaining the essence of the stratified random sampling framework. By excluding areas with limited accessibility, the sampling design can be adjusted to ensure a more practical and effective approach to data collection.
+
+ * **Delineation of sampling accessibility:** The sampling area can be further limited based on accessibility considerations. Areas with very limited accessibility, defined as regions located more than 1 kilometre away from a main road or access path, may be excluded from sampling areas. To accomplish this, a map of main roads and paths can be used to establish a sampling buffer that includes areas within a 1–kilometre buffer around the road infrastructures. This exclusion helps to eliminate the most remote and challenging–to–access areas. An additional layer of accessibility information can be incorporated based on population distribution in the country, considering that, if population is present, there is a high change that points in the surroundings can be accessible for sampling. In this case, populated nuclei are vectorized into points and a 250–meter buffer is then generated around each point. These resulting areas can be then added to the 1–kilometre buffer around the roads, which collectively defined the final sampling area.
+ 
+ * **Substitution of replacement points with replacement areas in close proximity to the target points:** The sampling design presented before included designated replacement points to serve as substitutes for each target point in the case that it would be inaccessible during fieldwork. However, this approach presented challenges, particularly for large areas, as the replacement point could be located far from the target point, resulting in significant logistical efforts. This limitation posed a risk of delays in completing the sampling campaign within the allocated time frame. To address this challenge, an alternative strategy is to replace the idea of replacement points with replacement areas situated in the immediate vicinity of the target point. The replacement area for each target point is now confined within a 500–meter buffer surrounding the target and falls within the same sampling stratum. This approach concentrates sampling and replacement activities within a specific geographic area, streamlining the overall process. By reducing the need for extensive travel, this method enhances efficiency and facilitates sample collection. Figure 2 illustrates the distribution of sampling points and replacement areas for visualization.
+ 
+  * **Additional area exclusion:** Some areas can be identified as not suitable for sampling purposes. This is the case of certain natural protected areas, conflict regions presenting risks for field operators, etc. These areas must be identified masked at an initial stage of the design to exclude them from the sampling strata.
+ 
+ The procedure is the same as that previously presented, with the difference that buffers and exclusion areas must be masked–out from the strata map before performing the random sampling.
+ 
+ 
+```{r replacement–areas, eval=FALSE, include=TRUE} 
+
+ # Compute sampling areas WITH REPLACEMENT -----
+  if(REPLACEMENT){
+      # Load strata
+      soil_lc <- st_read(paste0(results.path,"strata.shp"))
+
+      # Read sampling. points from previous step
+      z <- st_read(paste0(results.path,"sampling_points.shp"))
+      
+      # Define buffer of 500 meters (coordinate system must be in metric base)
+      buf.samples <- st_buffer(z, dist=distance.buffer)
+    
+      # Intersect buffers
+      samples_buffer = st_intersection(soil_lc, buf.samples)
+      samples_buffer <- samples_buffer[samples_buffer$type=="Target",]
+      samples_buffer <- samples_buffer[samples_buffer$soil_lc==samples_buffer$group,]
+      # Save Sampling areas
+      #st_write(samples_buffer, paste0('../soil_sampling/JAM/replacement_areas_', samples.buffer, '.shp'), delete_dsn = TRUE)
+      
+      # Write target points only
+      targets <- z[z$type=="Target",]
+      #st_write(targets, '../soil_sampling/JAM/sampling_points_TAR.shp', delete_dsn = TRUE)
+  }
+
+```
+
+
+## Stratified regular sampling
+
+The procedure for creating a stratified regular sampling design is identical to that presented for stratified random sampling, with the only distinction that the locations of the sampling points are distributed in a regular spatial grid. This transformation is achieved by changing the method from 'random' to 'regular' in the spatSample functions within the script above. 
+
+
+```{r regular–sampling, eval=TRUE, include=FALSE}
+
+# Stratified Regular Sampling over Soil/landcover Strata ----
+  # Read strata shapefile
+  polygons <- st_read(paste0(results.path,"strata.shp"))
+  if(REPLACEMENT){
+    polygons = st_intersection(polygons,distance.buffer)
+  }
+  
+
+polygons$area <- st_area(polygons) # calculate the area of each polygon
+
+# Create a new column to group polygons by a common attribute
+polygons$group <- polygons$soil_lc
+# Drop units to allow computations
+polygons <- drop_units(polygons)
+
+# Calculate the total area of all polygons in each group
+group_areas <- polygons %>%
+  dplyr::group_by(group)  %>% 
+  dplyr::summarize(total_area = sum(area))
+# Add a code to each group
+group_codes <- polygons %>% group_by(group) %>%
+  dplyr::summarize(code = first(code)) 
+
+group_areas <- left_join(group_areas,st_drop_geometry(group_codes), by = "group")
+
+# Ensure minimum of 2 samples at each polygon in each group
+group_areas$sample_count <- 2
+
+# Calculate the number of samples per group based on relative area
+group_areas$sample_count <- group_areas$sample_count+round(group_areas$total_area/sum(group_areas$total_area) * 
+                                                             (n-sum(group_areas$sample_count)))
+
+while (sum(group_areas$sample_count) != n) {
+  if (sum(group_areas$sample_count) > n) {
+    # Reduce sample count for the largest polygon until total count is n
+    max_index <- which.max(group_areas$sample_count)
+    group_areas$sample_count[max_index] <- group_areas$sample_count[max_index] - 1
+  } else {
+    # Increase sample count for the smallest polygon until total count is n
+    min_index <- which.min(group_areas$sample_count)
+    group_areas$sample_count[min_index] <- group_areas$sample_count[min_index] + 1
+  }
+}
+#sum(group_areas$sample_count) 
+
+polygons <- left_join(polygons, st_drop_geometry(group_areas), by = c("soil_lc"="group"))
+polygons <- dplyr::select(polygons, soil_lc, code.x, sample_count, geometry)
+
+ 
+# Generate regular points within each strata of size 3 times the required samples for each strata ----
+x <- spatSample(x = vect(group_areas), size = group_areas$sample_count * 3, method = "regular")
+
+# Compute sampling points for strata
+z <- x %>% 
+  st_as_sf() %>% 
+  dplyr::group_by(code) %>% 
+  dplyr::mutate(sample_count = as.numeric(sample_count),
+         order = seq_along(code),
+         ID = paste0(code, ".", order),
+         type = ifelse(sample_count >= order, "Target", "Replacement")) %>% 
+  vect()
+
+# Find missing samples
+missing.data <- left_join(group_areas,data.frame(z) %>%
+                            dplyr::filter(type=="Target") %>%
+                            dplyr::group_by(code) %>%
+                            tally()) %>%
+  dplyr::mutate(diff=sample_count-n)
+
+# Determine missing sampled strata
+missing.strata <- which(is.na(missing.data$diff))
+
+# Determine missing sampling point in strata (undersampled strata)
+missing.sample = which(missing.data$diff != 0)
+missing.number <- as.numeric(unlist(st_drop_geometry(missing.data[(missing.sample <- which(missing.data$diff != 0)),7])))
+
+# Compute sampling points for missing sampled strata
+x.missing.strata <- x[1]
+x.missing.strata$sample_count<- 0
+
+for(i in missing.strata){
+  xx.missing.strata <- x[1]
+  xx.missing.strata$sample_count<- 0
+  nn=0
+  while (sum(xx.missing.strata$sample_count) < 
+         group_areas[group_areas$code==i,][["sample_count"]]*5) {
+    
+    while(nn < group_areas[group_areas$code==i,][["sample_count"]]*3){
+      my.missing.strata <- spatSample(x = vect(group_areas[group_areas$code %in% i,]),
+                                      size =  group_areas[group_areas$code==i,][["sample_count"]]*5,
+                                      method = "random")
+      nn <- nn + nrow(data.frame(my.missing.strata))
+    }
+    xx.missing.strata <- rbind(xx.missing.strata,my.missing.strata)
+    print(sum(xx.missing.strata$sample_count))
+  }
+  print(i)
+  print(xx.missing.strata)
+  x.missing.strata <- rbind(x.missing.strata,xx.missing.strata)
+}
+
+# Join initial sampling with missing sampling strata data
+x <- rbind(x, x.missing.strata)
+
+# Compute sampling points for missing samples (regular sampling)
+x.missing.sample <- x[1]
+
+for(i in missing.sample){
+  xx.missing.sample <- x[1]
+  xx.missing.sample$sample_count<- 0
+  while (sum(xx.missing.sample$sample_count) < (group_areas[group_areas$code==i,][["sample_count"]]*3)) {
+    my.missing.sample <- spatSample(x = vect(group_areas[group_areas$code %in% i,]),
+                                    size = as.numeric(vect(group_areas[group_areas$code %in% i,])[[4]])+
+                                      (group_areas[group_areas$code==i,][["sample_count"]]*3), method = "regular")
+    
+    xx.missing.sample <- rbind(xx.missing.sample,my.missing.sample)
+    print(sum(xx.missing.sample$sample_count))
+  }
+  print(i)
+  print(xx.missing.sample)
+  x.missing.sample <- rbind(x.missing.sample,xx.missing.sample)
+}
+
+# Join initial sampling with missing sampling strata data and with missing samples 
+x <- rbind(x, x.missing.sample)
+
+# Remove extra artificial replacements 
+x <- x[x$sample_count > 0,]
+
+# Convert to Shapefile
+z <- x %>% 
+  st_as_sf() %>% 
+  dplyr::group_by(code) %>% 
+  dplyr::mutate(sample_count = as.numeric(sample_count),
+         order = seq_along(code),
+         ID = paste0(code, ".", order),
+         type = ifelse(sample_count >= order, "Target", "Replacement")) %>% 
+  vect()
+
+# Export data to Shapefile ----
+  
+  # Write sampling points to shp
+  #writeVector(z, paste0(results.path,"sampling_points.shp"), overwrite=TRUE)
+
+  # Check whether the number of initial target points equals the final target points 
+  n;nrow(z[z$type=="Target",])
+
+```
+
+
+```{r fig-14, fig.cap="Plot of strata and regular sampling points", eval=TRUE, include=TRUE}
+
+
+  map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
+        addTiles()
+  mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") + 
+        mapview(sf::st_as_sf(z), zcol = 'type', color = "white", col.regions = c('royalblue', 'tomato'), cex=3, legend = TRUE,layer.name = "Samples")
+  mv@map
+  
+  
+```
+
+
+## Random Sampling based on a stratified raster
+
+Finally, it is also possible to create a stratified area weighted random sampling using raster strata. The procedure involves the creation of the strata as a raster file and implement a random sampling using the frequencies of the strata as a guideline for distribution of the samples proportionally to their frequencies. This method is easily implemented using the package 'sgsR' [@sgsr]. 
+
+```{r sgsR-random,eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
+
+ strata <- st_read(paste0(results.path,"strata.shp"),quiet = TRUE)
+ strata$code <- as.integer(strata$code)
+ 
+ # Create stratification raster 
+  strata <- rast(st_rasterize(strata["code"],st_as_stars(st_bbox(strata), nx = 250, ny = 250)))
+  names(strata) <- "strata"
+  strata <- crop(strata, nghe, mask=TRUE)
+  
+  # Create stratified random sampling
+  target <- sample_strat(
+    sraster = strata,
+    nSamp = 200
+    )
+  target$type <- "target"
+  
+
+```
+
+Figure  \@ref(fig:fig-14b)  show the histogram of frequencies of samples over the strata categories respectively.
+
+
+```{r fig-14b, fig.cap="Frequencies of strata and random target samples", eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
+  # Histogram of frequencies
+  calculate_representation(
+    sraster = strata,
+    existing = target,
+    drop=0,
+    plot = TRUE 
+  )
+
+  # Add index by strata
+  target <- target %>% 
+    st_as_sf() %>% 
+    dplyr::group_by(strata) %>% 
+    dplyr::mutate(sample_count = sum(n),
+                  order = seq_along(strata),
+                  ID = paste0(strata, ".", order)) %>% 
+    vect()
+  
+
+```
+
+
+The construction of replacement points is straightforward by creating a new stratified set of samples on the same strata. In this case, the sample size has been incremented 3 times to create 3 replacement points for each target point. 
+
+```{r replacements-raster, eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
+   replacement <- sample_strat(
+    sraster = strata,
+    nSamp = 200*3
+    )
+   replacement$type <- "replacement"
+
+
+```
+
+
+```{r fig-14c, fig.cap="Frequencies of strata and random replacement samples", eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
+  # Histogram of frequencies
+  calculate_representation(
+    sraster = strata,
+    existing = replacement,
+    drop=0,
+    plot = TRUE 
+  )
+
+     # Add index by strata
+  replacement <- replacement %>% 
+    st_as_sf() %>% 
+    dplyr::group_by(strata) %>% 
+    dplyr::mutate(sample_count = sum(n),
+                  order = seq_along(strata),
+                  ID = paste0(strata, ".", order)) %>% 
+    vect()
+
+```
+
+Figures  \@ref(fig:fig-14c)  and \@ref(fig:fig-14d) show the frequencies of replacement samples over the strata categories and the distribution of target and replacement samples respectively.
+
+```{r fig-14d, fig.cap="Plot of raster strata and sampling points", eval=TRUE, include=TRUE}
+  # Plot samples over strata
+  # plot(strata, main="Strata and random samples")
+  # plot(nghe[1], col="transparent", add=TRUE)
+  # points(target,col="red")
+  # points(replacement,col="royalblue")
+  # legend("topleft", legend = c("target","replacement"), pch = 20, xpd=NA, bg="white", col=c("red","royalblue"))
+  
+  map = leaflet(options = leafletOptions(minZoom = 8.3)) %>%
+        addTiles()
+  mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") + 
+        mapview(target, zcol = 'type', color = "white", col.regions = c('tomato'), cex=3, legend = TRUE,layer.name = "Target") + 
+        mapview(replacement, zcol = 'type', color = "white", col.regions = c('royalblue'), cex=3, legend = TRUE,layer.name = "Replacement")
+  mv@map
+  
+```
+
+The resulting target and replacement points can finally be stored as shapefiles.
+
+```{r write-raster-pts, eval=FALSE, include=TRUE}
+  ## Export to shapefile
+   writeVector(target,
+                paste0(results.path,"target_pts_raster.shp"), overwrite=TRUE)
+   writeVector(replacement,
+                paste0(results.path,"replacement_pts_raster.shp"), overwrite=TRUE)
+
+```   
+
+<!--chapter:end:05-Stratified-sampling.Rmd-->
+
+
+# Conditioned Latin Hypercube Sampling 
+
+Conditioned Latin Hypercube Sampling (cLHS) is an advanced statistical method used for sampling multidimensional data developed within the context of digital Soil Mapping. It's an extension of the basic Latin Hypercube Sampling (LHS) technique, a statistical method for generating a distribution of samples of a random variable. The main advantage of LHS over simple random sampling is its ability to ensure that the entire range of the auxiliary variables are explored. It divides the range of each variable into intervals of equal probability and samples each interval.
+
+The term 'conditioned' refers to the way the sampling is adapted or conditioned based on specific requirements or constraints. It often involves conditioning the sampling process on one or more additional variables or criteria. This helps in generating samples that are not just representative in terms of the range of values, but also in terms of their relationships or distributions. cLHS is particularly useful for sampling from multivariate data, where there are multiple interrelated variables as it occurs in soil surveys. The main advantage of cLHS is its efficiency in sampling and its ability to better capture the structure and relationships within the data, compared to simpler sampling methods and ensures that the samples are representative not just of the range of each variable, but also of their interrelations. Detailed information on cLHS can be found in [@minasny2006].
+
+In this manual, we use the R implementation of cLHS by [@Roudier2011] and available as an [R package](https://cran.r-project.org/web/packages/clhs/). Additionally, we also included the CLHS analyses using the package `'sgsR'`(https://cran.r-project.org/web/packages/sgsR/) from [@sgsR], since it provides options to include buffering distance constraints within the cLHS approach.
+
+
+## cLHS Design
+
+As for stratified sampling, the creation target points from a conditioned Latin Hypercube Sampling design involves the identification of the relevant features describing the environmental diversity in the area. In this case, the environmental parameters are incorporated in the form of raster covariates. The determination of the number of samples in the design is also required. This step can be calculated following the information already provided in this manual.
+
+With the minimum sampling size of `r minimum_n` calculated before, we can conduct conditioned Latin Hypercube Sampling design for the area in the example using the R package `'cLHS'` available at CRAN. 
+
+
+```{r user-variables-6, eval=TRUE, include=TRUE}
+
+  # Path to rasters
+  raster.path <- "data/rasters/"
+  # Path to shapes
+  shp.path <- "data/shapes/"
+  # Path to results
+  results.path <- "data/results/"
+  # Aggregation factor for up-scaling raster covariates (optional)
+  agg.factor = 10
+  # Buffer distance for replacement areas (clhs)
+  D <- 1000 # Buffer distance to calculate replacement areas
+  # Define the minimum sample size. By default it uses the value calculated previously
+  #minimum_n <- minimum_n
+
+```
+
+We use the rasters of `r paste(shQuote(names(cov.dat)), collapse = ", ")` as covariates, which we trim by the administrative boundary of the 'Nghe An' province as an example to speed up the calculations in the exercise. The rasters are loaded as a raster stack, masked, and subjected to PCA transformation to reduce collinearity in the dataset. The PCA components that capture 99% of the variability in the data are retained as representatives of the environmental diversity in the area. Rasters of elevation and slope are kept separately for further analyses. A shapefile of roads is also loaded to account for the sampling cost associated with walking distances from roads. 
+
+
+```{r load_data_06, eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
+
+  # Read Spatial data covariates as rasters with terra
+  cov.dat <-  list.files(raster.path, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
+  cov.dat <- terra::rast(cov.dat) # SpatRaster from terra
+  # Load shape of district
+  nghe <- sf::st_read(file.path(paste0(shp.path,"/Nghe_An.shp")),quiet=TRUE)
+
+  # Crop covariates on administrative boundary
+  cov.dat <- crop(cov.dat, nghe, mask=TRUE)
+  # Store elevation and slope separately
+  elevation <- cov.dat$dtm_elevation_250m
+  slope <- cov.dat$dtm_slope_250m
+  
+  # Load roads
+  #roads <-  vect(file.path(paste0(shp.path,"/roads.shp")))
+  #roads <- crop(roads, nghe) 
+  roads <-  sf::st_read(file.path(paste0(shp.path,"/roads.shp")),quiet=TRUE)
+  roads <-  st_intersection(roads, nghe)
+```
+ 
+ 
+```{r PCA_invisible_06, eval=TRUE, include=FALSE, message=FALSE, warning=FALSE}
+  
+  # Simplify raster information with PCA
+  pca <- raster_pca(cov.dat)
+  
+  # Get SpatRaster layers
+  cov.dat <- pca$PCA
+  # Create a raster stack to be used as input in the clhs::clhs function 
+  cov.dat.ras <- raster::stack(cov.dat) 
+  # Subset rasters
+  cov.dat <- pca$PCA[[1:first(which(pca$summaryPCA[3,]>0.99))]]
+  cov.dat.ras <-  cov.dat.ras[[1:first(which(pca$summaryPCA[3,]>0.99))]]
+
+```
+
+```{r PCA_visible_06, eval=FALSE, include=TRUE, message=FALSE, warning=FALSE}
+  # Simplify raster information with PCA
+  pca <- raster_pca(cov.dat)
+  
+  # Get SpatRaster layers
+  cov.dat <- pca$PCA
+  # Create a raster stack to be used as input in the clhs::clhs function 
+  cov.dat.ras <- raster::stack(cov.dat) 
+  # Subset rasters
+  cov.dat <- pca$PCA[[1:first(which(pca$summaryPCA[3,]>0.99))]]
+  cov.dat.ras <-  cov.dat.ras[[1:first(which(pca$summaryPCA[3,]>0.99))]]
+
+```
+
+
+```{r PCA_06, eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
+  # Simplify raster information with PCA
+  pca <- raster_pca(cov.dat)
+  
+  # Get SpatRaster layers
+  cov.dat <- pca$PCA
+  # Create a raster stack to be used as input in the clhs::clhs function 
+  cov.dat.ras <- raster::stack(cov.dat) 
+  # Subset rasters
+  cov.dat <- pca$PCA[[1:first(which(pca$summaryPCA[3,]>0.99))]]
+  cov.dat.ras <-  cov.dat.ras[[1:first(which(pca$summaryPCA[3,]>0.99))]]
+
+```
+
+
+```{r fig-15, fig.cap="Covariates", eval=TRUE, include=TRUE}
+  
+  # Plot of covariates
+  plot(cov.dat)
+
+```
+
+
+The distribution of the sampling points is obtained using the `'cLHS'`function together with the stack of raster covariates and the minimum number of samples calculated in the previous Section. The function uses a number of iterations for the Metropolis–Hastings annealing process, with a default of 10000, to determine the optimal location of samples that account for a maximum of information on the raster covariates (Fig. \@ref(fig:fig-16). . 
+
+
+```{r fig-16, fig.cap="Evolution of the objective function", eval=TRUE, include=TRUE}
+
+  # Distribute sampling points with clhs
+  pts <- clhs(cov.dat.ras, size = minimum_n, iter = 10000, progress = FALSE, simple = FALSE)
+  # Plot of objective function
+  plot(pts, c('obj'))
+
+```
+
+
+The distribution of points is shown in Figure \@ref(fig:fig-17).
+
+```{r fig-17, fig.cap="Distribution of cLHS sampling points in the study area", eval=TRUE, include=TRUE}
+
+  ## Create a cLHS sampling point set----
+    plot(cov.dat[[1]], main="cLHS samples")
+    points(pts$sampled_data, col="red", pch = 1)
+
+```
+
+## Including existing legacy data in a cLHS sampling design
+
+In situations where there are legacy soil data samples available, it would be interesting to include them in the cLHS design to increase the diversity of covariates and avoid oversampling for some conditions. In this cases, the ancillary data can be included in the design as additional points to the `'clhs'` function.
+
+
+```{r clhs-legacy-06, eval=TRUE, include=TRUE}
+
+  # Create an artificial legacy dataset of 50 samples over the study area as an example
+  legacy.data <- spatSample(cov.dat, 50, na.rm=TRUE,xy=TRUE,method="random", as.points=T) # works with SpatRaster 
+
+  # Get covariates data as a points
+  cov.df<- as.points(cov.dat)
+  
+  # Merge legacy and covariate information
+  leg.new <-   rbind(legacy.data, cov.df)
+  leg.new <- as.data.frame(leg.new,geom='XY')
+  # Delete data from pixels outside the study area
+  leg.new <- na.omit(leg.new)
+  
+  # Calculate clhs 100 points plus locations of legacy data
+    res <- clhs(x = leg.new, size = 100 + length(legacy.data),  iter = 10000,simple = FALSE, progress = FALSE,
+            must.include = c(1:nrow(legacy.data)))
+
+  # Get sampling points
+  points <- res$sampled_data
+
+```
+
+Figure \@ref(fig:fig-18) shows the distribution of the created cLHS samples, which also include the position of the original legacy soil data points.
+
+```{r fig-18, fig.cap="cLHS sampling points with legacy data", eval=TRUE, include=TRUE}
+
+  # Plot points
+  plot(cov.dat[[1]], main="cLHS samples (blue circles) and legacy samples (red diamonds)")
+  points(points[,c("x","y")], col="navy", pch = 1)
+  points(legacy.data, col="red", pch = 5, cex=2)
+
+```
+
+
+## Working with large raster data
+
+The cLHS function samples the covariates in the raster stack in order to determine the optimal location of samples that best represent the environmental conditions in the area. In the case of working with large raster sets, the process can be highly computing demanding since all pixels in the raster stack are used in the process. There are two simple methods to avoid this constraint:
+
+ * **Aggregation of covariates:** The quickest solution is to aggregate the covariates in the raster stack to a lower pixel resolution. This is directly performed using the `'aggregate'` function from the `'terra'`package. In case that the raster stack has discrete layers (factor data), the corresponding layers has to be aggregated separately using either the 'min' or 'max' functions to avoid corruption of the data and the results added later to the data of continuous raster layers. 
+
+```{r aggregation-06, eval=FALSE, include=TRUE}
+
+  ## Aggregation of raster stack by a factor of 2. 
+  ## The original grid resolution is resampled using the mean value of the pixels in the grid
+    cov.dat2 <- aggregate(cov.dat, fact=10, fun="mean")
+    # Create clhs samples upon the resampled rasters  
+    resampled.clhs <- clhs(raster::stack(cov.dat2), size = 100, progress = FALSE, iter = 10000, simple = FALSE)
+    # Plot the points over the 1st raster
+    plot(cov.dat2[[1]], main="Regular resampled data")
+    points(resampled.clhs$sampled_data , col="red", pch = 1)
+
+```
+
+
+ * **Sampling covariate data:** Other method that can be used is to sample the stack (extract the covariates information at point scale) on a regular grid at a lower resolution than the raster grid and use this information as input within the cLHS function. The creation of a regular point grid on the raster stack is straightforward through the function `spatSample` from the `'terra'` package. In this case we create a regular grid of 1000 points.
+
+```{r fig-19, fig.cap="Low resolution points of covariate data", eval=TRUE, include=TRUE}
+
+  # Create a regular grid of 1000 points on the covariate space
+    regular.sample <- spatSample(cov.dat, size = 1000, xy=TRUE, method="regular", na.rm=TRUE)
+  # plot the points over the 1st raster
+    plot(cov.dat[[1]], main="Regular resampled data")
+    points(regular.sample, col="red", pch = 1)
+
+```
+
+This `dataframe` can be directly used as input in the cLHS function to get locations that best represent the covariate space in the area.
+
+
+```{r fig-20, fig.cap="cLHS sampling points on point-grid transformed raster covariate data", eval=TRUE, include=TRUE}
+
+  # Create clhs samples upon the regular grid  
+   regular.sample.clhs <- clhs(regular.sample, size = 100, progress = FALSE, iter = 10000, simple = FALSE)
+  # Plot points of clhs samples
+    points <- regular.sample.clhs$sampled_data # Get point coordinates of clhs sampling
+    plot(cov.dat[[1]], main="cLHS samples (red) and covariate resampled points (blue)")
+    points(regular.sample, col="dodgerblue", pch = 1)
+    points(points, col="red", cex=1)
+
+```
+
+Note that the sampling design follows the regular pattern of the regular grid extracted from the raster covariates 
+
+
+## Implementation of cost–constrained cLHS sampling
+
+There are situation in which the accessibility to some locations is totally or partially restricted such as areas with steep slopes, remote areas, or areas with forbidden access, which highly compromises the sampling process. For these cases, the sampling design can constrain the points to particular locations by defining environmental layers that cause an increment in the cost efficiency of the sampling. This is done with the `cost` attribute in the main `'clhs'` function. The following example uses the raster layer "distance to roads" as a cost layer to avoid low accessible points located at large distance from roads while optimizing the representativeness of the remaining environmental covariates.
+
+```{r roads-06, eval=TRUE, include=TRUE}
+    # Load pre-calculated distance–to–roads surface
+    dist2access <- terra::rast(paste0(results.path,"nghe_d2roads.tif"))
+    # plot(dist2access)
+    # plot(nghe, col="transparent", add=TRUE)
+    
+    # Add cost surface as raster layer
+    cov.dat.ras <- raster::addLayer(cov.dat.ras,raster::raster(dist2access))
+
+    # Harmonize NAs in rasters
+    cov.dat.ras$dist2access <- cov.dat.ras$dist2access * cov.dat.ras[[1]]/cov.dat.ras[[1]]
+    # plot(cov.dat.ras$dist2access)
+    # plot(nghe, col="transparent",add=TRUE)
+
+```
+
+The sampling set is calculated using distance to roads as a cost surface.
+```{r fig-21, fig.cap="Objective and cost funtions", eval=TRUE, include=TRUE, warning=FALSE}
+    # Create a cLHS sampling point set with 
+    cost.clhs <- clhs(cov.dat.ras, size = minimum_n, iter = 10000, progress = FALSE, simple = FALSE, cost = 'dist2access',  use.cpp = TRUE)
+
+```
+
+
+Figure \@ref(fig:fig-22) shows the distribution of the cost constrained `'clhs'` sampling over the `'cost'` surface. The sampling procedure concentrates, as much as possible, sampling sites in locations with lower costs.
+
+
+```{r fig-22, fig.cap="cLHS sampling with cost layers", eval=TRUE, include=TRUE, warning=F}
+    # Get and plot the point of samples
+    points <- cost.clhs$sampled_data  # Get point coordinates of clhs sampling
+    plot(cov.dat.ras[['dist2access']], main="cLHS samples with 'cost' constraints")
+    points(points, col="red", cex=1)
+  
+```
+
+
+Cost surfaces can be defined by other parameters than distances to roads. They can represent private property boundaries, slopes, presence of wetlands, etc. The package `'sgsR'` implements functions to define both cost surfaces and distances to roads simultaneously. In this case, it is possible to define an inner buffer distance – i.e. the distance from the roads that should be avoided for sampling and an outer buffer – i.e. the maximum sampling distance) from roads to maximize the variability of the sampling point while considering these limits. The `'sample_clhs'` function in this package also includes options to include existing legacy data in the process of clhs sampling. 
+
+
+```{r sample_clhs, eval=TRUE, include=TRUE,warning=FALSE, message=FALSE}
+
+# Load legacy data 
+  legacy <- sf::st_read(file.path(paste0(shp.path,"/legacy_soils.shp")),quiet=TRUE)
+
+  # Add distance to roads co the stack
+  cost <- cov.dat 
+  # Add distance to roads co the stack
+  cost <- c(cost, rast(cov.dat.ras$dist2access))
+  cost$slope <- slope # Define slope cost layer
+  # Calculate clhs points with legacy, cost and buffer to roads
+  buff_inner=20;
+  buff_outer=3000
+  # Convert roads to sf object and cast to multilinestring
+  roads2 <- st_as_sf(roads) %>%
+    st_cast("MULTILINESTRING") 
+
+  # Calculate clhs samples using slope as cost surface, distance to roads as
+  # access limitations, and including existing legacy data
+  aa <- sgsR::sample_clhs(mraster = cost, nSamp = minimum_n, existing = legacy,
+                          iter = 10000, details = TRUE, cost="slope", access=roads2,
+                          buff_inner=buff_inner, buff_outer=buff_outer)
+```
+
+
+```{r fig-22b, fig.cap="cLHS sampling with legacy data, cost surface and distance buffers around roads", eval=TRUE, include=TRUE, message=FALSE, warning = FALSE}
+
+    ## Plot distances, roads, clhs points and legacy data 
+    plot(cost$dist2access)
+    plot(roads,add=TRUE, col="black")
+    plot(aa$samples[aa$samples$type=="new",], col= "tomato",add=TRUE)
+    plot(aa$samples[aa$samples$type=="existing",], col= "gray40", add=TRUE, pch = 5, cex=2)
+```
+
+
+Legacy data is represented as blue dots while new samples from cLHS analyses are in red colour (Fig.\@ref(fig:fig-22)). Note that the new sampling points are located within a distance buffer of `r buff_inner`-`r buff_outer` meters from roads. In addition, a cost surface has also been included in the analyses.
+
+
+## Replacement areas in cLHS design
+
+The `'cLHS'` package incorporates methods for the delineation of replacement locations that could be utilized in the case any sampling point is unreachable. In this case, the function determines the probability of similarity to each point in an area determined by a buffer distance around the points. 
+
+```{r cLHS_buffer_05, eval=TRUE, include=TRUE}
+
+  ## Determine the similarity to points in a buffer of distance D
+  # Compute the buffers around points  
+    gw <- similarity_buffer(cov.dat.ras, cost.clhs$sampled_data, buffer = D)
+
+```
+
+The similarity probabilities for the first cLHS point is presented on Figure \@ref(fig:fig-23) over the elevation layer. 
+
+```{r fig-23, fig.cap="Probability of similarity in the buffer for the first cLHS point (in black) over elevation. The blue crosses represent the location of the remaining cLHS points from the analysis.", eval=TRUE, include=TRUE}
+
+    # Plot results
+    plot(elevation, legend=TRUE,main=paste("Similarity probability over elevation"))
+    ## Overlay points
+    points(cost.clhs$sampled_data[1], col = "dodgerblue", pch = 3)
+    ## Overlay probability stack for point 1
+    colors <- c((RColorBrewer::brewer.pal(9, "YlOrRd")))
+    terra::plot(gw[[1]], add=TRUE ,  legend=FALSE, col=colors)
+    ## Overlay 1st cLHS point
+    points(cost.clhs$sampled_data[1,1], col = "black", pch = 3,cex=1)
+
+```
+
+The probabilities can then be reclassified using a threshold value to delineate the areas with higher similarity to each central target point. 
+
+```{r cLHS_reclass_05, eval=TRUE, include=TRUE, warning=FALSE}
+    # Determine a threshold break to delineate replacement areas
+    similarity_threshold <- 0.90
+    # Reclassify buffer raster data according to the threshold break of probability
+    # 1 = similarity >= similarity_break; NA =  similarity <  similarity_break
+    # Define a vector with the break intervals and the output values (NA,1) 
+    breaks <- c(0, similarity_threshold, NA, similarity_threshold, 1, 1)
+    # Convert to a matrix
+    breaks <- matrix(breaks, ncol=3, byrow=TRUE)
+    # Reclassify the data in the layers from probabilities to (NA,)
+    s = stack(lapply(1:raster::nlayers(gw), function(i){raster::reclassify(gw[[i]], breaks, right=FALSE)}))
+  
+```
+
+
+The reclassified raster stack is then converted to an object of `'SpatialPolygonsDataFrame'` class.
+
+```{r cLHS_polygonize_05, eval=TRUE, include=TRUE}
+
+    # Polygonize replacement areas 
+    s = lapply(as.list(s), rasterToPolygons, dissolve=TRUE)
+    s <- bind(s,keepnames=TRUE)
+    # Add the identifier of the corresponding target point
+    for(i in 1: length(s)){
+      s@data$ID[i] <- as.integer(stringr::str_replace(s@polygons[[i]]@ID,"1.",""))
+    }
+    # Clean the data by storing target ID data only
+    s@data <- s@data["ID"]
+
+```
+
+
+The results are shown in Figure \@ref(fig:fig-24).
+
+```{r fig-24, fig.cap="Distribution of cLHS sampling points in the study area", eval=TRUE, include=TRUE}
+    # Plot results
+    plot(cov.dat[[1]], main=paste("cLHS samples and replacement areas for threshold = ", similarity_threshold))
+    plot(s,add=TRUE, col=NA, border="gray40")
+    points(cost.clhs$sampled_data, col="red", pch = 3)
+
+```
+
+
+Replacement areas and sampling points can finally be stored as `'shapefiles'`.
+
+```{r cLHS_export_05, eval=FALSE, include=TRUE, warning=FALSE, results='hide'}
+    
+    # Export replacement areas to shapefile 
+    s <- st_as_sf(s)
+    st_write(s, file.path(paste0(results.path,'replacement_areas_', D, '.shp')), delete_dsn = TRUE)
+    
+    # Export cLHS sampling points to shapefile
+    cost.clhs$sampled_data$ID <- row(cost.clhs$sampled_data)[,1] # Add identifier
+    out.pts <- st_as_sf(cost.clhs$sampled_data)
+    st_write(out.pts, paste0(results.path,'target_clhs.shp'), delete_dsn = TRUE)
+```
+
+
+<!--chapter:end:06-CLHS_sampling.Rmd-->
+
+# Annex I: Compendium of R scripts {-}
+
+This chapter compiles the complete list of R scripts involved in the process of soil sampling design.
+
+## Script 1: Introduction to R {-}
+
+```{r intro R, eval=F}
+# Introduction to R
+
+# 0. Playground =================================================
+
+# learn important keyboard shortcuts
+# Ctrl + enter for running code
+# tab after writing the first three 
+# characters of the function name
+# F1 to access the help
+
+# explore the use of <-, $, [], ==, !=, c(), :, 
+# data.frame(), list(), as.factor()
+
+a <- 10:15
+a[2]
+a[2:3]
+b <- c("1", "a", a )
+length(b)
+df <- data.frame(column_a = 1:8, column_b = b)
+
+df[,1]
+df$column_b
+as.numeric(df$column_b)
+plot(df)
+
+df[1:3,]
+df[,1]
+
+as.factor(b)
+
+d <- list(a, b, df)
+d
+names(d)
+names(d) <- c("numeric_vector", "character_vector", "dataframe")
+d
+d[[1]]
+d$numeric_vector
+
+a == b
+a != b
+
+# 1. Set working directory ======================================
+setwd("C:/GIT/Digital-Soil-Mapping/")
+
+# 2. Install and load packages ==================================
+# readxl, tidyverse, and data.table packages using the functions
+install.packages("tidyverse")
+install.packages("readxl")
+install.packages("data.table")
+library(tidyverse)
+library(readxl)
+library(data.table)
+
+# 3. Import an spreadsheet ======================================
+## 3.1 Read the MS Excel file -----------------------------------
+#Read the soil_data.xlsx file, spreadsheet 2, using read_excel 
+read_excel(path = "01-Data/soil_data.xlsx", sheet = 2)
+
+## 3.2 Read the csv file with the native function ---------------
+# 01-Data/horizon.csv
+read.csv("01-Data/soil_profile_data.csv")
+
+## 3.3 Read the csv file with the tidyverse function ------------
+read_csv("01-Data/soil_profile_data.csv")
+
+## 3.4 Read the csv file with the data.table function -----------
+fread("01-Data/soil_profile_data.csv")
+
+## 3.5 Assign the dataframe to an object called dat -------------
+dat <- read_csv("01-Data/soil_profile_data.csv")
+
+# 4. Tidyverse functions ========================================
+## 4.1 Select pid, hip, top, bottom, ph_h2o, cec from dat -------
+dat_1 <- dat %>% 
+  select(id_prof, id_hor, top, bottom, ph_h2o, cec)
+
+## 4.2 Filter: pick observations by their values ----------------
+# filter observations with cec > 50 cmolc/100g
+
+dat_2 <- dat_1 %>% 
+  filter(cec > 30)
+
+dat_2
+## 4.3 Mutate: create a new variable ----------------------------
+# thickness = top - bottom
+
+dat_3 <- dat_2 %>% 
+  mutate(thickness = bottom - top)
+
+## 4.4 Group_by and summarise -----------------------------------
+# group by variable pid
+# summarise taking the mean of pH and cec
+
+dat_4 <- dat_3 %>% 
+  group_by(id_prof) %>% 
+  summarise(mean_ph = mean(ph_h2o),
+            mean_cec = mean(cec))
+
+## 4.5 Reshape the table using pivot_longer ---------------------
+# use dat_3
+# put the names of the variables ph_h2o, 
+# cec and thickness in the column 
+# variable and keep the rest of the table. Save in dat_5 
+
+dat_5 <- dat_3 %>% 
+  pivot_longer(ph_h2o:thickness, names_to = "soil_property",
+               values_to = "value")
+
+## 4.6 Join the table sites.csv with dat_3 ----------------------
+# Load soil_phys_data030.csv (in 01-Data folder) 
+# Join its columns with dat_3 keeping all the rows of dat_3
+# save the result as dat_6
+
+phys <- read_csv("01-Data/soil_phys_data030.csv")
+
+phys <- phys %>% rename(id_prof = "ProfID")
+
+dat_6 <- dat_3 %>% 
+  left_join(phys)
+# or
+dat_6 <- phys %>% 
+  right_join(dat_3)
+
+# 5. Data visualization with ggplot2 ============================
+## 5.1 1D plot: histograms --------------------------------------
+# histograms of cec and ph_h2o
+
+ggplot(dat_3, aes(x=cec)) + geom_histogram()
+
+## 5.2 2D plot: scatterplot -------------------------------------
+# Scatterplot bottom vs. ph_h2o
+
+ggplot(dat_3, aes(x = bottom, y = ph_h2o)) + 
+  geom_point() 
+
+# add a fitting line
+
+ggplot(dat_3, aes(x = bottom, y = ph_h2o)) + 
+  geom_point() +
+  geom_smooth(method = "lm" )
+
+## 5.3 3D plot: scatterplot -------------------------------------
+# Scatterplot bottom vs. ph_h2o, add clay as color 
+# and size inside the 
+# function aes()
+
+ggplot(dat_3, 
+       aes(x = bottom, y = ph_h2o, color = cec, size = cec)) + 
+  geom_point()
+
+# 6. Geospatial data with terra =================================
+## Load packages (install them if needed)
+library(terra)
+## 6.1 Load a raster and a vector layer -------------------------
+# Load 01-Data/covs/grass.tif using rast() function, then plot it
+# Load 01-Data/soil map/SoilTypes.shp using vect() function and 
+# plot it 
+# explore the attributes of these layers
+
+r <- rast("01-Data/Macedonia/grass.tif")
+plot(r)
+
+v <- vect("01-Data/Macedonia/SoilTypes.shp")
+plot(v)
+
+## 6.2 Load a raster and a vector layer -------------------------
+# Check the current CRS (EPSG) of the raster and the vector. 
+# Find a *projected* CRS in http://epsg.io for Macedonia and 
+# copy the number
+# Check the Arguments of function project (?project) that need to
+# be defined
+# Save the new object as r_proj and v_proj
+# plot both objects
+
+r_proj <- project(x = r, y = "epsg:6204", method = "bilinear",
+                  res = 250)
+plot(r_proj)
+v_proj <- project(x = v, y = "epsg:6204")
+plot(v_proj, add = TRUE)
+
+## 6.3 Cropping and masking a raster ----------------------------
+# Compute the area of the polygons in v_proj 
+# (search for a function) and
+# assign the values to a new column named area
+# select the largest polygon using [], $, == and max() func. 
+# and save it as pol
+# crop the raster with pol using the crop() function and save 
+#it as r_pol
+# mask the raster r_pol with the polygon pol and save it 
+# with the same name
+# plot each result
+
+v_proj$area <- expanse(v_proj, unit = "ha")
+pol <- v_proj[v_proj$area == max(v_proj$area)]
+plot(pol)
+r_pol <- crop(r_proj, pol)
+plot(r_pol)
+plot(pol, add = TRUE)
+r_pol <- mask(r_pol, pol)
+plot(r_pol)
+
+## 6.4 Replace values in a raster by filtering their cells ------
+# Explore the following link to understand how terra 
+#manage cell values
+# https://rspatial.org/terra/pkg/4-algebra.html 
+# Replace values lower than 5 in r+pol by 0
+
+r_pol[r_pol$grass < 5] <- 0
+plot(r_pol)
+
+## 6.5 Rasterize a vector layer ---------------------------------
+# Use rasterize() function to convert v_proj to raster
+# Use r_proj as reference raster
+# Use field Symbol to assign cell values, and plot the new map
+
+v_class <- rasterize(x = v_proj, y = r_proj, field = "Symbol" )
+plot(v_class)
+v_class
+activeCat(v_class) <- 1
+
+## 6.6 Extracting raster values using points --------------------
+# Covert dat_6 to spatial points using vect() function 
+# (check help of vect())
+# Note that the EPSG number is 6204
+# Save the points as s
+# Plot s and r_proj together in the same map (Argument add=TRUE)
+# Extract the values of the raster using extract() 
+# function (check the help)
+# Remove the ID column of the extracted values
+# merge the extracted data with s using cbind() function
+# Convert s as a dataframe
+
+s <- vect(dat_6, geom=c("x", "y"), crs = "epsg:6204")
+plot(r_proj)
+plot(s, add=TRUE)
+x <- extract(r_proj,s, ID=FALSE)
+s <- cbind(s,x)
+d <- as.data.frame(s)
+d
+#GGally::ggscatmat(d)
+
+## 6.7 Zonal statistics using polygons and rasters --------------
+# Use the extract() func. to estimate the mean value of 
+# r_proj at each polygon
+# Use the fun= argument (check the help)
+# Use the cbind() func. to merge v_proj and the extracted values
+# convert v_proj to a dataframe
+# Create a ggplot boxplot (geom_boxplot) with x=Symbol
+# and y=grass 
+
+x <- extract(r_proj, v_proj, fun = mean, ID=FALSE)
+v_proj <- cbind(v_proj, x)
+
+d <- as_tibble(v_proj)
+
+d %>% 
+  ggplot(aes(x =Symbol, y = grass, fill = Symbol)) +
+  geom_boxplot() +
+  ylab("Grass probability")
+
+
+## END
+
+```
+
+
+## Script 2: Download environmental covariates {-}
+
+```{js covs, echo=TRUE, eval=FALSE}
+var assets = 
+["projects/digital-soil-mapping-gsp-fao/assets/CHELSA/bio1",
+"projects/digital-soil-mapping-gsp-fao/assets/CHELSA/bio12",
+"projects/digital-soil-mapping-gsp-fao/assets/CHELSA/bio13",
+"projects/digital-soil-mapping-gsp-fao/assets/CHELSA/bio14",
+"projects/digital-soil-mapping-gsp-fao/assets/CHELSA/bio16",
+"projects/digital-soil-mapping-gsp-fao/assets/CHELSA/bio17",
+"projects/digital-soil-mapping-gsp-fao/assets/CHELSA/bio5",
+"projects/digital-soil-mapping-gsp-fao/assets/CHELSA/bio6",
+"projects/digital-soil-mapping-gsp-fao/assets/CHELSA/ngd10",
+"projects/digital-soil-mapping-gsp-fao/assets/CHELSA/pet_penman_max",
+"projects/digital-soil-mapping-gsp-fao/assets/CHELSA/pet_penman_mean",
+"projects/digital-soil-mapping-gsp-fao/assets/CHELSA/pet_penman_min",
+"projects/digital-soil-mapping-gsp-fao/assets/CHELSA/pet_penman_range",
+"projects/digital-soil-mapping-gsp-fao/assets/CHELSA/sfcWind_max",
+"projects/digital-soil-mapping-gsp-fao/assets/CHELSA/sfcWind_mean",
+"projects/digital-soil-mapping-gsp-fao/assets/CHELSA/sfcWind_range",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/fpar_030405_500m_mean",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/fpar_030405_500m_sd",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/fpar_060708_500m_mean",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/fpar_060708_500m_sd",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/fpar_091011_500m_mean",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/fpar_091011_500m_sd",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/fpar_120102_500m_mean",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/fpar_120102_500m_sd",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/lstd_030405_mean",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/lstd_030405_sd",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/lstd_060708_mean",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/lstd_060708_sd",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/lstd_091011_mean",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/lstd_091011_sd",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/lstd_120102_mean",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/lstd_120102_sd",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/ndlst_030405_mean",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/ndlst_030405_sd",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/ndlst_060708_mean",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/ndlst_060708_sd",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/ndlst_091011_mean",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/ndlst_091011_sd",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/ndlst_120102_mean",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/ndlst_120102_sd",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/ndvi_030405_250m_mean",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/ndvi_030405_250m_sd",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/ndvi_060708_250m_mean",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/ndvi_060708_250m_sd",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/ndvi_091011_250m_mean",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/ndvi_091011_250m_sd",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/ndvi_120102_250m_mean",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/ndvi_120102_250m_sd",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/snow_cover",
+"projects/digital-soil-mapping-gsp-fao/assets/MODIS/swir_060708_500m_mean",
+"projects/digital-soil-mapping-gsp-fao/assets/LANDCOVER/crops",
+"projects/digital-soil-mapping-gsp-fao/assets/LANDCOVER/flooded_vegetation",
+"projects/digital-soil-mapping-gsp-fao/assets/LANDCOVER/grass",
+"projects/digital-soil-mapping-gsp-fao/assets/LANDCOVER/shrub_and_scrub",
+"projects/digital-soil-mapping-gsp-fao/assets/LANDCOVER/trees",
+"projects/digital-soil-mapping-gsp-fao/assets/OPENLANDMAP/dtm_curvature_250m",
+"projects/digital-soil-mapping-gsp-fao/assets/OPENLANDMAP/dtm_downslopecurvature_250m",
+"projects/digital-soil-mapping-gsp-fao/assets/OPENLANDMAP/dtm_dvm2_250m",
+"projects/digital-soil-mapping-gsp-fao/assets/OPENLANDMAP/dtm_dvm_250m",
+"projects/digital-soil-mapping-gsp-fao/assets/OPENLANDMAP/dtm_elevation_250m",
+"projects/digital-soil-mapping-gsp-fao/assets/OPENLANDMAP/dtm_mrn_250m",
+"projects/digital-soil-mapping-gsp-fao/assets/OPENLANDMAP/dtm_neg_openness_250m",
+"projects/digital-soil-mapping-gsp-fao/assets/OPENLANDMAP/dtm_pos_openness_250m",
+"projects/digital-soil-mapping-gsp-fao/assets/OPENLANDMAP/dtm_slope_250m",
+"projects/digital-soil-mapping-gsp-fao/assets/OPENLANDMAP/dtm_tpi_250m",
+"projects/digital-soil-mapping-gsp-fao/assets/OPENLANDMAP/dtm_twi_500m",
+"projects/digital-soil-mapping-gsp-fao/assets/OPENLANDMAP/dtm_upslopecurvature_250m",
+"projects/digital-soil-mapping-gsp-fao/assets/OPENLANDMAP/dtm_vbf_250m"];
+
+// Load borders 
+
+/// Using UN 2020 (replace the countries to download)
+/// var ISO = ['ITA'];
+/// var aoi =
+/// ee.FeatureCollection(
+/// 'projects/digital-soil-mapping-gsp-fao/assets/UN_BORDERS/BNDA_CTY'
+/// )
+///   .filter(ee.Filter.inList('ISO3CD', ISO));
+/// var region = aoi.geometry();
+
+/// Using a shapefile
+/// 1. Upload the borders of your countries as an asset
+/// 2. Replace 'your_shapefile' with the path to your shapefile
+var shapefile = ee.FeatureCollection('projects/digital-soil-mapping-gsp-fao/assets/Nghe_An');
+var region = shapefile.geometry().bounds();
+
+// Load assets as ImageCollection
+var assetsCollection = ee.ImageCollection(assets);
+
+// Clip each image in the collection to the region of interest
+var clippedCollection = assetsCollection.map(function(img){
+  return img.clip(region).toFloat();
+});
+
+// Function to replace masked values with zeroes for fpar bands
+function replaceMaskedFpar(img) {
+  var allBands = img.bandNames();
+  var fparBands =
+  allBands.filter(ee.Filter.stringStartsWith('item', 'fpar'));
+  var nonFparBands = allBands.removeAll(fparBands);
+  
+  var fparImg = img.select(fparBands).unmask(0);
+  var nonFparImg = img.select(nonFparBands);
+  
+  // If there are no fpar bands, return the original image
+  var result = ee.Algorithms.If(fparBands.length().eq(0),
+                                 img,
+                                 nonFparImg.addBands(fparImg));
+  
+  return ee.Image(result);
+}
+
+// Clip each image in the collection to the region of 
+//interest and replace masked values for fpar bands
+var clippedCollection = assetsCollection.map(function(img){
+  var clippedImg = img.clip(region).toFloat();
+  return replaceMaskedFpar(clippedImg);
+});
+
+// Stack the layers and maintain the 
+//layer names in the final file
+var stacked = clippedCollection.toBands();
+
+// Get the list of asset names
+var assetNames = ee.List(assets).map(function(asset) {
+  return ee.String(asset).split('/').get(-1);
+});
+
+// Rename the bands with asset names
+var renamed = stacked.rename(assetNames);
+print(renamed, 'Covariates to be exported')
+
+// Visualize the result
+// Set a visualization parameter 
+// (you can adjust the colors as desired)
+var visParams = {
+  bands: 'bio1',
+  min: 0,
+  max: 1,
+  palette: ['blue', 'green', 'yellow', 'red']
+};
+
+// Add the layer to the map
+Map.centerObject(renamed, 6)
+Map.addLayer(renamed, visParams, 'Covariates');
+// Export the stacked image to Google Drive
+Export.image.toDrive({
+  image: renamed,
+  description: 'covariates',
+  folder: 'GEE',
+  scale: 250,
+  maxPixels: 1e13,
+  region: region
+});
+
+/* Create mask for croplands ----------------------------*/
+
+// Load the Copernicus Global Land Service image collection
+var imageCollection = 
+ee.Image("COPERNICUS/Landcover/100m/Proba-V-C3/Global/2019")
+  .select("discrete_classification")
+  .clip(region)
+
+var crs = 'EPSG:4326'; // WGS84
+var res = 250; // Resolution in decimal degrees
+
+// Default resampling is nearest neighbor
+var image1 = imageCollection.resample()
+  .reproject({
+    crs: crs, // Add your desired CRS here
+    scale: res // Add your desired scale here
+  });
+
+// Reclassify the land cover classes
+var inList = [0, 20, 30, 40, 50, 60, 70, 80, 90, 100, 
+               111, 112, 113, 114, 115, 116, 
+              121, 122, 123, 124, 125, 126, 200];
+var outList = [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+var FAO_lu = image1.remap(inList, outList)
+  .toDouble()
+  .clip(region);
+
+// print(FAO_lu)
+
+// Convert 0 to NA
+var mask = FAO_lu.neq(0);
+print(mask)
+FAO_lu = FAO_lu.updateMask(mask);
+
+print(FAO_lu, "Mask")
+
+var visParams = {
+  bands: 'remapped',
+  min: 0,
+  max: 1,
+  palette: ['green', 'yellow']
+};
+
+// Add the layer to the map
+Map.addLayer(FAO_lu,visParams ,'Mask');
+
+// Export the land cover image as a raster to Google Drive
+Export.image.toDrive({
+  image: FAO_lu,
+  folder: 'GEE',
+  description: 'mask',
+  scale: res, // Add your desired scale here
+  region: region,
+  crs: crs, // Add your desired CRS here
+  maxPixels: 1e13 // Add a maximum number of pixels 
+  //for export if needed
+});
+
+
+
+```
+
+
+## Script 3: Evaluate Legacy Data {-}
+
+```{r legacy-data, eval=FALSE}
+
+#
+# Digital Soil Mapping
+# Soil Sampling Design
+# Evaluation of Legacy Data
+#
+# GSP-Secretariat
+# Contact: Luis.RodriguezLado@fao.org
+
+#________________________________________________________________
+
+# Empty environment and cache 
+  rm(list = ls())
+  gc()
+
+# Content of this script ========================================
+
+# Script for evaluation the degree of representativeness of a soil legacy dataset
+# relative to the diversity of the environmental conditions described in a set 
+# of rasterb covariates.
+# 
+# 0 - Set working directory and load packages
+# 1 - User-defined variables 
+# 2 - Extract environmental data from rasters at soil locations
+# 3 - Extract environmental data from rasters at soil locations
+# 4 - Compute variability matrix in covariates
+# 5 - Calculate hypercube of "covariates" distribution (P)
+# 6 - Calculate hypercube of "sample" distribution (Q)
+# 7 - Calculate Representativeness of the Legacy Dataset
+#________________________________________________________________
+
+start_time <- Sys.time()
+
+## 0 - Set working directory and load packages =================================
+
+  #remotes::install_github("lemuscanovas/synoptReg")
+
+  # Set working directory to source file location
+  setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+  setwd("../") # Move wd down to main folder
+
+  # List of packages
+  packages <- c("sp","terra","raster","sf","clhs", "sgsR","entropy", "tripack",
+                "manipulate","dplyr","synoptReg")
+  # Load packages
+  lapply(packages, require, character.only = TRUE)
+  # Remove object to save memory space
+  rm(packages) 
+  
+  
+## 1 - User-defined variables ==================================================
+  # Path to rasters
+  raster.path <- "data/rasters"
+  # Path to shapes
+  shp.path <- "data/shapes"
+  # Path to results
+  results.path <- "data/results/"
+  # Aggregation factor for up-scaling raster covariates (optional)
+  agg.factor = 10
+  
+  
+## 2 - Prepare data ============================================================
+  ## Load raster covariate data
+  # Read Spatial data covariates as rasters with terra
+  cov.dat <-  list.files(raster.path, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
+  cov.dat <- terra::rast(cov.dat) # SpatRaster from terra
+  # Aggregate stack to simplify data rasters for calculations 
+  cov.dat <- aggregate(cov.dat, fact=agg.factor, fun="mean")
+  
+  # Load shape of district
+  nghe <- sf::st_read(file.path(paste0(shp.path,"/Nghe_An.shp")),quiet=TRUE)
+  
+  # Crop covariates on administrative boundary
+  cov.dat <- crop(cov.dat, nghe, mask=TRUE)
+  
+  # Transform raster information with PCA
+  pca <- raster_pca(cov.dat)
+  
+  # Get SpatRaster layers
+  cov.dat <- pca$PCA
+  # Create a raster stack to be used as input in the clhs::clhs function 
+  cov.dat.ras <- raster::stack(cov.dat) 
+  # Subset rasters
+  cov.dat <- pca$PCA[[1:first(which(pca$summaryPCA[3,]>0.99))]]
+  cov.dat.ras <-  cov.dat.ras[[1:first(which(pca$summaryPCA[3,]>0.99))]]
+
+## 3 - Extract environmental data from rasters at soil locations ===============
+  # Load legacy soil data
+  p.dat <- terra::vect(file.path(paste0(shp.path,"/legacy_soils.shp")))
+  # Extract data
+  p.dat_I <- terra::extract(cov.dat, p.dat)
+  p.dat_I <- na.omit(p.dat_I) # Remove soil points outside study area
+  p.dat_I.df <- p.dat_I[,-1]
+  str(p.dat_I.df)
+
+## 4 - Compute variability matrix in the covariates ====================================
+  # Define Number of bins
+  nb <- 25
+  # Quantile matrix of the covariate data
+  q.mat <- matrix(NA, nrow = (nb + 1), ncol = nlyr(cov.dat))
+  j = 1
+  for (i in 1:nlyr(cov.dat)) {
+    ran1 <- minmax(cov.dat[[i]])[2] - minmax(cov.dat[[i]])[1]
+    step1 <- ran1 / nb
+    q.mat[, j] <-
+      seq(minmax(cov.dat[[i]])[1],
+          to = minmax(cov.dat[[i]])[2],
+          by = step1)
+    j <- j + 1
+  }
+  q.mat
+
+## 5 - Calculate hypercube of "covariates" distribution (P)  ===================  
+  # Convert SpatRaster to dataframe for calculations
+  cov.dat.df <- as.data.frame(cov.dat) 
+  cov.mat <- matrix(1, nrow = nb, ncol = ncol(q.mat))
+  cov.dat.mx <- as.matrix(cov.dat.df)
+  for (i in 1:nrow(cov.dat.mx)) {
+    for (j in 1:ncol(cov.dat.mx)) {
+      dd <- cov.dat.mx[[i, j]]
+      
+      if (!is.na(dd)) {
+        for (k in 1:nb) {
+          kl <- q.mat[k, j]
+          ku <- q.mat[k + 1, j]
+          
+          if (dd >= kl && dd <= ku) {
+            cov.mat[k, j] <- cov.mat[k, j] + 1
+          }
+        }
+      }
+    }
+  }
+  cov.mat
+  
+## 6 - Calculate hypercube of "sample" distribution (Q) ========================  
+
+  h.mat <- matrix(1, nrow = nb, ncol = ncol(q.mat))
+  for (i in 1:nrow(p.dat_I.df)) {
+    for (j in 1:ncol(p.dat_I.df)) {
+      dd <- p.dat_I.df[i, j]
+      
+      if (!is.na(dd)) {
+        for (k in 1:nb) {
+          kl <- q.mat[k, j]
+          ku <- q.mat[k + 1, j]
+          
+          if (dd >= kl && dd <= ku) {
+            h.mat[k, j] <- h.mat[k, j] + 1
+          }
+        }
+      }
+    }
+  }
+  h.mat 
+
+  
+## 7 - Calculate Representativeness of the Legacy Dataset ==================    
+
+  ## Calculate the proportion of "variables" in the covariate spectra that fall within the convex hull of variables in the "environmental sample space"
+  # Principal component of the legacy data sample
+  pca.s = prcomp(p.dat_I[,2:(ncol(cov.dat.df)+1)],scale=TRUE, center=TRUE)
+  scores_pca1 = as.data.frame(pca.s$x)
+  # Plot the first 2 principal components and convex hull
+  rand.tr <- tri.mesh(scores_pca1[,1],scores_pca1[,2],"remove") # Delaunay triangulation 
+  rand.ch <- convex.hull(rand.tr, plot.it=F) # convex hull
+  pr_poly = cbind(x=c(rand.ch$x),y=c(rand.ch$y)) # save the convex hull vertices
+  plot(scores_pca1[,1], scores_pca1[,2], xlab="PCA 1", ylab="PCA 2", xlim=c(min(scores_pca1[,1:2]), max(scores_pca1[,1:2])),ylim=c(min(scores_pca1[,1:2]), max(scores_pca1[,1:2])), main='Convex hull of soil legacy data')
+  lines(c(rand.ch$x,rand.ch$x[1]), c(rand.ch$y,rand.ch$y[1]),col="red",lwd=1) # draw the convex hull (domain of legacy data)
+  
+  # PCA projection of study area population onto the principal components
+  PCA_projection <- predict(pca.s, cov.dat.df) # Project study area population onto sample PC
+  newScores = cbind(x=PCA_projection[,1],y=PCA_projection[,2]) # PC scores of projected population
+  
+  # Plot the polygon and all points to be checked
+  plot(newScores, xlab="PCA 1", ylab="PCA 2", xlim=c(min(newScores[,1:2]), max(newScores[,1:2])), ylim=c(min(newScores[,1:2]), max(newScores[,1:2])), col='black', main='Environmental space plots over the convex hull of soil legacy data')
+  polygon(pr_poly,col='#99999990')
+  # Check which points fall within the polygon
+  pip <- point.in.polygon(newScores[,2], newScores[,1], pr_poly[,2],pr_poly[,1],mode.checked=FALSE)
+  newScores <- data.frame(cbind(newScores, pip))
+  # Plot points outside convex hull  
+  points(newScores[which(newScores$pip==0),1:2],pch='X', col='red')
+  
+  #  Proportion of the conditions in the study area that fall within the convex hull of sample conditions
+  sum(nrow(newScores[newScores$pip>0,]))/nrow(newScores)*100 
+  
+## END
+
+```
+
+
+## Script 4: Calculate Minimum Sample Size {-}
+
+```{r sample-size, eval=FALSE}
+#
+# Digital Soil Mapping
+# Soil Sampling Design
+# Optimizing Sample Size
+#
+# GSP-Secretariat
+# Contact: Luis.RodriguezLado@fao.org
+
+#________________________________________________________________
+
+#Empty environment and cache 
+  rm(list = ls())
+  gc()
+
+# Content of this script ========================================
+# The goal of this script is to determine the minimum sample size required to describe an area
+  # while retaining for a 95% of representativeness in the environmental variability of covariates
+  # in the area 
+# 
+# 0 - Set working directory and load necessary packages
+# 1 - User-defined variables 
+# 2 - Import national data 
+# 3 - Calculate the minimum sample size to describe the area
+# 4 - Plot covariate diversity as PCA scores 
+# 5 - KL divergence and % similarity results for growing N samples
+# 6 - Model KL divergence
+# 7 - Determine the minimum sample size for 95% representativeness
+# 8 - Determine the optimal iteration according to the minimum N size 
+# 9 - Plot minimum points from best iteration
+#________________________________________________________________
+
+ start_time <- Sys.time()
+
+## 0 - Set working directory and load necessary packages =======================
+
+  # Set working directory to source file location
+  setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+  setwd("../") # Move wd down to main folder
+  
+  # List of packages
+  packages <- c("sp","terra","raster","sf","clhs",
+                "sgsR","entropy", "tripack",
+              "manipulate","dplyr","plotly","synoptReg")
+  
+  # Load packages
+  lapply(packages, require, character.only = TRUE) 
+  rm(packages) # Remove object to save memory space
+  
+
+
+## 1 - User-defined variables ==================================================
+# Path to rasters
+  raster.path <- "data/rasters/"
+  # Path to shapes
+  shp.path <- "data/shapes/"
+  # Path to results
+  results.path <- "data/results/"
+# Aggregation factor for up-scaling raster covariates (optional)
+  agg.factor = 10
+
+# Define parameters to determine minimum sampling size
+  initial.n <- 50 # Initial sampling size to test
+  final.n <- 300 # Final sampling size to test
+  by.n <- 10 # Increment size
+  iters <- 5 # Number of trials on each size
+  
+
+## 2 - Import national data ====================================================
+  ## Load raster covariate data
+  # Read Spatial data covariates as rasters with terra
+  cov.dat <-  list.files(raster.path, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
+  cov.dat <- terra::rast(cov.dat) # SpatRaster from terra
+    # Aggregate stack to simplify data rasters for calculations 
+  cov.dat <- aggregate(cov.dat, fact=agg.factor, fun="mean")
+  # Load shape of district
+  nghe <- sf::st_read(file.path(paste0(shp.path,"/Nghe_An.shp")),quiet=TRUE)
+
+  # Crop covariates on administrative boundary
+  cov.dat <- crop(cov.dat, nghe, mask=TRUE)
+  # Store elevation and slope separately
+  elevation <- cov.dat$dtm_elevation_250m
+  slope <- cov.dat$dtm_slope_250m
+  
+  # Load roads
+  roads <-  vect(file.path(paste0(shp.path,"/roads.shp")))
+  roads <- crop(roads, nghe)
+ 
+  # Simplify raster information with PCA
+  pca <- raster_pca(cov.dat)
+  
+  # Get SpatRaster layers
+  cov.dat <- pca$PCA
+  # Create a raster stack to be used as input in the clhs::clhs function 
+  cov.dat.ras <- raster::stack(cov.dat) 
+  # Subset rasters
+  cov.dat <- pca$PCA[[1:first(which(pca$summaryPCA[3,]>0.99))]]
+  cov.dat.ras <-  cov.dat.ras[[1:first(which(pca$summaryPCA[3,]>0.99))]]
+  # Plot covariates
+  plot(cov.dat)
+  
+
+# 3 - Calculate the minimum sample size to describe the area ===================
+  # Start computations ----
+  # Initialize empty vectors to store results
+  number_of_samples <- c()
+  prop_explained <- c()
+  klo_samples <- c()
+  samples_storage <- list()
+
+  # Convert SpatRaster to dataframe
+  cov.dat.df <-  as.data.frame(cov.dat)
+
+  # Start evaluation with growing sample sizes
+  for (trial in seq(initial.n, final.n, by = by.n)) {
+    for (iteration in 1:iters) {
+      # Generate stratified clhs samples
+      p.dat_I <-  clhs(cov.dat.ras,
+          size = trial, iter = 10000,
+          progress = FALSE, simple = FALSE)
+      
+      # Get covariate values and coordinates for each point
+      p.dat_I <- p.dat_I$sampled_data
+      # Get covariate values as dataframe and delete NAs
+      p.dat_I.df <- as.data.frame(p.dat_I@data) %>%
+        na.omit()
+      
+      # Store samples as list
+      samples_storage[[paste0("N", trial, "_", iteration)]] <- p.dat_I
+      
+      ## Comparison of population and sample distributions - Kullback-Leibler (KL) divergence
+      # Define quantiles of the study area (number of bins)
+      nb <- 25
+      # Quantile matrix of the covariate data
+      q.mat <- matrix(NA, nrow = (nb + 1), ncol = nlyr(cov.dat))
+      j = 1
+      for (i in 1:nlyr(cov.dat)) {
+        ran1 <- minmax(cov.dat[[i]])[2] - minmax(cov.dat[[i]])[1]
+        step1 <- ran1 / nb
+        q.mat[, j] <-
+          seq(minmax(cov.dat[[i]])[1],
+              to = minmax(cov.dat[[i]])[2],
+              by = step1)
+        j <- j + 1
+      }
+      # q.mat
+      
+      # Hypercube of covariates in study area
+      # Initialize the covariate matrix
+      cov.mat <- matrix(1, nrow = nb, ncol = ncol(q.mat))
+      cov.dat.mx <- as.matrix(cov.dat.df)
+      for (i in 1:nrow(cov.dat.mx)) {
+        for (j in 1:ncol(cov.dat.mx)) {
+          dd <- cov.dat.mx[[i, j]]
+      
+          if (!is.na(dd)) {
+            for (k in 1:nb) {
+              kl <- q.mat[k, j]
+              ku <- q.mat[k + 1, j]
+              
+              if (dd >= kl && dd <= ku) {
+                cov.mat[k, j] <- cov.mat[k, j] + 1
+              }
+            }
+          }
+        }
+      }
+
+      # Compare whole study area covariate space with the selected sample
+      # Sample data hypercube (the same as for the raster data but on the sample data)
+      h.mat <- matrix(1, nrow = nb, ncol = ncol(q.mat))
+      for (i in 1:nrow(p.dat_I.df)) {
+        for (j in 1:ncol(p.dat_I.df)) {
+          dd <- p.dat_I.df[i, j]
+          
+          if (!is.na(dd)) {
+            for (k in 1:nb) {
+              kl <- q.mat[k, j]
+              ku <- q.mat[k + 1, j]
+              
+              if (dd >= kl && dd <= ku) {
+                h.mat[k, j] <- h.mat[k, j] + 1
+              }
+            }
+          }
+        }
+      }
+
+      ## Compute Kullback-Leibler (KL) divergence
+      kl.index <- c()
+      for (i in 1:ncol(cov.dat.df)) {
+        kl <-    KL.empirical(c(cov.mat[, i]), c(h.mat[, i]))
+        kl.index <- c(kl.index, kl)
+        klo <-  mean(kl.index)
+      }
+      
+      ## Calculate the proportion of "env. variables" in the covariate spectra that fall within the convex hull of variables in the "environmental sample space"
+      # Principal component of the data sample
+      pca.s = prcomp(p.dat_I.df, scale = TRUE, center = TRUE)
+      scores_pca1 = as.data.frame(pca.s$x)
+      # Plot the first 2 principal components and convex hull
+      rand.tr <-
+        tri.mesh(scores_pca1[, 1], scores_pca1[, 2], "remove") # Delaunay triangulation
+      rand.ch <- convex.hull(rand.tr, plot.it = F) # convex hull
+      pr_poly <-
+        cbind(x = c(rand.ch$x), y = c(rand.ch$y)) # save the convex hull vertices
+      # PCA projection of study area population onto the principal components
+      PCA_projection <-
+        predict(pca.s, cov.dat.df) # Project study area population onto sample PC
+      newScores = cbind(x = PCA_projection[, 1], y = PCA_projection[, 2]) # PC scores of projected population
+      # Check which points fall within the polygon
+      pip <-
+        point.in.polygon(newScores[, 2], newScores[, 1], pr_poly[, 2], pr_poly[, 1], mode.checked =
+                           FALSE)
+      newScores <- data.frame(cbind(newScores, pip))
+      klo_samples <- c(klo_samples, klo)
+      prop_explained <-
+        c(prop_explained, sum(newScores$pip) / nrow(newScores) * 100)
+      number_of_samples <- c(number_of_samples, trial)
+      print(
+        paste(
+          "N samples = ",
+          trial,
+          " out of ",
+          final.n,
+          "; iteration = ",
+          iteration,
+          "; KL = ",
+          klo,
+          "; Proportion = ",
+          sum(newScores$pip) / nrow(newScores) * 100
+        )
+      )
+    }
+  }
+
+
+# 4 - Plot covariate diversity as PCA scores ===================================
+  plot(newScores[,1:2],
+    xlab = "PCA 1",
+    ylab = "PCA 2",
+    xlim = c(min(newScores[,1:2], na.rm = T), max(newScores[,1:2], na.rm = T)),
+    ylim = c(min(newScores[,1:2], na.rm = T), max(newScores[,1:2], na.rm = T)),
+    col = 'black',
+    main = 'Environmental space plots on convex hull of soil samples')
+  
+  polygon(pr_poly, col = '#99999990')
+# # Plot points outside convex hull
+  points(newScores[which(newScores$pip == 0), 1:2],
+         col = 'red',
+         pch = 12,
+         cex = 1)
+
+# 5 - KL divergence and % representativeness for growing N samples =============
+  # Merge data from number of samples, KL divergence and % representativeness
+  results <- data.frame(number_of_samples, klo_samples, prop_explained)
+  names(results) <- c("N", "KL", "Perc")
+
+  # Calculate mean results by N size
+    mean_result <- results %>%
+      group_by(N) %>%
+      summarize_all(mean)
+    mean_result
+
+  ## Plot dispersion on KL and % by N
+    par(mar = c(5, 4, 1, 6))
+    boxplot(
+      Perc ~ N,
+      data = results,
+      col = rgb(1, 0.1, 0, alpha = 0.5),
+      ylab = "%"
+    )
+    mtext("KL divergence", side = 4, line = 3)
+  # Add new plot
+    par(new = TRUE, mar = c(5, 4, 1, 6))
+  # Box plot
+    boxplot(
+      KL ~ N,
+      data = results,
+      axes = FALSE,
+      outline = FALSE,
+      col = rgb(0, 0.8, 1, alpha = 0.5),
+      ylab = ""
+    )
+    axis(
+      4,
+      at = seq(0.02, 0.36, by = .06),
+      label = seq(0.02, 0.36, by = .06),
+      las = 3
+    )
+
+# 6 - Model KL divergence ======================================================
+  # Create an exponential decay function of the KL divergence
+    x <- mean_result$N
+    y = (mean_result$KL - min(mean_result$KL)) / (max(mean_result$KL) - min(mean_result$KL)) #KL
+  
+  # Parametrize Exponential decay function
+    start <-  list()     # Initialize an empty list for the starting values
+  
+  #fit function
+    k = 2
+    b0 = 0.01
+    b1 = 0.01
+  
+    fit1 <-
+      nls(
+        y ~ k * exp(-b1 * x) + b0,
+        start = list(k = k, b0 = b0, b1 = b1),
+        control = list(maxiter = 500),
+        trace = T
+      )
+    summary(fit1)
+  
+  # Plot fit
+    xx <- seq(1, final.n, 1)
+    plot(x, y)
+    lines(xx, predict(fit1, list(x = xx)))
+  # Predict with vfit function
+    jj <- predict(fit1, list(x = xx))
+    normalized = 1 - (jj - min(jj)) / (max(jj) - min(jj))
+    
+    
+# 7 - Determine the minimum sample size to account for 95% of cumulative probability of the covariate diversity ====
+    minimum_n <- length(which(normalized < 0.95)) + 1
+  
+    # Plot cdf and minimum sampling point
+    x <- xx
+    y <- normalized
+    
+    mydata <- data.frame(x, y)
+    opti <- mydata[mydata$x == minimum_n, ]
+    
+    plot_ly(
+      mydata,
+      x = ~ x,
+      y = ~ normalized,
+      mode = "lines+markers",
+      type = "scatter",
+      name = "CDF (1–KL divergence)"
+    ) %>%
+      add_trace(
+        x = ~ x,
+        y = ~ jj,
+        mode = "lines+markers",
+        type = "scatter",
+        yaxis = "y2",
+        name = "KL divergence"
+      )  %>%
+      add_trace(
+        x = ~ opti$x,
+        y = ~ opti$y,
+        yaxis = "y",
+        mode = "markers",
+        name = "Minimum N",
+        marker = list(
+          size = 8,
+          color = '#d62728',
+          line = list(color = 'black', width = 1)
+        )
+      ) %>%
+      layout(
+        xaxis = list(
+          title = "N",
+          showgrid = T,
+          dtick = 50,
+          tickfont = list(size = 11)
+        ),
+        yaxis = list(title = "1–KL divergence (% CDF)", showgrid = F),
+        yaxis2 = list(
+          title = "KL divergence",
+          overlaying = "y",
+          side = "right"
+        ),
+        legend = list(
+          orientation = "h",
+          y = 1.2,
+          x = 0.1,
+          traceorder = "normal"
+        ),
+        margin = list(
+          t = 50,
+          b = 50,
+          r = 100,
+          l = 80
+        ),
+        hovermode = 'x'
+      )  %>%
+      config(displayModeBar = FALSE)
+
+# 8 - Determine the optimal iteration according to the minimum N size ==========
+  optimal_iteration <- results[which(abs(results$N - minimum_n) == min(abs(results$N - minimum_n))), ] %>%
+    mutate(IDX = 1:n()) %>%
+    filter(Perc == max(Perc))
+    
+# 9 - Plot minimum points from best iteration ==================================
+  N_final <- samples_storage[paste0("N", optimal_iteration$N, "_", optimal_iteration$IDX)][[1]]
+  plot(cov.dat[[1]])
+  points(N_final)
+  
+## END
+
+```
+
+
+## Script 5: Stratified sampling on vector and raster data {-}
+
+This script uses soil and landcover classes to define polygon 'strata' for an area weighted  stratified sampling design.
+
+```{r stratified sampling, echo=TRUE, eval=FALSE}
+#
+# Digital Soil Mapping
+# Soil Sampling Design
+# Stratified Sampling on 'soil-landuse' strata
+#
+# Contact: Luis.RodriguezLado@fao.org
+#          Marcos.Angelini@fao.org
+#________________________________________________________________
+
+  # Empty environment and cache 
+    rm(list = ls())
+    gc()
+
+# Content of this script =======================================================
+# The goal of this script is to perform random and regular stratified
+# soil sampling designs using soil/landcover classes as 'strata'
+# The distribution of samples on the strata is based on a
+# weighted area distribution with the requirement of at least 2 sampling points
+# by strata. Small polygons (< 100 has) are eliminated from calculations.
+# Only 'strata' classes prone to be samples are included in the analyses.
+# The final sample data includes 'target' points - i.e. primary sampling points,
+# and 'replacement' points - i.e. points to be used as replacements in case
+# that the corresponding 'target' point cannot be sampled for any reason.
+# 
+# 0 - Set working directory and load packages
+# 1 - User-defined variables 
+# 2 - Import data 
+# 3 - Delineate soil strata
+# 4 - Delineate land-use strata 
+# 5 - Create sampling strata
+# 6 - Accommodate strata to requirements
+# 7 - Plot strata
+# 8 - Stratified random sampling
+# 9 - Plot points over strata
+# 10 - Calculate replacement areas for points
+# 11 - Stratified regular sampling
+#________________________________________________________________
+
+
+## 0 - Set working directory and load packages =================================
+
+  # Load packages as a vector objects
+    packages <- c("sf", "terra", "tidyverse", "rmapshaper",
+                  "units","plyr", "mapview", "leaflet")
+    lapply(packages, require, character.only = TRUE) # Load packages
+    rm(packages) # Remove object to save memory space 
+  
+  # Set working directory to source file location
+    setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
+
+## 1 - User-defined variables ==================================================
+    # Path to rasters
+    raster.path <- "data/rasters"
+    # Path to shapes
+    shp.path <- "data/shapes"
+    # Path to results
+    results.path <- "data/results/"
+    n <- 242
+
+    
+## 2 - Import data ====================================================
+    # Load soil data
+    soil <- st_read(paste0(shp.path,"/soils.shp"),promote_to_multi = FALSE)  
+    # Load Landcover data
+    lc <- st_read(paste0(shp.path,"/landcover.shp"))
+  
+  # Define a bounding area (optional).
+  # If BOUNDING = TRUE, then a bounding–area shapefile (bb) must be specified
+  # and the line in the code below must be uncommented
+    BOUNDING = FALSE
+    #bb <- st_read(paste0(shp.path,"/your_bounding_area.shp"))
+  
+  # Compute replacement areas (optional).
+    # If REPLACEMENT = TRUE, then replacement areas are calculated around a 
+    # specified buffer distance from target points within the same stratum class
+    REPLACEMENT = FALSE
+    distance.buffer = 500 # Distance must be adjusted to the coordinate system
+    #bb <- st_read(paste0(shp.path,"/your_bounding_area.shp"))
+    
+
+# 3 - Delineate soil strata =====================================================
+
+    # Clip soil data  by bounding area if defined
+    if (BOUNDING) {
+      soil <- st_intersection(soil, bb)
+    } else {
+      soil <- soil
+    }
+    # Check geometry
+    soil <- st_make_valid(soil)
+    soil <- st_cast(soil, "MULTIPOLYGON")
+    #Aggregate information by reference soil group (SRG)
+    #unique(soil$RSG)
+    # Remove NAs (water bodies are deleted)
+    soil <- soil[!is.na(soil$RSG),]
+    #unique(soil$RSG)
+    # Dissolve polygons by reference soil group
+    soil <- soil %>% group_by(RSG) %>% dplyr::summarize() 
+  # Write soil strata to disk
+    st_write(soil, paste0(results.path,"soil_classes.shp"), delete_dsn = TRUE)
+    
+    ## Plot aggregated soil classes
+    map = leaflet(leafletOptions(minZoom = 8)) %>%
+      addTiles()
+    mv <- mapview(soil["RSG"], alpha=0, homebutton=T, layer.name = "soils", map=map)
+    mv@map
+    #ggplot() + geom_sf(data=soil, aes(fill = factor(RSG)))
+    
+# 4 - Delineate land-use strata =================================================
+    
+    # Clip landcover data  by bounding area if exist
+    if (BOUNDING) {
+      lc <- st_intersection(lc, bb)
+    } else {
+      lc <- lc
+    }
+    # Check geometry
+    lc <- st_make_valid(lc)
+    # Agregate units
+    unique(lc$landcover)
+    lc$landcover[lc$landcover=="Broadleaf forest"]<- "Forest"
+    lc$landcover[lc$landcover=="Needleleaf forest"]<- "Forest"
+    lc$landcover[lc$landcover=="Mixed forest"]<- "Forest"
+    lc <- lc[lc$landcover!="Water body",]
+    unique(lc$landcover)
+    
+    # Dissolve polygons by reference soil group
+    lc <- lc %>% group_by(landcover) %>% dplyr::summarize() 
+    
+    # Write landcover strata as shapefile
+      st_write(lc, paste0(results.path,"lc_classes.shp"), delete_dsn = TRUE)
+    
+      # Plot map with the land cover information
+      map = leaflet() %>%
+        addTiles()
+      mv <- mapview(lc["landcover"], alpha=0, homebutton=T, layer.name = "Landcover", map=map)
+      mv@map
+      #ggplot() + geom_sf(data=lc, aes(fill = factor(landcover)))
+    
+
+# 5 - Create sampling strata ===================================================
+    
+      # Combine soil and landcover layers
+      sf_use_s2(FALSE)
+      soil_lc <- st_intersection(st_make_valid(soil), st_make_valid(lc))  
+      soil_lc$soil_lc <- paste0(soil_lc$RSG, "_", soil_lc$landcover)
+      soil_lc <- soil_lc %>% dplyr::select(soil_lc, geometry)
+    
+
+# 6 - Accommodate strata to requirements =======================================
+
+      # Select by Area. Convert to area to ha and select polygons with more than 100 has
+      soil_lc$area <- st_area(soil_lc)/10000 
+      soil_lc$area <- as.vector(soil_lc$area)
+      soil_lc <- soil_lc %>% 
+        group_by(soil_lc) %>% 
+        mutate(area = sum(area))
+      soil_lc <- soil_lc[soil_lc$area > 100,]
+      plot(soil_lc[1])
+      
+      # Replace blank spaces with underscore symbol to keep names uniform
+      soil_lc$soil_lc <- str_replace_all(soil_lc$soil_lc, " ", "_")
+      
+      # Create a column of strata numeric codes
+      soil_lc$code <- as.character(as.numeric(as.factor(soil_lc$soil_lc)))
+      
+      # List final strata
+      unique(soil_lc$soil_lc)
+      
+      # Write final sampling strata map
+      st_write(soil_lc, paste0(results.path,"strata.shp"), delete_dsn = TRUE)
+      
+# 7 - Plot strata ==============================================================
+  
+      # Plot final map of stratum
+      map = leaflet(options = leafletOptions(minZoom = 8.3)) %>%
+        addTiles()
+      mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata", map=map)
+      mv@map
+
+# 8 - Stratified random sampling ===============================================
+
+  # Read already created strata shapefile
+    polygons <- st_read(paste0(results.path,"strata.shp"))
+    if(REPLACEMENT){
+      polygons = st_intersection(polygons,distance.buffer)
+    }
+    
+  # Calculate the area of each polygon  
+    polygons$area <- st_area(polygons) 
+    
+  # Create a new column to group polygons by a common attribute
+    polygons$group <- polygons$soil_lc
+  # Drop units to allow computations
+    polygons <- drop_units(polygons)
+    
+  # Calculate the total area of all polygons in each group
+    group_areas <- polygons %>%
+      dplyr::group_by(group)  %>% 
+      dplyr::summarize(total_area = sum(area))
+  # Add a code to each group
+    group_codes <- polygons %>% group_by(group) %>%
+      dplyr::summarize(code = first(code)) 
+  # Join polygon strata and codes   
+    group_areas <- left_join(group_areas,st_drop_geometry(group_codes), by = "group")
+    
+  # Ensure minimum of 2 samples at each polygon in each group
+    group_areas$sample_count <- 2
+    
+  # Calculate the number of samples per group based on relative area
+    group_areas$sample_count <- 
+      group_areas$sample_count + 
+      round(group_areas$total_area/sum(group_areas$total_area) *
+              (n-sum(group_areas$sample_count)))
+  # Adjust sample size on classes
+    while (sum(group_areas$sample_count) != n) {
+      if (sum(group_areas$sample_count) > n) {
+      # Reduce sample count for the largest polygon until total count is n
+        max_index <- which.max(group_areas$sample_count)
+        group_areas$sample_count[max_index] <- group_areas$sample_count[max_index] - 1
+      } else {
+      # Increase sample count for the smallest polygon until total count is n
+        min_index <- which.min(group_areas$sample_count)
+        group_areas$sample_count[min_index] <- group_areas$sample_count[min_index] + 1
+      }
+    }
+  # Count the total samples. It must be equal to the sampling size
+    sum(group_areas$sample_count) 
+    
+    polygons <- left_join(polygons, st_drop_geometry(group_areas),
+                          by = c("soil_lc"="group"))
+    polygons <- dplyr::select(polygons, soil_lc, code.x, sample_count, geometry)
+    
+  # Generate random points within each strata of size 3 times
+  #the required samples for each strata
+    x <- spatSample(x = vect(group_areas),
+                    size = group_areas$sample_count * 3, method = "random")
+    
+  # Compute sampling points for strata
+    z <- x %>% 
+      st_as_sf() %>% 
+      dplyr::group_by(code) %>% 
+      dplyr::mutate(sample_count = as.numeric(sample_count),
+                    order = seq_along(code),
+                    ID = paste0(code, ".", order),
+                    type = ifelse(sample_count >= order, "Target", "Replacement")) %>% 
+      vect()
+    
+  # Find classes with missing samples
+    missing.data <- left_join(group_areas,data.frame(z) %>%
+                                dplyr::filter(type=="Target") %>%
+                                dplyr::group_by(code) %>%
+                                tally()) %>%
+      dplyr::mutate(diff=sample_count-n)
+    
+  # Determine missing sampled strata
+    missing.strata <- which(is.na(missing.data$diff))
+    
+  # Determine missing sampling point in strata (undersampled strata)
+    missing.sample = which(missing.data$diff != 0)
+    missing.number <- as.numeric(unlist(st_drop_geometry(missing.data[(missing.sample <- which(missing.data$diff != 0)),7])))
+    
+  # Compute sampling points for missing sampled strata
+    x.missing.strata <- x[1]
+    x.missing.strata$sample_count<- 0
+    
+    for(i in missing.strata){
+      xx.missing.strata <- x[1]
+      xx.missing.strata$sample_count<- 0
+      nn=0
+      while (sum(xx.missing.strata$sample_count) < 
+             group_areas[group_areas$code==i,][["sample_count"]]*5) {
+        
+        while(nn < group_areas[group_areas$code==i,][["sample_count"]]*3){
+          my.missing.strata <- spatSample(x = vect(group_areas[group_areas$code %in% i,]),
+                                          size =  group_areas[group_areas$code==i,][["sample_count"]]*5,
+                                          method = "random")
+          nn <- nn + nrow(data.frame(my.missing.strata))
+        }
+        xx.missing.strata <- rbind(xx.missing.strata,my.missing.strata)
+        print(sum(xx.missing.strata$sample_count))
+      }
+      print(i)
+      print(xx.missing.strata)
+      x.missing.strata <- rbind(x.missing.strata,xx.missing.strata)
+    }
+    
+  # Join initial sampling with missing sampling strata data
+    x <- rbind(x, x.missing.strata)
+    
+  # Compute sampling points for missing samples (random sampling)
+    x.missing.sample <- x[1]
+    
+    for(i in missing.sample){
+      xx.missing.sample <- x[1]
+      xx.missing.sample$sample_count<- 0
+      while (sum(xx.missing.sample$sample_count) < (group_areas[group_areas$code==i,][["sample_count"]]*3)) {
+        my.missing.sample <- spatSample(x = vect(group_areas[group_areas$code %in% i,]),
+                                        size = as.numeric(vect(group_areas[group_areas$code %in% i,])[[4]])+
+                                          (group_areas[group_areas$code==i,][["sample_count"]]*3), method = "random")
+        
+        xx.missing.sample <- rbind(xx.missing.sample,my.missing.sample)
+        print(sum(xx.missing.sample$sample_count))
+      }
+      print(i)
+      print(xx.missing.sample)
+      x.missing.sample <- rbind(x.missing.sample,xx.missing.sample)
+    }
+    
+  # Join initial sampling with missing sampling strata data and with missing samples 
+    x <- rbind(x, x.missing.sample)
+    
+  # Remove extra artificial replacements 
+    x <- x[x$sample_count > 0,]
+    
+  # Convert and export to shapefile
+    z <- x %>% 
+      st_as_sf() %>% 
+      dplyr::group_by(code) %>% 
+      dplyr::mutate(sample_count = as.numeric(sample_count),
+                    order = seq_along(code),
+                    ID = paste0(code, ".", order),
+                    type = ifelse(sample_count >= order, "Target", "Replacement")) %>% 
+      vect()
+    writeVector(z,
+                paste0(results.path,"strat_randm_samples.shp", overwrite=TRUE))
+
+  # Check if the number of initial target points equals the final target points 
+    n==nrow(z[z$type=="Target",])
+    n;nrow(z[z$type=="Target",])
+    
+# 9 - Plot points over strata ==================================================
+
+    map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
+      addTiles()
+    mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") + 
+      mapview(sf::st_as_sf(z), zcol = 'type', color = "white", col.regions = c('royalblue', 'tomato'), cex=3, legend = TRUE,layer.name = "Samples")
+    mv@map
+    
+    
+# 10 - Calculate replacement areas for points ==================================    
+    
+    if(REPLACEMENT){
+      # Load strata
+      soil_lc <- st_read(paste0(results.path,"strata.shp"))
+      
+      # Read sampling. points from previous step
+      z <- st_read(paste0(results.path,"strat_randm_samples.shp"))
+      
+      # Apply buffer of 500 meters
+      buf.samples <- st_buffer(z, dist=distance.buffer)
+      
+      # Intersect buffers
+      samples_buffer = st_intersection(soil_lc, buf.samples)
+      samples_buffer <- samples_buffer[samples_buffer$type=="Target",]
+      samples_buffer <- samples_buffer[samples_buffer$soil_lc==samples_buffer$group,]
+      
+      # Save Sampling areas
+      st_write(samples_buffer, paste0(results.path,"replacement_areas.shp"),
+                                      delete_dsn = TRUE)
+      # Write target points only
+      targets <- z[z$type=="Target",]
+      st_write(targets, paste0(results.path,"target_points.shp"), delete_dsn = TRUE)
+    }
+    
+    
+# 11 - Stratified regular sampling ==================================    
+    # Read already created strata shapefile
+    polygons <- st_read(paste0(results.path,"strata.shp"))
+    if(REPLACEMENT){
+      polygons = st_intersection(polygons,distance.buffer)
+    }
+    
+    # Calculate the area of each polygon  
+    polygons$area <- st_area(polygons) 
+    
+    # Create a new column to group polygons by a common attribute
+    polygons$group <- polygons$soil_lc
+    # Drop units to allow computations
+    polygons <- drop_units(polygons)
+    
+    # Calculate the total area of all polygons in each group
+    group_areas <- polygons %>%
+      dplyr::group_by(group)  %>% 
+      dplyr::summarize(total_area = sum(area))
+    # Add a code to each group
+    group_codes <- polygons %>% group_by(group) %>%
+      dplyr::summarize(code = first(code)) 
+    # Join polygon strata and codes   
+    group_areas <- left_join(group_areas,st_drop_geometry(group_codes), by = "group")
+    
+    # Ensure minimum of 2 samples at each polygon in each group
+    group_areas$sample_count <- 2
+    
+    # Calculate the number of samples per group based on relative area
+    group_areas$sample_count <- 
+      group_areas$sample_count + 
+      round(group_areas$total_area/sum(group_areas$total_area) *
+              (n-sum(group_areas$sample_count)))
+    # Adjust sample size on classes
+    while (sum(group_areas$sample_count) != n) {
+      if (sum(group_areas$sample_count) > n) {
+        # Reduce sample count for the largest polygon until total count is n
+        max_index <- which.max(group_areas$sample_count)
+        group_areas$sample_count[max_index] <- group_areas$sample_count[max_index] - 1
+      } else {
+        # Increase sample count for the smallest polygon until total count is n
+        min_index <- which.min(group_areas$sample_count)
+        group_areas$sample_count[min_index] <- group_areas$sample_count[min_index] + 1
+      }
+    }
+    # Count the total samples. It must be equal to the sampling size
+    sum(group_areas$sample_count) 
+    
+    polygons <- left_join(polygons, st_drop_geometry(group_areas),
+                          by = c("soil_lc"="group"))
+    polygons <- dplyr::select(polygons, soil_lc, code.x, sample_count, geometry)
+    
+    # Generate regular points within each strata of size 3 times
+    #the required samples for each strata
+    x <- spatSample(x = vect(group_areas),
+                    size = group_areas$sample_count * 3, method = "regular")
+    
+    # Compute sampling points for strata
+    z <- x %>% 
+      st_as_sf() %>% 
+      dplyr::group_by(code) %>% 
+      dplyr::mutate(sample_count = as.numeric(sample_count),
+                    order = seq_along(code),
+                    ID = paste0(code, ".", order),
+                    type = ifelse(sample_count >= order, "Target", "Replacement")) %>% 
+      vect()
+    
+    # Find classes with missing samples
+    missing.data <- left_join(group_areas,data.frame(z) %>%
+                                dplyr::filter(type=="Target") %>%
+                                dplyr::group_by(code) %>%
+                                tally()) %>%
+      dplyr::mutate(diff=sample_count-n)
+    
+    # Determine missing sampled strata
+    missing.strata <- which(is.na(missing.data$diff))
+    
+    # Determine missing sampling point in strata (undersampled strata)
+    missing.sample = which(missing.data$diff != 0)
+    missing.number <- as.numeric(unlist(st_drop_geometry(missing.data[(missing.sample <- which(missing.data$diff != 0)),7])))
+    
+    # Compute sampling points for missing sampled strata
+    x.missing.strata <- x[1]
+    x.missing.strata$sample_count<- 0
+    
+    for(i in missing.strata){
+      xx.missing.strata <- x[1]
+      xx.missing.strata$sample_count<- 0
+      nn=0
+      while (sum(xx.missing.strata$sample_count) < 
+             group_areas[group_areas$code==i,][["sample_count"]]*5) {
+        
+        while(nn < group_areas[group_areas$code==i,][["sample_count"]]*3){
+          my.missing.strata <- spatSample(x = vect(group_areas[group_areas$code %in% i,]),
+                                          size =  group_areas[group_areas$code==i,][["sample_count"]]*5,
+                                          method = "regular")
+          nn <- nn + nrow(data.frame(my.missing.strata))
+        }
+        xx.missing.strata <- rbind(xx.missing.strata,my.missing.strata)
+        print(sum(xx.missing.strata$sample_count))
+      }
+      print(i)
+      print(xx.missing.strata)
+      x.missing.strata <- rbind(x.missing.strata,xx.missing.strata)
+    }
+    
+    # Join initial sampling with missing sampling strata data
+    x <- rbind(x, x.missing.strata)
+    
+    # Compute sampling points for missing samples (regular sampling)
+    x.missing.sample <- x[1]
+    
+    for(i in missing.sample){
+      xx.missing.sample <- x[1]
+      xx.missing.sample$sample_count<- 0
+      while (sum(xx.missing.sample$sample_count) < (group_areas[group_areas$code==i,][["sample_count"]]*3)) {
+        my.missing.sample <- spatSample(x = vect(group_areas[group_areas$code %in% i,]),
+                                        size = as.numeric(vect(group_areas[group_areas$code %in% i,])[[4]])+
+                                          (group_areas[group_areas$code==i,][["sample_count"]]*3), method = "regular")
+        
+        xx.missing.sample <- rbind(xx.missing.sample,my.missing.sample)
+        print(sum(xx.missing.sample$sample_count))
+      }
+      print(i)
+      print(xx.missing.sample)
+      x.missing.sample <- rbind(x.missing.sample,xx.missing.sample)
+    }
+    
+    # Join initial sampling with missing sampling strata data and with missing samples 
+    x <- rbind(x, x.missing.sample)
+    
+    # Remove extra artificial replacements 
+    x <- x[x$sample_count > 0,]
+    
+    # Convert and export to shapefile
+    z <- x %>% 
+      st_as_sf() %>% 
+      dplyr::group_by(code) %>% 
+      dplyr::mutate(sample_count = as.numeric(sample_count),
+                    order = seq_along(code),
+                    ID = paste0(code, ".", order),
+                    type = ifelse(sample_count >= order, "Target", "Replacement")) %>% 
+      vect()
+    writeVector(z,
+                paste0(results.path,"strat_randm_samples.shp", overwrite=TRUE))
+    
+    # Check if the number of initial target points equals the final target points 
+    n==nrow(z[z$type=="Target",])
+    n;nrow(z[z$type=="Target",])
+    
+    # Plot results
+    map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
+      addTiles()
+    mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") + 
+      mapview(sf::st_as_sf(z), zcol = 'type', color = "white", col.regions = c('royalblue', 'tomato'), cex=3, legend = TRUE,layer.name = "Samples")
+    mv@map
+    
+    
+  ## Random Sampling based on a stratified raster
+    strata <- st_read(paste0(results.path,"strata.shp"),quiet = TRUE)
+    strata$code <- as.integer(strata$code)
+    
+    # Create stratification raster 
+    strata <- rast(st_rasterize(strata["code"],st_as_stars(st_bbox(strata), nx = 250, ny = 250)))
+    names(strata) <- "strata"
+    strata <- crop(strata, nghe, mask=TRUE)
+    
+    # Create stratified random sampling
+    target <- sample_strat(
+      sraster = strata,
+      nSamp = 200
+    )
+    target$type <- "target"
+    
+    # Histogram of frequencies for targets
+    calculate_representation(
+      sraster = strata,
+      existing = target,
+      drop=0,
+      plot = TRUE 
+    )
+    
+    # Add index by strata
+    target <- target %>% 
+      st_as_sf() %>% 
+      dplyr::group_by(strata) %>% 
+      dplyr::mutate(sample_count = sum(n),
+                    order = seq_along(strata),
+                    ID = paste0(strata, ".", order)) %>% 
+      vect()
+    
+    # Histogram of frequencies for replacements
+    calculate_representation(
+      sraster = strata,
+      existing = replacement,
+      drop=0,
+      plot = TRUE 
+    )
+    
+    # Add index by strata
+    replacement <- replacement %>% 
+      st_as_sf() %>% 
+      dplyr::group_by(strata) %>% 
+      dplyr::mutate(sample_count = sum(n),
+                    order = seq_along(strata),
+                    ID = paste0(strata, ".", order)) %>% 
+      vect()
+    
+    replacement <- sample_strat(
+      sraster = strata,
+      nSamp = 200*3
+    )
+    replacement$type <- "replacement"
+    
+    # Plot samples over strata
+      # plot(strata, main="Strata and random samples")
+      # plot(nghe[1], col="transparent", add=TRUE)
+      # points(target,col="red")
+      # points(replacement,col="dodgerblue")
+      # legend("topleft", legend = c("target","replacement"), pch = 20, xpd=NA, bg="white", col=c("red","dodgerblue"))
+    
+    map = leaflet(options = leafletOptions(minZoom = 8.3)) %>%
+      addTiles()
+    mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") + 
+      mapview(target, zcol = 'type', color = "white", col.regions = c('tomato'), cex=3, legend = TRUE,layer.name = "Target") + 
+      mapview(replacement, zcol = 'type', color = "white", col.regions = c('royalblue'), cex=3, legend = TRUE,layer.name = "Replacement")
+    mv@map
+```
+
+## Script 6: Conditional Latin Hypercube Sampling {-}
+
+```{r clhs-sampling, echo=TRUE, eval=FALSE}
+#
+# Digital Soil Mapping
+# Soil Sampling Design
+# conditional Latin Hypercube Sampling
+#
+# GSP-Secretariat
+# Contact: Luis.RodriguezLado@fao.org
+
+#________________________________________________________________
+
+  # Empty environment and cache 
+  rm(list = ls())
+  gc()
+
+# Content of this script ========================================
+
+# Script for creating a sampling design based on conditioned Latin Hypercube Sampling.
+# Given a suite of covariates this algorithm will assess the optimal location of
+#  samples based on the amount of information in the set of covariates.
+# 
+# 0 - Set working directory and load packages
+# 1 - User-defined variables 
+# 2 - Import national data 
+# 3 - Compute clhs
+# 4 - Including existing legacy data in a cLHS sampling design 
+# 5 - Working with large raster data
+# 6 - Cost–constrained cLHS sampling
+# 7 - Replacement areas in cLHS design
+# 8 - Polygonize replacement areas by similarity   
+# 9 - Constrained cLHS sampling accounting for accessibility and legacy data  
+#________________________________________________________________
+
+start_time <- Sys.time()
+
+## 0 - Set working directory and load packages =================================
+  
+  #remotes::install_github("lemuscanovas/synoptReg")
+  
+  # Set working directory to source file location
+  setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+  setwd("../") # Move wd down to main folder
+  
+  # List of packages
+  packages <- c("sp","terra","raster","sf","clhs", "sgsR","entropy", "tripack",
+              "manipulate","dplyr","synoptReg")
+  # Load packages
+  lapply(packages, require, character.only = TRUE)
+  # Remove object to save memory space
+  rm(packages) 
+
+
+## 1 - User-defined variables ==================================================
+  # Path to rasters
+  raster.path <- "data/rasters/"
+  # Path to shapes
+  shp.path <- "data/shapes/"
+  # Path to results
+  results.path <- "data/results/"
+  # Buffer distance for replacement areas (clhs)
+  D <- 1000 # Buffer distance to calculate replacement areas 
+  # Define the minimum sample size. By default it uses the value calculated previously
+  minimum_n <- 180
+  # Aggregation factor for up-scaling raster covariates (optional)
+  agg.factor = 10
+
+## 2 - Import national data ====================================================
+
+  # Read Spatial data covariates as rasters with terra
+  cov.dat <-  list.files(raster.path, pattern = "tif$",  recursive = TRUE, full.names = TRUE)
+  cov.dat <- terra::rast(cov.dat) # SpatRaster from terra
+  # Load shape of district
+  nghe <- sf::st_read(file.path(paste0(shp.path,"/Nghe_An.shp")),quiet=TRUE)
+
+  # Crop covariates on administrative boundary
+  cov.dat <- crop(cov.dat, nghe, mask=TRUE)
+  # Store elevation and slope separately
+  elevation <- cov.dat$dtm_elevation_250m
+  slope <- cov.dat$dtm_slope_250m
+  
+  # Load roads
+  #roads <-  vect(file.path(paste0(shp.path,"/roads.shp")))
+  #roads <- crop(roads, nghe) 
+  roads <-  sf::st_read(file.path(paste0(shp.path,"/roads.shp")),quiet=TRUE)
+  roads <-  st_intersection(roads, nghe)
+
+  # Simplify raster information with PCA
+  pca <- raster_pca(cov.dat)
+  
+  # Get SpatRaster layers
+  cov.dat <- pca$PCA
+  # Create a raster stack to be used as input in the clhs::clhs function 
+  cov.dat.ras <- raster::stack(cov.dat) 
+  # Subset rasters
+  cov.dat <- pca$PCA[[1:first(which(pca$summaryPCA[3,]>0.99))]]
+  cov.dat.ras <-  cov.dat.ras[[1:first(which(pca$summaryPCA[3,]>0.99))]]
+  
+  # Aggregate stack to simplify data rasters for calculations 
+    # cov.dat <- aggregate(cov.dat, fact=10, fun="mean")
+  
+  # Plot of covariates
+  plot(cov.dat)
+
+  
+## 3 - Compute clhs ============================================================
+ 
+  # Distribute sampling points with clhs
+  pts <- clhs(cov.dat.ras, size = 100, iter = 10000, progress = FALSE, simple = FALSE)
+  # Plot of objective function
+  plot(pts, c('obj'))
+  # Plot cLHS samples on map
+  plot(cov.dat[[1]], main="cLHS samples")
+  points(pts$sampled_data, col="red", pch = 1)
+  
+  
+## 4 - Including existing legacy data in a cLHS sampling design ================
+  
+  # Create an artificial legacy dataset of 50 samples over the study area as an example
+  legacy.data <- spatSample(cov.dat, 50, na.rm=TRUE,xy=TRUE,method="random", as.points=T) # works with SpatRaster 
+  
+  # Get covariates data as a points
+  cov.df<- as.points(cov.dat)
+  
+  # Merge legacy and covariate information
+  leg.new <-   rbind(legacy.data, cov.df)
+  leg.new <- as.data.frame(leg.new,geom='XY')
+  # Delete data from pixels outside the study area
+  leg.new <- na.omit(leg.new)
+  
+  # Calculate clhs 100 points plus locations of legacy data
+  res <- clhs(x = leg.new, size = 100 + length(legacy.data),  iter = 10000, simple = FALSE, progress = FALSE,
+              must.include = c(1:nrow(legacy.data)))
+  plot(res, c('obj'))
+  # Get sampling points
+  points <- res$sampled_data
+  
+  # Plot points
+  plot(cov.dat[[1]], main="cLHS samples (blue circles) and legacy samples (red diamonds)")
+  points(points[,c("x","y")], col="navy", pch = 1)
+  points(legacy.data, col="red", pch = 5, cex=2)
+  
+  
+## 5 - Working with large raster data ==========================================
+  
+  ## Scaling covariates
+    # Aggregation of covariates by a factor of 10. 
+    # The original grid resolution is up-scaled using the mean value of the pixels in the grid
+    cov.dat2 <- aggregate(cov.dat, fact=10, fun="mean")
+    # Create clhs samples upon the resamples rasters  
+    resampled.clhs <- clhs(raster::stack(cov.dat2), size = 100, progress = FALSE, iter = 10000, simple = FALSE)
+    plot(resampled.clhs, c('obj'))
+    # Plot the points over the 1st raster
+    plot(cov.dat2[[1]], main="Regular resampled data")
+    points(resampled.clhs$sampled_data , col="red", pch = 1)
+
+  ## Sampling to regular points
+    # Create a regular grid of 1000 points on the covariate space
+    regular.sample <- spatSample(cov.dat, size = 1000, xy=TRUE, method="regular", na.rm=TRUE)
+    # plot the points over the 1st raster
+    plot(cov.dat[[1]], main="Regular resampled data")
+    points(regular.sample, col="red", pch = 1)
+    
+    # Create clhs samples upon the regular grid  
+    regular.sample.clhs <- clhs(regular.sample, size = 100, progress = FALSE, iter = 10000, simple = FALSE)
+    plot(regular.sample.clhs, c('obj'))
+    # Plot points of clhs samples
+    points <- regular.sample.clhs$sampled_data # Get point coordinates of clhs sampling
+    plot(cov.dat[[1]], main="cLHS samples (red) and covariate resampled points (blue)")
+    points(regular.sample, col="navy", pch = 1)
+    points(points, col="red", cex=1)
+   
+  
+# 6 - Cost–constrained cLHS sampling
+    # Create a cost surface: 'Distance to roads'
+  
+    # Calculate distance to roads with te same spatial definition than the covariates
+      # dist2access <- terra::distance(cov.dat[[1]], roads, progress=TRUE)
+      # names(dist2access) <- "dist2access"
+      # Save cost surface to disk
+      # writeRaster(dist2access, paste0(results.path,"nghe_d2roads.tif"), overwrite=TRUE)
+      
+    # Load pre-calculated distance–to–roads surface
+    dist2access <- terra::rast(paste0(results.path,"nghe_d2roads.tif"))
+    # Aggregate to the same soatial definition
+     # dist2access <- aggregate(dist2access, fact=10, fun="mean")
+    plot(dist2access)
+    plot(nghe, col="transparent", add=TRUE)
+    
+    # Add cost surface as raster layer
+    cov.dat.ras <- raster::addLayer(cov.dat.ras,raster::raster(dist2access))
+    names(cov.dat.ras)
+    
+    # Harmonize NAs
+    cov.dat.ras$dist2access <- cov.dat.ras$dist2access * cov.dat.ras[[1]]/cov.dat.ras[[1]]
+    plot(cov.dat.ras$dist2access)
+    plot(nghe, col="transparent",add=TRUE)
+    
+    # Compute sampling points
+    cost.clhs <- clhs(cov.dat.ras, size = minimum_n, iter = 10000, progress = FALSE, simple = FALSE, cost = 'dist2access',  use.cpp = TRUE)
+    plot(cost.clhs, c('obj'))
+    # Get and plot the point of samples
+    points <- cost.clhs$sampled_data  # Get point coordinates of clhs sampling
+    plot(cov.dat.ras[['dist2access']], main="cLHS samples with 'cost' constraints")
+    points(points, col="red", cex=1)
+    
+
+# 7 - Replacement areas in cLHS design  
+    
+    # Determine the similarity to points in a buffer of distance 'D'
+    # Compute the buffers around points # cov25??
+    gw <- similarity_buffer(cov.dat.ras, cost.clhs$sampled_data, buffer = D)
+
+    # Plot results
+    plot(elevation, legend=TRUE,main=paste("Similarity probability over elevation"))
+    ## Overlay points
+    points(cost.clhs$sampled_data[1], col = "dodgerblue", pch = 3)
+    ## Overlay probability stack for point 1
+    colors <- c((RColorBrewer::brewer.pal(9, "YlOrRd")))
+    terra::plot(gw[[1]], add=TRUE ,  legend=FALSE, col=colors)
+    ## Overlay 1st cLHS point
+    points(cost.clhs$sampled_data[1,1], col = "black", pch = 3,cex=1)
+    
+# 8 - Polygonize replacement areas by similarity    
+
+    # Determine a threshold break to delineate replacement areas
+    similarity_threshold <- 0.90
+    # Reclassify buffer raster data according to the threshold break of probability
+    # 1 = similarity >= similarity_break; NA =  similarity <  similarity_break
+    # Define a vector with the break intervals and the output values (NA,1) 
+    breaks <- c(0, similarity_threshold, NA, similarity_threshold, 1, 1)
+    # Convert to a matrix
+    breaks <- matrix(breaks, ncol=3, byrow=TRUE)
+    # Reclassify the data in the layers from probabilities to (NA,)
+    s = stack(lapply(1:raster::nlayers(gw), function(i){raster::reclassify(gw[[i]], breaks, right=FALSE)}))
+    
+    # Polygonize replacement areas 
+    s = lapply(as.list(s), rasterToPolygons, dissolve=TRUE)
+    s <- bind(s,keepnames=TRUE)
+    # Add the identifier of the corresponding target point
+    for(i in 1: length(s)){
+      s@data$ID[i] <- as.integer(stringr::str_replace(s@polygons[[i]]@ID,"1.",""))
+    }
+    # Clean the data by storing target ID data only
+    s@data <- s@data["ID"]
+    
+    # Plot results
+    plot(cov.dat[[1]], main=paste("cLHS samples and replacement areas for threshold = ", similarity_threshold))
+    plot(s,add=TRUE, col=NA, border="gray40")
+    points(cost.clhs$sampled_data, col="red", pch = 3)
+    
+    # Export replacement areas to shapefile 
+    s <- st_as_sf(s)
+    st_write(s, file.path(paste0(results.path,'replacement_areas_', D, '.shp')), delete_dsn = TRUE)
+    
+    # Write cLHS sampling points to shapefile
+    cost.clhs$sampled_data$ID <- row(cost.clhs$sampled_data)[,1] # Add identifier
+    out.pts <- st_as_sf(cost.clhs$sampled_data)
+    st_write(out.pts, paste0(results.path,'target_clhs.shp'), delete_dsn = TRUE)
+
+         
+# 9 - Constrained cLHS sampling taking into account accessibility and legacy data  
+    # Load legacy data 
+    legacy <- sf::st_read(file.path(paste0(shp.path,"/legacy_soils.shp")),quiet=TRUE)
+    
+    # Calculate distance to roads and delete NA in outputs
+    cost <- cov.dat 
+    # Add distance to roads co the stack
+    cost <- c(cost, rast(cov.dat.ras$dist2access))
+    cost$slope <- slope
+    # Calculate clhs points with legacy, cost and buffer to roads
+    buff_inner=20;
+    buff_outer=3000
+    # Convert roads to sf object and cast to multilinestring
+    roads2 <- st_as_sf(roads) %>%
+      st_cast("MULTILINESTRING") 
+    
+    # Calculate clhs samples using slope as cost surface, distance to roads as
+    # access limitations, and including existing legacy data
+    aa <- sgsR::sample_clhs(mraster = cost, nSamp = minimum_n, existing = legacy,
+                            iter = 10000, details = TRUE, cost="slope", access=roads2,
+                            buff_inner=buff_inner, buff_outer=buff_outer)
+    
+    ## Plot distances, roads, clhs points and legacy data 
+    plot(cost$dist2access)
+    plot(roads,add=TRUE, col="black")
+    plot(aa$samples[aa$samples$type=="new",], col= "tomato",add=TRUE)
+    plot(aa$samples[aa$samples$type=="existing",], col= "gray40", add=TRUE, pch = 5, cex=2)
+    
+    # Write samples as shapefile
+    aa$samples[c("type","dist2access")] %>%
+      st_write(paste0(results.path,'const_clhs.shp'), delete_dsn = TRUE)
+    
+```
+
+
+<!--chapter:end:11-Compendium-of-code.Rmd-->
+
+# References {-}  
+
+<!--chapter:end:references.Rmd-->
+
