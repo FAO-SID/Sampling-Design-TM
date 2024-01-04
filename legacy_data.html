@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Evaluating Soil Legacy Data Sampling for DSM |  Soil Sampling Design</title>
+  <meta name="description" content="Soil Sampling Design - SoilFer Project" />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Evaluating Soil Legacy Data Sampling for DSM |  Soil Sampling Design" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="/images/frontcover.png" />
+  <meta property="og:description" content="Soil Sampling Design - SoilFer Project" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Evaluating Soil Legacy Data Sampling for DSM |  Soil Sampling Design" />
+  
+  <meta name="twitter:description" content="Soil Sampling Design - SoilFer Project" />
+  <meta name="twitter:image" content="/images/frontcover.png" />
+
+<meta name="author" content="Rodríguez Lado, L., Angelini, M.E, Naypewe, N., Luotto, I., Yigini, Y." />
+
+
+<meta name="date" content="2024-01-04" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="setting-up-the-software-environment.html"/>
+<link rel="next" href="determining-the-minimum-sampling-size.html"/>
+<script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="assets/plotly-binding-4.10.0/plotly.js"></script>
+<script src="assets/typedarray-0.1/typedarray.min.js"></script>
+<link href="assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<link href="assets/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="assets/leaflet-1.3.1/leaflet.js"></script>
+<link href="assets/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="assets/proj4-2.6.2/proj4.min.js"></script>
+<script src="assets/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="assets/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="assets/leaflet-binding-2.1.1/leaflet.js"></script>
+<link href="assets/HomeButton-0.0.1/home-button.css" rel="stylesheet" />
+<script src="assets/HomeButton-0.0.1/home-button.js"></script>
+<script src="assets/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<script src="assets/clipboard-0.0.1/setClipboardText.js"></script>
+<link href="assets/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
+<link href="assets/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
+<script src="assets/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="assets/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Soil Samping Design</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Licence</a></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#training-material"><i class="fa fa-check"></i><b>1.1</b> Training material</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html"><i class="fa fa-check"></i><b>2</b> Setting-up the software environment</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#use-of-r-rstudio-and-r-packages"><i class="fa fa-check"></i><b>2.1</b> Use of R, RStudio and R Packages</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#obtaining-and-installing-r"><i class="fa fa-check"></i><b>2.1.1</b> Obtaining and installing R</a></li>
+<li class="chapter" data-level="2.1.2" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#obtaining-and-installing-rstudio"><i class="fa fa-check"></i><b>2.1.2</b> Obtaining and installing RStudio</a></li>
+<li class="chapter" data-level="2.1.3" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#getting-started-with-r"><i class="fa fa-check"></i><b>2.1.3</b> Getting started with R</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#r-packages"><i class="fa fa-check"></i><b>2.2</b> R packages</a></li>
+<li class="chapter" data-level="2.3" data-path="setting-up-the-software-environment.html"><a href="setting-up-the-software-environment.html#gee---google-earth-engine"><i class="fa fa-check"></i><b>2.3</b> GEE - google earth engine</a></li>
+</ul></li>
+<li class="part"><span><b>Part one – Soil Legacy Data</b></span></li>
+<li class="chapter" data-level="3" data-path="legacy_data.html"><a href="legacy_data.html"><i class="fa fa-check"></i><b>3</b> Evaluating Soil Legacy Data Sampling for DSM</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="legacy_data.html"><a href="legacy_data.html#data-preparation"><i class="fa fa-check"></i><b>3.1</b> Data Preparation</a></li>
+<li class="chapter" data-level="3.2" data-path="legacy_data.html"><a href="legacy_data.html#representativeness-of-the-legacy-soil-data"><i class="fa fa-check"></i><b>3.2</b> Representativeness of the Legacy Soil Data</a></li>
+</ul></li>
+<li class="part"><span><b>I Part two – Soil Sampling Design</b></span></li>
+<li class="chapter" data-level="4" data-path="determining-the-minimum-sampling-size.html"><a href="determining-the-minimum-sampling-size.html"><i class="fa fa-check"></i><b>4</b> Determining the minimum sampling size</a></li>
+<li class="chapter" data-level="5" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html"><i class="fa fa-check"></i><b>5</b> Stratified Sampling Design</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#general-procedure"><i class="fa fa-check"></i><b>5.1</b> General Procedure</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#strata-creation"><i class="fa fa-check"></i><b>5.1.1</b> Strata creation</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-random-sampling"><i class="fa fa-check"></i><b>5.2</b> Stratified random sampling</a></li>
+<li class="chapter" data-level="5.3" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-random-sampling-for-large-areas"><i class="fa fa-check"></i><b>5.3</b> Stratified random sampling for large areas</a></li>
+<li class="chapter" data-level="5.4" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-regular-sampling"><i class="fa fa-check"></i><b>5.4</b> Stratified regular sampling</a></li>
+<li class="chapter" data-level="5.5" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#random-sampling-based-on-a-stratified-raster"><i class="fa fa-check"></i><b>5.5</b> Random Sampling based on a stratified raster</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html"><i class="fa fa-check"></i><b>6</b> Conditioned Latin Hypercube Sampling</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#clhs-design"><i class="fa fa-check"></i><b>6.1</b> cLHS Design</a></li>
+<li class="chapter" data-level="6.2" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#including-existing-legacy-data-in-a-clhs-sampling-design"><i class="fa fa-check"></i><b>6.2</b> Including existing legacy data in a cLHS sampling design</a></li>
+<li class="chapter" data-level="6.3" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#working-with-large-raster-data"><i class="fa fa-check"></i><b>6.3</b> Working with large raster data</a></li>
+<li class="chapter" data-level="6.4" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#implementation-of-costconstrained-clhs-sampling"><i class="fa fa-check"></i><b>6.4</b> Implementation of cost–constrained cLHS sampling</a></li>
+<li class="chapter" data-level="6.5" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html#replacement-areas-in-clhs-design"><i class="fa fa-check"></i><b>6.5</b> Replacement areas in cLHS design</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html"><i class="fa fa-check"></i>Annex I: Compendium of R scripts</a>
+<ul>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-1-introduction-to-r"><i class="fa fa-check"></i>Script 1: Introduction to R</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-2-download-environmental-covariates"><i class="fa fa-check"></i>Script 2: Download environmental covariates</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-3-evaluate-legacy-data"><i class="fa fa-check"></i>Script 3: Evaluate Legacy Data</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-4-calculate-minimum-sample-size"><i class="fa fa-check"></i>Script 4: Calculate Minimum Sample Size</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-5-stratified-sampling-on-vector-and-raster-data"><i class="fa fa-check"></i>Script 5: Stratified sampling on vector and raster data</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-6-conditional-latin-hypercube-sampling"><i class="fa fa-check"></i>Script 6: Conditional Latin Hypercube Sampling</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://www.fao.org/global-soil-partnership/" target="blank">Global Soil Partnership</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"><p><img src="images/frontcover.jpg" style="top:0px;height:150px;" align="right" />
+Soil Sampling Design</p></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="legacy_data" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Evaluating Soil Legacy Data Sampling for DSM<a href="legacy_data.html#legacy_data" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Modelling techniques in Digital Soil Mapping involve the use of sampling point soil data, with its associated soil properties database, and a number of environmental covariates that will be used to ascertain the relationships of soil properties and the environment to then generalize the findings to locations where no samples have been compiled.</p>
+<p>In soil sampling design, a crucial issue is to determine both the locations and the number of the samples to be compiled. In an optimal situation, soil sample database should adequately cover all the environmental diversity space in the study area with a frequency relative to the extent of the diversity in the environmental covariates.</p>
+<p>When dealing with legacy soil data, a question that arises is if the data is representative of the environmental diversity within the study area. In this Chapter we present a method to answer this question and to build an alternative how many samples can be retrieved to cover the same environmental space as the existing soil data. The method follows the main findings in <span class="citation">(<a href="#ref-Malone" role="doc-biblioref">Malone, Minansy and Brungard, 2019</a>)</span> and developed as {R} scripts.</p>
+<p>We adapted the original scripts to make use of vector <code>'.shp'</code> and raster <code>'.tif'</code> files, as these are data formats commonly used by GIS analysts and in which both soil and environmental data is often stored. We also made some changes in order to simplify the number of R packages and to avoid the use of deprecated packages as it appears in the original code.</p>
+<div id="data-preparation" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Data Preparation<a href="legacy_data.html#data-preparation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We must load the required packages and data for the analyses. We make use of the packages <code>sp</code> and <code>terra</code> to manipulate spatial data, <code>clhs</code> for Conditioned Latin Hypercube Sampling, <code>entropy</code> to compute Kullback–Leibler (KL) divergence indexes, <code>tripack</code> for Delaunay triangulation and <code>manipulate</code> for interactive plotting within RStudio. Ensure that all these packages are installed in your system before the execution of the script.</p>
+<p>We define the working directory to the directory in which the actual file is located and load the soil legacy sampling points and the environmental rasters from the <code>data</code> folder. To avoid the definition of each environmental covariate, we first retrieve all files with the <code>.tif</code> extension and then create a <code>SpatRaster</code> object with all of them in a row.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="legacy_data.html#cb1-1" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Set working directory to source file location</span></span>
+<span id="cb1-2"><a href="legacy_data.html#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">setwd</span>(<span class="fu">dirname</span>(rstudioapi<span class="sc">::</span><span class="fu">getActiveDocumentContext</span>()<span class="sc">$</span>path))</span></code></pre></div>
+<p>Here we define a number of variables that will be used during the exercises in this manual. They include the path to raster and shp files, aggregation and disaggregation factors, and buffer distances to define potential sampling areas from sampling points. These variables are later described at the appropriate section in the manual.</p>
+<p>The original covariates are cropped to match the extent of a smaller area, the Nghe An province in this exercise, to simplify the computation time. Then, covariates are transformed by Principal Component Analysis to uncorrelated Principal Component scores. This ensures the use of a lower amount of raster data avoiding multicollinearity in the original covariates. We select the Principal Component rasters that capture 99% of the variability in the dataset.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="legacy_data.html#cb2-1" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Load soil legacy point data and environmental covariates</span></span>
+<span id="cb2-2"><a href="legacy_data.html#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Read Spatial data covariates as rasters with terra</span></span>
+<span id="cb2-3"><a href="legacy_data.html#cb2-3" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span>  <span class="fu">list.files</span>(raster.path, <span class="at">pattern =</span> <span class="st">&quot;tif$&quot;</span>,  <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-4"><a href="legacy_data.html#cb2-4" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(cov.dat) <span class="co"># SpatRaster from terra</span></span>
+<span id="cb2-5"><a href="legacy_data.html#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Aggregate stack to simplify data rasters for calculations </span></span>
+<span id="cb2-6"><a href="legacy_data.html#cb2-6" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(cov.dat, <span class="at">fact=</span>agg.factor, <span class="at">fun=</span><span class="st">&quot;mean&quot;</span>)</span>
+<span id="cb2-7"><a href="legacy_data.html#cb2-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-8"><a href="legacy_data.html#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Load shape of district</span></span>
+<span id="cb2-9"><a href="legacy_data.html#cb2-9" aria-hidden="true" tabindex="-1"></a>  nghe <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_read</span>(<span class="fu">file.path</span>(<span class="fu">paste0</span>(shp.path,<span class="st">&quot;/Nghe_An.shp&quot;</span>)),<span class="at">quiet=</span><span class="cn">TRUE</span>)</span>
+<span id="cb2-10"><a href="legacy_data.html#cb2-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-11"><a href="legacy_data.html#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Crop covariates on administrative boundary</span></span>
+<span id="cb2-12"><a href="legacy_data.html#cb2-12" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span> <span class="fu">crop</span>(cov.dat, nghe, <span class="at">mask=</span><span class="cn">TRUE</span>)</span>
+<span id="cb2-13"><a href="legacy_data.html#cb2-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-14"><a href="legacy_data.html#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transform raster information with PCA</span></span>
+<span id="cb2-15"><a href="legacy_data.html#cb2-15" aria-hidden="true" tabindex="-1"></a>  pca <span class="ot">&lt;-</span> <span class="fu">raster_pca</span>(cov.dat)</span>
+<span id="cb2-16"><a href="legacy_data.html#cb2-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-17"><a href="legacy_data.html#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get SpatRaster layers</span></span>
+<span id="cb2-18"><a href="legacy_data.html#cb2-18" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span> pca<span class="sc">$</span>PCA</span>
+<span id="cb2-19"><a href="legacy_data.html#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create a raster stack to be used as input in the clhs::clhs function </span></span>
+<span id="cb2-20"><a href="legacy_data.html#cb2-20" aria-hidden="true" tabindex="-1"></a>  cov.dat.ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(cov.dat) </span>
+<span id="cb2-21"><a href="legacy_data.html#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Subset rasters</span></span>
+<span id="cb2-22"><a href="legacy_data.html#cb2-22" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span> pca<span class="sc">$</span>PCA[[<span class="dv">1</span><span class="sc">:</span><span class="fu">first</span>(<span class="fu">which</span>(pca<span class="sc">$</span>summaryPCA[<span class="dv">3</span>,]<span class="sc">&gt;</span><span class="fl">0.99</span>))]]</span>
+<span id="cb2-23"><a href="legacy_data.html#cb2-23" aria-hidden="true" tabindex="-1"></a>  cov.dat.ras <span class="ot">&lt;-</span>  cov.dat.ras[[<span class="dv">1</span><span class="sc">:</span><span class="fu">first</span>(<span class="fu">which</span>(pca<span class="sc">$</span>summaryPCA[<span class="dv">3</span>,]<span class="sc">&gt;</span><span class="fl">0.99</span>))]]</span>
+<span id="cb2-24"><a href="legacy_data.html#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># convert to dataframe</span></span>
+<span id="cb2-25"><a href="legacy_data.html#cb2-25" aria-hidden="true" tabindex="-1"></a>  cov.dat.df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(cov.dat)</span>
+<span id="cb2-26"><a href="legacy_data.html#cb2-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-27"><a href="legacy_data.html#cb2-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Load legacy soil data</span></span>
+<span id="cb2-28"><a href="legacy_data.html#cb2-28" aria-hidden="true" tabindex="-1"></a>  p.dat <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">vect</span>(<span class="fu">file.path</span>(<span class="fu">paste0</span>(shp.path,<span class="st">&quot;/legacy_soils.shp&quot;</span>)))</span></code></pre></div>
+<p>Figure <a href="#fig-3"><strong>??</strong></a> shows the PCA-transformed raster layers used in the analyses.</p>
+<div class="figure"><span style="display:block;" id="fig:fig-3"></span>
+<img src="Technical-Manual-Soil-Sampling-Design_files/figure-html/fig-3-1.png" alt="Covariates" width="672" />
+<p class="caption">
+Figure 3.1: Covariates
+</p>
+</div>
+</div>
+<div id="representativeness-of-the-legacy-soil-data" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Representativeness of the Legacy Soil Data<a href="legacy_data.html#representativeness-of-the-legacy-soil-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The next step involves determining the distributions of environmental values in the soil samples data and comparing them with the existing distributions of each environmental variable to assess the representativeness of the existing soil samples in the environmental space.</p>
+<p>The comparison of distributions is performed using the Kullback–Leibler divergence (KL) distance, a measure used to quantify the difference between two probability distributions.
+KL–divergence compares an ‘objective’ or reference probability distribution (in this case, the distribution of covariates in the complete covariate space – P) with a ‘model’ or approximate probability distribution (the values of covariates in the soil samples – Q). The main idea is to determine how much information is lost when Q is used to approximate P. In other words, KL–divergence measures how much the Q distribution deviates from the P distribution. KL–divergence approaches 0 as the two distributions have identical quantities of information.</p>
+<p>To create a dataset with the values of the environmental parameters at the locations of the soil samples, we cross-reference soil and environmental data.</p>
+<p>First, we calculate a ‘n–matrix’ with the values of the covariates, dividing their values into ‘n’ bins according to an equal–probability distribution. Each bin captures the environmental variability within its interval in the total distribution. In this exercise, ‘n’ equals to 25. The result is a 26×4 matrix, where the rows represent the upper and lower limit of the bin (26 thresholds are required to represent 25 bins), and the columns correspond to the number of variables used as environmental proxies.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="legacy_data.html#cb3-1" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Variability matrix in the covariates</span></span>
+<span id="cb3-2"><a href="legacy_data.html#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define Number of bins</span></span>
+<span id="cb3-3"><a href="legacy_data.html#cb3-3" aria-hidden="true" tabindex="-1"></a>      nb <span class="ot">&lt;-</span> <span class="dv">25</span></span>
+<span id="cb3-4"><a href="legacy_data.html#cb3-4" aria-hidden="true" tabindex="-1"></a>      <span class="co">#quantile matrix (of the covariate data)</span></span>
+<span id="cb3-5"><a href="legacy_data.html#cb3-5" aria-hidden="true" tabindex="-1"></a>      q.mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow=</span>(nb<span class="sc">+</span><span class="dv">1</span>), <span class="at">ncol=</span> <span class="fu">nlyr</span>(cov.dat))</span>
+<span id="cb3-6"><a href="legacy_data.html#cb3-6" aria-hidden="true" tabindex="-1"></a>      j<span class="ot">=</span><span class="dv">1</span></span>
+<span id="cb3-7"><a href="legacy_data.html#cb3-7" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlyr</span>(cov.dat)){ <span class="co">#note the index start here</span></span>
+<span id="cb3-8"><a href="legacy_data.html#cb3-8" aria-hidden="true" tabindex="-1"></a>      <span class="co">#get a quantile matrix together of the covariates</span></span>
+<span id="cb3-9"><a href="legacy_data.html#cb3-9" aria-hidden="true" tabindex="-1"></a>        ran1 <span class="ot">&lt;-</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">2</span>] <span class="sc">-</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">1</span>]</span>
+<span id="cb3-10"><a href="legacy_data.html#cb3-10" aria-hidden="true" tabindex="-1"></a>        step1 <span class="ot">&lt;-</span> ran1<span class="sc">/</span>nb </span>
+<span id="cb3-11"><a href="legacy_data.html#cb3-11" aria-hidden="true" tabindex="-1"></a>        q.mat[,j] <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">1</span>], <span class="at">to =</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">2</span>], <span class="at">by =</span>step1)</span>
+<span id="cb3-12"><a href="legacy_data.html#cb3-12" aria-hidden="true" tabindex="-1"></a>        j<span class="ot">&lt;-</span> j<span class="sc">+</span><span class="dv">1</span>}</span></code></pre></div>
+<p>From this matrix, we compute the hypercube matrix of covariates in the whole covariate space.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="legacy_data.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Hypercube of &quot;objective&quot; distribution (P) – covariates</span></span>
+<span id="cb4-2"><a href="legacy_data.html#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert SpatRaster to dataframe for calculations</span></span>
+<span id="cb4-3"><a href="legacy_data.html#cb4-3" aria-hidden="true" tabindex="-1"></a>      cov.mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow =</span> nb, <span class="at">ncol =</span> <span class="fu">ncol</span>(q.mat))</span>
+<span id="cb4-4"><a href="legacy_data.html#cb4-4" aria-hidden="true" tabindex="-1"></a>      cov.dat.mx <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(cov.dat.df)</span>
+<span id="cb4-5"><a href="legacy_data.html#cb4-5" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(cov.dat.mx)) {</span>
+<span id="cb4-6"><a href="legacy_data.html#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(cov.dat.mx)) {</span>
+<span id="cb4-7"><a href="legacy_data.html#cb4-7" aria-hidden="true" tabindex="-1"></a>          dd <span class="ot">&lt;-</span> cov.dat.mx[[i, j]]</span>
+<span id="cb4-8"><a href="legacy_data.html#cb4-8" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb4-9"><a href="legacy_data.html#cb4-9" aria-hidden="true" tabindex="-1"></a>          <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(dd)) {</span>
+<span id="cb4-10"><a href="legacy_data.html#cb4-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nb) {</span>
+<span id="cb4-11"><a href="legacy_data.html#cb4-11" aria-hidden="true" tabindex="-1"></a>              kl <span class="ot">&lt;-</span> q.mat[k, j]</span>
+<span id="cb4-12"><a href="legacy_data.html#cb4-12" aria-hidden="true" tabindex="-1"></a>              ku <span class="ot">&lt;-</span> q.mat[k <span class="sc">+</span> <span class="dv">1</span>, j]</span>
+<span id="cb4-13"><a href="legacy_data.html#cb4-13" aria-hidden="true" tabindex="-1"></a>              </span>
+<span id="cb4-14"><a href="legacy_data.html#cb4-14" aria-hidden="true" tabindex="-1"></a>              <span class="cf">if</span> (dd <span class="sc">&gt;=</span> kl <span class="sc">&amp;&amp;</span> dd <span class="sc">&lt;=</span> ku) {</span>
+<span id="cb4-15"><a href="legacy_data.html#cb4-15" aria-hidden="true" tabindex="-1"></a>                cov.mat[k, j] <span class="ot">&lt;-</span> cov.mat[k, j] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb4-16"><a href="legacy_data.html#cb4-16" aria-hidden="true" tabindex="-1"></a>              }</span>
+<span id="cb4-17"><a href="legacy_data.html#cb4-17" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb4-18"><a href="legacy_data.html#cb4-18" aria-hidden="true" tabindex="-1"></a>          }</span>
+<span id="cb4-19"><a href="legacy_data.html#cb4-19" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb4-20"><a href="legacy_data.html#cb4-20" aria-hidden="true" tabindex="-1"></a>      }</span></code></pre></div>
+<p>Te, we calculate the hypercube matrix of covariates in the sample space.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="legacy_data.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Sample data hypercube</span></span>
+<span id="cb5-2"><a href="legacy_data.html#cb5-2" aria-hidden="true" tabindex="-1"></a>      h.mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow =</span> nb, <span class="at">ncol =</span> <span class="fu">ncol</span>(q.mat))</span>
+<span id="cb5-3"><a href="legacy_data.html#cb5-3" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(p.dat_I.df)) {</span>
+<span id="cb5-4"><a href="legacy_data.html#cb5-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(p.dat_I.df)) {</span>
+<span id="cb5-5"><a href="legacy_data.html#cb5-5" aria-hidden="true" tabindex="-1"></a>          dd <span class="ot">&lt;-</span> p.dat_I.df[i, j]</span>
+<span id="cb5-6"><a href="legacy_data.html#cb5-6" aria-hidden="true" tabindex="-1"></a>          </span>
+<span id="cb5-7"><a href="legacy_data.html#cb5-7" aria-hidden="true" tabindex="-1"></a>          <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(dd)) {</span>
+<span id="cb5-8"><a href="legacy_data.html#cb5-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nb) {</span>
+<span id="cb5-9"><a href="legacy_data.html#cb5-9" aria-hidden="true" tabindex="-1"></a>              kl <span class="ot">&lt;-</span> q.mat[k, j]</span>
+<span id="cb5-10"><a href="legacy_data.html#cb5-10" aria-hidden="true" tabindex="-1"></a>              ku <span class="ot">&lt;-</span> q.mat[k <span class="sc">+</span> <span class="dv">1</span>, j]</span>
+<span id="cb5-11"><a href="legacy_data.html#cb5-11" aria-hidden="true" tabindex="-1"></a>              </span>
+<span id="cb5-12"><a href="legacy_data.html#cb5-12" aria-hidden="true" tabindex="-1"></a>              <span class="cf">if</span> (dd <span class="sc">&gt;=</span> kl <span class="sc">&amp;&amp;</span> dd <span class="sc">&lt;=</span> ku) {</span>
+<span id="cb5-13"><a href="legacy_data.html#cb5-13" aria-hidden="true" tabindex="-1"></a>                h.mat[k, j] <span class="ot">&lt;-</span> h.mat[k, j] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb5-14"><a href="legacy_data.html#cb5-14" aria-hidden="true" tabindex="-1"></a>              }</span>
+<span id="cb5-15"><a href="legacy_data.html#cb5-15" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb5-16"><a href="legacy_data.html#cb5-16" aria-hidden="true" tabindex="-1"></a>          }</span>
+<span id="cb5-17"><a href="legacy_data.html#cb5-17" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb5-18"><a href="legacy_data.html#cb5-18" aria-hidden="true" tabindex="-1"></a>      }</span></code></pre></div>
+<ul>
+<li><strong>KL–divergence</strong></li>
+</ul>
+<p>We calculate the KL–divergence to measure how much the distribution of covariates in the sample space (Q) deviates from the distribution of covariates in the complete study area space (P).</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="legacy_data.html#cb6-1" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Compare covariate distributions in P and Q with Kullback–Leibler (KL) divergence</span></span>
+<span id="cb6-2"><a href="legacy_data.html#cb6-2" aria-hidden="true" tabindex="-1"></a>      kl.index <span class="ot">&lt;-</span><span class="fu">c</span>()</span>
+<span id="cb6-3"><a href="legacy_data.html#cb6-3" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(cov.dat.df)){</span>
+<span id="cb6-4"><a href="legacy_data.html#cb6-4" aria-hidden="true" tabindex="-1"></a>        kl <span class="ot">&lt;-</span>    <span class="fu">KL.empirical</span>(<span class="fu">c</span>(cov.mat[,i]), <span class="fu">c</span>(h.mat[,i]))</span>
+<span id="cb6-5"><a href="legacy_data.html#cb6-5" aria-hidden="true" tabindex="-1"></a>        kl.index <span class="ot">&lt;-</span> <span class="fu">c</span>(kl.index,kl)</span>
+<span id="cb6-6"><a href="legacy_data.html#cb6-6" aria-hidden="true" tabindex="-1"></a>        klo <span class="ot">&lt;-</span>  <span class="fu">mean</span>(kl.index)</span>
+<span id="cb6-7"><a href="legacy_data.html#cb6-7" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb6-8"><a href="legacy_data.html#cb6-8" aria-hidden="true" tabindex="-1"></a>      <span class="co">#print(kl.index) # KL divergences of each covariate</span></span>
+<span id="cb6-9"><a href="legacy_data.html#cb6-9" aria-hidden="true" tabindex="-1"></a>      <span class="co">#print(klo) # KL divergence in the existing soil samples</span></span></code></pre></div>
+<p>The KL–divergence is always greater than or equal to zero, and reaches its minimum value (zero) only when P and Q are identical. Thus, lower values of KL–divergence indicate a better match between both the sample and the study area spaces, suggesting that the sample space provides a fair representation of the environmental conditions in the study area.</p>
+<p>In this case, the KL–divergence value is 0.175, which quantifies the amount of environmental variability in the study area captured by the legacy samples.</p>
+<ul>
+<li><strong>Percent of representativeness in relation to the overall environmental conditions</strong></li>
+</ul>
+<p>Finally, we can assess the extent to which our legacy soil dataset represents the existing environmental conditions in the study area. We calculate the proportion of pixels in the study area that would fall within the convex hull polygon delineated based on the environmental conditions found only at the locations of the soil legacy data. The convex hull polygon is created using a Principal Component transformation of the data in the soil legacy dataset, utilizing the outer limits of the scores of the points projected onto the two main components (Fig. <a href="#fig-4"><strong>??</strong></a>).</p>
+<div class="figure"><span style="display:block;" id="fig:fig-4"></span>
+<img src="Technical-Manual-Soil-Sampling-Design_files/figure-html/fig-4-1.png" alt="PCA plot of the covariate" width="672" />
+<p class="caption">
+Figure 3.2: PCA plot of the covariate
+</p>
+</div>
+<p>This indicates that 95.3% of the existing conditions in the study area are encompassed within the convex hull delineated using the data from the soil samples. This percentage shows the level of adequacy of the legacy data for DSM in the area.</p>
+
+</div>
+</div>
+
+
+
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body">
+<div id="ref-Malone" class="csl-entry">
+<strong>Malone, B.P., Minansy, B. &amp; Brungard, C.</strong> 2019. Some methods to improve the utility of conditioned latin hypercube sampling. <em>PeerJ</em>, 7: e6451. <a href="https://doi.org/10.7717/peerj.6451">https://doi.org/10.7717/peerj.6451</a>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="setting-up-the-software-environment.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="determining-the-minimum-sampling-size.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/luislado/Sampling_Design_GSP/edit/master/03-Legacy-data.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Technical Manual Soil Sampling Design.pdf", "Technical Manual Soil Sampling Design.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection",
+"scroll_highlight": true
+},
+"toolbar": {
+"position": "static"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
