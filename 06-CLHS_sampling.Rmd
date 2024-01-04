@@ -35,7 +35,7 @@ With the minimum sampling size of `r minimum_n` calculated before, we can conduc
 
 ```
 
-We use the rasters of `r paste(shQuote(names(cov.dat)), collapse = ", ")` as covariates, which we trim by the administrative boundary of the 'Nghe An' province as an example to speed up the calculations in the exercise. The rasters are loaded as a raster stack, masked, and subjected to PCA transformation to reduce collinearity in the dataset. The PCA components that capture 99% of the variability in the data are retained as representatives of the environmental diversity in the area. Rasters of elevation and slope are kept separately for further analyses. A shapefile of roads is also loaded to account for the sampling cost associated with walking distances from roads. 
+We use the rasters of as covariates, which we trim by the administrative boundary of the 'Nghe An' province as an example to speed up the calculations in the exercise. The rasters are loaded as a raster stack, masked, and subjected to PCA transformation to reduce collinearity in the dataset. The PCA components that capture 99% of the variability in the data are retained as representatives of the environmental diversity in the area. Rasters of elevation and slope are kept separately for further analyses. A shapefile of roads is also loaded to account for the sampling cost associated with walking distances from roads. 
 
 
 ```{r load_data_06, eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
