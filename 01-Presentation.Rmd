@@ -44,7 +44,7 @@ When selecting a suitable probability sampling design for these dual objectives,
 2.  Stratified random sampling using subareas as strata, particularly when aiming to estimate means or totals for these subareas.
 3.  Geographical spreading of sampling units, potentially benefiting from spatial analysis methods like kriging.
 
-## Methodologies in This Technical Manual
+## Sampling strategies in this Technical Manual
 
 This technical manual primarily focuses on two advanced soil sampling methodologies: Conditioned Latin Hypercube Sampling (cLHS) and Stratified Simple Random Sampling.
 
@@ -52,11 +52,13 @@ cLHS is a model-based method adapted for observational studies, especially effec
 
 On the other hand, Stratified Simple Random Sampling is a design-based probability sampling technique. This method is utilized to enhance sampling precision by dividing a heterogeneous population into more homogeneous subgroups or strata, such as different soil types or land use categories. Within each stratum, simple random sampling is conducted. This approach is beneficial for increasing statistical efficiency and reducing variance within each stratum. It's broadly applicable in various fields, notably in ecological and environmental studies, where it's used to sample distinct sub-areas with unique characteristics.
 
-# How to use this manual
+We present implementations of these methods at a national scale for real case scenarios considering different constraints.
 
-The manual is structured in two parts. `'Part One'` presents a methodology to evaluate the capacity of an existing soil legacy data to represent the potential soil diversity within a certain study area and determine whether it is a valid set for Digital Soil Mapping purposes. We use the *Kullback-Leibler divergence* (KL) measurement to quantify the difference between the probability distributions of covariate values in the legacy samples set and in the whole area and determine how much information is lost when the sample set is used to approximate the diversity in the existing environmental conditions in the whole area.
+## How to use this manual
 
-In `'Part Two'` we present several methods for creating soil sampling designs. We start with the determination of the minimum sample size required for describing most of the environmental diversity in the area, to the creation of sampling designs. We present examples of various sampling methods, ranging from traditional grid-based approaches to advanced statistical sampling strategies. We include methods for systematic, random and stratified sampling, evaluating their strengths and weaknesses in the context of DSM.
+The manual is structured in two parts. `'Part One'` presents a methodology to evaluate the capacity of existing soil legacy data to represent the potential soil diversity within a certain study area and determine whether it is a valid set for Digital Soil Mapping purposes. We use the *Kullback-Leibler divergence* (KL) measurement to quantify the difference between the probability distributions of covariate values in the legacy samples set and in the whole area and determine how much information is lost when the sample set is used to approximate the diversity in the existing environmental conditions in the whole area.
+
+In `'Part Two'` we present several methods for creating soil sampling designs. We start with the determination of the minimum sample size required for describing most of the environmental diversity in the area to the creation of sampling designs. We present examples of various sampling methods, ranging from traditional grid-based approaches to advanced statistical sampling strategies. We include systematic, random and stratified sampling methods, evaluating their strengths and weaknesses in the context of DSM.
 
 ## Training material
 
