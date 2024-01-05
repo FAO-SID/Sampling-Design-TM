@@ -54,6 +54,8 @@ Here we define a number of variables that will be used during the exercises in t
     shp.path <- "data/shapes"
   # Path to results
     results.path <- "data/results/"
+  # Path to additional data
+    other.path <- "data/other/"
   # Aggregation factor for up-scaling raster covariates (optional)
     agg.factor = 10
 
@@ -94,7 +96,7 @@ The original covariates are cropped to match the extent of a smaller area, the N
   
 ```
 
-Figure \@ref(fig-3) shows the PCA-transformed raster layers used in the analyses.
+Figure \@ref(fig:fig-3) shows the PCA-transformed raster layers used in the analyses.
 
 ```{r, fig-3, fig.cap = "Covariates", echo = FALSE}
   ## Plot covariates
@@ -219,7 +221,7 @@ In this case, the KL–divergence value is `r round(klo,3)`, which quantifies th
 
 * **Percent of representativeness in relation to the overall environmental conditions**
 
-Finally, we can assess the extent to which our legacy soil dataset represents the existing environmental conditions in the study area. We calculate the proportion of pixels in the study area that would fall within the convex hull polygon delineated based on the environmental conditions found only at the locations of the soil legacy data. The convex hull polygon is created using a Principal Component transformation of the data in the soil legacy dataset, utilizing the outer limits of the scores of the points projected onto the two main components (Fig. \@ref(fig-4)).
+Finally, we can assess the extent to which our legacy soil dataset represents the existing environmental conditions in the study area. We calculate the proportion of pixels in the study area that would fall within the convex hull polygon delineated based on the environmental conditions found only at the locations of the soil legacy data. The convex hull polygon is created using a Principal Component transformation of the data in the soil legacy dataset, utilizing the outer limits of the scores of the points projected onto the two main components (Fig. \@ref(fig:fig-4)).
 
 
 ```{r, fig-4, fig.cap = "PCA plot of the covariate", echo = FALSE}

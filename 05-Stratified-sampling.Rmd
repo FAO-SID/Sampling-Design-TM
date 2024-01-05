@@ -1,11 +1,11 @@
 
-# Stratified Sampling Design
+# Stratified Simple Random Sampling
 
-Stratified random sampling is a technique where the study area is divided into different `groups` or `strata` based on certain environmental traits and a number of random samples are taken from within each group. One of the primary advantages of stratified sampling is its ability to capture the diversity within a population by making sure each group is represented. It can provide a more accurate reflection of the entire population compared to random sampling, especially when the groups are distinct and have unique qualities. This approach is particularly beneficial when certain subgroups within the population are specifically noteworthy. It also allows for more precise estimates with a smaller total sample size compared to simple random choice. Stratified sampling presents some disadvantages. Achieving effective categories requires a proper definition and delineation of the initial information to create the `strata`. The classification of the environmental information into categories and ensuring fair portrayal of each can be intricate and time–taking and mislabeling elements into an improper group can lead to skewed outcomes.
+Stratified simple random sampling is a technique where the study area is divided into different `groups` or `strata` based on certain environmental traits and a number of random samples are taken from within each group. One of the primary advantages of stratified sampling is its ability to capture the diversity within a population by making sure each group is represented. It can provide a more accurate reflection of the entire population compared to random sampling, especially when the groups are distinct and have unique qualities. This approach is particularly beneficial when certain subgroups within the population are specifically noteworthy. It also allows for more precise estimates with a smaller total sample size compared to simple random choice. Stratified sampling presents some disadvantages. Achieving effective categories requires a proper definition and delineation of the initial information to create the `strata`. The classification of the environmental information into categories and ensuring fair portrayal of each can be intricate and time–taking and mislabeling elements into an improper group can lead to skewed outcomes.
 
 ## General Procedure
 
-The creation of a  stratified random sampling design involves the identification of relevant features describing the environmental diversity in the area (soil and landcover are the environmental variables generally used to define strata), delineation of the strata, determination of the number of samples to distribute to each stratum, followed by random sampling within it. By identifying relevant classes, combining them to define strata and allocating an appropriate number of samples to each stratum, a representative sample can be obtained. Random sampling within each stratum helps to ensure that the sample is unbiased and provides a fair representation of the overall conditions in the area.
+The creation of a stratified simple random sampling design involves the identification of relevant features describing the environmental diversity in the area (soil and landcover are the environmental variables generally used to define strata), delineation of the strata, determination of the number of samples to distribute to each stratum, followed by random sampling within it. By identifying relevant classes, combining them to define strata and allocating an appropriate number of samples to each stratum, a representative sample can be obtained. Random sampling within each stratum helps to ensure that the sample is unbiased and provides a fair representation of the overall conditions in the area.
 
 The first question is about how many samples must be retrieved from each strata. The sampling scheme starts with the definition of the total number of samples to collect. In this case, the determination of the sample size is a complex and highly variable process based, among others, on the specific goals of the study, the variability of environmental proxies, the statistical requirements for accuracy and confidence, as well as additional considerations such as accessibility, costs and available resources. The optimal number of samples can be determined following the method proposed in Chapter 2 of this manual. The number of samples within each stratum is calculated using an area–weighted approach taking into account the relative area of each stratum. The sampling design in this section must also comply with the following requirements:
 
@@ -364,11 +364,11 @@ Results are shown in Figure \@ref(fig:fig-13).
 
 
 
-## Stratified random sampling for large areas
+## Stratified simple random sampling for large areas
 
-The implementation of a stratified random sampling, along with target and replacement points, can present operating difficulties when dealing with areas of significant size and with locations that are hard to reach. To address this issue, the sampling approach can be modified by excluding areas with limited accessibility.
+The implementation of a stratified simple random sampling, along with target and replacement points, can present operating difficulties when dealing with areas of significant size and with locations that are hard to reach. To address this issue, the sampling approach can be modified by excluding areas with limited accessibility.
 
-This modification can streamline fieldwork operations and establish a feasible sampling method while still retaining the essence of the stratified random sampling framework. By excluding areas with limited accessibility, the sampling design can be adjusted to ensure a more practical and effective approach to data collection.
+This modification can streamline fieldwork operations and establish a feasible sampling method while still retaining the essence of the stratified simple random sampling framework. By excluding areas with limited accessibility, the sampling design can be adjusted to ensure a more practical and effective approach to data collection.
 
  * **Delineation of sampling accessibility:** The sampling area can be further limited based on accessibility considerations. Areas with very limited accessibility, defined as regions located more than 1 kilometre away from a main road or access path, may be excluded from sampling areas. To accomplish this, a map of main roads and paths can be used to establish a sampling buffer that includes areas within a 1–kilometre buffer around the road infrastructures. This exclusion helps to eliminate the most remote and challenging–to–access areas. An additional layer of accessibility information can be incorporated based on population distribution in the country, considering that, if population is present, there is a high change that points in the surroundings can be accessible for sampling. In this case, populated nuclei are vectorized into points and a 250–meter buffer is then generated around each point. These resulting areas can be then added to the 1–kilometre buffer around the roads, which collectively defined the final sampling area.
  
@@ -407,9 +407,9 @@ This modification can streamline fieldwork operations and establish a feasible s
 ```
 
 
-## Stratified regular sampling
+## Stratified simple regular sampling
 
-The procedure for creating a stratified regular sampling design is identical to that presented for stratified random sampling, with the only distinction that the locations of the sampling points are distributed in a regular spatial grid. This transformation is achieved by changing the method from 'random' to 'regular' in the spatSample functions within the script above. 
+The procedure for creating a stratified simple regular sampling design is identical to that presented for stratified simple random sampling, with the only distinction that the locations of the sampling points are distributed in a regular spatial grid. This transformation is achieved by changing the method from 'random' to 'regular' in the spatSample functions within the script above. 
 
 
 ```{r regular–sampling, eval=TRUE, include=FALSE}
@@ -577,7 +577,7 @@ z <- x %>%
 ```
 
 
-## Random Sampling based on a stratified raster
+## Simple Random Sampling based on a stratified raster
 
 Finally, it is also possible to create a stratified area weighted random sampling using raster strata. The procedure involves the creation of the strata as a raster file and implement a random sampling using the frequencies of the strata as a guideline for distribution of the samples proportionally to their frequencies. This method is easily implemented using the package 'sgsR' [@sgsr]. 
 
@@ -591,7 +591,7 @@ Finally, it is also possible to create a stratified area weighted random samplin
   names(strata) <- "strata"
   strata <- crop(strata, nghe, mask=TRUE)
   
-  # Create stratified random sampling
+  # Create stratified simple random sampling
   target <- sample_strat(
     sraster = strata,
     nSamp = 200

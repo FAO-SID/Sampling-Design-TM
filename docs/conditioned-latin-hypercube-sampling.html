@@ -30,7 +30,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="stratified-sampling-design.html"/>
+<link rel="prev" href="stratified-simple-random-sampling.html"/>
 <link rel="next" href="annex-i-compendium-of-r-scripts.html"/>
 <script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -208,16 +208,16 @@ div.csl-indent {
 </ul></li>
 <li class="part"><span><b>I Part two – Soil Sampling Design</b></span></li>
 <li class="chapter" data-level="4" data-path="determining-the-minimum-sampling-size.html"><a href="determining-the-minimum-sampling-size.html"><i class="fa fa-check"></i><b>4</b> Determining the minimum sampling size</a></li>
-<li class="chapter" data-level="5" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html"><i class="fa fa-check"></i><b>5</b> Stratified Sampling Design</a>
+<li class="chapter" data-level="5" data-path="stratified-simple-random-sampling.html"><a href="stratified-simple-random-sampling.html"><i class="fa fa-check"></i><b>5</b> Stratified Simple Random Sampling</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#general-procedure"><i class="fa fa-check"></i><b>5.1</b> General Procedure</a>
+<li class="chapter" data-level="5.1" data-path="stratified-simple-random-sampling.html"><a href="stratified-simple-random-sampling.html#general-procedure"><i class="fa fa-check"></i><b>5.1</b> General Procedure</a>
 <ul>
-<li class="chapter" data-level="5.1.1" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#strata-creation"><i class="fa fa-check"></i><b>5.1.1</b> Strata creation</a></li>
+<li class="chapter" data-level="5.1.1" data-path="stratified-simple-random-sampling.html"><a href="stratified-simple-random-sampling.html#strata-creation"><i class="fa fa-check"></i><b>5.1.1</b> Strata creation</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-random-sampling"><i class="fa fa-check"></i><b>5.2</b> Stratified random sampling</a></li>
-<li class="chapter" data-level="5.3" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-random-sampling-for-large-areas"><i class="fa fa-check"></i><b>5.3</b> Stratified random sampling for large areas</a></li>
-<li class="chapter" data-level="5.4" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-regular-sampling"><i class="fa fa-check"></i><b>5.4</b> Stratified regular sampling</a></li>
-<li class="chapter" data-level="5.5" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#random-sampling-based-on-a-stratified-raster"><i class="fa fa-check"></i><b>5.5</b> Random Sampling based on a stratified raster</a></li>
+<li class="chapter" data-level="5.2" data-path="stratified-simple-random-sampling.html"><a href="stratified-simple-random-sampling.html#stratified-random-sampling"><i class="fa fa-check"></i><b>5.2</b> Stratified random sampling</a></li>
+<li class="chapter" data-level="5.3" data-path="stratified-simple-random-sampling.html"><a href="stratified-simple-random-sampling.html#stratified-simple-random-sampling-for-large-areas"><i class="fa fa-check"></i><b>5.3</b> Stratified simple random sampling for large areas</a></li>
+<li class="chapter" data-level="5.4" data-path="stratified-simple-random-sampling.html"><a href="stratified-simple-random-sampling.html#stratified-simple-regular-sampling"><i class="fa fa-check"></i><b>5.4</b> Stratified simple regular sampling</a></li>
+<li class="chapter" data-level="5.5" data-path="stratified-simple-random-sampling.html"><a href="stratified-simple-random-sampling.html#simple-random-sampling-based-on-a-stratified-raster"><i class="fa fa-check"></i><b>5.5</b> Simple Random Sampling based on a stratified raster</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html"><i class="fa fa-check"></i><b>6</b> Conditioned Latin Hypercube Sampling</a>
 <ul>
@@ -266,20 +266,23 @@ Soil Sampling Design</p></a>
 <div id="clhs-design" class="section level2 hasAnchor" number="6.1">
 <h2><span class="header-section-number">6.1</span> cLHS Design<a href="conditioned-latin-hypercube-sampling.html#clhs-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>As for stratified sampling, the creation target points from a conditioned Latin Hypercube Sampling design involves the identification of the relevant features describing the environmental diversity in the area. In this case, the environmental parameters are incorporated in the form of raster covariates. The determination of the number of samples in the design is also required. This step can be calculated following the information already provided in this manual.</p>
-<p>With the minimum sampling size of 165 calculated before, we can conduct conditioned Latin Hypercube Sampling design for the area in the example using the R package <code>'cLHS'</code> available at CRAN.</p>
+<p>With the minimum sampling size of 167 calculated before, we can conduct conditioned Latin Hypercube Sampling design for the area in the example using the R package <code>'cLHS'</code> available at CRAN.</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="conditioned-latin-hypercube-sampling.html#cb39-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Path to rasters</span></span>
 <span id="cb39-2"><a href="conditioned-latin-hypercube-sampling.html#cb39-2" aria-hidden="true" tabindex="-1"></a>  raster.path <span class="ot">&lt;-</span> <span class="st">&quot;data/rasters/&quot;</span></span>
 <span id="cb39-3"><a href="conditioned-latin-hypercube-sampling.html#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Path to shapes</span></span>
 <span id="cb39-4"><a href="conditioned-latin-hypercube-sampling.html#cb39-4" aria-hidden="true" tabindex="-1"></a>  shp.path <span class="ot">&lt;-</span> <span class="st">&quot;data/shapes/&quot;</span></span>
 <span id="cb39-5"><a href="conditioned-latin-hypercube-sampling.html#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Path to results</span></span>
 <span id="cb39-6"><a href="conditioned-latin-hypercube-sampling.html#cb39-6" aria-hidden="true" tabindex="-1"></a>  results.path <span class="ot">&lt;-</span> <span class="st">&quot;data/results/&quot;</span></span>
-<span id="cb39-7"><a href="conditioned-latin-hypercube-sampling.html#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Aggregation factor for up-scaling raster covariates (optional)</span></span>
-<span id="cb39-8"><a href="conditioned-latin-hypercube-sampling.html#cb39-8" aria-hidden="true" tabindex="-1"></a>  agg.factor <span class="ot">=</span> <span class="dv">10</span></span>
-<span id="cb39-9"><a href="conditioned-latin-hypercube-sampling.html#cb39-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Buffer distance for replacement areas (clhs)</span></span>
-<span id="cb39-10"><a href="conditioned-latin-hypercube-sampling.html#cb39-10" aria-hidden="true" tabindex="-1"></a>  D <span class="ot">&lt;-</span> <span class="dv">1000</span> <span class="co"># Buffer distance to calculate replacement areas</span></span>
-<span id="cb39-11"><a href="conditioned-latin-hypercube-sampling.html#cb39-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define the minimum sample size. By default it uses the value calculated previously</span></span>
-<span id="cb39-12"><a href="conditioned-latin-hypercube-sampling.html#cb39-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#minimum_n &lt;- minimum_n</span></span></code></pre></div>
-<p>We use the rasters of ‘PC1’, ‘PC2’, ‘PC3’, ‘PC4’, ‘PC5’, ‘PC6’, ‘PC7’, ‘PC8’, ‘PC9’, ‘PC10’ as covariates, which we trim by the administrative boundary of the ‘Nghe An’ province as an example to speed up the calculations in the exercise. The rasters are loaded as a raster stack, masked, and subjected to PCA transformation to reduce collinearity in the dataset. The PCA components that capture 99% of the variability in the data are retained as representatives of the environmental diversity in the area. Rasters of elevation and slope are kept separately for further analyses. A shapefile of roads is also loaded to account for the sampling cost associated with walking distances from roads.</p>
+<span id="cb39-7"><a href="conditioned-latin-hypercube-sampling.html#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Path to additional data</span></span>
+<span id="cb39-8"><a href="conditioned-latin-hypercube-sampling.html#cb39-8" aria-hidden="true" tabindex="-1"></a>  other.path <span class="ot">&lt;-</span> <span class="st">&quot;data/other/&quot;</span></span>
+<span id="cb39-9"><a href="conditioned-latin-hypercube-sampling.html#cb39-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb39-10"><a href="conditioned-latin-hypercube-sampling.html#cb39-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Aggregation factor for up-scaling raster covariates (optional)</span></span>
+<span id="cb39-11"><a href="conditioned-latin-hypercube-sampling.html#cb39-11" aria-hidden="true" tabindex="-1"></a>  agg.factor <span class="ot">=</span> <span class="dv">10</span></span>
+<span id="cb39-12"><a href="conditioned-latin-hypercube-sampling.html#cb39-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Buffer distance for replacement areas (clhs)</span></span>
+<span id="cb39-13"><a href="conditioned-latin-hypercube-sampling.html#cb39-13" aria-hidden="true" tabindex="-1"></a>  D <span class="ot">&lt;-</span> <span class="dv">1000</span> <span class="co"># Buffer distance to calculate replacement areas</span></span>
+<span id="cb39-14"><a href="conditioned-latin-hypercube-sampling.html#cb39-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define the minimum sample size. By default it uses the value calculated previously</span></span>
+<span id="cb39-15"><a href="conditioned-latin-hypercube-sampling.html#cb39-15" aria-hidden="true" tabindex="-1"></a>  <span class="co">#minimum_n &lt;- minimum_n</span></span></code></pre></div>
+<p>We use the rasters of as covariates, which we trim by the administrative boundary of the ‘Nghe An’ province as an example to speed up the calculations in the exercise. The rasters are loaded as a raster stack, masked, and subjected to PCA transformation to reduce collinearity in the dataset. The PCA components that capture 99% of the variability in the data are retained as representatives of the environmental diversity in the area. Rasters of elevation and slope are kept separately for further analyses. A shapefile of roads is also loaded to account for the sampling cost associated with walking distances from roads.</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="conditioned-latin-hypercube-sampling.html#cb40-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Read Spatial data covariates as rasters with terra</span></span>
 <span id="cb40-2"><a href="conditioned-latin-hypercube-sampling.html#cb40-2" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span>  <span class="fu">list.files</span>(raster.path, <span class="at">pattern =</span> <span class="st">&quot;tif$&quot;</span>,  <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb40-3"><a href="conditioned-latin-hypercube-sampling.html#cb40-3" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(cov.dat) <span class="co"># SpatRaster from terra</span></span>
@@ -428,7 +431,7 @@ Figure 6.6: cLHS sampling points on point-grid transformed raster covariate data
 <h2><span class="header-section-number">6.4</span> Implementation of cost–constrained cLHS sampling<a href="conditioned-latin-hypercube-sampling.html#implementation-of-costconstrained-clhs-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>There are situation in which the accessibility to some locations is totally or partially restricted such as areas with steep slopes, remote areas, or areas with forbidden access, which highly compromises the sampling process. For these cases, the sampling design can constrain the points to particular locations by defining environmental layers that cause an increment in the cost efficiency of the sampling. This is done with the <code>cost</code> attribute in the main <code>'clhs'</code> function. The following example uses the raster layer “distance to roads” as a cost layer to avoid low accessible points located at large distance from roads while optimizing the representativeness of the remaining environmental covariates.</p>
 <div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="conditioned-latin-hypercube-sampling.html#cb51-1" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Load pre-calculated distance–to–roads surface</span></span>
-<span id="cb51-2"><a href="conditioned-latin-hypercube-sampling.html#cb51-2" aria-hidden="true" tabindex="-1"></a>    dist2access <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="fu">paste0</span>(results.path,<span class="st">&quot;nghe_d2roads.tif&quot;</span>))</span>
+<span id="cb51-2"><a href="conditioned-latin-hypercube-sampling.html#cb51-2" aria-hidden="true" tabindex="-1"></a>    dist2access <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="fu">paste0</span>(other.path,<span class="st">&quot;nghe_d2roads.tif&quot;</span>))</span>
 <span id="cb51-3"><a href="conditioned-latin-hypercube-sampling.html#cb51-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot(dist2access)</span></span>
 <span id="cb51-4"><a href="conditioned-latin-hypercube-sampling.html#cb51-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot(nghe, col=&quot;transparent&quot;, add=TRUE)</span></span>
 <span id="cb51-5"><a href="conditioned-latin-hypercube-sampling.html#cb51-5" aria-hidden="true" tabindex="-1"></a>    </span>
@@ -570,7 +573,7 @@ Figure 6.10: Distribution of cLHS sampling points in the study area
           </div>
         </div>
       </div>
-<a href="stratified-sampling-design.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="stratified-simple-random-sampling.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="annex-i-compendium-of-r-scripts.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

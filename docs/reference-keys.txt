@@ -38,13 +38,13 @@ legacy_data
 data-preparation
 representativeness-of-the-legacy-soil-data
 determining-the-minimum-sampling-size
-stratified-sampling-design
+stratified-simple-random-sampling
 general-procedure
 strata-creation
 stratified-random-sampling
-stratified-random-sampling-for-large-areas
-stratified-regular-sampling
-random-sampling-based-on-a-stratified-raster
+stratified-simple-random-sampling-for-large-areas
+stratified-simple-regular-sampling
+simple-random-sampling-based-on-a-stratified-raster
 conditioned-latin-hypercube-sampling
 clhs-design
 including-existing-legacy-data-in-a-clhs-sampling-design

@@ -208,16 +208,16 @@ div.csl-indent {
 </ul></li>
 <li class="part"><span><b>I Part two – Soil Sampling Design</b></span></li>
 <li class="chapter" data-level="4" data-path="determining-the-minimum-sampling-size.html"><a href="determining-the-minimum-sampling-size.html"><i class="fa fa-check"></i><b>4</b> Determining the minimum sampling size</a></li>
-<li class="chapter" data-level="5" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html"><i class="fa fa-check"></i><b>5</b> Stratified Sampling Design</a>
+<li class="chapter" data-level="5" data-path="stratified-simple-random-sampling.html"><a href="stratified-simple-random-sampling.html"><i class="fa fa-check"></i><b>5</b> Stratified Simple Random Sampling</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#general-procedure"><i class="fa fa-check"></i><b>5.1</b> General Procedure</a>
+<li class="chapter" data-level="5.1" data-path="stratified-simple-random-sampling.html"><a href="stratified-simple-random-sampling.html#general-procedure"><i class="fa fa-check"></i><b>5.1</b> General Procedure</a>
 <ul>
-<li class="chapter" data-level="5.1.1" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#strata-creation"><i class="fa fa-check"></i><b>5.1.1</b> Strata creation</a></li>
+<li class="chapter" data-level="5.1.1" data-path="stratified-simple-random-sampling.html"><a href="stratified-simple-random-sampling.html#strata-creation"><i class="fa fa-check"></i><b>5.1.1</b> Strata creation</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-random-sampling"><i class="fa fa-check"></i><b>5.2</b> Stratified random sampling</a></li>
-<li class="chapter" data-level="5.3" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-random-sampling-for-large-areas"><i class="fa fa-check"></i><b>5.3</b> Stratified random sampling for large areas</a></li>
-<li class="chapter" data-level="5.4" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#stratified-regular-sampling"><i class="fa fa-check"></i><b>5.4</b> Stratified regular sampling</a></li>
-<li class="chapter" data-level="5.5" data-path="stratified-sampling-design.html"><a href="stratified-sampling-design.html#random-sampling-based-on-a-stratified-raster"><i class="fa fa-check"></i><b>5.5</b> Random Sampling based on a stratified raster</a></li>
+<li class="chapter" data-level="5.2" data-path="stratified-simple-random-sampling.html"><a href="stratified-simple-random-sampling.html#stratified-random-sampling"><i class="fa fa-check"></i><b>5.2</b> Stratified random sampling</a></li>
+<li class="chapter" data-level="5.3" data-path="stratified-simple-random-sampling.html"><a href="stratified-simple-random-sampling.html#stratified-simple-random-sampling-for-large-areas"><i class="fa fa-check"></i><b>5.3</b> Stratified simple random sampling for large areas</a></li>
+<li class="chapter" data-level="5.4" data-path="stratified-simple-random-sampling.html"><a href="stratified-simple-random-sampling.html#stratified-simple-regular-sampling"><i class="fa fa-check"></i><b>5.4</b> Stratified simple regular sampling</a></li>
+<li class="chapter" data-level="5.5" data-path="stratified-simple-random-sampling.html"><a href="stratified-simple-random-sampling.html#simple-random-sampling-based-on-a-stratified-raster"><i class="fa fa-check"></i><b>5.5</b> Simple Random Sampling based on a stratified raster</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="conditioned-latin-hypercube-sampling.html"><a href="conditioned-latin-hypercube-sampling.html"><i class="fa fa-check"></i><b>6</b> Conditioned Latin Hypercube Sampling</a>
 <ul>
@@ -300,7 +300,7 @@ Soil Sampling Design</p></a>
 <span id="cb2-26"><a href="legacy_data.html#cb2-26" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb2-27"><a href="legacy_data.html#cb2-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Load legacy soil data</span></span>
 <span id="cb2-28"><a href="legacy_data.html#cb2-28" aria-hidden="true" tabindex="-1"></a>  p.dat <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">vect</span>(<span class="fu">file.path</span>(<span class="fu">paste0</span>(shp.path,<span class="st">&quot;/legacy_soils.shp&quot;</span>)))</span></code></pre></div>
-<p>Figure <a href="#fig-3"><strong>??</strong></a> shows the PCA-transformed raster layers used in the analyses.</p>
+<p>Figure <a href="legacy_data.html#fig:fig-3">3.1</a> shows the PCA-transformed raster layers used in the analyses.</p>
 <div class="figure"><span style="display:block;" id="fig:fig-3"></span>
 <img src="Technical-Manual-Soil-Sampling-Design_files/figure-html/fig-3-1.png" alt="Covariates" width="672" />
 <p class="caption">
@@ -385,7 +385,7 @@ KL–divergence compares an ‘objective’ or reference probability distributio
 <ul>
 <li><strong>Percent of representativeness in relation to the overall environmental conditions</strong></li>
 </ul>
-<p>Finally, we can assess the extent to which our legacy soil dataset represents the existing environmental conditions in the study area. We calculate the proportion of pixels in the study area that would fall within the convex hull polygon delineated based on the environmental conditions found only at the locations of the soil legacy data. The convex hull polygon is created using a Principal Component transformation of the data in the soil legacy dataset, utilizing the outer limits of the scores of the points projected onto the two main components (Fig. <a href="#fig-4"><strong>??</strong></a>).</p>
+<p>Finally, we can assess the extent to which our legacy soil dataset represents the existing environmental conditions in the study area. We calculate the proportion of pixels in the study area that would fall within the convex hull polygon delineated based on the environmental conditions found only at the locations of the soil legacy data. The convex hull polygon is created using a Principal Component transformation of the data in the soil legacy dataset, utilizing the outer limits of the scores of the points projected onto the two main components (Fig. <a href="legacy_data.html#fig:fig-4">3.2</a>).</p>
 <div class="figure"><span style="display:block;" id="fig:fig-4"></span>
 <img src="Technical-Manual-Soil-Sampling-Design_files/figure-html/fig-4-1.png" alt="PCA plot of the covariate" width="672" />
 <p class="caption">

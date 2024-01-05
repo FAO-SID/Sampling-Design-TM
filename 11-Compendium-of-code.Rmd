@@ -5,6 +5,7 @@ This chapter compiles the complete list of R scripts involved in the process of 
 ## Script 1: Introduction to R {-}
 
 ```{r intro R, eval=F}
+
 # Introduction to R
 
 # 0. Playground =================================================
@@ -47,7 +48,10 @@ a == b
 a != b
 
 # 1. Set working directory ======================================
+# Set working directory to a specific location
 setwd("C:/GIT/Digital-Soil-Mapping/")
+# Set working directory to source file location
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # 2. Install and load packages ==================================
 # readxl, tidyverse, and data.table packages using the functions
@@ -57,24 +61,28 @@ install.packages("data.table")
 library(tidyverse)
 library(readxl)
 library(data.table)
+# Install packages from other repository than CRAN
+install.packages("remotes")
+remotes::install_github("lemuscanovas/synoptReg")
+
 
 # 3. Import an spreadsheet ======================================
 ## 3.1 Read the MS Excel file -----------------------------------
 #Read the soil_data.xlsx file, spreadsheet 2, using read_excel 
-read_excel(path = "01-Data/soil_data.xlsx", sheet = 2)
+read_excel(path = "data/other/soil_data.xlsx", sheet = 2)
 
 ## 3.2 Read the csv file with the native function ---------------
 # 01-Data/horizon.csv
-read.csv("01-Data/soil_profile_data.csv")
+read.csv("data/other/soil_profile_data.csv")
 
 ## 3.3 Read the csv file with the tidyverse function ------------
-read_csv("01-Data/soil_profile_data.csv")
+read_csv("data/other/soil_profile_data.csv")
 
 ## 3.4 Read the csv file with the data.table function -----------
-fread("01-Data/soil_profile_data.csv")
+fread("data/other/soil_profile_data.csv")
 
 ## 3.5 Assign the dataframe to an object called dat -------------
-dat <- read_csv("01-Data/soil_profile_data.csv")
+dat <- read_csv("data/other/soil_profile_data.csv")
 
 # 4. Tidyverse functions ========================================
 ## 4.1 Select pid, hip, top, bottom, ph_h2o, cec from dat -------
@@ -118,7 +126,7 @@ dat_5 <- dat_3 %>%
 # Join its columns with dat_3 keeping all the rows of dat_3
 # save the result as dat_6
 
-phys <- read_csv("01-Data/soil_phys_data030.csv")
+phys <- read_csv("data/other/soil_phys_data030_2.csv")
 
 phys <- phys %>% rename(id_prof = "ProfID")
 
@@ -159,30 +167,30 @@ ggplot(dat_3,
 ## Load packages (install them if needed)
 library(terra)
 ## 6.1 Load a raster and a vector layer -------------------------
-# Load 01-Data/covs/grass.tif using rast() function, then plot it
-# Load 01-Data/soil map/SoilTypes.shp using vect() function and 
+# Load data/other/landcover2013.tif using rast() function, then plot it
+# Load data/shapes/landcover.shp using vect() function and 
 # plot it 
 # explore the attributes of these layers
 
-r <- rast("01-Data/Macedonia/grass.tif")
+r <- rast("data/other/landcover2013.tif")
 plot(r)
 
-v <- vect("01-Data/Macedonia/SoilTypes.shp")
+v <- vect("data/shapes/landcover.shp")
 plot(v)
 
 ## 6.2 Load a raster and a vector layer -------------------------
 # Check the current CRS (EPSG) of the raster and the vector. 
-# Find a *projected* CRS in http://epsg.io for Macedonia and 
+# Find a *projected* CRS in http://epsg.io for Vietnam and 
 # copy the number
 # Check the Arguments of function project (?project) that need to
 # be defined
 # Save the new object as r_proj and v_proj
 # plot both objects
 
-r_proj <- project(x = r, y = "epsg:6204", method = "bilinear",
+r_proj <- project(x = r, y = "epsg:3405", method = "near",
                   res = 250)
 plot(r_proj)
-v_proj <- project(x = v, y = "epsg:6204")
+v_proj <- project(x = v, y = "epsg:3405")
 plot(v_proj, add = TRUE)
 
 ## 6.3 Cropping and masking a raster ----------------------------
@@ -212,15 +220,15 @@ plot(r_pol)
 # https://rspatial.org/terra/pkg/4-algebra.html 
 # Replace values lower than 5 in r+pol by 0
 
-r_pol[r_pol$grass < 5] <- 0
+r_pol[r_pol$landcover2013 < 5] <- 0
 plot(r_pol)
 
 ## 6.5 Rasterize a vector layer ---------------------------------
 # Use rasterize() function to convert v_proj to raster
 # Use r_proj as reference raster
-# Use field Symbol to assign cell values, and plot the new map
+# Use field landcover to assign cell values, and plot the new map
 
-v_class <- rasterize(x = v_proj, y = r_proj, field = "Symbol" )
+v_class <- rasterize(x = v_proj, y = r_proj, field = "landcover" )
 plot(v_class)
 v_class
 activeCat(v_class) <- 1
@@ -228,7 +236,7 @@ activeCat(v_class) <- 1
 ## 6.6 Extracting raster values using points --------------------
 # Covert dat_6 to spatial points using vect() function 
 # (check help of vect())
-# Note that the EPSG number is 6204
+# Note that the EPSG number is 3405
 # Save the points as s
 # Plot s and r_proj together in the same map (Argument add=TRUE)
 # Extract the values of the raster using extract() 
@@ -237,7 +245,8 @@ activeCat(v_class) <- 1
 # merge the extracted data with s using cbind() function
 # Convert s as a dataframe
 
-s <- vect(dat_6, geom=c("x", "y"), crs = "epsg:6204")
+s <- vect(dat_6, geom=c("x", "y"), crs = "epsg:4326")
+  #s <- project(x = s, y = "epsg:3405")
 plot(r_proj)
 plot(s, add=TRUE)
 x <- extract(r_proj,s, ID=FALSE)
@@ -248,22 +257,27 @@ d
 
 ## 6.7 Zonal statistics using polygons and rasters --------------
 # Use the extract() func. to estimate the mean value of 
-# r_proj at each polygon
+# distance_proj at each polygon
 # Use the fun= argument (check the help)
 # Use the cbind() func. to merge v_proj and the extracted values
 # convert v_proj to a dataframe
-# Create a ggplot boxplot (geom_boxplot) with x=Symbol
-# and y=grass 
+# Create a ggplot boxplot (geom_boxplot) with x=landcover
+# and y=dist2access 
 
-x <- extract(r_proj, v_proj, fun = mean, ID=FALSE)
+distance <- rast("data/other/nghe_d2roads.tif")
+plot(distance)
+distance_proj <- project(x = distance, y = "epsg:3405", method = "bilinear",
+                  res = 250)
+plot(distance_proj)
+x <- extract(distance_proj, v_proj, fun = mean, ID=FALSE)
 v_proj <- cbind(v_proj, x)
 
 d <- as_tibble(v_proj)
 
 d %>% 
-  ggplot(aes(x =Symbol, y = grass, fill = Symbol)) +
+  ggplot(aes(x =landcover, y = dist2access, fill = landcover)) +
   geom_boxplot() +
-  ylab("Grass probability")
+  ylab("Distance to roads")
 
 
 ## END
@@ -555,6 +569,8 @@ start_time <- Sys.time()
   shp.path <- "data/shapes"
   # Path to results
   results.path <- "data/results/"
+  # Path to additional data
+  other.path <- "data/other/"
   # Aggregation factor for up-scaling raster covariates (optional)
   agg.factor = 10
   
@@ -749,6 +765,8 @@ start_time <- Sys.time()
   shp.path <- "data/shapes/"
   # Path to results
   results.path <- "data/results/"
+  # Path to additional data
+  other.path <- "data/other/"
 # Aggregation factor for up-scaling raster covariates (optional)
   agg.factor = 10
 
@@ -1158,6 +1176,8 @@ This script uses soil and landcover classes to define polygon 'strata' for an ar
     shp.path <- "data/shapes"
     # Path to results
     results.path <- "data/results/"
+    # Path to additional data
+    other.path <- "data/other/"
     n <- 242
 
     
@@ -1757,6 +1777,8 @@ start_time <- Sys.time()
   shp.path <- "data/shapes/"
   # Path to results
   results.path <- "data/results/"
+  # Path to additional data
+  other.path <- "data/other/"
   # Buffer distance for replacement areas (clhs)
   D <- 1000 # Buffer distance to calculate replacement areas 
   # Define the minimum sample size. By default it uses the value calculated previously
@@ -1877,10 +1899,10 @@ start_time <- Sys.time()
       # dist2access <- terra::distance(cov.dat[[1]], roads, progress=TRUE)
       # names(dist2access) <- "dist2access"
       # Save cost surface to disk
-      # writeRaster(dist2access, paste0(results.path,"nghe_d2roads.tif"), overwrite=TRUE)
+      # writeRaster(dist2access, paste0(other.path,"nghe_d2roads.tif"), overwrite=TRUE)
       
     # Load pre-calculated distance–to–roads surface
-    dist2access <- terra::rast(paste0(results.path,"nghe_d2roads.tif"))
+    dist2access <- terra::rast(paste0(other.path,"nghe_d2roads.tif"))
     # Aggregate to the same soatial definition
      # dist2access <- aggregate(dist2access, fact=10, fun="mean")
     plot(dist2access)
