@@ -16,10 +16,10 @@ fig:fig-14b
 fig:fig-14c
 fig:fig-14d
 fig:fig-15
-fig:fig-16
 fig:fig-17
 fig:fig-18
-fig:fig-19
+fig:fig-19a
+fig:fig-19b
 fig:fig-20
 fig:fig-22
 fig:fig-22b

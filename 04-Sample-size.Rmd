@@ -80,7 +80,7 @@ As in the previous section, covariates are PCA-transformed to avoid collinearity
   
 ```
 
-Fig. \@ref(fig:fig-10) shows the covariates retained for the analyses.
+Fig. \@ref(fig:fig-5) shows the covariates retained for the analyses.
 
 ```{r fig-5, eval=TRUE, include=TRUE, fig.cap="Plot of the covariates"}
 
@@ -277,15 +277,20 @@ Figure \@ref(fig:fig-7) shows the distribution of covariates in the sample space
 ```{r fig-7a, fig.cap="Boxplot of the dispersion in KL and % repressentativeness in the iteration trials for each sample size",fig.width=8, fig.height=5, eval=TRUE, include=TRUE}
 
   ## Plot dispersion on KL and % by N
-  par(mar=c(5, 4, 1, 6))
+  par(mar = c(5, 4, 5, 5))
   boxplot(Perc ~ N, data=results, col = rgb(1, 0.1, 0, alpha = 0.5),ylab = "%")
   mtext("KL divergence",side=4,line=3)
   # Add new plot
-  par(new = TRUE,mar=c(5, 4, 1, 6))
+  par(new = TRUE,mar=c(5, 4, 5, 5))
   # Box plot
   boxplot(KL ~ N, data=results, axes = FALSE,outline = FALSE,
           col = rgb(0, 0.8, 1, alpha = 0.5), ylab = "")
   axis(4, at=seq(0.02, 0.36, by=.06),  label=seq(0.02, 0.36, by=.06), las=3)
+  # Draw legend
+  par(xpd=TRUE)
+  legend("top", inset=c(1,-.15) ,c("% coincidence", "KL divergence"), horiz=T,cex=.9,
+         box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+  par(xpd=FALSE)
     
 ```
 

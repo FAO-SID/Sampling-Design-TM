@@ -28,7 +28,6 @@
 # 7 - Calculate Representativeness of the Legacy Dataset
 #________________________________________________________________
 
-start_time <- Sys.time()
 
 ## 0 - Set working directory and load packages =================================
 
@@ -95,7 +94,7 @@ start_time <- Sys.time()
   str(p.dat_I.df)
 
 ## 4 - Compute variability matrix in the covariates ====================================
-  # Define Number of bins
+  # Define Number of quantiles (bins)
   nb <- 25
   # Quantile matrix of the covariate data
   q.mat <- matrix(NA, nrow = (nb + 1), ncol = nlyr(cov.dat))
