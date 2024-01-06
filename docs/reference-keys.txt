@@ -26,6 +26,10 @@ fig:fig-22b
 fig:fig-23
 fig:fig-24
 introduction
+basic-concepts-of-soil-sampling
+soil-sampling-for-mapping
+sampling-strategies-in-this-technical-manual
+how-to-use-this-manual
 training-material
 setting-up-the-software-environment
 use-of-r-rstudio-and-r-packages
