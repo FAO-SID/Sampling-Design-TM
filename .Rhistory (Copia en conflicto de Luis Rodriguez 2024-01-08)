@@ -1,0 +1,512 @@
+Perc ~ N,
+data = results,
+col = rgb(1, 0.1, 0, alpha = 0.5),
+ylab = "% coincidence"
+)
+mtext("KL divergence", side = 4, line = 3)
+# Add new plot
+par(new = TRUE, mar = c(6, 4.1, 6, 2.1))
+# Box plot
+boxplot(
+KL ~ N,
+data = results,
+axes = FALSE,
+outline = FALSE,
+col = rgb(0, 0.8, 1, alpha = 0.5),
+ylab = ""
+)
+axis(
+4,
+at = seq(0.02, 0.36, by = .06),
+label = seq(0.02, 0.36, by = .06),
+las = 3
+)
+legend("top", inset = c(0, -0.9),c("% coincidence", "KL divergence"),cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+legend("top", inset = c(0, -0.7),c("% coincidence", "KL divergence"),cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+legend("top", inset = c(0, -0-6),c("% coincidence", "KL divergence"),cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+legend("top", inset = c(0, -0.6),c("% coincidence", "KL divergence"),cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+legend("top", inset = c(0, -0.5),c("% coincidence", "KL divergence"),cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+legend("top", inset = c(0, -0.4),c("% coincidence", "KL divergence"),cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+legend("top", inset = c(0, 0.4),c("% coincidence", "KL divergence"),cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+legend("top", inset = c(0, -0.1),c("% coincidence", "KL divergence"),cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+legend(x = "topright",
+inset = c(-0.45, 0),c("% coincidence", "KL divergence"),cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+legend(x = "top",
+inset = c(-0.45, 0),c("% coincidence", "KL divergence"),cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+legend(x = "bottom",
+inset = c(0, -0.5), # You will need to fine-tune the second
+# value depending on the windows size
+legend = c("J0", "J2"),
+lty = c(1, 2),
+col = c(2, 3),
+lwd = 2,
+xpd = TRUE, # You need to specify this graphical parameter to add
+# the legend outside the plot area
+horiz = TRUE) # Horizontal legend. You can also set the number
+# of columns with the argument ncol
+# if horiz = FALSE
+legend(x = "bottom",
+inset = c(0, -0.5), # You will need to fine-tune the second
+# value depending on the windows size
+legend = c("J0", "J2"),
+lty = c(1, 2),
+col = c(2, 3),
+lwd = 2,
+xpd = TRUE, # You need to specify this graphical parameter to add
+# the legend outside the plot area
+horiz = TRUE) # Horizontal legend. You can also set the number
+# of columns with the argument ncol
+# if horiz = FALSE
+## Plot dispersion on KL and % by N
+par(mar=c(5.1, 4.1, 4.1, 8.1), xpd=TRUE)
+boxplot(
+Perc ~ N,
+data = results,
+col = rgb(1, 0.1, 0, alpha = 0.5),
+ylab = "% coincidence"
+)
+mtext("KL divergence", side = 4, line = 3)
+# Add new plot
+par(new = TRUE, mar=c(5.1, 4.1, 4.1, 8.1), xpd=TRUE)
+# Box plot
+boxplot(
+KL ~ N,
+data = results,
+axes = FALSE,
+outline = FALSE,
+col = rgb(0, 0.8, 1, alpha = 0.5),
+ylab = ""
+)
+axis(
+4,
+at = seq(0.02, 0.36, by = .06),
+label = seq(0.02, 0.36, by = .06),
+las = 3
+)
+legend(x = "top",
+inset = c(-0.45, 0),c("% coincidence", "KL divergence"),cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+legend("topright", inset=c(-0.2,0), c("% coincidence", "KL divergence"),cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+legend("topright", inset=c(-0.3,0), c("% coincidence", "KL divergence"),cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+legend("topright", inset=c(-0.4,0), c("% coincidence", "KL divergence"),cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+legend("topright", inset=c(-0.34,0), c("% coincidence", "KL divergence"),cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+par(mar = c(5, 4, 1, 6))
+boxplot(
+Perc ~ N,
+data = results,
+col = rgb(1, 0.1, 0, alpha = 0.5),
+ylab = "% coincidence"
+)
+mtext("KL divergence", side = 4, line = 3)
+# Add new plot
+par(new = TRUE, mar = c(5, 4, 1, 6))
+# Box plot
+boxplot(
+KL ~ N,
+data = results,
+axes = FALSE,
+outline = FALSE,
+col = rgb(0, 0.8, 1, alpha = 0.5),
+ylab = ""
+)
+axis(
+4,
+at = seq(0.02, 0.36, by = .06),
+label = seq(0.02, 0.36, by = .06),
+las = 3
+)
+legend("topright", inset=c(-0.34,0) ,c("% coincidence", "KL divergence"),horiz=TRUE, cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+## Plot dispersion on KL and % by N
+par(mar = c(5, 4, 1, 6))
+boxplot(
+Perc ~ N,
+data = results,
+col = rgb(1, 0.1, 0, alpha = 0.5),
+ylab = "% coincidence"
+)
+mtext("KL divergence", side = 4, line = 3)
+# Add new plot
+par(new = TRUE, mar = c(5, 4, 1, 6))
+# Box plot
+boxplot(
+KL ~ N,
+data = results,
+axes = FALSE,
+outline = FALSE,
+col = rgb(0, 0.8, 1, alpha = 0.5),
+ylab = ""
+)
+axis(
+4,
+at = seq(0.02, 0.36, by = .06),
+label = seq(0.02, 0.36, by = .06),
+las = 3
+)
+## Plot dispersion on KL and % by N
+par(mar = c(5, 4, 1, 6))
+boxplot(
+Perc ~ N,
+data = results,
+col = rgb(1, 0.1, 0, alpha = 0.5),
+ylab = "% coincidence"
+)
+mtext("KL divergence", side = 4, line = 3)
+# Add new plot
+par(new = TRUE, mar = c(5, 4, 1, 6))
+# Box plot
+boxplot(
+KL ~ N,
+data = results,
+axes = FALSE,
+outline = FALSE,
+col = rgb(0, 0.8, 1, alpha = 0.5),
+ylab = ""
+)
+axis(
+4,
+at = seq(0.02, 0.36, by = .06),
+label = seq(0.02, 0.36, by = .06),
+las = 3
+)
+legend("topright", inset=c(-0.34,0) ,c("% coincidence", "KL divergence"),horiz=TRUE, cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+## Plot dispersion on KL and % by N
+par(mar = c(5, 4, 1, 6))
+boxplot(
+Perc ~ N,
+data = results,
+col = rgb(1, 0.1, 0, alpha = 0.5),
+ylab = "% coincidence"
+)
+mtext("KL divergence", side = 4, line = 3)
+# Add new plot
+par(new = TRUE, mar = c(5, 4, 1, 6))
+# Box plot
+boxplot(
+KL ~ N,
+data = results,
+axes = FALSE,
+outline = FALSE,
+col = rgb(0, 0.8, 1, alpha = 0.5),
+ylab = ""
+)
+axis(
+4,
+at = seq(0.02, 0.36, by = .06),
+label = seq(0.02, 0.36, by = .06),
+las = 3
+)
+par(opar())
+par(mar = c(1, 1, 1, 1))
+boxplot(
+Perc ~ N,
+data = results,
+col = rgb(1, 0.1, 0, alpha = 0.5),
+ylab = "% coincidence"
+)
+mtext("KL divergence", side = 4, line = 3)
+# Add new plot
+par(new = TRUE, mar = c(5, 4, 1, 6))
+# Box plot
+boxplot(
+KL ~ N,
+data = results,
+axes = FALSE,
+outline = FALSE,
+col = rgb(0, 0.8, 1, alpha = 0.5),
+ylab = ""
+)
+axis(
+4,
+at = seq(0.02, 0.36, by = .06),
+label = seq(0.02, 0.36, by = .06),
+las = 3
+)
+legend("topright", inset=c(-0.34,0) ,c("% coincidence", "KL divergence"),horiz=TRUE, cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+on.exit(par(opar)) # Back to the default graphical parameters
+## Plot dispersion on KL and % by N
+par(mar = c(5, 4, 1, 6))
+boxplot(
+Perc ~ N,
+data = results,
+col = rgb(1, 0.1, 0, alpha = 0.5),
+ylab = "% coincidence"
+)
+mtext("KL divergence", side = 4, line = 3)
+# Add new plot
+par(new = TRUE, mar = c(5, 4, 1, 6))
+# Box plot
+boxplot(
+KL ~ N,
+data = results,
+axes = FALSE,
+outline = FALSE,
+col = rgb(0, 0.8, 1, alpha = 0.5),
+ylab = ""
+)
+axis(
+4,
+at = seq(0.02, 0.36, by = .06),
+label = seq(0.02, 0.36, by = .06),
+las = 3
+)
+legend("topright", inset=c(-0.34,0) ,c("% coincidence", "KL divergence"),horiz=TRUE, cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+on.exit(par(opar)) # Back to the default graphical parameters
+par(no.readonly = TRUE)
+par(mar = c(1, 1, 1, 1))
+opar <- par(no.readonly = TRUE) # Back to the default graphical parameters
+## Plot dispersion on KL and % by N
+par(mar = c(5, 4, 1, 8))
+boxplot(
+Perc ~ N,
+data = results,
+col = rgb(1, 0.1, 0, alpha = 0.5),
+ylab = "% coincidence"
+)
+mtext("KL divergence", side = 4, line = 3)
+# Add new plot
+par(new = TRUE, mar = c(5, 4, 1, 8))
+# Box plot
+boxplot(
+KL ~ N,
+data = results,
+axes = FALSE,
+outline = FALSE,
+col = rgb(0, 0.8, 1, alpha = 0.5),
+ylab = ""
+)
+axis(
+4,
+at = seq(0.02, 0.36, by = .06),
+label = seq(0.02, 0.36, by = .06),
+las = 3
+)
+legend("topright", inset=c(-0.34,0) ,c("% coincidence", "KL divergence"),horiz=TRUE, cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+par(xpd=FALSE)
+par()
+boxplot(
+Perc ~ N,
+data = results,
+col = rgb(1, 0.1, 0, alpha = 0.5),
+ylab = "% coincidence"
+)
+opar <- par(no.readonly = TRUE) # Back to the default graphical parameters
+## Plot dispersion on KL and % by N
+par(mar = c(5, 4, 1, 8))
+boxplot(
+Perc ~ N,
+data = results,
+col = rgb(1, 0.1, 0, alpha = 0.5),
+ylab = "% coincidence"
+)
+mtext("KL divergence", side = 4, line = 3)
+# Add new plot
+par(new = TRUE, mar = c(5, 4, 1, 8))
+# Box plot
+boxplot(
+KL ~ N,
+data = results,
+axes = FALSE,
+outline = FALSE,
+col = rgb(0, 0.8, 1, alpha = 0.5),
+ylab = ""
+)
+axis(
+4,
+at = seq(0.02, 0.36, by = .06),
+label = seq(0.02, 0.36, by = .06),
+las = 3
+)
+legend("topright", inset=c(-0.34,0) ,c("% coincidence", "KL divergence"),horiz=TRUE, cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+on.exit(par(opar)) # Back to the default graphical parameters
+legend("topright", inset=c(-0.44,0) ,c("% coincidence", "KL divergence"),horiz=TRUE, cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+on.exit(par(opar)) # Back to the default graphical parameters
+legend("topright", inset=c(-0.44,0) ,c("% coincidence", "KL divergence"),horiz=F, cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+legend("topright", inset=c(-0.34,0) ,c("% coincidence", "KL divergence"),horiz=F, cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+opar <- par(no.readonly = TRUE) # Back to the default graphical parameters
+## Plot dispersion on KL and % by N
+par(mar = c(5, 4, 1, 8))
+boxplot(
+Perc ~ N,
+data = results,
+col = rgb(1, 0.1, 0, alpha = 0.5),
+ylab = "% coincidence"
+)
+mtext("KL divergence", side = 4, line = 3)
+# Add new plot
+par(new = TRUE, mar = c(5, 4, 1, 8))
+# Box plot
+boxplot(
+KL ~ N,
+data = results,
+axes = FALSE,
+outline = FALSE,
+col = rgb(0, 0.8, 1, alpha = 0.5),
+ylab = ""
+)
+axis(
+4,
+at = seq(0.02, 0.36, by = .06),
+label = seq(0.02, 0.36, by = .06),
+las = 3
+)
+legend("topright", inset=c(-0.34,0) ,c("% coincidence", "KL divergence"),horiz=F, cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+on.exit(par(opar)) # Back to the default graphical parameters
+legend("topright", inset=c(-0.34,0) ,c("% coincidence", "KL divergence"),horiz=T, cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+legend("topright", inset=c(-0.14,0) ,c("% coincidence", "KL divergence"),horiz=F, cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+opar <- par(no.readonly = TRUE) # Back to the default graphical parameters
+## Plot dispersion on KL and % by N
+par(mar = c(5, 4, 1, 18))
+boxplot(
+Perc ~ N,
+data = results,
+col = rgb(1, 0.1, 0, alpha = 0.5),
+ylab = "% coincidence"
+)
+mtext("KL divergence", side = 4, line = 3)
+# Add new plot
+par(new = TRUE, mar = c(5, 4, 1, 18))
+# Box plot
+boxplot(
+KL ~ N,
+data = results,
+axes = FALSE,
+outline = FALSE,
+col = rgb(0, 0.8, 1, alpha = 0.5),
+ylab = ""
+)
+axis(
+4,
+at = seq(0.02, 0.36, by = .06),
+label = seq(0.02, 0.36, by = .06),
+las = 3
+)
+legend("topright", inset=c(-0.14,0) ,c("% coincidence", "KL divergence"),horiz=F, cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+on.exit(par(opar)) # Back to the default graphical parameters
+legend("topright", inset=c(-0.24,0) ,c("% coincidence", "KL divergence"),horiz=F, cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+opar <- par(no.readonly = TRUE) # Back to the default graphical parameters
+legend("topright", inset=c(-0.24,0) ,c("% coincidence", "KL divergence"),horiz=F, cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+## Plot dispersion on KL and % by N
+par(mar = c(5, 4, 1, 18))
+boxplot(
+Perc ~ N,
+data = results,
+col = rgb(1, 0.1, 0, alpha = 0.5),
+ylab = "% coincidence"
+)
+mtext("KL divergence", side = 4, line = 3)
+# Add new plot
+par(new = TRUE, mar = c(5, 4, 1, 18))
+# Box plot
+boxplot(
+KL ~ N,
+data = results,
+axes = FALSE,
+outline = FALSE,
+col = rgb(0, 0.8, 1, alpha = 0.5),
+ylab = ""
+)
+axis(
+4,
+at = seq(0.02, 0.36, by = .06),
+label = seq(0.02, 0.36, by = .06),
+las = 3
+)
+legend("topright", inset=c(-0.24,0) ,c("% coincidence", "KL divergence"),horiz=F, cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+on.exit(par(opar)) # Back to the default graphical parameters
+opar <- par(no.readonly = TRUE) # Back to the default graphical parameters
+## Plot dispersion on KL and % by N
+par(mar = c(5, 4, 1, 18))
+legend("topright", inset=c(-0.24,0) ,c("% coincidence", "KL divergence"),horiz=F, cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+boxplot(
+Perc ~ N,
+data = results,
+col = rgb(1, 0.1, 0, alpha = 0.5),
+ylab = "% coincidence"
+)
+mtext("KL divergence", side = 4, line = 3)
+# Add new plot
+par(new = TRUE, mar = c(5, 4, 1, 18))
+# Box plot
+boxplot(
+KL ~ N,
+data = results,
+axes = FALSE,
+outline = FALSE,
+col = rgb(0, 0.8, 1, alpha = 0.5),
+ylab = ""
+)
+axis(
+4,
+at = seq(0.02, 0.36, by = .06),
+label = seq(0.02, 0.36, by = .06),
+las = 3
+)
+opar <- par(no.readonly = TRUE) # Back to the default graphical parameters
+## Plot dispersion on KL and % by N
+par(mar = c(5, 4, 1, 10))
+boxplot(
+Perc ~ N,
+data = results,
+col = rgb(1, 0.1, 0, alpha = 0.5),
+ylab = "% coincidence"
+)
+mtext("KL divergence", side = 4, line = 3)
+# Add new plot
+par(new = TRUE, mar = c(5, 4, 1, 10))
+# Box plot
+boxplot(
+KL ~ N,
+data = results,
+axes = FALSE,
+outline = FALSE,
+col = rgb(0, 0.8, 1, alpha = 0.5),
+ylab = ""
+)
+axis(
+4,
+at = seq(0.02, 0.36, by = .06),
+label = seq(0.02, 0.36, by = .06),
+las = 3
+)
+legend("topright", inset=c(-0.24,0) ,c("% coincidence", "KL divergence"),horiz=F, cex=0.8,
+box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
+on.exit(par(opar)) # Back to the default graphical parameters
+par(xpd=TRUE)
+legend(2.8,-1,c("group A", "group B"), pch = c(1,2), lty = c(1,2))
+boxplot(
+Perc ~ N,
+data = results,
+col = rgb(1, 0.1, 0, alpha = 0.5),
+ylab = "% coincidence"
+)

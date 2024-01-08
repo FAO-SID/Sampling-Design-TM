@@ -276,4 +276,17 @@ start_time <- Sys.time()
       cores = 4
     )
     
+## 11 - Plot sample density over covariates ====================================
+    
+    # Distribution of elevation values on the sampling design vs. original elevation data
+    s0 <- rbind(data.frame(method = "Elevation", data.frame(elevation)))
+    s1 <- extract(elevation,pts)
+    s1$method <-"cLHS"
+    
+    # Plot the covariate elevation values as histogram bars and the sampling distribution as curve
+    library(ggplot2)
+    dens_elev <- ggplot() +
+      geom_histogram(data=s0, aes(x=dtm_elevation_250m,fill="red",y=after_stat(density)),binwidth=25, alpha=.5, position="identity") +
+      geom_density(data = s1, aes(x = dtm_elevation_250m, col = method))
+    dens_elev
     
