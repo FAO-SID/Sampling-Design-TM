@@ -399,6 +399,43 @@ N_final <- samples_storage[paste0("N", optimal_iteration$N, "_", optimal_iterati
 plot(cov.dat[[1]])
 plot(N_final,add=T,col="red")
 
+## 10 - Calculate minimum and and optimal sample size with opendsm =============
+
+#install.packages('~/Downloads/DescTools_0.99.45.tar', repos=NULL, type='source')
+#install.packages('DescTools')
+library("DescTools")
+
+#' Source scripts from  https://github.com/newdale/opendsm/tree/main
+#'
+#' Determine minimum sample size for the clhs algorithm
+#' This script is based on the publication:
+#' Determining minimum sample size for the conditioned Latin hypercube sampling algorithm
+#' DOI: https://doi.org/10.1016/j.pedsph.2022.09.001
+source("scripts/clhs_min.R")  
+#' Optimal sample size based on the publication:
+#' Divergence metrics for determining optimal training sample size in digital soil mapping
+#' DOI: https://doi.org/10.1016/j.geoderma.2023.116553   
+source("scripts/opt_sample.R")
+#' Perform Sequential Variable Inflation Factor Analysis
+source("scripts/seqVIF.R")
+#' Function to calculate the KL-divergence
+#' score between two probability distributions, P and Q.
+source("scripts/kldiv.R")
+#' Function to calculate the Jensen-Shannon Distance
+#' score between two probability distributions, P and Q.
+source("scripts/jsdist.R")
+#' Function to calculate the Jensen-Shannon-divergence
+#' score between two probability distributions, P and Q.
+source("scripts/jsdiv.R")
+
+# Convert raster covariates to dataframe
+cov.dat.df <- data.frame(cov.dat)
+# Calculate minimum sample size
+min_N <-clhs_min(cov.dat.df)
+# Calculate optimal sample size ising normalized KL-div, JS-div and JS distance
+opt_N <- opt_sample(alg="clhs",s_min=150,s_max=500, s_step=50, s_reps=4, covs = cov.dat.df,clhs_iter=100, cpus=NULL, conf=0.95)
+
+
 ## END
 
 

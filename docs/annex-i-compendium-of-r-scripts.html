@@ -20,10 +20,10 @@
   <meta name="twitter:description" content="Soil Sampling Design - SoilFer Project" />
   <meta name="twitter:image" content="/images/frontcover.png" />
 
-<meta name="author" content="Rodríguez Lado, L., Angelini, M.E, Naypewe, N., Luotto, I., Yigini, Y." />
+<meta name="author" content="Rodríguez Lado, L., Angelini, M.E, Nyapwere, N., Luotto, I., Yigini, Y." />
 
 
-<meta name="date" content="2024-01-06" />
+<meta name="date" content="2024-01-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -236,7 +236,7 @@ div.csl-indent {
 <li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-1-introduction-to-r"><i class="fa fa-check"></i>Script 1: Introduction to R</a></li>
 <li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-2-download-environmental-covariates"><i class="fa fa-check"></i>Script 2: Download environmental covariates</a></li>
 <li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-3-evaluate-legacy-data"><i class="fa fa-check"></i>Script 3: Evaluate Legacy Data</a></li>
-<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-4-calculate-minimum-sample-size"><i class="fa fa-check"></i>Script 4: Calculate Minimum Sample Size</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-4-calculate-minimum-and-optimal-sample-sizes"><i class="fa fa-check"></i>Script 4: Calculate Minimum and Optimal Sample Sizes</a></li>
 <li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-5-stratified-sampling-on-vector-and-raster-data"><i class="fa fa-check"></i>Script 5: Stratified sampling on vector and raster data</a></li>
 <li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-6-conditional-latin-hypercube-sampling"><i class="fa fa-check"></i>Script 6: Conditional Latin Hypercube Sampling</a></li>
 </ul></li>
@@ -952,8 +952,8 @@ Soil Sampling Design</p></a>
 <span id="cb68-187"><a href="annex-i-compendium-of-r-scripts.html#cb68-187" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb68-188"><a href="annex-i-compendium-of-r-scripts.html#cb68-188" aria-hidden="true" tabindex="-1"></a><span class="do">## </span><span class="re">END</span></span></code></pre></div>
 </div>
-<div id="script-4-calculate-minimum-sample-size" class="section level2 unnumbered hasAnchor">
-<h2>Script 4: Calculate Minimum Sample Size<a href="annex-i-compendium-of-r-scripts.html#script-4-calculate-minimum-sample-size" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="script-4-calculate-minimum-and-optimal-sample-sizes" class="section level2 unnumbered hasAnchor">
+<h2>Script 4: Calculate Minimum and Optimal Sample Sizes<a href="annex-i-compendium-of-r-scripts.html#script-4-calculate-minimum-and-optimal-sample-sizes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="annex-i-compendium-of-r-scripts.html#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
 <span id="cb69-2"><a href="annex-i-compendium-of-r-scripts.html#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Digital Soil Mapping</span></span>
 <span id="cb69-3"><a href="annex-i-compendium-of-r-scripts.html#cb69-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Soil Sampling Design</span></span>
@@ -1046,317 +1046,358 @@ Soil Sampling Design</p></a>
 <span id="cb69-90"><a href="annex-i-compendium-of-r-scripts.html#cb69-90" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb69-91"><a href="annex-i-compendium-of-r-scripts.html#cb69-91" aria-hidden="true" tabindex="-1"></a><span class="co"># Get SpatRaster layers</span></span>
 <span id="cb69-92"><a href="annex-i-compendium-of-r-scripts.html#cb69-92" aria-hidden="true" tabindex="-1"></a>cov.dat <span class="ot">&lt;-</span> pca<span class="sc">$</span>PCA</span>
-<span id="cb69-93"><a href="annex-i-compendium-of-r-scripts.html#cb69-93" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset rasters</span></span>
-<span id="cb69-94"><a href="annex-i-compendium-of-r-scripts.html#cb69-94" aria-hidden="true" tabindex="-1"></a>cov.dat <span class="ot">&lt;-</span> pca<span class="sc">$</span>PCA[[<span class="dv">1</span><span class="sc">:</span><span class="fu">first</span>(<span class="fu">which</span>(pca<span class="sc">$</span>summaryPCA[<span class="dv">3</span>,]<span class="sc">&gt;</span><span class="fl">0.99</span>))]]</span>
-<span id="cb69-95"><a href="annex-i-compendium-of-r-scripts.html#cb69-95" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot covariates</span></span>
-<span id="cb69-96"><a href="annex-i-compendium-of-r-scripts.html#cb69-96" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cov.dat)</span>
-<span id="cb69-97"><a href="annex-i-compendium-of-r-scripts.html#cb69-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-98"><a href="annex-i-compendium-of-r-scripts.html#cb69-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-99"><a href="annex-i-compendium-of-r-scripts.html#cb69-99" aria-hidden="true" tabindex="-1"></a><span class="co"># 3 - Calculate the minimum sample size to describe the area ===================</span></span>
-<span id="cb69-100"><a href="annex-i-compendium-of-r-scripts.html#cb69-100" aria-hidden="true" tabindex="-1"></a><span class="co"># Start computations ----</span></span>
-<span id="cb69-101"><a href="annex-i-compendium-of-r-scripts.html#cb69-101" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize empty vectors to store results</span></span>
-<span id="cb69-102"><a href="annex-i-compendium-of-r-scripts.html#cb69-102" aria-hidden="true" tabindex="-1"></a>number_of_samples <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb69-103"><a href="annex-i-compendium-of-r-scripts.html#cb69-103" aria-hidden="true" tabindex="-1"></a>prop_explained <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb69-104"><a href="annex-i-compendium-of-r-scripts.html#cb69-104" aria-hidden="true" tabindex="-1"></a>klo_samples <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb69-105"><a href="annex-i-compendium-of-r-scripts.html#cb69-105" aria-hidden="true" tabindex="-1"></a>samples_storage <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb69-106"><a href="annex-i-compendium-of-r-scripts.html#cb69-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-107"><a href="annex-i-compendium-of-r-scripts.html#cb69-107" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert SpatRaster to dataframe</span></span>
-<span id="cb69-108"><a href="annex-i-compendium-of-r-scripts.html#cb69-108" aria-hidden="true" tabindex="-1"></a>cov.dat.df <span class="ot">&lt;-</span>  <span class="fu">as.data.frame</span>(cov.dat)</span>
+<span id="cb69-93"><a href="annex-i-compendium-of-r-scripts.html#cb69-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-94"><a href="annex-i-compendium-of-r-scripts.html#cb69-94" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset rasters to main PC (var. explained &lt;=0.99)</span></span>
+<span id="cb69-95"><a href="annex-i-compendium-of-r-scripts.html#cb69-95" aria-hidden="true" tabindex="-1"></a>n_comps <span class="ot">&lt;-</span> <span class="fu">first</span>(<span class="fu">which</span>(pca<span class="sc">$</span>summaryPCA[<span class="dv">3</span>,]<span class="sc">&gt;</span><span class="fl">0.99</span>))</span>
+<span id="cb69-96"><a href="annex-i-compendium-of-r-scripts.html#cb69-96" aria-hidden="true" tabindex="-1"></a>cov.dat <span class="ot">&lt;-</span> pca<span class="sc">$</span>PCA[[<span class="dv">1</span><span class="sc">:</span>n_comps]]</span>
+<span id="cb69-97"><a href="annex-i-compendium-of-r-scripts.html#cb69-97" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb69-98"><a href="annex-i-compendium-of-r-scripts.html#cb69-98" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot covariates</span></span>
+<span id="cb69-99"><a href="annex-i-compendium-of-r-scripts.html#cb69-99" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cov.dat)</span>
+<span id="cb69-100"><a href="annex-i-compendium-of-r-scripts.html#cb69-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-101"><a href="annex-i-compendium-of-r-scripts.html#cb69-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-102"><a href="annex-i-compendium-of-r-scripts.html#cb69-102" aria-hidden="true" tabindex="-1"></a><span class="co"># 3 - Calculate the minimum sample size to describe the area ===================</span></span>
+<span id="cb69-103"><a href="annex-i-compendium-of-r-scripts.html#cb69-103" aria-hidden="true" tabindex="-1"></a><span class="co"># Start computations ----</span></span>
+<span id="cb69-104"><a href="annex-i-compendium-of-r-scripts.html#cb69-104" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize empty vectors to store results</span></span>
+<span id="cb69-105"><a href="annex-i-compendium-of-r-scripts.html#cb69-105" aria-hidden="true" tabindex="-1"></a>number_of_samples <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb69-106"><a href="annex-i-compendium-of-r-scripts.html#cb69-106" aria-hidden="true" tabindex="-1"></a>prop_explained <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb69-107"><a href="annex-i-compendium-of-r-scripts.html#cb69-107" aria-hidden="true" tabindex="-1"></a>klo_samples <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb69-108"><a href="annex-i-compendium-of-r-scripts.html#cb69-108" aria-hidden="true" tabindex="-1"></a>samples_storage <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
 <span id="cb69-109"><a href="annex-i-compendium-of-r-scripts.html#cb69-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-110"><a href="annex-i-compendium-of-r-scripts.html#cb69-110" aria-hidden="true" tabindex="-1"></a><span class="co"># Start evaluation with growing sample sizes</span></span>
-<span id="cb69-111"><a href="annex-i-compendium-of-r-scripts.html#cb69-111" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (trial <span class="cf">in</span> <span class="fu">seq</span>(initial.n, final.n, <span class="at">by =</span> by.n)) {</span>
-<span id="cb69-112"><a href="annex-i-compendium-of-r-scripts.html#cb69-112" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (iteration <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>iters) {</span>
-<span id="cb69-113"><a href="annex-i-compendium-of-r-scripts.html#cb69-113" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Generate stratified clhs samples</span></span>
-<span id="cb69-114"><a href="annex-i-compendium-of-r-scripts.html#cb69-114" aria-hidden="true" tabindex="-1"></a>    p.dat_I <span class="ot">&lt;-</span>  <span class="fu">sample_clhs</span>(cov.dat,</span>
-<span id="cb69-115"><a href="annex-i-compendium-of-r-scripts.html#cb69-115" aria-hidden="true" tabindex="-1"></a>                     <span class="at">nSamp =</span> trial, <span class="at">iter =</span> <span class="dv">10000</span>,</span>
-<span id="cb69-116"><a href="annex-i-compendium-of-r-scripts.html#cb69-116" aria-hidden="true" tabindex="-1"></a>                     <span class="at">progress =</span> <span class="cn">FALSE</span>, <span class="at">simple =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb69-117"><a href="annex-i-compendium-of-r-scripts.html#cb69-117" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb69-118"><a href="annex-i-compendium-of-r-scripts.html#cb69-118" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get covariate values as dataframe and delete NAs, avoid geometry</span></span>
-<span id="cb69-119"><a href="annex-i-compendium-of-r-scripts.html#cb69-119" aria-hidden="true" tabindex="-1"></a>    p.dat_I.df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(p.dat_I) <span class="sc">%&gt;%</span></span>
-<span id="cb69-120"><a href="annex-i-compendium-of-r-scripts.html#cb69-120" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">!</span>(geometry)) <span class="sc">%&gt;%</span></span>
-<span id="cb69-121"><a href="annex-i-compendium-of-r-scripts.html#cb69-121" aria-hidden="true" tabindex="-1"></a>      <span class="fu">na.omit</span>()</span>
-<span id="cb69-122"><a href="annex-i-compendium-of-r-scripts.html#cb69-122" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb69-123"><a href="annex-i-compendium-of-r-scripts.html#cb69-123" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Store samples as list</span></span>
-<span id="cb69-124"><a href="annex-i-compendium-of-r-scripts.html#cb69-124" aria-hidden="true" tabindex="-1"></a>    samples_storage[[<span class="fu">paste0</span>(<span class="st">&quot;N&quot;</span>, trial, <span class="st">&quot;_&quot;</span>, iteration)]] <span class="ot">&lt;-</span> p.dat_I</span>
+<span id="cb69-110"><a href="annex-i-compendium-of-r-scripts.html#cb69-110" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert SpatRaster to dataframe</span></span>
+<span id="cb69-111"><a href="annex-i-compendium-of-r-scripts.html#cb69-111" aria-hidden="true" tabindex="-1"></a>cov.dat.df <span class="ot">&lt;-</span>  <span class="fu">as.data.frame</span>(cov.dat)</span>
+<span id="cb69-112"><a href="annex-i-compendium-of-r-scripts.html#cb69-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-113"><a href="annex-i-compendium-of-r-scripts.html#cb69-113" aria-hidden="true" tabindex="-1"></a><span class="co"># Start evaluation with growing sample sizes</span></span>
+<span id="cb69-114"><a href="annex-i-compendium-of-r-scripts.html#cb69-114" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (trial <span class="cf">in</span> <span class="fu">seq</span>(initial.n, final.n, <span class="at">by =</span> by.n)) {</span>
+<span id="cb69-115"><a href="annex-i-compendium-of-r-scripts.html#cb69-115" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (iteration <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>iters) {</span>
+<span id="cb69-116"><a href="annex-i-compendium-of-r-scripts.html#cb69-116" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Generate stratified clhs samples</span></span>
+<span id="cb69-117"><a href="annex-i-compendium-of-r-scripts.html#cb69-117" aria-hidden="true" tabindex="-1"></a>    p.dat_I <span class="ot">&lt;-</span>  <span class="fu">sample_clhs</span>(cov.dat,</span>
+<span id="cb69-118"><a href="annex-i-compendium-of-r-scripts.html#cb69-118" aria-hidden="true" tabindex="-1"></a>                     <span class="at">nSamp =</span> trial, <span class="at">iter =</span> <span class="dv">10000</span>,</span>
+<span id="cb69-119"><a href="annex-i-compendium-of-r-scripts.html#cb69-119" aria-hidden="true" tabindex="-1"></a>                     <span class="at">progress =</span> <span class="cn">FALSE</span>, <span class="at">simple =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb69-120"><a href="annex-i-compendium-of-r-scripts.html#cb69-120" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb69-121"><a href="annex-i-compendium-of-r-scripts.html#cb69-121" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get covariate values as dataframe and delete NAs, avoid geometry</span></span>
+<span id="cb69-122"><a href="annex-i-compendium-of-r-scripts.html#cb69-122" aria-hidden="true" tabindex="-1"></a>    p.dat_I.df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(p.dat_I) <span class="sc">%&gt;%</span></span>
+<span id="cb69-123"><a href="annex-i-compendium-of-r-scripts.html#cb69-123" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">!</span>(geometry)) <span class="sc">%&gt;%</span></span>
+<span id="cb69-124"><a href="annex-i-compendium-of-r-scripts.html#cb69-124" aria-hidden="true" tabindex="-1"></a>      <span class="fu">na.omit</span>()</span>
 <span id="cb69-125"><a href="annex-i-compendium-of-r-scripts.html#cb69-125" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb69-126"><a href="annex-i-compendium-of-r-scripts.html#cb69-126" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Comparison of population and sample distributions - Kullback-Leibler (KL) divergence</span></span>
-<span id="cb69-127"><a href="annex-i-compendium-of-r-scripts.html#cb69-127" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define quantiles of the study area (number of bins)</span></span>
-<span id="cb69-128"><a href="annex-i-compendium-of-r-scripts.html#cb69-128" aria-hidden="true" tabindex="-1"></a>    nb <span class="ot">&lt;-</span> <span class="dv">25</span></span>
-<span id="cb69-129"><a href="annex-i-compendium-of-r-scripts.html#cb69-129" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Quantile matrix of the covariate data</span></span>
-<span id="cb69-130"><a href="annex-i-compendium-of-r-scripts.html#cb69-130" aria-hidden="true" tabindex="-1"></a>    q.mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow =</span> (nb <span class="sc">+</span> <span class="dv">1</span>), <span class="at">ncol =</span> <span class="fu">nlyr</span>(cov.dat))</span>
-<span id="cb69-131"><a href="annex-i-compendium-of-r-scripts.html#cb69-131" aria-hidden="true" tabindex="-1"></a>    j <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb69-132"><a href="annex-i-compendium-of-r-scripts.html#cb69-132" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlyr</span>(cov.dat)) {</span>
-<span id="cb69-133"><a href="annex-i-compendium-of-r-scripts.html#cb69-133" aria-hidden="true" tabindex="-1"></a>      ran1 <span class="ot">&lt;-</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">2</span>] <span class="sc">-</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">1</span>]</span>
-<span id="cb69-134"><a href="annex-i-compendium-of-r-scripts.html#cb69-134" aria-hidden="true" tabindex="-1"></a>      step1 <span class="ot">&lt;-</span> ran1 <span class="sc">/</span> nb</span>
-<span id="cb69-135"><a href="annex-i-compendium-of-r-scripts.html#cb69-135" aria-hidden="true" tabindex="-1"></a>      q.mat[, j] <span class="ot">&lt;-</span></span>
-<span id="cb69-136"><a href="annex-i-compendium-of-r-scripts.html#cb69-136" aria-hidden="true" tabindex="-1"></a>        <span class="fu">seq</span>(<span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">1</span>],</span>
-<span id="cb69-137"><a href="annex-i-compendium-of-r-scripts.html#cb69-137" aria-hidden="true" tabindex="-1"></a>            <span class="at">to =</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">2</span>],</span>
-<span id="cb69-138"><a href="annex-i-compendium-of-r-scripts.html#cb69-138" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> step1)</span>
-<span id="cb69-139"><a href="annex-i-compendium-of-r-scripts.html#cb69-139" aria-hidden="true" tabindex="-1"></a>      j <span class="ot">&lt;-</span> j <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb69-140"><a href="annex-i-compendium-of-r-scripts.html#cb69-140" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb69-141"><a href="annex-i-compendium-of-r-scripts.html#cb69-141" aria-hidden="true" tabindex="-1"></a>    q.mat</span>
-<span id="cb69-142"><a href="annex-i-compendium-of-r-scripts.html#cb69-142" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb69-143"><a href="annex-i-compendium-of-r-scripts.html#cb69-143" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Hypercube of covariates in study area</span></span>
-<span id="cb69-144"><a href="annex-i-compendium-of-r-scripts.html#cb69-144" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Initialize the covariate matrix</span></span>
-<span id="cb69-145"><a href="annex-i-compendium-of-r-scripts.html#cb69-145" aria-hidden="true" tabindex="-1"></a>    cov.mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow =</span> nb, <span class="at">ncol =</span> <span class="fu">ncol</span>(q.mat))</span>
-<span id="cb69-146"><a href="annex-i-compendium-of-r-scripts.html#cb69-146" aria-hidden="true" tabindex="-1"></a>    cov.dat.mx <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(cov.dat.df)</span>
-<span id="cb69-147"><a href="annex-i-compendium-of-r-scripts.html#cb69-147" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(cov.dat.mx)) {</span>
-<span id="cb69-148"><a href="annex-i-compendium-of-r-scripts.html#cb69-148" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(cov.dat.mx)) {</span>
-<span id="cb69-149"><a href="annex-i-compendium-of-r-scripts.html#cb69-149" aria-hidden="true" tabindex="-1"></a>        dd <span class="ot">&lt;-</span> cov.dat.mx[[i, j]]</span>
-<span id="cb69-150"><a href="annex-i-compendium-of-r-scripts.html#cb69-150" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb69-151"><a href="annex-i-compendium-of-r-scripts.html#cb69-151" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(dd)) {</span>
-<span id="cb69-152"><a href="annex-i-compendium-of-r-scripts.html#cb69-152" aria-hidden="true" tabindex="-1"></a>          <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nb) {</span>
-<span id="cb69-153"><a href="annex-i-compendium-of-r-scripts.html#cb69-153" aria-hidden="true" tabindex="-1"></a>            kl <span class="ot">&lt;-</span> q.mat[k, j]</span>
-<span id="cb69-154"><a href="annex-i-compendium-of-r-scripts.html#cb69-154" aria-hidden="true" tabindex="-1"></a>            ku <span class="ot">&lt;-</span> q.mat[k <span class="sc">+</span> <span class="dv">1</span>, j]</span>
-<span id="cb69-155"><a href="annex-i-compendium-of-r-scripts.html#cb69-155" aria-hidden="true" tabindex="-1"></a>            </span>
-<span id="cb69-156"><a href="annex-i-compendium-of-r-scripts.html#cb69-156" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (dd <span class="sc">&gt;=</span> kl <span class="sc">&amp;&amp;</span> dd <span class="sc">&lt;=</span> ku) {</span>
-<span id="cb69-157"><a href="annex-i-compendium-of-r-scripts.html#cb69-157" aria-hidden="true" tabindex="-1"></a>              cov.mat[k, j] <span class="ot">&lt;-</span> cov.mat[k, j] <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb69-158"><a href="annex-i-compendium-of-r-scripts.html#cb69-158" aria-hidden="true" tabindex="-1"></a>            }</span>
-<span id="cb69-159"><a href="annex-i-compendium-of-r-scripts.html#cb69-159" aria-hidden="true" tabindex="-1"></a>          }</span>
-<span id="cb69-160"><a href="annex-i-compendium-of-r-scripts.html#cb69-160" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb69-161"><a href="annex-i-compendium-of-r-scripts.html#cb69-161" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb69-162"><a href="annex-i-compendium-of-r-scripts.html#cb69-162" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb69-163"><a href="annex-i-compendium-of-r-scripts.html#cb69-163" aria-hidden="true" tabindex="-1"></a>    cov.mat</span>
-<span id="cb69-164"><a href="annex-i-compendium-of-r-scripts.html#cb69-164" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb69-165"><a href="annex-i-compendium-of-r-scripts.html#cb69-165" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compare whole study area covariate space with the selected sample</span></span>
-<span id="cb69-166"><a href="annex-i-compendium-of-r-scripts.html#cb69-166" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Sample data hypercube (the same as for the raster data but on the sample data)</span></span>
-<span id="cb69-167"><a href="annex-i-compendium-of-r-scripts.html#cb69-167" aria-hidden="true" tabindex="-1"></a>    h.mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow =</span> nb, <span class="at">ncol =</span> <span class="fu">ncol</span>(q.mat))</span>
-<span id="cb69-168"><a href="annex-i-compendium-of-r-scripts.html#cb69-168" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(p.dat_I.df)) {</span>
-<span id="cb69-169"><a href="annex-i-compendium-of-r-scripts.html#cb69-169" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(p.dat_I.df)) {</span>
-<span id="cb69-170"><a href="annex-i-compendium-of-r-scripts.html#cb69-170" aria-hidden="true" tabindex="-1"></a>        dd <span class="ot">&lt;-</span> p.dat_I.df[i, j]</span>
-<span id="cb69-171"><a href="annex-i-compendium-of-r-scripts.html#cb69-171" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb69-172"><a href="annex-i-compendium-of-r-scripts.html#cb69-172" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(dd)) {</span>
-<span id="cb69-173"><a href="annex-i-compendium-of-r-scripts.html#cb69-173" aria-hidden="true" tabindex="-1"></a>          <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nb) {</span>
-<span id="cb69-174"><a href="annex-i-compendium-of-r-scripts.html#cb69-174" aria-hidden="true" tabindex="-1"></a>            kl <span class="ot">&lt;-</span> q.mat[k, j]</span>
-<span id="cb69-175"><a href="annex-i-compendium-of-r-scripts.html#cb69-175" aria-hidden="true" tabindex="-1"></a>            ku <span class="ot">&lt;-</span> q.mat[k <span class="sc">+</span> <span class="dv">1</span>, j]</span>
-<span id="cb69-176"><a href="annex-i-compendium-of-r-scripts.html#cb69-176" aria-hidden="true" tabindex="-1"></a>            </span>
-<span id="cb69-177"><a href="annex-i-compendium-of-r-scripts.html#cb69-177" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (dd <span class="sc">&gt;=</span> kl <span class="sc">&amp;&amp;</span> dd <span class="sc">&lt;=</span> ku) {</span>
-<span id="cb69-178"><a href="annex-i-compendium-of-r-scripts.html#cb69-178" aria-hidden="true" tabindex="-1"></a>              h.mat[k, j] <span class="ot">&lt;-</span> h.mat[k, j] <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb69-179"><a href="annex-i-compendium-of-r-scripts.html#cb69-179" aria-hidden="true" tabindex="-1"></a>            }</span>
-<span id="cb69-180"><a href="annex-i-compendium-of-r-scripts.html#cb69-180" aria-hidden="true" tabindex="-1"></a>          }</span>
-<span id="cb69-181"><a href="annex-i-compendium-of-r-scripts.html#cb69-181" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb69-182"><a href="annex-i-compendium-of-r-scripts.html#cb69-182" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb69-183"><a href="annex-i-compendium-of-r-scripts.html#cb69-183" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb69-184"><a href="annex-i-compendium-of-r-scripts.html#cb69-184" aria-hidden="true" tabindex="-1"></a>    h.mat</span>
-<span id="cb69-185"><a href="annex-i-compendium-of-r-scripts.html#cb69-185" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb69-186"><a href="annex-i-compendium-of-r-scripts.html#cb69-186" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Compute Kullback-Leibler (KL) divergence</span></span>
-<span id="cb69-187"><a href="annex-i-compendium-of-r-scripts.html#cb69-187" aria-hidden="true" tabindex="-1"></a>    kl.index <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb69-188"><a href="annex-i-compendium-of-r-scripts.html#cb69-188" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(cov.dat.df)) {</span>
-<span id="cb69-189"><a href="annex-i-compendium-of-r-scripts.html#cb69-189" aria-hidden="true" tabindex="-1"></a>      kl <span class="ot">&lt;-</span>    <span class="fu">KL.empirical</span>(<span class="fu">c</span>(cov.mat[, i]), <span class="fu">c</span>(h.mat[, i]))</span>
-<span id="cb69-190"><a href="annex-i-compendium-of-r-scripts.html#cb69-190" aria-hidden="true" tabindex="-1"></a>      kl.index <span class="ot">&lt;-</span> <span class="fu">c</span>(kl.index, kl)</span>
-<span id="cb69-191"><a href="annex-i-compendium-of-r-scripts.html#cb69-191" aria-hidden="true" tabindex="-1"></a>      klo <span class="ot">&lt;-</span>  <span class="fu">mean</span>(kl.index)</span>
-<span id="cb69-192"><a href="annex-i-compendium-of-r-scripts.html#cb69-192" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb69-193"><a href="annex-i-compendium-of-r-scripts.html#cb69-193" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb69-194"><a href="annex-i-compendium-of-r-scripts.html#cb69-194" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Calculate the proportion of &quot;env. variables&quot; in the covariate spectra that fall within the convex hull of variables in the &quot;environmental sample space&quot;</span></span>
-<span id="cb69-195"><a href="annex-i-compendium-of-r-scripts.html#cb69-195" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Principal component of the data sample</span></span>
-<span id="cb69-196"><a href="annex-i-compendium-of-r-scripts.html#cb69-196" aria-hidden="true" tabindex="-1"></a>    pca.s <span class="ot">=</span> <span class="fu">prcomp</span>(p.dat_I.df, <span class="at">scale =</span> <span class="cn">TRUE</span>, <span class="at">center =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb69-197"><a href="annex-i-compendium-of-r-scripts.html#cb69-197" aria-hidden="true" tabindex="-1"></a>    scores_pca1 <span class="ot">=</span> <span class="fu">as.data.frame</span>(pca.s<span class="sc">$</span>x)</span>
-<span id="cb69-198"><a href="annex-i-compendium-of-r-scripts.html#cb69-198" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot the first 2 principal components and convex hull</span></span>
-<span id="cb69-199"><a href="annex-i-compendium-of-r-scripts.html#cb69-199" aria-hidden="true" tabindex="-1"></a>    rand.tr <span class="ot">&lt;-</span></span>
-<span id="cb69-200"><a href="annex-i-compendium-of-r-scripts.html#cb69-200" aria-hidden="true" tabindex="-1"></a>      <span class="fu">tri.mesh</span>(scores_pca1[, <span class="dv">1</span>], scores_pca1[, <span class="dv">2</span>], <span class="st">&quot;remove&quot;</span>) <span class="co"># Delaunay triangulation</span></span>
-<span id="cb69-201"><a href="annex-i-compendium-of-r-scripts.html#cb69-201" aria-hidden="true" tabindex="-1"></a>    rand.ch <span class="ot">&lt;-</span> <span class="fu">convex.hull</span>(rand.tr, <span class="at">plot.it =</span> F) <span class="co"># convex hull</span></span>
-<span id="cb69-202"><a href="annex-i-compendium-of-r-scripts.html#cb69-202" aria-hidden="true" tabindex="-1"></a>    pr_poly <span class="ot">&lt;-</span></span>
-<span id="cb69-203"><a href="annex-i-compendium-of-r-scripts.html#cb69-203" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cbind</span>(<span class="at">x =</span> <span class="fu">c</span>(rand.ch<span class="sc">$</span>x), <span class="at">y =</span> <span class="fu">c</span>(rand.ch<span class="sc">$</span>y)) <span class="co"># save the convex hull vertices</span></span>
-<span id="cb69-204"><a href="annex-i-compendium-of-r-scripts.html#cb69-204" aria-hidden="true" tabindex="-1"></a>    <span class="co"># PCA projection of study area population onto the principal components</span></span>
-<span id="cb69-205"><a href="annex-i-compendium-of-r-scripts.html#cb69-205" aria-hidden="true" tabindex="-1"></a>    PCA_projection <span class="ot">&lt;-</span></span>
-<span id="cb69-206"><a href="annex-i-compendium-of-r-scripts.html#cb69-206" aria-hidden="true" tabindex="-1"></a>      <span class="fu">predict</span>(pca.s, cov.dat.df) <span class="co"># Project study area population onto sample PC</span></span>
-<span id="cb69-207"><a href="annex-i-compendium-of-r-scripts.html#cb69-207" aria-hidden="true" tabindex="-1"></a>    newScores <span class="ot">=</span> <span class="fu">cbind</span>(<span class="at">x =</span> PCA_projection[, <span class="dv">1</span>], <span class="at">y =</span> PCA_projection[, <span class="dv">2</span>]) <span class="co"># PC scores of projected population</span></span>
-<span id="cb69-208"><a href="annex-i-compendium-of-r-scripts.html#cb69-208" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check which points fall within the polygon</span></span>
-<span id="cb69-209"><a href="annex-i-compendium-of-r-scripts.html#cb69-209" aria-hidden="true" tabindex="-1"></a>    pip <span class="ot">&lt;-</span></span>
-<span id="cb69-210"><a href="annex-i-compendium-of-r-scripts.html#cb69-210" aria-hidden="true" tabindex="-1"></a>      <span class="fu">point.in.polygon</span>(newScores[, <span class="dv">2</span>], newScores[, <span class="dv">1</span>], pr_poly[, <span class="dv">2</span>], pr_poly[, <span class="dv">1</span>], <span class="at">mode.checked =</span></span>
-<span id="cb69-211"><a href="annex-i-compendium-of-r-scripts.html#cb69-211" aria-hidden="true" tabindex="-1"></a>                         <span class="cn">FALSE</span>)</span>
-<span id="cb69-212"><a href="annex-i-compendium-of-r-scripts.html#cb69-212" aria-hidden="true" tabindex="-1"></a>    newScores <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(newScores, pip))</span>
-<span id="cb69-213"><a href="annex-i-compendium-of-r-scripts.html#cb69-213" aria-hidden="true" tabindex="-1"></a>    klo_samples <span class="ot">&lt;-</span> <span class="fu">c</span>(klo_samples, klo)</span>
-<span id="cb69-214"><a href="annex-i-compendium-of-r-scripts.html#cb69-214" aria-hidden="true" tabindex="-1"></a>    prop_explained <span class="ot">&lt;-</span></span>
-<span id="cb69-215"><a href="annex-i-compendium-of-r-scripts.html#cb69-215" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(prop_explained, <span class="fu">sum</span>(newScores<span class="sc">$</span>pip) <span class="sc">/</span> <span class="fu">nrow</span>(newScores) <span class="sc">*</span> <span class="dv">100</span>)</span>
-<span id="cb69-216"><a href="annex-i-compendium-of-r-scripts.html#cb69-216" aria-hidden="true" tabindex="-1"></a>    number_of_samples <span class="ot">&lt;-</span> <span class="fu">c</span>(number_of_samples, trial)</span>
-<span id="cb69-217"><a href="annex-i-compendium-of-r-scripts.html#cb69-217" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(</span>
-<span id="cb69-218"><a href="annex-i-compendium-of-r-scripts.html#cb69-218" aria-hidden="true" tabindex="-1"></a>      <span class="fu">paste</span>(</span>
-<span id="cb69-219"><a href="annex-i-compendium-of-r-scripts.html#cb69-219" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;N samples = &quot;</span>,</span>
-<span id="cb69-220"><a href="annex-i-compendium-of-r-scripts.html#cb69-220" aria-hidden="true" tabindex="-1"></a>        trial,</span>
-<span id="cb69-221"><a href="annex-i-compendium-of-r-scripts.html#cb69-221" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot; out of &quot;</span>,</span>
-<span id="cb69-222"><a href="annex-i-compendium-of-r-scripts.html#cb69-222" aria-hidden="true" tabindex="-1"></a>        final.n,</span>
-<span id="cb69-223"><a href="annex-i-compendium-of-r-scripts.html#cb69-223" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;; iteration = &quot;</span>,</span>
-<span id="cb69-224"><a href="annex-i-compendium-of-r-scripts.html#cb69-224" aria-hidden="true" tabindex="-1"></a>        iteration,</span>
-<span id="cb69-225"><a href="annex-i-compendium-of-r-scripts.html#cb69-225" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;; KL = &quot;</span>,</span>
-<span id="cb69-226"><a href="annex-i-compendium-of-r-scripts.html#cb69-226" aria-hidden="true" tabindex="-1"></a>        klo,</span>
-<span id="cb69-227"><a href="annex-i-compendium-of-r-scripts.html#cb69-227" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;; Proportion = &quot;</span>,</span>
-<span id="cb69-228"><a href="annex-i-compendium-of-r-scripts.html#cb69-228" aria-hidden="true" tabindex="-1"></a>        <span class="fu">sum</span>(newScores<span class="sc">$</span>pip) <span class="sc">/</span> <span class="fu">nrow</span>(newScores) <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb69-229"><a href="annex-i-compendium-of-r-scripts.html#cb69-229" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb69-230"><a href="annex-i-compendium-of-r-scripts.html#cb69-230" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb69-231"><a href="annex-i-compendium-of-r-scripts.html#cb69-231" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb69-232"><a href="annex-i-compendium-of-r-scripts.html#cb69-232" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb69-233"><a href="annex-i-compendium-of-r-scripts.html#cb69-233" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-234"><a href="annex-i-compendium-of-r-scripts.html#cb69-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-235"><a href="annex-i-compendium-of-r-scripts.html#cb69-235" aria-hidden="true" tabindex="-1"></a><span class="co"># 4 - Plot covariate diversity as PCA scores ===================================</span></span>
-<span id="cb69-236"><a href="annex-i-compendium-of-r-scripts.html#cb69-236" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>],</span>
-<span id="cb69-237"><a href="annex-i-compendium-of-r-scripts.html#cb69-237" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;PCA 1&quot;</span>,</span>
-<span id="cb69-238"><a href="annex-i-compendium-of-r-scripts.html#cb69-238" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;PCA 2&quot;</span>,</span>
-<span id="cb69-239"><a href="annex-i-compendium-of-r-scripts.html#cb69-239" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(<span class="fu">min</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">na.rm =</span> T), <span class="fu">max</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">na.rm =</span> T)),</span>
-<span id="cb69-240"><a href="annex-i-compendium-of-r-scripts.html#cb69-240" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fu">min</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">na.rm =</span> T), <span class="fu">max</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">na.rm =</span> T)),</span>
-<span id="cb69-241"><a href="annex-i-compendium-of-r-scripts.html#cb69-241" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">&#39;black&#39;</span>,</span>
-<span id="cb69-242"><a href="annex-i-compendium-of-r-scripts.html#cb69-242" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&#39;Environmental space plots on convex hull of soil samples&#39;</span>)</span>
-<span id="cb69-243"><a href="annex-i-compendium-of-r-scripts.html#cb69-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-244"><a href="annex-i-compendium-of-r-scripts.html#cb69-244" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(pr_poly, <span class="at">col =</span> <span class="st">&#39;#99999990&#39;</span>)</span>
-<span id="cb69-245"><a href="annex-i-compendium-of-r-scripts.html#cb69-245" aria-hidden="true" tabindex="-1"></a><span class="co"># # Plot points outside convex hull</span></span>
-<span id="cb69-246"><a href="annex-i-compendium-of-r-scripts.html#cb69-246" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(newScores[<span class="fu">which</span>(newScores<span class="sc">$</span>pip <span class="sc">==</span> <span class="dv">0</span>), <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>],</span>
-<span id="cb69-247"><a href="annex-i-compendium-of-r-scripts.html#cb69-247" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
-<span id="cb69-248"><a href="annex-i-compendium-of-r-scripts.html#cb69-248" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch =</span> <span class="dv">12</span>,</span>
-<span id="cb69-249"><a href="annex-i-compendium-of-r-scripts.html#cb69-249" aria-hidden="true" tabindex="-1"></a>       <span class="at">cex =</span> <span class="dv">1</span>)</span>
-<span id="cb69-250"><a href="annex-i-compendium-of-r-scripts.html#cb69-250" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-251"><a href="annex-i-compendium-of-r-scripts.html#cb69-251" aria-hidden="true" tabindex="-1"></a><span class="co"># 5 - KL divergence and % coincidence for growing N samples =============</span></span>
-<span id="cb69-252"><a href="annex-i-compendium-of-r-scripts.html#cb69-252" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge data from number of samples, KL divergence and % coincidence</span></span>
-<span id="cb69-253"><a href="annex-i-compendium-of-r-scripts.html#cb69-253" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(number_of_samples, klo_samples, prop_explained)</span>
-<span id="cb69-254"><a href="annex-i-compendium-of-r-scripts.html#cb69-254" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(results) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;N&quot;</span>, <span class="st">&quot;KL&quot;</span>, <span class="st">&quot;Perc&quot;</span>)</span>
-<span id="cb69-255"><a href="annex-i-compendium-of-r-scripts.html#cb69-255" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-256"><a href="annex-i-compendium-of-r-scripts.html#cb69-256" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate mean results by N size</span></span>
-<span id="cb69-257"><a href="annex-i-compendium-of-r-scripts.html#cb69-257" aria-hidden="true" tabindex="-1"></a>mean_result <span class="ot">&lt;-</span> results <span class="sc">%&gt;%</span></span>
-<span id="cb69-258"><a href="annex-i-compendium-of-r-scripts.html#cb69-258" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(N) <span class="sc">%&gt;%</span></span>
-<span id="cb69-259"><a href="annex-i-compendium-of-r-scripts.html#cb69-259" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize_all</span>(mean)</span>
-<span id="cb69-260"><a href="annex-i-compendium-of-r-scripts.html#cb69-260" aria-hidden="true" tabindex="-1"></a>mean_result</span>
-<span id="cb69-261"><a href="annex-i-compendium-of-r-scripts.html#cb69-261" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-262"><a href="annex-i-compendium-of-r-scripts.html#cb69-262" aria-hidden="true" tabindex="-1"></a><span class="do">## Plot dispersion on KL and % by N</span></span>
-<span id="cb69-263"><a href="annex-i-compendium-of-r-scripts.html#cb69-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-264"><a href="annex-i-compendium-of-r-scripts.html#cb69-264" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">5</span>))</span>
-<span id="cb69-265"><a href="annex-i-compendium-of-r-scripts.html#cb69-265" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(</span>
-<span id="cb69-266"><a href="annex-i-compendium-of-r-scripts.html#cb69-266" aria-hidden="true" tabindex="-1"></a>  Perc <span class="sc">~</span> N,</span>
-<span id="cb69-267"><a href="annex-i-compendium-of-r-scripts.html#cb69-267" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> results,</span>
-<span id="cb69-268"><a href="annex-i-compendium-of-r-scripts.html#cb69-268" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">1</span>, <span class="fl">0.1</span>, <span class="dv">0</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>),</span>
-<span id="cb69-269"><a href="annex-i-compendium-of-r-scripts.html#cb69-269" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;% coincidence&quot;</span></span>
-<span id="cb69-270"><a href="annex-i-compendium-of-r-scripts.html#cb69-270" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb69-271"><a href="annex-i-compendium-of-r-scripts.html#cb69-271" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(<span class="st">&quot;KL divergence&quot;</span>, <span class="at">side =</span> <span class="dv">4</span>, <span class="at">line =</span> <span class="dv">3</span>)</span>
-<span id="cb69-272"><a href="annex-i-compendium-of-r-scripts.html#cb69-272" aria-hidden="true" tabindex="-1"></a><span class="co"># Add new plot</span></span>
-<span id="cb69-273"><a href="annex-i-compendium-of-r-scripts.html#cb69-273" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>, <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">5</span>))</span>
-<span id="cb69-274"><a href="annex-i-compendium-of-r-scripts.html#cb69-274" aria-hidden="true" tabindex="-1"></a><span class="co"># Box plot</span></span>
-<span id="cb69-275"><a href="annex-i-compendium-of-r-scripts.html#cb69-275" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(</span>
-<span id="cb69-276"><a href="annex-i-compendium-of-r-scripts.html#cb69-276" aria-hidden="true" tabindex="-1"></a>  KL <span class="sc">~</span> N,</span>
-<span id="cb69-277"><a href="annex-i-compendium-of-r-scripts.html#cb69-277" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> results,</span>
-<span id="cb69-278"><a href="annex-i-compendium-of-r-scripts.html#cb69-278" aria-hidden="true" tabindex="-1"></a>  <span class="at">axes =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb69-279"><a href="annex-i-compendium-of-r-scripts.html#cb69-279" aria-hidden="true" tabindex="-1"></a>  <span class="at">outline =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb69-280"><a href="annex-i-compendium-of-r-scripts.html#cb69-280" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">0</span>, <span class="fl">0.8</span>, <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>),</span>
-<span id="cb69-281"><a href="annex-i-compendium-of-r-scripts.html#cb69-281" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;&quot;</span></span>
-<span id="cb69-282"><a href="annex-i-compendium-of-r-scripts.html#cb69-282" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb69-283"><a href="annex-i-compendium-of-r-scripts.html#cb69-283" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(</span>
-<span id="cb69-284"><a href="annex-i-compendium-of-r-scripts.html#cb69-284" aria-hidden="true" tabindex="-1"></a>  <span class="dv">4</span>,</span>
-<span id="cb69-285"><a href="annex-i-compendium-of-r-scripts.html#cb69-285" aria-hidden="true" tabindex="-1"></a>  <span class="at">at =</span> <span class="fu">seq</span>(<span class="fl">0.02</span>, <span class="fl">0.36</span>, <span class="at">by =</span> .<span class="dv">06</span>),</span>
-<span id="cb69-286"><a href="annex-i-compendium-of-r-scripts.html#cb69-286" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">seq</span>(<span class="fl">0.02</span>, <span class="fl">0.36</span>, <span class="at">by =</span> .<span class="dv">06</span>),</span>
-<span id="cb69-287"><a href="annex-i-compendium-of-r-scripts.html#cb69-287" aria-hidden="true" tabindex="-1"></a>  <span class="at">las =</span> <span class="dv">3</span></span>
-<span id="cb69-288"><a href="annex-i-compendium-of-r-scripts.html#cb69-288" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb69-289"><a href="annex-i-compendium-of-r-scripts.html#cb69-289" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw legend</span></span>
-<span id="cb69-290"><a href="annex-i-compendium-of-r-scripts.html#cb69-290" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">xpd=</span><span class="cn">TRUE</span>)</span>
-<span id="cb69-291"><a href="annex-i-compendium-of-r-scripts.html#cb69-291" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;top&quot;</span>, <span class="at">inset=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="sc">-</span>.<span class="dv">15</span>) ,<span class="fu">c</span>(<span class="st">&quot;% coincidence&quot;</span>, <span class="st">&quot;KL divergence&quot;</span>), <span class="at">horiz=</span>T,<span class="at">cex=</span>.<span class="dv">9</span>,</span>
-<span id="cb69-292"><a href="annex-i-compendium-of-r-scripts.html#cb69-292" aria-hidden="true" tabindex="-1"></a>       <span class="at">box.lty=</span><span class="dv">0</span>,<span class="at">fill =</span> <span class="fu">c</span>(<span class="fu">rgb</span>(<span class="dv">1</span>, <span class="fl">0.1</span>, <span class="dv">0</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>), <span class="fu">rgb</span>(<span class="dv">0</span>, <span class="fl">0.8</span>, <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)))</span>
-<span id="cb69-293"><a href="annex-i-compendium-of-r-scripts.html#cb69-293" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">xpd=</span><span class="cn">FALSE</span>)</span>
-<span id="cb69-294"><a href="annex-i-compendium-of-r-scripts.html#cb69-294" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-295"><a href="annex-i-compendium-of-r-scripts.html#cb69-295" aria-hidden="true" tabindex="-1"></a><span class="co"># 6 - Model KL divergence ======================================================</span></span>
-<span id="cb69-296"><a href="annex-i-compendium-of-r-scripts.html#cb69-296" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an exponential decay function of the KL divergence</span></span>
-<span id="cb69-297"><a href="annex-i-compendium-of-r-scripts.html#cb69-297" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> mean_result<span class="sc">$</span>N</span>
-<span id="cb69-298"><a href="annex-i-compendium-of-r-scripts.html#cb69-298" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> (mean_result<span class="sc">$</span>KL <span class="sc">-</span> <span class="fu">min</span>(mean_result<span class="sc">$</span>KL)) <span class="sc">/</span> (<span class="fu">max</span>(mean_result<span class="sc">$</span>KL) <span class="sc">-</span> <span class="fu">min</span>(mean_result<span class="sc">$</span>KL)) <span class="co">#KL</span></span>
-<span id="cb69-299"><a href="annex-i-compendium-of-r-scripts.html#cb69-299" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-300"><a href="annex-i-compendium-of-r-scripts.html#cb69-300" aria-hidden="true" tabindex="-1"></a><span class="co"># Parametrize Exponential decay function</span></span>
-<span id="cb69-301"><a href="annex-i-compendium-of-r-scripts.html#cb69-301" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span>  <span class="fu">list</span>()     <span class="co"># Initialize an empty list for the starting values</span></span>
+<span id="cb69-126"><a href="annex-i-compendium-of-r-scripts.html#cb69-126" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Store samples as list</span></span>
+<span id="cb69-127"><a href="annex-i-compendium-of-r-scripts.html#cb69-127" aria-hidden="true" tabindex="-1"></a>    samples_storage[[<span class="fu">paste0</span>(<span class="st">&quot;N&quot;</span>, trial, <span class="st">&quot;_&quot;</span>, iteration)]] <span class="ot">&lt;-</span> p.dat_I</span>
+<span id="cb69-128"><a href="annex-i-compendium-of-r-scripts.html#cb69-128" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb69-129"><a href="annex-i-compendium-of-r-scripts.html#cb69-129" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Comparison of population and sample distributions - Kullback-Leibler (KL) divergence</span></span>
+<span id="cb69-130"><a href="annex-i-compendium-of-r-scripts.html#cb69-130" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define quantiles of the study area (number of bins)</span></span>
+<span id="cb69-131"><a href="annex-i-compendium-of-r-scripts.html#cb69-131" aria-hidden="true" tabindex="-1"></a>    nb <span class="ot">&lt;-</span> <span class="dv">25</span></span>
+<span id="cb69-132"><a href="annex-i-compendium-of-r-scripts.html#cb69-132" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Quantile matrix of the covariate data</span></span>
+<span id="cb69-133"><a href="annex-i-compendium-of-r-scripts.html#cb69-133" aria-hidden="true" tabindex="-1"></a>    q.mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow =</span> (nb <span class="sc">+</span> <span class="dv">1</span>), <span class="at">ncol =</span> <span class="fu">nlyr</span>(cov.dat))</span>
+<span id="cb69-134"><a href="annex-i-compendium-of-r-scripts.html#cb69-134" aria-hidden="true" tabindex="-1"></a>    j <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb69-135"><a href="annex-i-compendium-of-r-scripts.html#cb69-135" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlyr</span>(cov.dat)) {</span>
+<span id="cb69-136"><a href="annex-i-compendium-of-r-scripts.html#cb69-136" aria-hidden="true" tabindex="-1"></a>      ran1 <span class="ot">&lt;-</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">2</span>] <span class="sc">-</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">1</span>]</span>
+<span id="cb69-137"><a href="annex-i-compendium-of-r-scripts.html#cb69-137" aria-hidden="true" tabindex="-1"></a>      step1 <span class="ot">&lt;-</span> ran1 <span class="sc">/</span> nb</span>
+<span id="cb69-138"><a href="annex-i-compendium-of-r-scripts.html#cb69-138" aria-hidden="true" tabindex="-1"></a>      q.mat[, j] <span class="ot">&lt;-</span></span>
+<span id="cb69-139"><a href="annex-i-compendium-of-r-scripts.html#cb69-139" aria-hidden="true" tabindex="-1"></a>        <span class="fu">seq</span>(<span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">1</span>],</span>
+<span id="cb69-140"><a href="annex-i-compendium-of-r-scripts.html#cb69-140" aria-hidden="true" tabindex="-1"></a>            <span class="at">to =</span> <span class="fu">minmax</span>(cov.dat[[i]])[<span class="dv">2</span>],</span>
+<span id="cb69-141"><a href="annex-i-compendium-of-r-scripts.html#cb69-141" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> step1)</span>
+<span id="cb69-142"><a href="annex-i-compendium-of-r-scripts.html#cb69-142" aria-hidden="true" tabindex="-1"></a>      j <span class="ot">&lt;-</span> j <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb69-143"><a href="annex-i-compendium-of-r-scripts.html#cb69-143" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb69-144"><a href="annex-i-compendium-of-r-scripts.html#cb69-144" aria-hidden="true" tabindex="-1"></a>    q.mat</span>
+<span id="cb69-145"><a href="annex-i-compendium-of-r-scripts.html#cb69-145" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb69-146"><a href="annex-i-compendium-of-r-scripts.html#cb69-146" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Hypercube of covariates in study area</span></span>
+<span id="cb69-147"><a href="annex-i-compendium-of-r-scripts.html#cb69-147" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Initialize the covariate matrix</span></span>
+<span id="cb69-148"><a href="annex-i-compendium-of-r-scripts.html#cb69-148" aria-hidden="true" tabindex="-1"></a>    cov.mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow =</span> nb, <span class="at">ncol =</span> <span class="fu">ncol</span>(q.mat))</span>
+<span id="cb69-149"><a href="annex-i-compendium-of-r-scripts.html#cb69-149" aria-hidden="true" tabindex="-1"></a>    cov.dat.mx <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(cov.dat.df)</span>
+<span id="cb69-150"><a href="annex-i-compendium-of-r-scripts.html#cb69-150" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(cov.dat.mx)) {</span>
+<span id="cb69-151"><a href="annex-i-compendium-of-r-scripts.html#cb69-151" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(cov.dat.mx)) {</span>
+<span id="cb69-152"><a href="annex-i-compendium-of-r-scripts.html#cb69-152" aria-hidden="true" tabindex="-1"></a>        dd <span class="ot">&lt;-</span> cov.dat.mx[[i, j]]</span>
+<span id="cb69-153"><a href="annex-i-compendium-of-r-scripts.html#cb69-153" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb69-154"><a href="annex-i-compendium-of-r-scripts.html#cb69-154" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(dd)) {</span>
+<span id="cb69-155"><a href="annex-i-compendium-of-r-scripts.html#cb69-155" aria-hidden="true" tabindex="-1"></a>          <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nb) {</span>
+<span id="cb69-156"><a href="annex-i-compendium-of-r-scripts.html#cb69-156" aria-hidden="true" tabindex="-1"></a>            kl <span class="ot">&lt;-</span> q.mat[k, j]</span>
+<span id="cb69-157"><a href="annex-i-compendium-of-r-scripts.html#cb69-157" aria-hidden="true" tabindex="-1"></a>            ku <span class="ot">&lt;-</span> q.mat[k <span class="sc">+</span> <span class="dv">1</span>, j]</span>
+<span id="cb69-158"><a href="annex-i-compendium-of-r-scripts.html#cb69-158" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb69-159"><a href="annex-i-compendium-of-r-scripts.html#cb69-159" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (dd <span class="sc">&gt;=</span> kl <span class="sc">&amp;&amp;</span> dd <span class="sc">&lt;=</span> ku) {</span>
+<span id="cb69-160"><a href="annex-i-compendium-of-r-scripts.html#cb69-160" aria-hidden="true" tabindex="-1"></a>              cov.mat[k, j] <span class="ot">&lt;-</span> cov.mat[k, j] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb69-161"><a href="annex-i-compendium-of-r-scripts.html#cb69-161" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb69-162"><a href="annex-i-compendium-of-r-scripts.html#cb69-162" aria-hidden="true" tabindex="-1"></a>          }</span>
+<span id="cb69-163"><a href="annex-i-compendium-of-r-scripts.html#cb69-163" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb69-164"><a href="annex-i-compendium-of-r-scripts.html#cb69-164" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb69-165"><a href="annex-i-compendium-of-r-scripts.html#cb69-165" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb69-166"><a href="annex-i-compendium-of-r-scripts.html#cb69-166" aria-hidden="true" tabindex="-1"></a>    cov.mat</span>
+<span id="cb69-167"><a href="annex-i-compendium-of-r-scripts.html#cb69-167" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb69-168"><a href="annex-i-compendium-of-r-scripts.html#cb69-168" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compare whole study area covariate space with the selected sample</span></span>
+<span id="cb69-169"><a href="annex-i-compendium-of-r-scripts.html#cb69-169" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Sample data hypercube (the same as for the raster data but on the sample data)</span></span>
+<span id="cb69-170"><a href="annex-i-compendium-of-r-scripts.html#cb69-170" aria-hidden="true" tabindex="-1"></a>    h.mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow =</span> nb, <span class="at">ncol =</span> <span class="fu">ncol</span>(q.mat))</span>
+<span id="cb69-171"><a href="annex-i-compendium-of-r-scripts.html#cb69-171" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(p.dat_I.df)) {</span>
+<span id="cb69-172"><a href="annex-i-compendium-of-r-scripts.html#cb69-172" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(p.dat_I.df)) {</span>
+<span id="cb69-173"><a href="annex-i-compendium-of-r-scripts.html#cb69-173" aria-hidden="true" tabindex="-1"></a>        dd <span class="ot">&lt;-</span> p.dat_I.df[i, j]</span>
+<span id="cb69-174"><a href="annex-i-compendium-of-r-scripts.html#cb69-174" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb69-175"><a href="annex-i-compendium-of-r-scripts.html#cb69-175" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(dd)) {</span>
+<span id="cb69-176"><a href="annex-i-compendium-of-r-scripts.html#cb69-176" aria-hidden="true" tabindex="-1"></a>          <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nb) {</span>
+<span id="cb69-177"><a href="annex-i-compendium-of-r-scripts.html#cb69-177" aria-hidden="true" tabindex="-1"></a>            kl <span class="ot">&lt;-</span> q.mat[k, j]</span>
+<span id="cb69-178"><a href="annex-i-compendium-of-r-scripts.html#cb69-178" aria-hidden="true" tabindex="-1"></a>            ku <span class="ot">&lt;-</span> q.mat[k <span class="sc">+</span> <span class="dv">1</span>, j]</span>
+<span id="cb69-179"><a href="annex-i-compendium-of-r-scripts.html#cb69-179" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb69-180"><a href="annex-i-compendium-of-r-scripts.html#cb69-180" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (dd <span class="sc">&gt;=</span> kl <span class="sc">&amp;&amp;</span> dd <span class="sc">&lt;=</span> ku) {</span>
+<span id="cb69-181"><a href="annex-i-compendium-of-r-scripts.html#cb69-181" aria-hidden="true" tabindex="-1"></a>              h.mat[k, j] <span class="ot">&lt;-</span> h.mat[k, j] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb69-182"><a href="annex-i-compendium-of-r-scripts.html#cb69-182" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb69-183"><a href="annex-i-compendium-of-r-scripts.html#cb69-183" aria-hidden="true" tabindex="-1"></a>          }</span>
+<span id="cb69-184"><a href="annex-i-compendium-of-r-scripts.html#cb69-184" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb69-185"><a href="annex-i-compendium-of-r-scripts.html#cb69-185" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb69-186"><a href="annex-i-compendium-of-r-scripts.html#cb69-186" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb69-187"><a href="annex-i-compendium-of-r-scripts.html#cb69-187" aria-hidden="true" tabindex="-1"></a>    h.mat</span>
+<span id="cb69-188"><a href="annex-i-compendium-of-r-scripts.html#cb69-188" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb69-189"><a href="annex-i-compendium-of-r-scripts.html#cb69-189" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Compute Kullback-Leibler (KL) divergence</span></span>
+<span id="cb69-190"><a href="annex-i-compendium-of-r-scripts.html#cb69-190" aria-hidden="true" tabindex="-1"></a>    kl.index <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb69-191"><a href="annex-i-compendium-of-r-scripts.html#cb69-191" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(cov.dat.df)) {</span>
+<span id="cb69-192"><a href="annex-i-compendium-of-r-scripts.html#cb69-192" aria-hidden="true" tabindex="-1"></a>      kl <span class="ot">&lt;-</span>    <span class="fu">KL.empirical</span>(<span class="fu">c</span>(cov.mat[, i]), <span class="fu">c</span>(h.mat[, i]))</span>
+<span id="cb69-193"><a href="annex-i-compendium-of-r-scripts.html#cb69-193" aria-hidden="true" tabindex="-1"></a>      kl.index <span class="ot">&lt;-</span> <span class="fu">c</span>(kl.index, kl)</span>
+<span id="cb69-194"><a href="annex-i-compendium-of-r-scripts.html#cb69-194" aria-hidden="true" tabindex="-1"></a>      klo <span class="ot">&lt;-</span>  <span class="fu">mean</span>(kl.index)</span>
+<span id="cb69-195"><a href="annex-i-compendium-of-r-scripts.html#cb69-195" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb69-196"><a href="annex-i-compendium-of-r-scripts.html#cb69-196" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb69-197"><a href="annex-i-compendium-of-r-scripts.html#cb69-197" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Calculate the proportion of &quot;env. variables&quot; in the covariate spectra that fall within the convex hull of variables in the &quot;environmental sample space&quot;</span></span>
+<span id="cb69-198"><a href="annex-i-compendium-of-r-scripts.html#cb69-198" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Principal component of the data sample</span></span>
+<span id="cb69-199"><a href="annex-i-compendium-of-r-scripts.html#cb69-199" aria-hidden="true" tabindex="-1"></a>    pca.s <span class="ot">=</span> <span class="fu">prcomp</span>(p.dat_I.df, <span class="at">scale =</span> <span class="cn">TRUE</span>, <span class="at">center =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb69-200"><a href="annex-i-compendium-of-r-scripts.html#cb69-200" aria-hidden="true" tabindex="-1"></a>    scores_pca1 <span class="ot">=</span> <span class="fu">as.data.frame</span>(pca.s<span class="sc">$</span>x)</span>
+<span id="cb69-201"><a href="annex-i-compendium-of-r-scripts.html#cb69-201" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot the first 2 principal components and convex hull</span></span>
+<span id="cb69-202"><a href="annex-i-compendium-of-r-scripts.html#cb69-202" aria-hidden="true" tabindex="-1"></a>    rand.tr <span class="ot">&lt;-</span></span>
+<span id="cb69-203"><a href="annex-i-compendium-of-r-scripts.html#cb69-203" aria-hidden="true" tabindex="-1"></a>      <span class="fu">tri.mesh</span>(scores_pca1[, <span class="dv">1</span>], scores_pca1[, <span class="dv">2</span>], <span class="st">&quot;remove&quot;</span>) <span class="co"># Delaunay triangulation</span></span>
+<span id="cb69-204"><a href="annex-i-compendium-of-r-scripts.html#cb69-204" aria-hidden="true" tabindex="-1"></a>    rand.ch <span class="ot">&lt;-</span> <span class="fu">convex.hull</span>(rand.tr, <span class="at">plot.it =</span> F) <span class="co"># convex hull</span></span>
+<span id="cb69-205"><a href="annex-i-compendium-of-r-scripts.html#cb69-205" aria-hidden="true" tabindex="-1"></a>    pr_poly <span class="ot">&lt;-</span></span>
+<span id="cb69-206"><a href="annex-i-compendium-of-r-scripts.html#cb69-206" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cbind</span>(<span class="at">x =</span> <span class="fu">c</span>(rand.ch<span class="sc">$</span>x), <span class="at">y =</span> <span class="fu">c</span>(rand.ch<span class="sc">$</span>y)) <span class="co"># save the convex hull vertices</span></span>
+<span id="cb69-207"><a href="annex-i-compendium-of-r-scripts.html#cb69-207" aria-hidden="true" tabindex="-1"></a>    <span class="co"># PCA projection of study area population onto the principal components</span></span>
+<span id="cb69-208"><a href="annex-i-compendium-of-r-scripts.html#cb69-208" aria-hidden="true" tabindex="-1"></a>    PCA_projection <span class="ot">&lt;-</span></span>
+<span id="cb69-209"><a href="annex-i-compendium-of-r-scripts.html#cb69-209" aria-hidden="true" tabindex="-1"></a>      <span class="fu">predict</span>(pca.s, cov.dat.df) <span class="co"># Project study area population onto sample PC</span></span>
+<span id="cb69-210"><a href="annex-i-compendium-of-r-scripts.html#cb69-210" aria-hidden="true" tabindex="-1"></a>    newScores <span class="ot">=</span> <span class="fu">cbind</span>(<span class="at">x =</span> PCA_projection[, <span class="dv">1</span>], <span class="at">y =</span> PCA_projection[, <span class="dv">2</span>]) <span class="co"># PC scores of projected population</span></span>
+<span id="cb69-211"><a href="annex-i-compendium-of-r-scripts.html#cb69-211" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check which points fall within the polygon</span></span>
+<span id="cb69-212"><a href="annex-i-compendium-of-r-scripts.html#cb69-212" aria-hidden="true" tabindex="-1"></a>    pip <span class="ot">&lt;-</span></span>
+<span id="cb69-213"><a href="annex-i-compendium-of-r-scripts.html#cb69-213" aria-hidden="true" tabindex="-1"></a>      <span class="fu">point.in.polygon</span>(newScores[, <span class="dv">2</span>], newScores[, <span class="dv">1</span>], pr_poly[, <span class="dv">2</span>], pr_poly[, <span class="dv">1</span>], <span class="at">mode.checked =</span></span>
+<span id="cb69-214"><a href="annex-i-compendium-of-r-scripts.html#cb69-214" aria-hidden="true" tabindex="-1"></a>                         <span class="cn">FALSE</span>)</span>
+<span id="cb69-215"><a href="annex-i-compendium-of-r-scripts.html#cb69-215" aria-hidden="true" tabindex="-1"></a>    newScores <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(newScores, pip))</span>
+<span id="cb69-216"><a href="annex-i-compendium-of-r-scripts.html#cb69-216" aria-hidden="true" tabindex="-1"></a>    klo_samples <span class="ot">&lt;-</span> <span class="fu">c</span>(klo_samples, klo)</span>
+<span id="cb69-217"><a href="annex-i-compendium-of-r-scripts.html#cb69-217" aria-hidden="true" tabindex="-1"></a>    prop_explained <span class="ot">&lt;-</span></span>
+<span id="cb69-218"><a href="annex-i-compendium-of-r-scripts.html#cb69-218" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(prop_explained, <span class="fu">sum</span>(newScores<span class="sc">$</span>pip) <span class="sc">/</span> <span class="fu">nrow</span>(newScores) <span class="sc">*</span> <span class="dv">100</span>)</span>
+<span id="cb69-219"><a href="annex-i-compendium-of-r-scripts.html#cb69-219" aria-hidden="true" tabindex="-1"></a>    number_of_samples <span class="ot">&lt;-</span> <span class="fu">c</span>(number_of_samples, trial)</span>
+<span id="cb69-220"><a href="annex-i-compendium-of-r-scripts.html#cb69-220" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(</span>
+<span id="cb69-221"><a href="annex-i-compendium-of-r-scripts.html#cb69-221" aria-hidden="true" tabindex="-1"></a>      <span class="fu">paste</span>(</span>
+<span id="cb69-222"><a href="annex-i-compendium-of-r-scripts.html#cb69-222" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;N samples = &quot;</span>,</span>
+<span id="cb69-223"><a href="annex-i-compendium-of-r-scripts.html#cb69-223" aria-hidden="true" tabindex="-1"></a>        trial,</span>
+<span id="cb69-224"><a href="annex-i-compendium-of-r-scripts.html#cb69-224" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot; out of &quot;</span>,</span>
+<span id="cb69-225"><a href="annex-i-compendium-of-r-scripts.html#cb69-225" aria-hidden="true" tabindex="-1"></a>        final.n,</span>
+<span id="cb69-226"><a href="annex-i-compendium-of-r-scripts.html#cb69-226" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;; iteration = &quot;</span>,</span>
+<span id="cb69-227"><a href="annex-i-compendium-of-r-scripts.html#cb69-227" aria-hidden="true" tabindex="-1"></a>        iteration,</span>
+<span id="cb69-228"><a href="annex-i-compendium-of-r-scripts.html#cb69-228" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;; KL = &quot;</span>,</span>
+<span id="cb69-229"><a href="annex-i-compendium-of-r-scripts.html#cb69-229" aria-hidden="true" tabindex="-1"></a>        klo,</span>
+<span id="cb69-230"><a href="annex-i-compendium-of-r-scripts.html#cb69-230" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;; Proportion = &quot;</span>,</span>
+<span id="cb69-231"><a href="annex-i-compendium-of-r-scripts.html#cb69-231" aria-hidden="true" tabindex="-1"></a>        <span class="fu">sum</span>(newScores<span class="sc">$</span>pip) <span class="sc">/</span> <span class="fu">nrow</span>(newScores) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb69-232"><a href="annex-i-compendium-of-r-scripts.html#cb69-232" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb69-233"><a href="annex-i-compendium-of-r-scripts.html#cb69-233" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb69-234"><a href="annex-i-compendium-of-r-scripts.html#cb69-234" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb69-235"><a href="annex-i-compendium-of-r-scripts.html#cb69-235" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb69-236"><a href="annex-i-compendium-of-r-scripts.html#cb69-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-237"><a href="annex-i-compendium-of-r-scripts.html#cb69-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-238"><a href="annex-i-compendium-of-r-scripts.html#cb69-238" aria-hidden="true" tabindex="-1"></a><span class="co"># 4 - Plot covariate diversity as PCA scores ===================================</span></span>
+<span id="cb69-239"><a href="annex-i-compendium-of-r-scripts.html#cb69-239" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>],</span>
+<span id="cb69-240"><a href="annex-i-compendium-of-r-scripts.html#cb69-240" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;PCA 1&quot;</span>,</span>
+<span id="cb69-241"><a href="annex-i-compendium-of-r-scripts.html#cb69-241" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;PCA 2&quot;</span>,</span>
+<span id="cb69-242"><a href="annex-i-compendium-of-r-scripts.html#cb69-242" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(<span class="fu">min</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">na.rm =</span> T), <span class="fu">max</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">na.rm =</span> T)),</span>
+<span id="cb69-243"><a href="annex-i-compendium-of-r-scripts.html#cb69-243" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fu">min</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">na.rm =</span> T), <span class="fu">max</span>(newScores[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">na.rm =</span> T)),</span>
+<span id="cb69-244"><a href="annex-i-compendium-of-r-scripts.html#cb69-244" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">&#39;black&#39;</span>,</span>
+<span id="cb69-245"><a href="annex-i-compendium-of-r-scripts.html#cb69-245" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&#39;Environmental space plots on convex hull of soil samples&#39;</span>)</span>
+<span id="cb69-246"><a href="annex-i-compendium-of-r-scripts.html#cb69-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-247"><a href="annex-i-compendium-of-r-scripts.html#cb69-247" aria-hidden="true" tabindex="-1"></a><span class="fu">polygon</span>(pr_poly, <span class="at">col =</span> <span class="st">&#39;#99999990&#39;</span>)</span>
+<span id="cb69-248"><a href="annex-i-compendium-of-r-scripts.html#cb69-248" aria-hidden="true" tabindex="-1"></a><span class="co"># # Plot points outside convex hull</span></span>
+<span id="cb69-249"><a href="annex-i-compendium-of-r-scripts.html#cb69-249" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(newScores[<span class="fu">which</span>(newScores<span class="sc">$</span>pip <span class="sc">==</span> <span class="dv">0</span>), <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>],</span>
+<span id="cb69-250"><a href="annex-i-compendium-of-r-scripts.html#cb69-250" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb69-251"><a href="annex-i-compendium-of-r-scripts.html#cb69-251" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch =</span> <span class="dv">12</span>,</span>
+<span id="cb69-252"><a href="annex-i-compendium-of-r-scripts.html#cb69-252" aria-hidden="true" tabindex="-1"></a>       <span class="at">cex =</span> <span class="dv">1</span>)</span>
+<span id="cb69-253"><a href="annex-i-compendium-of-r-scripts.html#cb69-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-254"><a href="annex-i-compendium-of-r-scripts.html#cb69-254" aria-hidden="true" tabindex="-1"></a><span class="co"># 5 - KL divergence and % coincidence for growing N samples =============</span></span>
+<span id="cb69-255"><a href="annex-i-compendium-of-r-scripts.html#cb69-255" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge data from number of samples, KL divergence and % coincidence</span></span>
+<span id="cb69-256"><a href="annex-i-compendium-of-r-scripts.html#cb69-256" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(number_of_samples, klo_samples, prop_explained)</span>
+<span id="cb69-257"><a href="annex-i-compendium-of-r-scripts.html#cb69-257" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(results) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;N&quot;</span>, <span class="st">&quot;KL&quot;</span>, <span class="st">&quot;Perc&quot;</span>)</span>
+<span id="cb69-258"><a href="annex-i-compendium-of-r-scripts.html#cb69-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-259"><a href="annex-i-compendium-of-r-scripts.html#cb69-259" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate mean results by N size</span></span>
+<span id="cb69-260"><a href="annex-i-compendium-of-r-scripts.html#cb69-260" aria-hidden="true" tabindex="-1"></a>mean_result <span class="ot">&lt;-</span> results <span class="sc">%&gt;%</span></span>
+<span id="cb69-261"><a href="annex-i-compendium-of-r-scripts.html#cb69-261" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(N) <span class="sc">%&gt;%</span></span>
+<span id="cb69-262"><a href="annex-i-compendium-of-r-scripts.html#cb69-262" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize_all</span>(mean)</span>
+<span id="cb69-263"><a href="annex-i-compendium-of-r-scripts.html#cb69-263" aria-hidden="true" tabindex="-1"></a>mean_result</span>
+<span id="cb69-264"><a href="annex-i-compendium-of-r-scripts.html#cb69-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-265"><a href="annex-i-compendium-of-r-scripts.html#cb69-265" aria-hidden="true" tabindex="-1"></a><span class="do">## Plot dispersion on KL and % by N</span></span>
+<span id="cb69-266"><a href="annex-i-compendium-of-r-scripts.html#cb69-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-267"><a href="annex-i-compendium-of-r-scripts.html#cb69-267" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">5</span>))</span>
+<span id="cb69-268"><a href="annex-i-compendium-of-r-scripts.html#cb69-268" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(</span>
+<span id="cb69-269"><a href="annex-i-compendium-of-r-scripts.html#cb69-269" aria-hidden="true" tabindex="-1"></a>  Perc <span class="sc">~</span> N,</span>
+<span id="cb69-270"><a href="annex-i-compendium-of-r-scripts.html#cb69-270" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> results,</span>
+<span id="cb69-271"><a href="annex-i-compendium-of-r-scripts.html#cb69-271" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">1</span>, <span class="fl">0.1</span>, <span class="dv">0</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>),</span>
+<span id="cb69-272"><a href="annex-i-compendium-of-r-scripts.html#cb69-272" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;% coincidence&quot;</span></span>
+<span id="cb69-273"><a href="annex-i-compendium-of-r-scripts.html#cb69-273" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb69-274"><a href="annex-i-compendium-of-r-scripts.html#cb69-274" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(<span class="st">&quot;KL divergence&quot;</span>, <span class="at">side =</span> <span class="dv">4</span>, <span class="at">line =</span> <span class="dv">3</span>)</span>
+<span id="cb69-275"><a href="annex-i-compendium-of-r-scripts.html#cb69-275" aria-hidden="true" tabindex="-1"></a><span class="co"># Add new plot</span></span>
+<span id="cb69-276"><a href="annex-i-compendium-of-r-scripts.html#cb69-276" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>, <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">5</span>))</span>
+<span id="cb69-277"><a href="annex-i-compendium-of-r-scripts.html#cb69-277" aria-hidden="true" tabindex="-1"></a><span class="co"># Box plot</span></span>
+<span id="cb69-278"><a href="annex-i-compendium-of-r-scripts.html#cb69-278" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(</span>
+<span id="cb69-279"><a href="annex-i-compendium-of-r-scripts.html#cb69-279" aria-hidden="true" tabindex="-1"></a>  KL <span class="sc">~</span> N,</span>
+<span id="cb69-280"><a href="annex-i-compendium-of-r-scripts.html#cb69-280" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> results,</span>
+<span id="cb69-281"><a href="annex-i-compendium-of-r-scripts.html#cb69-281" aria-hidden="true" tabindex="-1"></a>  <span class="at">axes =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb69-282"><a href="annex-i-compendium-of-r-scripts.html#cb69-282" aria-hidden="true" tabindex="-1"></a>  <span class="at">outline =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb69-283"><a href="annex-i-compendium-of-r-scripts.html#cb69-283" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">0</span>, <span class="fl">0.8</span>, <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>),</span>
+<span id="cb69-284"><a href="annex-i-compendium-of-r-scripts.html#cb69-284" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb69-285"><a href="annex-i-compendium-of-r-scripts.html#cb69-285" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb69-286"><a href="annex-i-compendium-of-r-scripts.html#cb69-286" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(</span>
+<span id="cb69-287"><a href="annex-i-compendium-of-r-scripts.html#cb69-287" aria-hidden="true" tabindex="-1"></a>  <span class="dv">4</span>,</span>
+<span id="cb69-288"><a href="annex-i-compendium-of-r-scripts.html#cb69-288" aria-hidden="true" tabindex="-1"></a>  <span class="at">at =</span> <span class="fu">seq</span>(<span class="fl">0.02</span>, <span class="fl">0.36</span>, <span class="at">by =</span> .<span class="dv">06</span>),</span>
+<span id="cb69-289"><a href="annex-i-compendium-of-r-scripts.html#cb69-289" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">seq</span>(<span class="fl">0.02</span>, <span class="fl">0.36</span>, <span class="at">by =</span> .<span class="dv">06</span>),</span>
+<span id="cb69-290"><a href="annex-i-compendium-of-r-scripts.html#cb69-290" aria-hidden="true" tabindex="-1"></a>  <span class="at">las =</span> <span class="dv">3</span></span>
+<span id="cb69-291"><a href="annex-i-compendium-of-r-scripts.html#cb69-291" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb69-292"><a href="annex-i-compendium-of-r-scripts.html#cb69-292" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw legend</span></span>
+<span id="cb69-293"><a href="annex-i-compendium-of-r-scripts.html#cb69-293" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">xpd=</span><span class="cn">TRUE</span>)</span>
+<span id="cb69-294"><a href="annex-i-compendium-of-r-scripts.html#cb69-294" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;top&quot;</span>, <span class="at">inset=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="sc">-</span>.<span class="dv">15</span>) ,<span class="fu">c</span>(<span class="st">&quot;% coincidence&quot;</span>, <span class="st">&quot;KL divergence&quot;</span>), <span class="at">horiz=</span>T,<span class="at">cex=</span>.<span class="dv">9</span>,</span>
+<span id="cb69-295"><a href="annex-i-compendium-of-r-scripts.html#cb69-295" aria-hidden="true" tabindex="-1"></a>       <span class="at">box.lty=</span><span class="dv">0</span>,<span class="at">fill =</span> <span class="fu">c</span>(<span class="fu">rgb</span>(<span class="dv">1</span>, <span class="fl">0.1</span>, <span class="dv">0</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>), <span class="fu">rgb</span>(<span class="dv">0</span>, <span class="fl">0.8</span>, <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)))</span>
+<span id="cb69-296"><a href="annex-i-compendium-of-r-scripts.html#cb69-296" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">xpd=</span><span class="cn">FALSE</span>)</span>
+<span id="cb69-297"><a href="annex-i-compendium-of-r-scripts.html#cb69-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-298"><a href="annex-i-compendium-of-r-scripts.html#cb69-298" aria-hidden="true" tabindex="-1"></a><span class="co"># 6 - Model KL divergence ======================================================</span></span>
+<span id="cb69-299"><a href="annex-i-compendium-of-r-scripts.html#cb69-299" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an exponential decay function of the KL divergence</span></span>
+<span id="cb69-300"><a href="annex-i-compendium-of-r-scripts.html#cb69-300" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> mean_result<span class="sc">$</span>N</span>
+<span id="cb69-301"><a href="annex-i-compendium-of-r-scripts.html#cb69-301" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> (mean_result<span class="sc">$</span>KL <span class="sc">-</span> <span class="fu">min</span>(mean_result<span class="sc">$</span>KL)) <span class="sc">/</span> (<span class="fu">max</span>(mean_result<span class="sc">$</span>KL) <span class="sc">-</span> <span class="fu">min</span>(mean_result<span class="sc">$</span>KL)) <span class="co">#KL</span></span>
 <span id="cb69-302"><a href="annex-i-compendium-of-r-scripts.html#cb69-302" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-303"><a href="annex-i-compendium-of-r-scripts.html#cb69-303" aria-hidden="true" tabindex="-1"></a><span class="co">#fit function</span></span>
-<span id="cb69-304"><a href="annex-i-compendium-of-r-scripts.html#cb69-304" aria-hidden="true" tabindex="-1"></a>k <span class="ot">=</span> <span class="dv">2</span></span>
-<span id="cb69-305"><a href="annex-i-compendium-of-r-scripts.html#cb69-305" aria-hidden="true" tabindex="-1"></a>b0 <span class="ot">=</span> <span class="fl">0.01</span></span>
-<span id="cb69-306"><a href="annex-i-compendium-of-r-scripts.html#cb69-306" aria-hidden="true" tabindex="-1"></a>b1 <span class="ot">=</span> <span class="fl">0.01</span></span>
-<span id="cb69-307"><a href="annex-i-compendium-of-r-scripts.html#cb69-307" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-308"><a href="annex-i-compendium-of-r-scripts.html#cb69-308" aria-hidden="true" tabindex="-1"></a>fit1 <span class="ot">&lt;-</span></span>
-<span id="cb69-309"><a href="annex-i-compendium-of-r-scripts.html#cb69-309" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nls</span>(</span>
-<span id="cb69-310"><a href="annex-i-compendium-of-r-scripts.html#cb69-310" aria-hidden="true" tabindex="-1"></a>    y <span class="sc">~</span> k <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>b1 <span class="sc">*</span> x) <span class="sc">+</span> b0,</span>
-<span id="cb69-311"><a href="annex-i-compendium-of-r-scripts.html#cb69-311" aria-hidden="true" tabindex="-1"></a>    <span class="at">start =</span> <span class="fu">list</span>(<span class="at">k =</span> k, <span class="at">b0 =</span> b0, <span class="at">b1 =</span> b1),</span>
-<span id="cb69-312"><a href="annex-i-compendium-of-r-scripts.html#cb69-312" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">list</span>(<span class="at">maxiter =</span> <span class="dv">500</span>),</span>
-<span id="cb69-313"><a href="annex-i-compendium-of-r-scripts.html#cb69-313" aria-hidden="true" tabindex="-1"></a>    <span class="at">trace =</span> T</span>
-<span id="cb69-314"><a href="annex-i-compendium-of-r-scripts.html#cb69-314" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb69-315"><a href="annex-i-compendium-of-r-scripts.html#cb69-315" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit1)</span>
-<span id="cb69-316"><a href="annex-i-compendium-of-r-scripts.html#cb69-316" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-317"><a href="annex-i-compendium-of-r-scripts.html#cb69-317" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot fit</span></span>
-<span id="cb69-318"><a href="annex-i-compendium-of-r-scripts.html#cb69-318" aria-hidden="true" tabindex="-1"></a>xx <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, final.n, <span class="dv">1</span>)</span>
-<span id="cb69-319"><a href="annex-i-compendium-of-r-scripts.html#cb69-319" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y)</span>
-<span id="cb69-320"><a href="annex-i-compendium-of-r-scripts.html#cb69-320" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xx, <span class="fu">predict</span>(fit1, <span class="fu">list</span>(<span class="at">x =</span> xx)))</span>
-<span id="cb69-321"><a href="annex-i-compendium-of-r-scripts.html#cb69-321" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict with vfit function</span></span>
-<span id="cb69-322"><a href="annex-i-compendium-of-r-scripts.html#cb69-322" aria-hidden="true" tabindex="-1"></a>jj <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit1, <span class="fu">list</span>(<span class="at">x =</span> xx))</span>
-<span id="cb69-323"><a href="annex-i-compendium-of-r-scripts.html#cb69-323" aria-hidden="true" tabindex="-1"></a>normalized <span class="ot">=</span> <span class="dv">1</span> <span class="sc">-</span> (jj <span class="sc">-</span> <span class="fu">min</span>(jj)) <span class="sc">/</span> (<span class="fu">max</span>(jj) <span class="sc">-</span> <span class="fu">min</span>(jj))</span>
-<span id="cb69-324"><a href="annex-i-compendium-of-r-scripts.html#cb69-324" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-325"><a href="annex-i-compendium-of-r-scripts.html#cb69-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-326"><a href="annex-i-compendium-of-r-scripts.html#cb69-326" aria-hidden="true" tabindex="-1"></a><span class="co"># 7 - Determine the minimum sample size to account for 95% of cumulative probability of the covariate diversity ====</span></span>
-<span id="cb69-327"><a href="annex-i-compendium-of-r-scripts.html#cb69-327" aria-hidden="true" tabindex="-1"></a>minimum_n <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">which</span>(normalized <span class="sc">&lt;</span> <span class="fl">0.95</span>)) <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb69-303"><a href="annex-i-compendium-of-r-scripts.html#cb69-303" aria-hidden="true" tabindex="-1"></a><span class="co"># Parametrize Exponential decay function</span></span>
+<span id="cb69-304"><a href="annex-i-compendium-of-r-scripts.html#cb69-304" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span>  <span class="fu">list</span>()     <span class="co"># Initialize an empty list for the starting values</span></span>
+<span id="cb69-305"><a href="annex-i-compendium-of-r-scripts.html#cb69-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-306"><a href="annex-i-compendium-of-r-scripts.html#cb69-306" aria-hidden="true" tabindex="-1"></a><span class="co">#fit function</span></span>
+<span id="cb69-307"><a href="annex-i-compendium-of-r-scripts.html#cb69-307" aria-hidden="true" tabindex="-1"></a>k <span class="ot">=</span> <span class="dv">2</span></span>
+<span id="cb69-308"><a href="annex-i-compendium-of-r-scripts.html#cb69-308" aria-hidden="true" tabindex="-1"></a>b0 <span class="ot">=</span> <span class="fl">0.01</span></span>
+<span id="cb69-309"><a href="annex-i-compendium-of-r-scripts.html#cb69-309" aria-hidden="true" tabindex="-1"></a>b1 <span class="ot">=</span> <span class="fl">0.01</span></span>
+<span id="cb69-310"><a href="annex-i-compendium-of-r-scripts.html#cb69-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-311"><a href="annex-i-compendium-of-r-scripts.html#cb69-311" aria-hidden="true" tabindex="-1"></a>fit1 <span class="ot">&lt;-</span></span>
+<span id="cb69-312"><a href="annex-i-compendium-of-r-scripts.html#cb69-312" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nls</span>(</span>
+<span id="cb69-313"><a href="annex-i-compendium-of-r-scripts.html#cb69-313" aria-hidden="true" tabindex="-1"></a>    y <span class="sc">~</span> k <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>b1 <span class="sc">*</span> x) <span class="sc">+</span> b0,</span>
+<span id="cb69-314"><a href="annex-i-compendium-of-r-scripts.html#cb69-314" aria-hidden="true" tabindex="-1"></a>    <span class="at">start =</span> <span class="fu">list</span>(<span class="at">k =</span> k, <span class="at">b0 =</span> b0, <span class="at">b1 =</span> b1),</span>
+<span id="cb69-315"><a href="annex-i-compendium-of-r-scripts.html#cb69-315" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">list</span>(<span class="at">maxiter =</span> <span class="dv">500</span>),</span>
+<span id="cb69-316"><a href="annex-i-compendium-of-r-scripts.html#cb69-316" aria-hidden="true" tabindex="-1"></a>    <span class="at">trace =</span> T</span>
+<span id="cb69-317"><a href="annex-i-compendium-of-r-scripts.html#cb69-317" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb69-318"><a href="annex-i-compendium-of-r-scripts.html#cb69-318" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit1)</span>
+<span id="cb69-319"><a href="annex-i-compendium-of-r-scripts.html#cb69-319" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-320"><a href="annex-i-compendium-of-r-scripts.html#cb69-320" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot fit</span></span>
+<span id="cb69-321"><a href="annex-i-compendium-of-r-scripts.html#cb69-321" aria-hidden="true" tabindex="-1"></a>xx <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, final.n, <span class="dv">1</span>)</span>
+<span id="cb69-322"><a href="annex-i-compendium-of-r-scripts.html#cb69-322" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y)</span>
+<span id="cb69-323"><a href="annex-i-compendium-of-r-scripts.html#cb69-323" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xx, <span class="fu">predict</span>(fit1, <span class="fu">list</span>(<span class="at">x =</span> xx)))</span>
+<span id="cb69-324"><a href="annex-i-compendium-of-r-scripts.html#cb69-324" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict with vfit function</span></span>
+<span id="cb69-325"><a href="annex-i-compendium-of-r-scripts.html#cb69-325" aria-hidden="true" tabindex="-1"></a>jj <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit1, <span class="fu">list</span>(<span class="at">x =</span> xx))</span>
+<span id="cb69-326"><a href="annex-i-compendium-of-r-scripts.html#cb69-326" aria-hidden="true" tabindex="-1"></a>normalized <span class="ot">=</span> <span class="dv">1</span> <span class="sc">-</span> (jj <span class="sc">-</span> <span class="fu">min</span>(jj)) <span class="sc">/</span> (<span class="fu">max</span>(jj) <span class="sc">-</span> <span class="fu">min</span>(jj))</span>
+<span id="cb69-327"><a href="annex-i-compendium-of-r-scripts.html#cb69-327" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb69-328"><a href="annex-i-compendium-of-r-scripts.html#cb69-328" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-329"><a href="annex-i-compendium-of-r-scripts.html#cb69-329" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot cdf and minimum sampling point</span></span>
-<span id="cb69-330"><a href="annex-i-compendium-of-r-scripts.html#cb69-330" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> xx</span>
-<span id="cb69-331"><a href="annex-i-compendium-of-r-scripts.html#cb69-331" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> normalized</span>
-<span id="cb69-332"><a href="annex-i-compendium-of-r-scripts.html#cb69-332" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-333"><a href="annex-i-compendium-of-r-scripts.html#cb69-333" aria-hidden="true" tabindex="-1"></a>mydata <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(x, y)</span>
-<span id="cb69-334"><a href="annex-i-compendium-of-r-scripts.html#cb69-334" aria-hidden="true" tabindex="-1"></a>opti <span class="ot">&lt;-</span> mydata[mydata<span class="sc">$</span>x <span class="sc">==</span> minimum_n, ]</span>
+<span id="cb69-329"><a href="annex-i-compendium-of-r-scripts.html#cb69-329" aria-hidden="true" tabindex="-1"></a><span class="co"># 7 - Determine the minimum sample size to account for 95% of cumulative probability of the covariate diversity ====</span></span>
+<span id="cb69-330"><a href="annex-i-compendium-of-r-scripts.html#cb69-330" aria-hidden="true" tabindex="-1"></a>minimum_n <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">which</span>(normalized <span class="sc">&lt;</span> <span class="fl">0.95</span>)) <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb69-331"><a href="annex-i-compendium-of-r-scripts.html#cb69-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-332"><a href="annex-i-compendium-of-r-scripts.html#cb69-332" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot cdf and minimum sampling point</span></span>
+<span id="cb69-333"><a href="annex-i-compendium-of-r-scripts.html#cb69-333" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> xx</span>
+<span id="cb69-334"><a href="annex-i-compendium-of-r-scripts.html#cb69-334" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> normalized</span>
 <span id="cb69-335"><a href="annex-i-compendium-of-r-scripts.html#cb69-335" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-336"><a href="annex-i-compendium-of-r-scripts.html#cb69-336" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(</span>
-<span id="cb69-337"><a href="annex-i-compendium-of-r-scripts.html#cb69-337" aria-hidden="true" tabindex="-1"></a>  mydata,</span>
-<span id="cb69-338"><a href="annex-i-compendium-of-r-scripts.html#cb69-338" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="sc">~</span> x,</span>
-<span id="cb69-339"><a href="annex-i-compendium-of-r-scripts.html#cb69-339" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="sc">~</span> normalized,</span>
-<span id="cb69-340"><a href="annex-i-compendium-of-r-scripts.html#cb69-340" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">&quot;lines+markers&quot;</span>,</span>
-<span id="cb69-341"><a href="annex-i-compendium-of-r-scripts.html#cb69-341" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;scatter&quot;</span>,</span>
-<span id="cb69-342"><a href="annex-i-compendium-of-r-scripts.html#cb69-342" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">&quot;CDF (1–KL divergence)&quot;</span></span>
-<span id="cb69-343"><a href="annex-i-compendium-of-r-scripts.html#cb69-343" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb69-344"><a href="annex-i-compendium-of-r-scripts.html#cb69-344" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_trace</span>(</span>
-<span id="cb69-345"><a href="annex-i-compendium-of-r-scripts.html#cb69-345" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="sc">~</span> x,</span>
-<span id="cb69-346"><a href="annex-i-compendium-of-r-scripts.html#cb69-346" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="sc">~</span> jj,</span>
-<span id="cb69-347"><a href="annex-i-compendium-of-r-scripts.html#cb69-347" aria-hidden="true" tabindex="-1"></a>    <span class="at">mode =</span> <span class="st">&quot;lines+markers&quot;</span>,</span>
-<span id="cb69-348"><a href="annex-i-compendium-of-r-scripts.html#cb69-348" aria-hidden="true" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">&quot;scatter&quot;</span>,</span>
-<span id="cb69-349"><a href="annex-i-compendium-of-r-scripts.html#cb69-349" aria-hidden="true" tabindex="-1"></a>    <span class="at">yaxis =</span> <span class="st">&quot;y2&quot;</span>,</span>
-<span id="cb69-350"><a href="annex-i-compendium-of-r-scripts.html#cb69-350" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">&quot;KL divergence&quot;</span></span>
-<span id="cb69-351"><a href="annex-i-compendium-of-r-scripts.html#cb69-351" aria-hidden="true" tabindex="-1"></a>  )  <span class="sc">%&gt;%</span></span>
-<span id="cb69-352"><a href="annex-i-compendium-of-r-scripts.html#cb69-352" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_trace</span>(</span>
-<span id="cb69-353"><a href="annex-i-compendium-of-r-scripts.html#cb69-353" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="sc">~</span> opti<span class="sc">$</span>x,</span>
-<span id="cb69-354"><a href="annex-i-compendium-of-r-scripts.html#cb69-354" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="sc">~</span> opti<span class="sc">$</span>y,</span>
-<span id="cb69-355"><a href="annex-i-compendium-of-r-scripts.html#cb69-355" aria-hidden="true" tabindex="-1"></a>    <span class="at">yaxis =</span> <span class="st">&quot;y&quot;</span>,</span>
-<span id="cb69-356"><a href="annex-i-compendium-of-r-scripts.html#cb69-356" aria-hidden="true" tabindex="-1"></a>    <span class="at">mode =</span> <span class="st">&quot;markers&quot;</span>,</span>
-<span id="cb69-357"><a href="annex-i-compendium-of-r-scripts.html#cb69-357" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">&quot;Minimum N&quot;</span>,</span>
-<span id="cb69-358"><a href="annex-i-compendium-of-r-scripts.html#cb69-358" aria-hidden="true" tabindex="-1"></a>    <span class="at">marker =</span> <span class="fu">list</span>(</span>
-<span id="cb69-359"><a href="annex-i-compendium-of-r-scripts.html#cb69-359" aria-hidden="true" tabindex="-1"></a>      <span class="at">size =</span> <span class="dv">8</span>,</span>
-<span id="cb69-360"><a href="annex-i-compendium-of-r-scripts.html#cb69-360" aria-hidden="true" tabindex="-1"></a>      <span class="at">color =</span> <span class="st">&#39;#d62728&#39;</span>,</span>
-<span id="cb69-361"><a href="annex-i-compendium-of-r-scripts.html#cb69-361" aria-hidden="true" tabindex="-1"></a>      <span class="at">line =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">&#39;black&#39;</span>, <span class="at">width =</span> <span class="dv">1</span>)</span>
-<span id="cb69-362"><a href="annex-i-compendium-of-r-scripts.html#cb69-362" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb69-363"><a href="annex-i-compendium-of-r-scripts.html#cb69-363" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb69-364"><a href="annex-i-compendium-of-r-scripts.html#cb69-364" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
-<span id="cb69-365"><a href="annex-i-compendium-of-r-scripts.html#cb69-365" aria-hidden="true" tabindex="-1"></a>    <span class="at">xaxis =</span> <span class="fu">list</span>(</span>
-<span id="cb69-366"><a href="annex-i-compendium-of-r-scripts.html#cb69-366" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">&quot;N&quot;</span>,</span>
-<span id="cb69-367"><a href="annex-i-compendium-of-r-scripts.html#cb69-367" aria-hidden="true" tabindex="-1"></a>      <span class="at">showgrid =</span> T,</span>
-<span id="cb69-368"><a href="annex-i-compendium-of-r-scripts.html#cb69-368" aria-hidden="true" tabindex="-1"></a>      <span class="at">dtick =</span> <span class="dv">50</span>,</span>
-<span id="cb69-369"><a href="annex-i-compendium-of-r-scripts.html#cb69-369" aria-hidden="true" tabindex="-1"></a>      <span class="at">tickfont =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">11</span>)</span>
-<span id="cb69-370"><a href="annex-i-compendium-of-r-scripts.html#cb69-370" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb69-371"><a href="annex-i-compendium-of-r-scripts.html#cb69-371" aria-hidden="true" tabindex="-1"></a>    <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">&quot;1–KL divergence (% CDF)&quot;</span>, <span class="at">showgrid =</span> F),</span>
-<span id="cb69-372"><a href="annex-i-compendium-of-r-scripts.html#cb69-372" aria-hidden="true" tabindex="-1"></a>    <span class="at">yaxis2 =</span> <span class="fu">list</span>(</span>
-<span id="cb69-373"><a href="annex-i-compendium-of-r-scripts.html#cb69-373" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">&quot;KL divergence&quot;</span>,</span>
-<span id="cb69-374"><a href="annex-i-compendium-of-r-scripts.html#cb69-374" aria-hidden="true" tabindex="-1"></a>      <span class="at">overlaying =</span> <span class="st">&quot;y&quot;</span>,</span>
-<span id="cb69-375"><a href="annex-i-compendium-of-r-scripts.html#cb69-375" aria-hidden="true" tabindex="-1"></a>      <span class="at">side =</span> <span class="st">&quot;right&quot;</span></span>
-<span id="cb69-376"><a href="annex-i-compendium-of-r-scripts.html#cb69-376" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb69-377"><a href="annex-i-compendium-of-r-scripts.html#cb69-377" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend =</span> <span class="fu">list</span>(</span>
-<span id="cb69-378"><a href="annex-i-compendium-of-r-scripts.html#cb69-378" aria-hidden="true" tabindex="-1"></a>      <span class="at">orientation =</span> <span class="st">&quot;h&quot;</span>,</span>
-<span id="cb69-379"><a href="annex-i-compendium-of-r-scripts.html#cb69-379" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="fl">1.2</span>,</span>
-<span id="cb69-380"><a href="annex-i-compendium-of-r-scripts.html#cb69-380" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="fl">0.1</span>,</span>
-<span id="cb69-381"><a href="annex-i-compendium-of-r-scripts.html#cb69-381" aria-hidden="true" tabindex="-1"></a>      <span class="at">traceorder =</span> <span class="st">&quot;normal&quot;</span></span>
-<span id="cb69-382"><a href="annex-i-compendium-of-r-scripts.html#cb69-382" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb69-383"><a href="annex-i-compendium-of-r-scripts.html#cb69-383" aria-hidden="true" tabindex="-1"></a>    <span class="at">margin =</span> <span class="fu">list</span>(</span>
-<span id="cb69-384"><a href="annex-i-compendium-of-r-scripts.html#cb69-384" aria-hidden="true" tabindex="-1"></a>      <span class="at">t =</span> <span class="dv">50</span>,</span>
-<span id="cb69-385"><a href="annex-i-compendium-of-r-scripts.html#cb69-385" aria-hidden="true" tabindex="-1"></a>      <span class="at">b =</span> <span class="dv">50</span>,</span>
-<span id="cb69-386"><a href="annex-i-compendium-of-r-scripts.html#cb69-386" aria-hidden="true" tabindex="-1"></a>      <span class="at">r =</span> <span class="dv">100</span>,</span>
-<span id="cb69-387"><a href="annex-i-compendium-of-r-scripts.html#cb69-387" aria-hidden="true" tabindex="-1"></a>      <span class="at">l =</span> <span class="dv">80</span></span>
-<span id="cb69-388"><a href="annex-i-compendium-of-r-scripts.html#cb69-388" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb69-389"><a href="annex-i-compendium-of-r-scripts.html#cb69-389" aria-hidden="true" tabindex="-1"></a>    <span class="at">hovermode =</span> <span class="st">&#39;x&#39;</span></span>
-<span id="cb69-390"><a href="annex-i-compendium-of-r-scripts.html#cb69-390" aria-hidden="true" tabindex="-1"></a>  )  <span class="sc">%&gt;%</span></span>
-<span id="cb69-391"><a href="annex-i-compendium-of-r-scripts.html#cb69-391" aria-hidden="true" tabindex="-1"></a>  <span class="fu">config</span>(<span class="at">displayModeBar =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb69-392"><a href="annex-i-compendium-of-r-scripts.html#cb69-392" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-393"><a href="annex-i-compendium-of-r-scripts.html#cb69-393" aria-hidden="true" tabindex="-1"></a><span class="co"># 8 - Determine the optimal iteration according to the minimum N size ==========</span></span>
-<span id="cb69-394"><a href="annex-i-compendium-of-r-scripts.html#cb69-394" aria-hidden="true" tabindex="-1"></a>optimal_iteration <span class="ot">&lt;-</span> results[<span class="fu">which</span>(<span class="fu">abs</span>(results<span class="sc">$</span>N <span class="sc">-</span> minimum_n) <span class="sc">==</span> <span class="fu">min</span>(<span class="fu">abs</span>(results<span class="sc">$</span>N <span class="sc">-</span> minimum_n))), ] <span class="sc">%&gt;%</span></span>
-<span id="cb69-395"><a href="annex-i-compendium-of-r-scripts.html#cb69-395" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">IDX =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb69-396"><a href="annex-i-compendium-of-r-scripts.html#cb69-396" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Perc <span class="sc">==</span> <span class="fu">max</span>(Perc))</span>
-<span id="cb69-397"><a href="annex-i-compendium-of-r-scripts.html#cb69-397" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-398"><a href="annex-i-compendium-of-r-scripts.html#cb69-398" aria-hidden="true" tabindex="-1"></a><span class="co"># 9 - Plot minimum points from best iteration ==================================</span></span>
-<span id="cb69-399"><a href="annex-i-compendium-of-r-scripts.html#cb69-399" aria-hidden="true" tabindex="-1"></a>N_final <span class="ot">&lt;-</span> samples_storage[<span class="fu">paste0</span>(<span class="st">&quot;N&quot;</span>, optimal_iteration<span class="sc">$</span>N, <span class="st">&quot;_&quot;</span>, optimal_iteration<span class="sc">$</span>IDX)][[<span class="dv">1</span>]]</span>
-<span id="cb69-400"><a href="annex-i-compendium-of-r-scripts.html#cb69-400" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cov.dat[[<span class="dv">1</span>]])</span>
-<span id="cb69-401"><a href="annex-i-compendium-of-r-scripts.html#cb69-401" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(N_final,<span class="at">add=</span>T,<span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span>
-<span id="cb69-402"><a href="annex-i-compendium-of-r-scripts.html#cb69-402" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-403"><a href="annex-i-compendium-of-r-scripts.html#cb69-403" aria-hidden="true" tabindex="-1"></a><span class="do">## </span><span class="re">END</span></span></code></pre></div>
+<span id="cb69-336"><a href="annex-i-compendium-of-r-scripts.html#cb69-336" aria-hidden="true" tabindex="-1"></a>mydata <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(x, y)</span>
+<span id="cb69-337"><a href="annex-i-compendium-of-r-scripts.html#cb69-337" aria-hidden="true" tabindex="-1"></a>opti <span class="ot">&lt;-</span> mydata[mydata<span class="sc">$</span>x <span class="sc">==</span> minimum_n, ]</span>
+<span id="cb69-338"><a href="annex-i-compendium-of-r-scripts.html#cb69-338" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-339"><a href="annex-i-compendium-of-r-scripts.html#cb69-339" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(</span>
+<span id="cb69-340"><a href="annex-i-compendium-of-r-scripts.html#cb69-340" aria-hidden="true" tabindex="-1"></a>  mydata,</span>
+<span id="cb69-341"><a href="annex-i-compendium-of-r-scripts.html#cb69-341" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="sc">~</span> x,</span>
+<span id="cb69-342"><a href="annex-i-compendium-of-r-scripts.html#cb69-342" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="sc">~</span> normalized,</span>
+<span id="cb69-343"><a href="annex-i-compendium-of-r-scripts.html#cb69-343" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">&quot;lines+markers&quot;</span>,</span>
+<span id="cb69-344"><a href="annex-i-compendium-of-r-scripts.html#cb69-344" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;scatter&quot;</span>,</span>
+<span id="cb69-345"><a href="annex-i-compendium-of-r-scripts.html#cb69-345" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">&quot;CDF (1–KL divergence)&quot;</span></span>
+<span id="cb69-346"><a href="annex-i-compendium-of-r-scripts.html#cb69-346" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb69-347"><a href="annex-i-compendium-of-r-scripts.html#cb69-347" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_trace</span>(</span>
+<span id="cb69-348"><a href="annex-i-compendium-of-r-scripts.html#cb69-348" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="sc">~</span> x,</span>
+<span id="cb69-349"><a href="annex-i-compendium-of-r-scripts.html#cb69-349" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="sc">~</span> jj,</span>
+<span id="cb69-350"><a href="annex-i-compendium-of-r-scripts.html#cb69-350" aria-hidden="true" tabindex="-1"></a>    <span class="at">mode =</span> <span class="st">&quot;lines+markers&quot;</span>,</span>
+<span id="cb69-351"><a href="annex-i-compendium-of-r-scripts.html#cb69-351" aria-hidden="true" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">&quot;scatter&quot;</span>,</span>
+<span id="cb69-352"><a href="annex-i-compendium-of-r-scripts.html#cb69-352" aria-hidden="true" tabindex="-1"></a>    <span class="at">yaxis =</span> <span class="st">&quot;y2&quot;</span>,</span>
+<span id="cb69-353"><a href="annex-i-compendium-of-r-scripts.html#cb69-353" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">&quot;KL divergence&quot;</span></span>
+<span id="cb69-354"><a href="annex-i-compendium-of-r-scripts.html#cb69-354" aria-hidden="true" tabindex="-1"></a>  )  <span class="sc">%&gt;%</span></span>
+<span id="cb69-355"><a href="annex-i-compendium-of-r-scripts.html#cb69-355" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_trace</span>(</span>
+<span id="cb69-356"><a href="annex-i-compendium-of-r-scripts.html#cb69-356" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="sc">~</span> opti<span class="sc">$</span>x,</span>
+<span id="cb69-357"><a href="annex-i-compendium-of-r-scripts.html#cb69-357" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="sc">~</span> opti<span class="sc">$</span>y,</span>
+<span id="cb69-358"><a href="annex-i-compendium-of-r-scripts.html#cb69-358" aria-hidden="true" tabindex="-1"></a>    <span class="at">yaxis =</span> <span class="st">&quot;y&quot;</span>,</span>
+<span id="cb69-359"><a href="annex-i-compendium-of-r-scripts.html#cb69-359" aria-hidden="true" tabindex="-1"></a>    <span class="at">mode =</span> <span class="st">&quot;markers&quot;</span>,</span>
+<span id="cb69-360"><a href="annex-i-compendium-of-r-scripts.html#cb69-360" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">&quot;Minimum N&quot;</span>,</span>
+<span id="cb69-361"><a href="annex-i-compendium-of-r-scripts.html#cb69-361" aria-hidden="true" tabindex="-1"></a>    <span class="at">marker =</span> <span class="fu">list</span>(</span>
+<span id="cb69-362"><a href="annex-i-compendium-of-r-scripts.html#cb69-362" aria-hidden="true" tabindex="-1"></a>      <span class="at">size =</span> <span class="dv">8</span>,</span>
+<span id="cb69-363"><a href="annex-i-compendium-of-r-scripts.html#cb69-363" aria-hidden="true" tabindex="-1"></a>      <span class="at">color =</span> <span class="st">&#39;#d62728&#39;</span>,</span>
+<span id="cb69-364"><a href="annex-i-compendium-of-r-scripts.html#cb69-364" aria-hidden="true" tabindex="-1"></a>      <span class="at">line =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">&#39;black&#39;</span>, <span class="at">width =</span> <span class="dv">1</span>)</span>
+<span id="cb69-365"><a href="annex-i-compendium-of-r-scripts.html#cb69-365" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb69-366"><a href="annex-i-compendium-of-r-scripts.html#cb69-366" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb69-367"><a href="annex-i-compendium-of-r-scripts.html#cb69-367" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
+<span id="cb69-368"><a href="annex-i-compendium-of-r-scripts.html#cb69-368" aria-hidden="true" tabindex="-1"></a>    <span class="at">xaxis =</span> <span class="fu">list</span>(</span>
+<span id="cb69-369"><a href="annex-i-compendium-of-r-scripts.html#cb69-369" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">&quot;N&quot;</span>,</span>
+<span id="cb69-370"><a href="annex-i-compendium-of-r-scripts.html#cb69-370" aria-hidden="true" tabindex="-1"></a>      <span class="at">showgrid =</span> T,</span>
+<span id="cb69-371"><a href="annex-i-compendium-of-r-scripts.html#cb69-371" aria-hidden="true" tabindex="-1"></a>      <span class="at">dtick =</span> <span class="dv">50</span>,</span>
+<span id="cb69-372"><a href="annex-i-compendium-of-r-scripts.html#cb69-372" aria-hidden="true" tabindex="-1"></a>      <span class="at">tickfont =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">11</span>)</span>
+<span id="cb69-373"><a href="annex-i-compendium-of-r-scripts.html#cb69-373" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb69-374"><a href="annex-i-compendium-of-r-scripts.html#cb69-374" aria-hidden="true" tabindex="-1"></a>    <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">&quot;1–KL divergence (% CDF)&quot;</span>, <span class="at">showgrid =</span> F),</span>
+<span id="cb69-375"><a href="annex-i-compendium-of-r-scripts.html#cb69-375" aria-hidden="true" tabindex="-1"></a>    <span class="at">yaxis2 =</span> <span class="fu">list</span>(</span>
+<span id="cb69-376"><a href="annex-i-compendium-of-r-scripts.html#cb69-376" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">&quot;KL divergence&quot;</span>,</span>
+<span id="cb69-377"><a href="annex-i-compendium-of-r-scripts.html#cb69-377" aria-hidden="true" tabindex="-1"></a>      <span class="at">overlaying =</span> <span class="st">&quot;y&quot;</span>,</span>
+<span id="cb69-378"><a href="annex-i-compendium-of-r-scripts.html#cb69-378" aria-hidden="true" tabindex="-1"></a>      <span class="at">side =</span> <span class="st">&quot;right&quot;</span></span>
+<span id="cb69-379"><a href="annex-i-compendium-of-r-scripts.html#cb69-379" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb69-380"><a href="annex-i-compendium-of-r-scripts.html#cb69-380" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend =</span> <span class="fu">list</span>(</span>
+<span id="cb69-381"><a href="annex-i-compendium-of-r-scripts.html#cb69-381" aria-hidden="true" tabindex="-1"></a>      <span class="at">orientation =</span> <span class="st">&quot;h&quot;</span>,</span>
+<span id="cb69-382"><a href="annex-i-compendium-of-r-scripts.html#cb69-382" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="fl">1.2</span>,</span>
+<span id="cb69-383"><a href="annex-i-compendium-of-r-scripts.html#cb69-383" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="fl">0.1</span>,</span>
+<span id="cb69-384"><a href="annex-i-compendium-of-r-scripts.html#cb69-384" aria-hidden="true" tabindex="-1"></a>      <span class="at">traceorder =</span> <span class="st">&quot;normal&quot;</span></span>
+<span id="cb69-385"><a href="annex-i-compendium-of-r-scripts.html#cb69-385" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb69-386"><a href="annex-i-compendium-of-r-scripts.html#cb69-386" aria-hidden="true" tabindex="-1"></a>    <span class="at">margin =</span> <span class="fu">list</span>(</span>
+<span id="cb69-387"><a href="annex-i-compendium-of-r-scripts.html#cb69-387" aria-hidden="true" tabindex="-1"></a>      <span class="at">t =</span> <span class="dv">50</span>,</span>
+<span id="cb69-388"><a href="annex-i-compendium-of-r-scripts.html#cb69-388" aria-hidden="true" tabindex="-1"></a>      <span class="at">b =</span> <span class="dv">50</span>,</span>
+<span id="cb69-389"><a href="annex-i-compendium-of-r-scripts.html#cb69-389" aria-hidden="true" tabindex="-1"></a>      <span class="at">r =</span> <span class="dv">100</span>,</span>
+<span id="cb69-390"><a href="annex-i-compendium-of-r-scripts.html#cb69-390" aria-hidden="true" tabindex="-1"></a>      <span class="at">l =</span> <span class="dv">80</span></span>
+<span id="cb69-391"><a href="annex-i-compendium-of-r-scripts.html#cb69-391" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb69-392"><a href="annex-i-compendium-of-r-scripts.html#cb69-392" aria-hidden="true" tabindex="-1"></a>    <span class="at">hovermode =</span> <span class="st">&#39;x&#39;</span></span>
+<span id="cb69-393"><a href="annex-i-compendium-of-r-scripts.html#cb69-393" aria-hidden="true" tabindex="-1"></a>  )  <span class="sc">%&gt;%</span></span>
+<span id="cb69-394"><a href="annex-i-compendium-of-r-scripts.html#cb69-394" aria-hidden="true" tabindex="-1"></a>  <span class="fu">config</span>(<span class="at">displayModeBar =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb69-395"><a href="annex-i-compendium-of-r-scripts.html#cb69-395" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-396"><a href="annex-i-compendium-of-r-scripts.html#cb69-396" aria-hidden="true" tabindex="-1"></a><span class="co"># 8 - Determine the optimal iteration according to the minimum N size ==========</span></span>
+<span id="cb69-397"><a href="annex-i-compendium-of-r-scripts.html#cb69-397" aria-hidden="true" tabindex="-1"></a>optimal_iteration <span class="ot">&lt;-</span> results[<span class="fu">which</span>(<span class="fu">abs</span>(results<span class="sc">$</span>N <span class="sc">-</span> minimum_n) <span class="sc">==</span> <span class="fu">min</span>(<span class="fu">abs</span>(results<span class="sc">$</span>N <span class="sc">-</span> minimum_n))), ] <span class="sc">%&gt;%</span></span>
+<span id="cb69-398"><a href="annex-i-compendium-of-r-scripts.html#cb69-398" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">IDX =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb69-399"><a href="annex-i-compendium-of-r-scripts.html#cb69-399" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Perc <span class="sc">==</span> <span class="fu">max</span>(Perc))</span>
+<span id="cb69-400"><a href="annex-i-compendium-of-r-scripts.html#cb69-400" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-401"><a href="annex-i-compendium-of-r-scripts.html#cb69-401" aria-hidden="true" tabindex="-1"></a><span class="co"># 9 - Plot minimum points from best iteration ==================================</span></span>
+<span id="cb69-402"><a href="annex-i-compendium-of-r-scripts.html#cb69-402" aria-hidden="true" tabindex="-1"></a>N_final <span class="ot">&lt;-</span> samples_storage[<span class="fu">paste0</span>(<span class="st">&quot;N&quot;</span>, optimal_iteration<span class="sc">$</span>N, <span class="st">&quot;_&quot;</span>, optimal_iteration<span class="sc">$</span>IDX)][[<span class="dv">1</span>]]</span>
+<span id="cb69-403"><a href="annex-i-compendium-of-r-scripts.html#cb69-403" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cov.dat[[<span class="dv">1</span>]])</span>
+<span id="cb69-404"><a href="annex-i-compendium-of-r-scripts.html#cb69-404" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(N_final,<span class="at">add=</span>T,<span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span>
+<span id="cb69-405"><a href="annex-i-compendium-of-r-scripts.html#cb69-405" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-406"><a href="annex-i-compendium-of-r-scripts.html#cb69-406" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-407"><a href="annex-i-compendium-of-r-scripts.html#cb69-407" aria-hidden="true" tabindex="-1"></a><span class="do">## 10 - Calculate minimum and and optimal sample size with opendsm</span></span>
+<span id="cb69-408"><a href="annex-i-compendium-of-r-scripts.html#cb69-408" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb69-409"><a href="annex-i-compendium-of-r-scripts.html#cb69-409" aria-hidden="true" tabindex="-1"></a>    <span class="co">#install.packages(&#39;DescTools&#39;)</span></span>
+<span id="cb69-410"><a href="annex-i-compendium-of-r-scripts.html#cb69-410" aria-hidden="true" tabindex="-1"></a>    <span class="fu">library</span>(<span class="st">&quot;DescTools&quot;</span>)</span>
+<span id="cb69-411"><a href="annex-i-compendium-of-r-scripts.html#cb69-411" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-412"><a href="annex-i-compendium-of-r-scripts.html#cb69-412" aria-hidden="true" tabindex="-1"></a>    <span class="co">#&#39; Source scripts from  https://github.com/newdale/opendsm/tree/main</span></span>
+<span id="cb69-413"><a href="annex-i-compendium-of-r-scripts.html#cb69-413" aria-hidden="true" tabindex="-1"></a>    <span class="co">#&#39;</span></span>
+<span id="cb69-414"><a href="annex-i-compendium-of-r-scripts.html#cb69-414" aria-hidden="true" tabindex="-1"></a>    <span class="co">#&#39; Determine minimum sample size for the clhs algorithm</span></span>
+<span id="cb69-415"><a href="annex-i-compendium-of-r-scripts.html#cb69-415" aria-hidden="true" tabindex="-1"></a>    <span class="co">#&#39; This script is based on the publication:</span></span>
+<span id="cb69-416"><a href="annex-i-compendium-of-r-scripts.html#cb69-416" aria-hidden="true" tabindex="-1"></a>    <span class="co">#&#39; Determining minimum sample size for the conditioned Latin hypercube sampling algorithm</span></span>
+<span id="cb69-417"><a href="annex-i-compendium-of-r-scripts.html#cb69-417" aria-hidden="true" tabindex="-1"></a>    <span class="co">#&#39; DOI: https://doi.org/10.1016/j.pedsph.2022.09.001</span></span>
+<span id="cb69-418"><a href="annex-i-compendium-of-r-scripts.html#cb69-418" aria-hidden="true" tabindex="-1"></a>    <span class="fu">source</span>(<span class="st">&quot;scripts/clhs_min.R&quot;</span>)  </span>
+<span id="cb69-419"><a href="annex-i-compendium-of-r-scripts.html#cb69-419" aria-hidden="true" tabindex="-1"></a>    <span class="co">#&#39; Optimal sample size based on the publication:</span></span>
+<span id="cb69-420"><a href="annex-i-compendium-of-r-scripts.html#cb69-420" aria-hidden="true" tabindex="-1"></a>    <span class="co">#&#39; Divergence metrics for determining optimal training sample size in digital soil mapping</span></span>
+<span id="cb69-421"><a href="annex-i-compendium-of-r-scripts.html#cb69-421" aria-hidden="true" tabindex="-1"></a>    <span class="co">#&#39; DOI: https://doi.org/10.1016/j.geoderma.2023.116553   </span></span>
+<span id="cb69-422"><a href="annex-i-compendium-of-r-scripts.html#cb69-422" aria-hidden="true" tabindex="-1"></a>    <span class="fu">source</span>(<span class="st">&quot;scripts/opt_sample.R&quot;</span>)</span>
+<span id="cb69-423"><a href="annex-i-compendium-of-r-scripts.html#cb69-423" aria-hidden="true" tabindex="-1"></a>    <span class="co">#&#39; Perform Sequential Variable Inflation Factor Analysis</span></span>
+<span id="cb69-424"><a href="annex-i-compendium-of-r-scripts.html#cb69-424" aria-hidden="true" tabindex="-1"></a>    <span class="fu">source</span>(<span class="st">&quot;scripts/seqVIF.R&quot;</span>)</span>
+<span id="cb69-425"><a href="annex-i-compendium-of-r-scripts.html#cb69-425" aria-hidden="true" tabindex="-1"></a>    <span class="co">#&#39; Function to calculate the KL-divergence</span></span>
+<span id="cb69-426"><a href="annex-i-compendium-of-r-scripts.html#cb69-426" aria-hidden="true" tabindex="-1"></a>    <span class="co">#&#39; score between two probability distributions, P and Q.</span></span>
+<span id="cb69-427"><a href="annex-i-compendium-of-r-scripts.html#cb69-427" aria-hidden="true" tabindex="-1"></a>    <span class="fu">source</span>(<span class="st">&quot;scripts/kldiv.R&quot;</span>)</span>
+<span id="cb69-428"><a href="annex-i-compendium-of-r-scripts.html#cb69-428" aria-hidden="true" tabindex="-1"></a>    <span class="co">#&#39; Function to calculate the Jensen-Shannon Distance</span></span>
+<span id="cb69-429"><a href="annex-i-compendium-of-r-scripts.html#cb69-429" aria-hidden="true" tabindex="-1"></a>    <span class="co">#&#39; score between two probability distributions, P and Q.</span></span>
+<span id="cb69-430"><a href="annex-i-compendium-of-r-scripts.html#cb69-430" aria-hidden="true" tabindex="-1"></a>    <span class="fu">source</span>(<span class="st">&quot;scripts/jsdist.R&quot;</span>)</span>
+<span id="cb69-431"><a href="annex-i-compendium-of-r-scripts.html#cb69-431" aria-hidden="true" tabindex="-1"></a>    <span class="co">#&#39; Function to calculate the Jensen-Shannon-divergence</span></span>
+<span id="cb69-432"><a href="annex-i-compendium-of-r-scripts.html#cb69-432" aria-hidden="true" tabindex="-1"></a>    <span class="co">#&#39; score between two probability distributions, P and Q.</span></span>
+<span id="cb69-433"><a href="annex-i-compendium-of-r-scripts.html#cb69-433" aria-hidden="true" tabindex="-1"></a>    <span class="fu">source</span>(<span class="st">&quot;scripts/jsdiv.R&quot;</span>)</span>
+<span id="cb69-434"><a href="annex-i-compendium-of-r-scripts.html#cb69-434" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb69-435"><a href="annex-i-compendium-of-r-scripts.html#cb69-435" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert raster covariates to dataframe</span></span>
+<span id="cb69-436"><a href="annex-i-compendium-of-r-scripts.html#cb69-436" aria-hidden="true" tabindex="-1"></a>    cov.dat.df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(cov.dat[[<span class="dv">1</span><span class="sc">:</span>n_comps]])</span>
+<span id="cb69-437"><a href="annex-i-compendium-of-r-scripts.html#cb69-437" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate minimum sample size</span></span>
+<span id="cb69-438"><a href="annex-i-compendium-of-r-scripts.html#cb69-438" aria-hidden="true" tabindex="-1"></a>    min_N <span class="ot">&lt;-</span><span class="fu">clhs_min</span>(cov.dat.df)</span>
+<span id="cb69-439"><a href="annex-i-compendium-of-r-scripts.html#cb69-439" aria-hidden="true" tabindex="-1"></a>    min_n <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(min_N<span class="sc">$</span>Sample_Size[<span class="dv">1</span>])</span>
+<span id="cb69-440"><a href="annex-i-compendium-of-r-scripts.html#cb69-440" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate optimal sample size ising normalized KL-div, JS-div and JS distance</span></span>
+<span id="cb69-441"><a href="annex-i-compendium-of-r-scripts.html#cb69-441" aria-hidden="true" tabindex="-1"></a>    opt_N <span class="ot">&lt;-</span> <span class="fu">opt_sample</span>(<span class="at">alg=</span><span class="st">&quot;clhs&quot;</span>,<span class="at">s_min =</span> min_n, <span class="at">s_max =</span> <span class="dv">500</span>, <span class="at">s_step=</span><span class="dv">50</span>, <span class="at">s_reps=</span><span class="dv">4</span>, <span class="at">covs =</span> cov.dat.df,<span class="at">clhs_iter=</span><span class="dv">100</span>, <span class="at">cpus=</span><span class="cn">NULL</span>, <span class="at">conf=</span><span class="fl">0.95</span>)</span>
+<span id="cb69-442"><a href="annex-i-compendium-of-r-scripts.html#cb69-442" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb69-443"><a href="annex-i-compendium-of-r-scripts.html#cb69-443" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb69-444"><a href="annex-i-compendium-of-r-scripts.html#cb69-444" aria-hidden="true" tabindex="-1"></a><span class="do">## </span><span class="re">END</span></span></code></pre></div>
 </div>
 <div id="script-5-stratified-sampling-on-vector-and-raster-data" class="section level2 unnumbered hasAnchor">
 <h2>Script 5: Stratified sampling on vector and raster data<a href="annex-i-compendium-of-r-scripts.html#script-5-stratified-sampling-on-vector-and-raster-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -2230,13 +2271,29 @@ Soil Sampling Design</p></a>
 <span id="cb71-268"><a href="annex-i-compendium-of-r-scripts.html#cb71-268" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_write</span>(<span class="fu">paste0</span>(results.path,<span class="st">&#39;const_clhs.shp&#39;</span>), <span class="at">delete_dsn =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb71-269"><a href="annex-i-compendium-of-r-scripts.html#cb71-269" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb71-270"><a href="annex-i-compendium-of-r-scripts.html#cb71-270" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb71-271"><a href="annex-i-compendium-of-r-scripts.html#cb71-271" aria-hidden="true" tabindex="-1"></a><span class="do">## 10 - Calculate COOBS ========================================================</span></span>
-<span id="cb71-272"><a href="annex-i-compendium-of-r-scripts.html#cb71-272" aria-hidden="true" tabindex="-1"></a>    <span class="fu">calculate_coobs</span>(</span>
-<span id="cb71-273"><a href="annex-i-compendium-of-r-scripts.html#cb71-273" aria-hidden="true" tabindex="-1"></a>      <span class="at">mraster =</span> cov.dat,</span>
-<span id="cb71-274"><a href="annex-i-compendium-of-r-scripts.html#cb71-274" aria-hidden="true" tabindex="-1"></a>      <span class="at">existing =</span> cost.clhs,</span>
-<span id="cb71-275"><a href="annex-i-compendium-of-r-scripts.html#cb71-275" aria-hidden="true" tabindex="-1"></a>      <span class="at">plot =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb71-276"><a href="annex-i-compendium-of-r-scripts.html#cb71-276" aria-hidden="true" tabindex="-1"></a>      <span class="at">cores =</span> <span class="dv">4</span></span>
-<span id="cb71-277"><a href="annex-i-compendium-of-r-scripts.html#cb71-277" aria-hidden="true" tabindex="-1"></a>    )    </span></code></pre></div>
+<span id="cb71-271"><a href="annex-i-compendium-of-r-scripts.html#cb71-271" aria-hidden="true" tabindex="-1"></a><span class="do">## 10 - Calculate COOBS (sgsR) =================================================</span></span>
+<span id="cb71-272"><a href="annex-i-compendium-of-r-scripts.html#cb71-272" aria-hidden="true" tabindex="-1"></a>    <span class="co">#&#39; COOBS (count of observations) is an algorithm to map relatively</span></span>
+<span id="cb71-273"><a href="annex-i-compendium-of-r-scripts.html#cb71-273" aria-hidden="true" tabindex="-1"></a>    <span class="co">#&#39; adequate and under-sampled areas on a sampling pattern (generally clhs) </span></span>
+<span id="cb71-274"><a href="annex-i-compendium-of-r-scripts.html#cb71-274" aria-hidden="true" tabindex="-1"></a>    <span class="fu">calculate_coobs</span>(</span>
+<span id="cb71-275"><a href="annex-i-compendium-of-r-scripts.html#cb71-275" aria-hidden="true" tabindex="-1"></a>      <span class="at">mraster =</span> cov.dat,</span>
+<span id="cb71-276"><a href="annex-i-compendium-of-r-scripts.html#cb71-276" aria-hidden="true" tabindex="-1"></a>      <span class="at">existing =</span> cost.clhs,</span>
+<span id="cb71-277"><a href="annex-i-compendium-of-r-scripts.html#cb71-277" aria-hidden="true" tabindex="-1"></a>      <span class="at">plot =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb71-278"><a href="annex-i-compendium-of-r-scripts.html#cb71-278" aria-hidden="true" tabindex="-1"></a>      <span class="at">cores =</span> <span class="dv">4</span></span>
+<span id="cb71-279"><a href="annex-i-compendium-of-r-scripts.html#cb71-279" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb71-280"><a href="annex-i-compendium-of-r-scripts.html#cb71-280" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb71-281"><a href="annex-i-compendium-of-r-scripts.html#cb71-281" aria-hidden="true" tabindex="-1"></a><span class="do">## 11 - Plot sample density over covariates ====================================</span></span>
+<span id="cb71-282"><a href="annex-i-compendium-of-r-scripts.html#cb71-282" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb71-283"><a href="annex-i-compendium-of-r-scripts.html#cb71-283" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Distribution of elevation values on the sampling design vs. original elevation data</span></span>
+<span id="cb71-284"><a href="annex-i-compendium-of-r-scripts.html#cb71-284" aria-hidden="true" tabindex="-1"></a>    s0 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">data.frame</span>(<span class="at">method =</span> <span class="st">&quot;Elevation&quot;</span>, <span class="fu">data.frame</span>(elevation)))</span>
+<span id="cb71-285"><a href="annex-i-compendium-of-r-scripts.html#cb71-285" aria-hidden="true" tabindex="-1"></a>    s1 <span class="ot">&lt;-</span> <span class="fu">extract</span>(elevation,pts)</span>
+<span id="cb71-286"><a href="annex-i-compendium-of-r-scripts.html#cb71-286" aria-hidden="true" tabindex="-1"></a>    s1<span class="sc">$</span>method <span class="ot">&lt;-</span><span class="st">&quot;cLHS&quot;</span></span>
+<span id="cb71-287"><a href="annex-i-compendium-of-r-scripts.html#cb71-287" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb71-288"><a href="annex-i-compendium-of-r-scripts.html#cb71-288" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot the covariate elevation values as histogram bars and the sampling distribution as curve</span></span>
+<span id="cb71-289"><a href="annex-i-compendium-of-r-scripts.html#cb71-289" aria-hidden="true" tabindex="-1"></a>    <span class="fu">library</span>(ggplot2)</span>
+<span id="cb71-290"><a href="annex-i-compendium-of-r-scripts.html#cb71-290" aria-hidden="true" tabindex="-1"></a>    dens_elev <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb71-291"><a href="annex-i-compendium-of-r-scripts.html#cb71-291" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_histogram</span>(<span class="at">data=</span>s0, <span class="fu">aes</span>(<span class="at">x=</span>dtm_elevation_250m,<span class="at">fill=</span><span class="st">&quot;red&quot;</span>,<span class="at">y=</span><span class="fu">after_stat</span>(density)),<span class="at">binwidth=</span><span class="dv">25</span>, <span class="at">alpha=</span>.<span class="dv">5</span>, <span class="at">position=</span><span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb71-292"><a href="annex-i-compendium-of-r-scripts.html#cb71-292" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_density</span>(<span class="at">data =</span> s1, <span class="fu">aes</span>(<span class="at">x =</span> dtm_elevation_250m, <span class="at">col =</span> method))</span>
+<span id="cb71-293"><a href="annex-i-compendium-of-r-scripts.html#cb71-293" aria-hidden="true" tabindex="-1"></a>    dens_elev</span></code></pre></div>
 
 </div>
 </div>

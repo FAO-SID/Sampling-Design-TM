@@ -45,6 +45,7 @@
 #'
 #' @examples
 #' # import the example data and run with 4 reps
+#' load("covs.rda")
 #' data(covs)
 #' out<- opt_sample(alg="clhs", s_min=10, s_max=400, s_step=20, s_reps=4, covs= covs, clhs_iter=100, cpus=NULL, conf=0.95)
 #'

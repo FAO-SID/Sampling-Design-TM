@@ -14,7 +14,7 @@
 #'
 #' @return list, with 7 objects
 #' Object 1. Dataframe 'Sample_Size' returning descriptive statistics for the minimum sample size
-#' Object 2. Dataframe 'Transformations' provides data transformations used to normalize covariate distriburions
+#' Object 2. Dataframe 'Transformations' provides data transformations used to normalize covariate distributions
 #' Object 3. Dataframe 'Results' provides the minimum sample size for each individual covariate
 #' Object 4. Dataframe 'Bimodality' provides the results of bimodality assessment for covariates deemd to be bimodal
 #' Object 5. List 'Hist_Original' containing histogtram objects for each covariate

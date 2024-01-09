@@ -3,7 +3,7 @@ title: |
   <img src="images/frontcover.jpg" style="top:0px;height:150px;" align="right" />
     Soil Sampling Design
 subtitle: "Technical Manual"
-author: "Rodríguez Lado, L., Angelini,  M.E, Naypewe, N., Luotto, I., Yigini, Y."
+author: "Rodríguez Lado, L., Angelini,  M.E, Nyapwere, N., Luotto, I., Yigini, Y."
 date: "`r Sys.Date()`"
 cover-image: images/frontcover.png
 site: bookdown::bookdown_site

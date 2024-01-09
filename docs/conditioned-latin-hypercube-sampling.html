@@ -20,10 +20,10 @@
   <meta name="twitter:description" content="Soil Sampling Design - SoilFer Project" />
   <meta name="twitter:image" content="/images/frontcover.png" />
 
-<meta name="author" content="Rodríguez Lado, L., Angelini, M.E, Naypewe, N., Luotto, I., Yigini, Y." />
+<meta name="author" content="Rodríguez Lado, L., Angelini, M.E, Nyapwere, N., Luotto, I., Yigini, Y." />
 
 
-<meta name="date" content="2024-01-06" />
+<meta name="date" content="2024-01-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -236,7 +236,7 @@ div.csl-indent {
 <li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-1-introduction-to-r"><i class="fa fa-check"></i>Script 1: Introduction to R</a></li>
 <li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-2-download-environmental-covariates"><i class="fa fa-check"></i>Script 2: Download environmental covariates</a></li>
 <li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-3-evaluate-legacy-data"><i class="fa fa-check"></i>Script 3: Evaluate Legacy Data</a></li>
-<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-4-calculate-minimum-sample-size"><i class="fa fa-check"></i>Script 4: Calculate Minimum Sample Size</a></li>
+<li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-4-calculate-minimum-and-optimal-sample-sizes"><i class="fa fa-check"></i>Script 4: Calculate Minimum and Optimal Sample Sizes</a></li>
 <li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-5-stratified-sampling-on-vector-and-raster-data"><i class="fa fa-check"></i>Script 5: Stratified sampling on vector and raster data</a></li>
 <li class="chapter" data-level="" data-path="annex-i-compendium-of-r-scripts.html"><a href="annex-i-compendium-of-r-scripts.html#script-6-conditional-latin-hypercube-sampling"><i class="fa fa-check"></i>Script 6: Conditional Latin Hypercube Sampling</a></li>
 </ul></li>
@@ -270,7 +270,7 @@ Soil Sampling Design</p></a>
 <div id="clhs-design" class="section level2 hasAnchor" number="6.1">
 <h2><span class="header-section-number">6.1</span> cLHS Design<a href="conditioned-latin-hypercube-sampling.html#clhs-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>As for stratified sampling, the creation target points from a conditioned Latin Hypercube Sampling design involves the identification of the relevant features describing the environmental diversity in the area. In this case, the environmental parameters are incorporated in the form of raster covariates. The determination of the number of samples in the design is also required. This step can be calculated following the information already provided in this manual.</p>
-<p>With the minimum sampling size of 165 calculated before, we can conduct conditioned Latin Hypercube Sampling design for the area in the example using the R packages <code>'sgsR'</code> and <code>'cLHS'</code> available at CRAN.</p>
+<p>With the minimum sampling size of 162 calculated before, we can conduct conditioned Latin Hypercube Sampling design for the area in the example using the R packages <code>'sgsR'</code> and <code>'cLHS'</code> available at CRAN.</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="conditioned-latin-hypercube-sampling.html#cb40-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Path to rasters</span></span>
 <span id="cb40-2"><a href="conditioned-latin-hypercube-sampling.html#cb40-2" aria-hidden="true" tabindex="-1"></a>  raster.path <span class="ot">&lt;-</span> <span class="st">&quot;data/rasters/&quot;</span></span>
 <span id="cb40-3"><a href="conditioned-latin-hypercube-sampling.html#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Path to shapes</span></span>
