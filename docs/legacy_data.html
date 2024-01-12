@@ -74,7 +74,7 @@
 <link href="assets/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
 <script src="assets/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
 <script src="assets/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script>
-<script src="assets/Strata_586e12-1/data_stars_Stratac0175a.txt"></script>
+<script src="assets/Strata_ab4683-1/data_stars_Strataf752e9.txt"></script>
 <script src="assets/joda-0.0.1/joda.js"></script>
 <script src="assets/joda-0.0.1/addImageQuery-bindings.js"></script>
 
@@ -297,11 +297,11 @@ Soil Sampling Design</p></a>
 <span id="cb2-16"><a href="legacy_data.html#cb2-16" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb2-17"><a href="legacy_data.html#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get SpatRaster layers</span></span>
 <span id="cb2-18"><a href="legacy_data.html#cb2-18" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span> pca<span class="sc">$</span>PCA</span>
-<span id="cb2-19"><a href="legacy_data.html#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create a raster stack to be used as input in the clhs::clhs function </span></span>
-<span id="cb2-20"><a href="legacy_data.html#cb2-20" aria-hidden="true" tabindex="-1"></a>  cov.dat.ras <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">stack</span>(cov.dat) </span>
-<span id="cb2-21"><a href="legacy_data.html#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Subset rasters</span></span>
-<span id="cb2-22"><a href="legacy_data.html#cb2-22" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span> pca<span class="sc">$</span>PCA[[<span class="dv">1</span><span class="sc">:</span><span class="fu">first</span>(<span class="fu">which</span>(pca<span class="sc">$</span>summaryPCA[<span class="dv">3</span>,]<span class="sc">&gt;</span><span class="fl">0.99</span>))]]</span>
-<span id="cb2-23"><a href="legacy_data.html#cb2-23" aria-hidden="true" tabindex="-1"></a>  cov.dat.ras <span class="ot">&lt;-</span>  cov.dat.ras[[<span class="dv">1</span><span class="sc">:</span><span class="fu">first</span>(<span class="fu">which</span>(pca<span class="sc">$</span>summaryPCA[<span class="dv">3</span>,]<span class="sc">&gt;</span><span class="fl">0.99</span>))]]</span>
+<span id="cb2-19"><a href="legacy_data.html#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="legacy_data.html#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Subset rasters to main PC (var. explained &lt;=0.99)</span></span>
+<span id="cb2-21"><a href="legacy_data.html#cb2-21" aria-hidden="true" tabindex="-1"></a>  n_comps <span class="ot">&lt;-</span> <span class="fu">first</span>(<span class="fu">which</span>(pca<span class="sc">$</span>summaryPCA[<span class="dv">3</span>,]<span class="sc">&gt;</span><span class="fl">0.99</span>))</span>
+<span id="cb2-22"><a href="legacy_data.html#cb2-22" aria-hidden="true" tabindex="-1"></a>  cov.dat <span class="ot">&lt;-</span> pca<span class="sc">$</span>PCA[[<span class="dv">1</span><span class="sc">:</span>n_comps]]</span>
+<span id="cb2-23"><a href="legacy_data.html#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-24"><a href="legacy_data.html#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># convert to dataframe</span></span>
 <span id="cb2-25"><a href="legacy_data.html#cb2-25" aria-hidden="true" tabindex="-1"></a>  cov.dat.df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(cov.dat)</span>
 <span id="cb2-26"><a href="legacy_data.html#cb2-26" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -388,7 +388,7 @@ KL–divergence compares an ‘objective’ or reference probability distributio
 <span id="cb6-8"><a href="legacy_data.html#cb6-8" aria-hidden="true" tabindex="-1"></a>      <span class="co">#print(kl.index) # KL divergences of each covariate</span></span>
 <span id="cb6-9"><a href="legacy_data.html#cb6-9" aria-hidden="true" tabindex="-1"></a>      <span class="co">#print(klo) # KL divergence in the existing soil samples</span></span></code></pre></div>
 <p>The KL–divergence is always greater than or equal to zero, and reaches its minimum value (zero) only when P and Q are identical. Thus, lower values of KL–divergence indicate a better match between both the sample and the study area spaces, suggesting that the sample space provides a fair representation of the environmental conditions in the study area.</p>
-<p>In this case, the KL–divergence value is 0.175, which quantifies the amount of environmental variability in the study area captured by the legacy samples.</p>
+<p>In this case, the KL–divergence value is 0.181, which quantifies the amount of environmental variability in the study area captured by the legacy samples.</p>
 <ul>
 <li><strong>Percent of representativeness in relation to the overall environmental conditions</strong></li>
 </ul>
@@ -399,7 +399,7 @@ KL–divergence compares an ‘objective’ or reference probability distributio
 Figure 3.2: PCA plot of the covariate
 </p>
 </div>
-<p>This indicates that 95.3% of the existing conditions in the study area are encompassed within the convex hull delineated using the data from the soil samples. This percentage shows the level of adequacy of the legacy data for DSM in the area.</p>
+<p>This indicates that 90.3% of the existing conditions in the study area are encompassed within the convex hull delineated using the data from the soil samples. This percentage shows the level of adequacy of the legacy data for DSM in the area.</p>
 
 </div>
 </div>

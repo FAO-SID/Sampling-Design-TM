@@ -543,7 +543,6 @@ Export.image.toDrive({
 # 7 - Calculate Representativeness of the Legacy Dataset
 #________________________________________________________________
 
-start_time <- Sys.time()
 
 ## 0 - Set working directory and load packages =================================
 
@@ -1851,7 +1850,7 @@ start_time <- Sys.time()
   # Define the minimum sample size. By default it uses the value calculated previously
   minimum_n <- 180
   # Aggregation factor for up-scaling raster covariates (optional)
-  agg.factor = 10
+  agg.factor = 5
 
 ## 2 - Import national data ====================================================
 

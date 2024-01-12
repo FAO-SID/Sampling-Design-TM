@@ -56,7 +56,7 @@
   # Path to additional data
   other.path <- "data/other/"
   # Aggregation factor for up-scaling raster covariates (optional)
-  agg.factor = 10
+  agg.factor = 5
   
   
 ## 2 - Prepare data ============================================================
@@ -78,11 +78,10 @@
   
   # Get SpatRaster layers
   cov.dat <- pca$PCA
-  # Create a raster stack to be used as input in the clhs::clhs function 
-  cov.dat.ras <- raster::stack(cov.dat) 
-  # Subset rasters
-  cov.dat <- pca$PCA[[1:first(which(pca$summaryPCA[3,]>0.99))]]
-  cov.dat.ras <-  cov.dat.ras[[1:first(which(pca$summaryPCA[3,]>0.99))]]
+  
+  # Subset rasters to main PC (var. explained <=0.99)
+  n_comps <- first(which(pca$summaryPCA[3,]>0.99))
+  cov.dat <- pca$PCA[[1:n_comps]]
 
 ## 3 - Extract environmental data from rasters at soil locations ===============
   # Load legacy soil data
