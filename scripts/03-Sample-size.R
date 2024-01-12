@@ -27,6 +27,8 @@ gc()
 # 7 - Determine the minimum sample size for 95% coincidence
 # 8 - Determine the optimal iteration according to the minimum N size 
 # 9 - Plot minimum points from best iteration
+# 10 - Calculate COOBS (sgsR)
+# 11 - Calculate minimum and and optimal sample size with opendsm
 #________________________________________________________________
 
 
@@ -59,10 +61,10 @@ other.path <- "data/other/"
 agg.factor = 10
 
 # Define parameters to determine minimum sampling size
-initial.n <- 50 # Initial sampling size to test
-final.n <- 250 # Final sampling size to test
-by.n <- 10 # Increment size
-iters <- 10 # Number of trials on each size
+initial.n <- 60 # Initial sampling size to test
+final.n <- 360 # Final sampling size to test
+by.n <- 20 # Increment size
+iters <- 5 # Number of trials on each size
 
 
 ## 2 - Import national data ====================================================
@@ -399,7 +401,31 @@ N_final <- samples_storage[paste0("N", optimal_iteration$N, "_", optimal_iterati
 plot(cov.dat[[1]])
 plot(N_final,add=T,col="red")
 
-## 10 - Calculate minimum and and optimal sample size with opendsm =============
+## 10 - Calculate COOBS (sgsR) =================================================
+#' COOBS (count of observations) is an algorithm to map relatively
+#' adequate and under-sampled areas on a sampling pattern.
+#' COOBS algorithms allow one to understand which areas in a spatial domain are adequately and under-sampled. 
+#' COOBS ca be used to design an additional survey by limiting the cLHS algorithm to areas where the COOBS
+#' value is below some specified threshold. 
+coobs <- calculate_coobs(
+  mraster = cov.dat,
+  existing = N_final,
+  plot = TRUE,
+  cores = 4,
+  filename = paste0(results.path,"/coobs_SampleSize.tif"),
+  overwrite = TRUE
+)
+
+# Plot COOBS
+
+plot(coobs[[2]], main="Number of samples in similar environment")
+plot(nghe[1], col="transparent", add=TRUE)
+
+# coobs.results <-  rast(paste0(results.path,"coobs_SampleSize.tif"))
+# plot(coobs.results[[2]], main="Number of samples in similar environment (COOBS)")
+# plot(nghe[1], col="transparent", add=TRUE)
+
+## 11 - Calculate minimum and and optimal sample size with opendsm =============
 
 #install.packages('~/Downloads/DescTools_0.99.45.tar', repos=NULL, type='source')
 #install.packages('DescTools')
@@ -432,7 +458,7 @@ source("scripts/jsdiv.R")
 cov.dat.df <- data.frame(cov.dat)
 # Calculate minimum sample size
 min_N <-clhs_min(cov.dat.df)
-# Calculate optimal sample size ising normalized KL-div, JS-div and JS distance
+# Calculate optimal sample size using normalized KL-div, JS-div and JS distance
 opt_N <- opt_sample(alg="clhs",s_min=150,s_max=500, s_step=50, s_reps=4, covs = cov.dat.df,clhs_iter=100, cpus=NULL, conf=0.95)
 
 

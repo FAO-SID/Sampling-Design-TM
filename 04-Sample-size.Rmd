@@ -83,7 +83,7 @@ As in the previous section, covariates are PCA-transformed to avoid collinearity
 Fig. \@ref(fig:fig-5) shows the covariates retained for the analyses.
 
 ```{r fig-5, eval=TRUE, include=TRUE, fig.cap="Plot of the covariates"}
-
+  ## Plot covariates
    plot(cov.dat)
   
 ```
@@ -93,7 +93,7 @@ Fig. \@ref(fig:fig-5) shows the covariates retained for the analyses.
 
   ## Define the number of samples to be tested in a loop (from initial to final) and the step of the sequence
   initial.n <- 50 # Initial sampling size to test
-  final.n <- 250 # Final sampling size to test
+  final.n <- 300 # Final sampling size to test
   by.n <- 10 # Increment size
   iters <- 10 # Number of trials on each size
 
@@ -290,9 +290,14 @@ Figure \@ref(fig:fig-7) shows the distribution of covariates in the sample space
   par(xpd=TRUE)
   legend("top", inset=c(1,-.15) ,c("% coincidence", "KL divergence"), horiz=T,cex=.9,
          box.lty=0,fill = c(rgb(1, 0.1, 0, alpha = 0.5), rgb(0, 0.8, 1, alpha = 0.5)))
-  par(xpd=FALSE)
+
     
 ```
+
+```{r margins, eval=TRUE, include=FALSE}
+  par(xpd=FALSE)
+```
+
 
 
 ```{r results–table–03, eval=TRUE, include=FALSE}

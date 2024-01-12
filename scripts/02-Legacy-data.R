@@ -20,7 +20,7 @@
 # 
 # 0 - Set working directory and load packages
 # 1 - User-defined variables 
-# 2 - Extract environmental data from rasters at soil locations
+# 2 - Prepare data
 # 3 - Extract environmental data from rasters at soil locations
 # 4 - Compute variability matrix in covariates
 # 5 - Calculate hypercube of "covariates" distribution (P)

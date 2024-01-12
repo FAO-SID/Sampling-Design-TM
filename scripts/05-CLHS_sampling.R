@@ -22,12 +22,15 @@
 # 1 - User-defined variables 
 # 2 - Import national data 
 # 3 - Compute clhs
-# 4 - Including existing legacy data in a cLHS sampling design 
-# 5 - Working with large raster data
-# 6 - Cost–constrained cLHS sampling
-# 7 - Replacement areas in cLHS design
-# 8 - Polygonize replacement areas by similarity   
-# 9 - Constrained cLHS sampling accounting for accessibility and legacy data  
+# 4 - Identify under-sampled areas
+# 5 - Including existing legacy data in a cLHS sampling design 
+# 6 - Working with large raster data
+# 7 - Cost–constrained cLHS sampling
+# 8 - Replacement areas in cLHS design
+# 9 - Polygonize replacement areas by similarity   
+# 10 - Constrained cLHS sampling accounting for accessibility and legacy data  
+# 11 - Plot sample density over covariates
+# 12 - Calculate minimum and and optimal sample size with opendms
 #________________________________________________________________
 
 start_time <- Sys.time()
@@ -110,8 +113,23 @@ start_time <- Sys.time()
   plot(cov.dat[[1]], main="cLHS samples")
   points(pts, col="red", pch = 1)
   
+## 4 - Identify under-sampled areas ============================================
+  #' Calculate COOBS (count of observations) is an algorithm to map relatively
+  #' COOBS (count of observations) is an algorithm to map relatively
+  #' adequate and under-sampled areas on a sampling pattern.
+  #' COOBS algorithms allow one to understand which areas in a spatial domain are adequately and under-sampled. 
+  #' COOBS ca be used to design an additional survey by limiting the cLHS algorithm to areas where the COOBS
+  #' value is below some specified threshold. 
+  coobs <- calculate_coobs(
+    mraster = cov.dat,
+    existing = pts,
+    plot = TRUE,
+    cores = 4,
+    filename = paste0(results.path,"/coobs_clhs.tif"),
+    overwrite = TRUE
+  )
   
-## 4 - Including existing legacy data in a cLHS sampling design ================
+## 5 - Including existing legacy data in a cLHS sampling design ================
   
   # Create an artificial random legacy dataset of 50 samples over the study area as an example
   legacy.data <- sample_srs( raster = cov.dat, nSamp = 50)
@@ -125,7 +143,7 @@ start_time <- Sys.time()
   points(res[res$type=="existing",], col="red", pch = 5, cex=2)
   
   
-## 5 - Working with large raster data ==========================================
+## 6 - Working with large raster data ==========================================
   
   # Scaling covariates
     # Aggregation of covariates by a factor of 10. 
@@ -154,7 +172,7 @@ start_time <- Sys.time()
     points(points, col="red", cex=1)
    
   
-## 6 - Cost–constrained cLHS sampling
+## 7 - Cost–constrained cLHS sampling
       # Use 'Distance to roads' as cost surface
       # Calculate distance to roads with te same spatial definition than the covariates
       # dist2access <- terra::distance(cov.dat[[1]], roads, progress=TRUE)
@@ -186,7 +204,7 @@ start_time <- Sys.time()
     plot(cost.clhs, col="red", cex=1,add=T)
     
 
-## 7 - Replacement areas in cLHS design (requires raster package)
+## 8 - Replacement areas in cLHS design (requires raster package)
     
     # Determine the similarity to points in a buffer of distance 'D'
     # Compute the buffers around points # cov25??
@@ -202,7 +220,7 @@ start_time <- Sys.time()
     ## Overlay 1st cLHS point
     points(cost.clhs[1,], col = "red", pch = 12,cex=1)
     
-# 8 - Polygonize replacement areas by similarity    
+# 9 - Polygonize replacement areas by similarity    
 
     # Determine a threshold break to delineate replacement areas
     similarity_threshold <- 0.90
@@ -240,7 +258,7 @@ start_time <- Sys.time()
     st_write(out.pts, paste0(results.path,'target_clhs.shp'), delete_dsn = TRUE)
 
          
-## 9 - Constrained cLHS sampling taking into account accessibility and legacy data  
+## 10 - Constrained cLHS sampling taking into account accessibility and legacy data  
     # Load legacy data 
     legacy <- sf::st_read(file.path(paste0(shp.path,"/legacy_soils.shp")),quiet=TRUE)
     
@@ -270,16 +288,7 @@ start_time <- Sys.time()
       st_write(paste0(results.path,'const_clhs.shp'), delete_dsn = TRUE)
     
     
-## 10 - Calculate COOBS (sgsR) =================================================
-    #' COOBS (count of observations) is an algorithm to map relatively
-    #' adequate and under-sampled areas on a sampling pattern (generally clhs) 
-    coobs <- calculate_coobs(
-      mraster = cov.dat,
-      existing = cost.clhs,
-      plot = TRUE,
-      cores = 4
-    )
-    
+
 ## 11 - Plot sample density over covariates ====================================
     
     # Distribution of elevation values on the sampling design vs. original elevation data

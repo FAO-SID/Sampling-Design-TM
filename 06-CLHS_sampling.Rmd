@@ -51,10 +51,10 @@ We use the rasters of as covariates, which we trim by the administrative boundar
   # Store elevation and slope separately
   elevation <- cov.dat$dtm_elevation_250m
   slope <- cov.dat$dtm_slope_250m
-  
   # Load roads
   roads <-  sf::st_read(file.path(paste0(shp.path,"/roads.shp")),quiet=TRUE)
   roads <-  st_intersection(roads, nghe)
+  
 ```
  
  
@@ -85,7 +85,9 @@ We use the rasters of as covariates, which we trim by the administrative boundar
   # Get SpatRaster layers
   cov.dat <- pca$PCA
   # Subset rasters
-  cov.dat <- pca$PCA[[1:first(which(pca$summaryPCA[3,]>0.99))]]
+  n_comps <- first(which(pca$summaryPCA[3,]>0.99)) # Select PC explaining >=99%
+  cov.dat <- pca$PCA[[1:n_comps]]
+  
   # Remove pca stack
   rm(pca)
   
@@ -249,7 +251,7 @@ Figure \@ref(fig:fig-22) shows the distribution of the cost constrained `'clhs'`
 Cost surfaces can be defined by other parameters than distances to roads. They can represent private property boundaries, slopes, presence of wetlands, etc. The package `'sgsR'` implements functions to define both cost surfaces and distances to roads simultaneously. In this case, it is possible to define an inner buffer distance – i.e. the distance from the roads that should be avoided for sampling and an outer buffer – i.e. the maximum sampling distance) from roads to maximize the variability of the sampling point while considering these limits. The `'sample_clhs'` function in this package also includes options to include existing legacy data in the process of clhs sampling. 
 
 
-```{r sample_clhs, eval=TRUE, include=TRUE,warning=FALSE, message=FALSE}
+```{r clhs-legacy-samples, eval=TRUE, include=TRUE,warning=FALSE, message=FALSE}
 
     # Load legacy data 
     legacy <- sf::st_read(file.path(paste0(shp.path,"/legacy_soils.shp")),quiet=TRUE)
@@ -298,7 +300,7 @@ The results can then be saved to a shapefile.
 
 The `'cLHS'` package incorporates methods for the delineation of replacement locations that could be utilized in the case any sampling point is unreachable. In this case, the function determines the probability of similarity to each point in an area determined by a buffer distance around the points. The inputs of the `'similarity_buffer'` functions must be a 'RasterStack' in the covariates and a 'SpatialPointsDataFrame' for the point data.
 
-```{r cLHS_buffer_05, eval=TRUE, include=TRUE}
+```{r clhs-buffer-06, eval=TRUE, include=TRUE}
 
   ## Determine the similarity to points in a buffer of distance D
     gw <- similarity_buffer(raster::stack(cov.dat) ,  as(cost.clhs, "Spatial"), buffer = D)
@@ -323,7 +325,7 @@ The similarity probabilities for the first cLHS point is presented on Figure \@r
 
 The probabilities can then be reclassified using a threshold value to delineate the areas with higher similarity to each central target point. 
 
-```{r cLHS_reclass_05, eval=TRUE, include=TRUE, warning=FALSE}
+```{r clhs-reclass-06, eval=TRUE, include=TRUE, warning=FALSE}
     # Determine a threshold break to delineate replacement areas
     similarity_threshold <- 0.90
     # Reclassify buffer raster data according to the threshold break of probability
@@ -340,7 +342,7 @@ The probabilities can then be reclassified using a threshold value to delineate 
 
 The reclassified raster stack is then converted to an object of `'SpatialPolygonsDataFrame'` class.
 
-```{r cLHS_polygonize_05, eval=TRUE, include=TRUE}
+```{r clhs-polygonize-06, eval=TRUE, include=TRUE}
 
     # Polygonize replacement areas 
     s = lapply(as.list(s), rasterToPolygons, dissolve=TRUE)
@@ -369,7 +371,7 @@ The results are shown in Figure \@ref(fig:fig-24).
 
 Replacement areas and sampling points can finally be stored as `'shapefiles'`.
 
-```{r cLHS_export_05, eval=FALSE, include=TRUE, warning=FALSE, results='hide'}
+```{r clhs-export-06, eval=FALSE, include=TRUE, warning=FALSE, results='hide'}
     
     # Export replacement areas to shapefile 
     s <- st_as_sf(s)

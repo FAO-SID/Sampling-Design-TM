@@ -29,20 +29,18 @@
 # 4 - Delineate land-use strata 
 # 5 - Create sampling strata
 # 6 - Accommodate strata to requirements
-# 7 - Plot strata
-# 8 - Stratified random sampling
-# 9 - Plot points over strata
-# 10 - Calculate replacement areas for points
-# 11 - Stratified regular sampling
+# 7 - Stratified random sampling
+# 8 - Calculate replacement areas for points
+# 9 - Stratified regular sampling
+# 10 - Random Sampling based on a stratified raster
 #________________________________________________________________
 
-  start_time <- Sys.time()
 
 ## 0 - Set working directory and load packages =================================
 
   # Load packages as a vector objects
     packages <- c("sf", "terra", "tidyverse", "rmapshaper",
-                  "units","plyr", "mapview", "leaflet")
+                  "units","plyr", "mapview", "leaflet", "stars","sgsR")
     lapply(packages, require, character.only = TRUE) # Load packages
     rm(packages) # Remove object to save memory space 
   
@@ -59,10 +57,14 @@
     results.path <- "data/results/"
     # Path to additional data
     other.path <- "data/other/"
-    n <- 242
+    # Set number of samples
+    n <- 250
 
     
-## 2 - Import data ====================================================
+## 2 - Import data =============================================================
+    # Load shape of district
+    nghe <- sf::st_read(file.path(paste0(shp.path,"/Nghe_An.shp")),quiet=TRUE)
+    
     # Load soil data
     soil <- st_read(paste0(shp.path,"/soils.shp"),promote_to_multi = FALSE)  
     # Load Landcover data
@@ -75,14 +77,10 @@
     #bb <- st_read(paste0(shp.path,"/your_bounding_area.shp"))
   
   # Compute replacement areas (optional).
-    # If REPLACEMENT = TRUE, then replacement areas are calculated around a 
-    # specified buffer distance from target points within the same stratum class
-    REPLACEMENT = FALSE
-    distance.buffer = 500 # Distance must be adjusted to the coordinate system
-    #bb <- st_read(paste0(shp.path,"/your_bounding_area.shp"))
-    
+    distance.buffer = 500
 
-# 3 - Delineate soil strata =====================================================
+
+## 3 - Delineate soil strata ===================================================
 
     # Clip soil data  by bounding area if defined
     if (BOUNDING) {
@@ -110,7 +108,7 @@
     mv@map
     #ggplot() + geom_sf(data=soil, aes(fill = factor(RSG)))
     
-# 4 - Delineate land-use strata =================================================
+## 4 - Delineate land-use strata ===============================================
     
     # Clip landcover data  by bounding area if exist
     if (BOUNDING) {
@@ -142,7 +140,7 @@
     #ggplot() + geom_sf(data=lc, aes(fill = factor(landcover)))
     
 
-# 5 - Create sampling strata ===================================================
+## 5 - Create sampling strata ==================================================
     
       # Combine soil and landcover layers
       sf_use_s2(FALSE) # use in case st_intersection cannot be run
@@ -151,7 +149,7 @@
       soil_lc <- soil_lc %>% dplyr::select(soil_lc, geometry)
     
 
-# 6 - Accommodate strata to requirements =======================================
+## 6 - Accommodate strata to requirements ======================================
 
       # Select by Area. Convert to area to ha and select polygons with more than 100 has
       soil_lc$area <- st_area(soil_lc)/10000 
@@ -174,7 +172,7 @@
       # Write final sampling strata map
       st_write(soil_lc, paste0(results.path,"strata.shp"), delete_dsn = TRUE)
       
-# 7 - Plot strata ==============================================================
+    # Plot strata 
   
       # Plot final map of stratum
       map = leaflet(options = leafletOptions(minZoom = 8.3)) %>%
@@ -182,12 +180,12 @@
       mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata", map=map)
       mv@map
 
-# 8 - Stratified random sampling ===============================================
+## 7 - Stratified random sampling ==============================================
 
   # Read already created strata shapefile
     polygons <- st_read(paste0(results.path,"strata.shp"))
-    if(REPLACEMENT){
-      polygons = st_intersection(polygons,distance.buffer)
+    if(BOUNDING){
+      polygons = st_intersection(polygons,bb)
     }
     
   # Calculate the area of each polygon  
@@ -327,14 +325,13 @@
                     type = ifelse(sample_count >= order, "Target", "Replacement")) %>% 
       vect()
     writeVector(z,
-                paste0(results.path,"strat_randm_samples.shp", overwrite=TRUE))
+                filename = paste0(results.path,"strat_randm_samples.shp"), overwrite=TRUE)
 
   # Check if the number of initial target points equals the final target points 
     n==nrow(z[z$type=="Target",])
     n;nrow(z[z$type=="Target",])
     
-# 9 - Plot points over strata ==================================================
-
+  # Plot points over strata 
     map = leaflet(options = leafletOptions(minZoom = 11.4)) %>%
       addTiles()
     mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") + 
@@ -342,14 +339,14 @@
     mv@map
     
     
-# 10 - Calculate replacement areas for points ==================================    
+## 8 - Calculate replacement areas for points ==================================    
     
-    if(REPLACEMENT){
       # Load strata
       soil_lc <- st_read(paste0(results.path,"strata.shp"))
       
       # Read sampling. points from previous step
       z <- st_read(paste0(results.path,"strat_randm_samples.shp"))
+      z <- z[z$type=="Target",]
       
       # Apply buffer of 500 meters
       buf.samples <- st_buffer(z, dist=distance.buffer)
@@ -365,17 +362,12 @@
       # Write target points only
       targets <- z[z$type=="Target",]
       st_write(targets, paste0(results.path,"target_points.shp"), delete_dsn = TRUE)
-    }
+
     
-    
-# 11 - Stratified regular sampling ==================================    
-    # Read already created strata shapefile
+## 9 - Stratified regular sampling =============================================    
+    # Read strata shapefile
     polygons <- st_read(paste0(results.path,"strata.shp"))
-    if(REPLACEMENT){
-      polygons = st_intersection(polygons,distance.buffer)
-    }
-    
-    # Calculate the area of each polygon  
+    # Calculate the area of each polygon
     polygons$area <- st_area(polygons) 
     
     # Create a new column to group polygons by a common attribute
@@ -390,19 +382,16 @@
     # Add a code to each group
     group_codes <- polygons %>% group_by(group) %>%
       dplyr::summarize(code = first(code)) 
-    # Join polygon strata and codes   
+    
     group_areas <- left_join(group_areas,st_drop_geometry(group_codes), by = "group")
     
     # Ensure minimum of 2 samples at each polygon in each group
     group_areas$sample_count <- 2
     
     # Calculate the number of samples per group based on relative area
-    group_areas$sample_count <- 
-      group_areas$sample_count + 
-      round(group_areas$total_area/sum(group_areas$total_area) *
-              (n-sum(group_areas$sample_count)))
-    # Adjust sample size on classes
-    while (sum(group_areas$sample_count) != n) {
+    group_areas$sample_count <- group_areas$sample_count+round(group_areas$total_area/sum(group_areas$total_area) * 
+                                                                 (n-sum(group_areas$sample_count)))
+  while (sum(group_areas$sample_count) != n) {
       if (sum(group_areas$sample_count) > n) {
         # Reduce sample count for the largest polygon until total count is n
         max_index <- which.max(group_areas$sample_count)
@@ -413,17 +402,14 @@
         group_areas$sample_count[min_index] <- group_areas$sample_count[min_index] + 1
       }
     }
-    # Count the total samples. It must be equal to the sampling size
-    sum(group_areas$sample_count) 
+    #sum(group_areas$sample_count) 
     
-    polygons <- left_join(polygons, st_drop_geometry(group_areas),
-                          by = c("soil_lc"="group"))
+    polygons <- left_join(polygons, st_drop_geometry(group_areas), by = c("soil_lc"="group"))
     polygons <- dplyr::select(polygons, soil_lc, code.x, sample_count, geometry)
     
-    # Generate regular points within each strata of size 3 times
-    #the required samples for each strata
-    x <- spatSample(x = vect(group_areas),
-                    size = group_areas$sample_count * 3, method = "regular")
+    
+    # Generate regular points within each strata of size 3 times the required samples for each strata ----
+    x <- spatSample(x = vect(group_areas), size = group_areas$sample_count * 3, method = "regular")
     
     # Compute sampling points for strata
     z <- x %>% 
@@ -435,7 +421,7 @@
                     type = ifelse(sample_count >= order, "Target", "Replacement")) %>% 
       vect()
     
-    # Find classes with missing samples
+    # Find missing samples
     missing.data <- left_join(group_areas,data.frame(z) %>%
                                 dplyr::filter(type=="Target") %>%
                                 dplyr::group_by(code) %>%
@@ -463,7 +449,7 @@
         while(nn < group_areas[group_areas$code==i,][["sample_count"]]*3){
           my.missing.strata <- spatSample(x = vect(group_areas[group_areas$code %in% i,]),
                                           size =  group_areas[group_areas$code==i,][["sample_count"]]*5,
-                                          method = "regular")
+                                          method = "random")
           nn <- nn + nrow(data.frame(my.missing.strata))
         }
         xx.missing.strata <- rbind(xx.missing.strata,my.missing.strata)
@@ -502,7 +488,7 @@
     # Remove extra artificial replacements 
     x <- x[x$sample_count > 0,]
     
-    # Convert and export to shapefile
+    # Convert to Shapefile
     z <- x %>% 
       st_as_sf() %>% 
       dplyr::group_by(code) %>% 
@@ -511,8 +497,11 @@
                     ID = paste0(code, ".", order),
                     type = ifelse(sample_count >= order, "Target", "Replacement")) %>% 
       vect()
-    writeVector(z,
-                paste0(results.path,"strat_randm_samples.shp", overwrite=TRUE))
+    
+    # Export data to Shapefile ----
+    
+    # Write sampling points to shp
+    writeVector(z, paste0(results.path,"regular_str_points.shp"), overwrite=TRUE)
     
     # Check if the number of initial target points equals the final target points 
     n==nrow(z[z$type=="Target",])
@@ -526,7 +515,8 @@
     mv@map
     
     
-  ## Random Sampling based on a stratified raster
+# 10 - Random Sampling based on a stratified raster =============================
+    
     strata <- st_read(paste0(results.path,"strata.shp"),quiet = TRUE)
     strata$code <- as.integer(strata$code)
     
@@ -536,12 +526,21 @@
     strata <- crop(strata, nghe, mask=TRUE)
     
     # Create stratified random sampling
+    # Target points
     target <- sample_strat(
       sraster = strata,
-      nSamp = 200
+      nSamp = n
     )
     target$type <- "target"
+
     
+    # Replacement points
+    replacement <- sample_strat(
+      sraster = strata,
+      nSamp = nrow(target)*3
+    )
+    replacement$type <- "replacement"
+
     # Histogram of frequencies for targets
     calculate_representation(
       sraster = strata,
@@ -549,16 +548,6 @@
       drop=0,
       plot = TRUE 
     )
-    
-    # Add index by strata
-    target <- target %>% 
-      st_as_sf() %>% 
-      dplyr::group_by(strata) %>% 
-      dplyr::mutate(sample_count = sum(n),
-                    order = seq_along(strata),
-                    ID = paste0(strata, ".", order)) %>% 
-      vect()
-    
     # Histogram of frequencies for replacements
     calculate_representation(
       sraster = strata,
@@ -567,35 +556,41 @@
       plot = TRUE 
     )
     
-    # Add index by strata
-    replacement <- replacement %>% 
+    # Add index by strata to targets
+    target <- target %>% 
       st_as_sf() %>% 
       dplyr::group_by(strata) %>% 
-      dplyr::mutate(sample_count = sum(n),
-                    order = seq_along(strata),
+      dplyr::mutate(order = seq_along(strata),
                     ID = paste0(strata, ".", order)) %>% 
       vect()
     
-    replacement <- sample_strat(
-      sraster = strata,
-      nSamp = 200*3
-    )
-    replacement$type <- "replacement"
+    # Add index by strata to replacements
+    replacement <- replacement %>% 
+      st_as_sf() %>% 
+      dplyr::group_by(strata) %>% 
+      dplyr::mutate(order = seq_along(strata),
+                    ID = paste0(strata, ".", order)) %>% 
+      vect()
+    
+    # Merge target and replacement points in a single object
+    sampling.points <- rbind(target,replacement)
     
     # Plot samples over strata
-      # plot(strata, main="Strata and random samples")
-      # plot(nghe[1], col="transparent", add=TRUE)
-      # points(target,col="red")
-      # points(replacement,col="dodgerblue")
-      # legend("topleft", legend = c("target","replacement"), pch = 20, xpd=NA, bg="white", col=c("red","dodgerblue"))
-    
     map = leaflet(options = leafletOptions(minZoom = 8.3)) %>%
       addTiles()
-    mv <- mapview(soil_lc["soil_lc"], alpha=0, homebutton=T, layer.name = "Strata") + 
-      mapview(target, zcol = 'type', color = "white", col.regions = c('tomato'), cex=3, legend = TRUE,layer.name = "Target") + 
-      mapview(replacement, zcol = 'type', color = "white", col.regions = c('royalblue'), cex=3, legend = TRUE,layer.name = "Replacement")
+    mv <- mapview(st_as_stars(strata),homebutton=T, layer.name = "Strata") + 
+      mapview(sampling.points, zcol = 'type', color = "white", col.regions = c('royalblue', 'tomato'), cex=3, legend = TRUE,layer.name = "Samples")
     mv@map
     
-####  Time required to compute the script
-Sys.time() - start_time 
-
+    # Plot samples over strata
+    # plot(strata, main="Strata and random samples")
+    # plot(nghe[1], col="transparent", add=TRUE)
+    # points(target,col="red")
+    # points(replacement,col="dodgerblue")
+    # legend("topleft", legend = c("target","replacement"), pch = 20, xpd=NA, bg="white", col=c("red","dodgerblue"))
+    
+    ## Export to shapefile
+    writeVector(sampling.points,
+                paste0(results.path,"pts_raster.shp"), overwrite=TRUE)
+    
+    
